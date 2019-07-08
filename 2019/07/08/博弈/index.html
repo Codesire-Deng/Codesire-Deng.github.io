@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>离散数学随笔 | 欲乘风归去</title>
+  <title>博弈 | 欲乘风归去</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.6 Rules of Inference Modus ponens 假言推理 p &amp;amp; p-&amp;gt;q =&amp;gt; q  Modus tollens 取拒式 !q &amp;amp; p-&amp;gt;q =&amp;gt; !p Hypothetical syllogism /,haɪpə’θɛtɪk, ‘sɪlə,dʒɪz(ə)m/ 假言三段论 p-&amp;gt;q &amp;amp; q-&amp;gt;r =&amp;gt; p-">
+  <meta name="description" content="组合游戏 两个游戏者轮流操作 游戏的状态集有限，每种状态最多出现一次（游戏可以结束） 无法操作的输，另一个获胜（游戏必有胜负） 公平游戏。两个游戏者面对相同的状态允许有相同的操作。">
 <meta name="keywords" content="数学">
 <meta property="og:type" content="article">
-<meta property="og:title" content="离散数学随笔">
-<meta property="og:url" content="http://yoursite.com/2019/06/30/离散数学/index.html">
+<meta property="og:title" content="博弈">
+<meta property="og:url" content="http://yoursite.com/2019/07/08/博弈/index.html">
 <meta property="og:site_name" content="欲乘风归去">
-<meta property="og:description" content="1.6 Rules of Inference Modus ponens 假言推理 p &amp;amp; p-&amp;gt;q =&amp;gt; q  Modus tollens 取拒式 !q &amp;amp; p-&amp;gt;q =&amp;gt; !p Hypothetical syllogism /,haɪpə’θɛtɪk, ‘sɪlə,dʒɪz(ə)m/ 假言三段论 p-&amp;gt;q &amp;amp; q-&amp;gt;r =&amp;gt; p-">
+<meta property="og:description" content="组合游戏 两个游戏者轮流操作 游戏的状态集有限，每种状态最多出现一次（游戏可以结束） 无法操作的输，另一个获胜（游戏必有胜负） 公平游戏。两个游戏者面对相同的状态允许有相同的操作。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-07T15:19:58.839Z">
+<meta property="og:updated_time" content="2019-07-08T02:01:39.056Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="离散数学随笔">
-<meta name="twitter:description" content="1.6 Rules of Inference Modus ponens 假言推理 p &amp;amp; p-&amp;gt;q =&amp;gt; q  Modus tollens 取拒式 !q &amp;amp; p-&amp;gt;q =&amp;gt; !p Hypothetical syllogism /,haɪpə’θɛtɪk, ‘sɪlə,dʒɪz(ə)m/ 假言三段论 p-&amp;gt;q &amp;amp; q-&amp;gt;r =&amp;gt; p-">
+<meta name="twitter:title" content="博弈">
+<meta name="twitter:description" content="组合游戏 两个游戏者轮流操作 游戏的状态集有限，每种状态最多出现一次（游戏可以结束） 无法操作的输，另一个获胜（游戏必有胜负） 公平游戏。两个游戏者面对相同的状态允许有相同的操作。">
   
     <link rel="alternative" href="/atom.xml" title="欲乘风归去" type="application/atom+xml">
   
@@ -147,217 +147,65 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-离散数学" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-博弈" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      离散数学随笔
+      博弈
     </h1>
   
 
         
-        <a href="/2019/06/30/离散数学/" class="archive-article-date">
-  	<time datetime="2019-06-29T17:37:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-30</time>
+        <a href="/2019/07/08/博弈/" class="archive-article-date">
+  	<time datetime="2019-07-08T01:51:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-08</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1-6-Rules-of-Inference"><a href="#1-6-Rules-of-Inference" class="headerlink" title="1.6 Rules of Inference"></a>1.6 Rules of Inference</h1><ol>
-<li>Modus ponens 假言推理 p &amp; p-&gt;q =&gt; q </li>
-<li>Modus tollens 取拒式 !q &amp; p-&gt;q =&gt; !p</li>
-<li>Hypothetical syllogism /,haɪpə’θɛtɪk, ‘sɪlə,dʒɪz(ə)m/ 假言三段论 p-&gt;q &amp; q-&gt;r =&gt; p-&gt;r </li>
-<li>Disjunctive syllogism 析取三段论 pVq &amp; !p = p</li>
-<li>Addtion 附加律 p =&gt; pVq  （附加在析取式中）</li>
-<li>Simplification 化简律 p&amp;&amp;q =&gt; p （合取条件的拆分）</li>
-<li>Resolution 消解律 pVq &amp; !pVr =&gt; qVr 条件相斥必有一T</li>
-<li>? Logical equivalence<a id="more"></a>
+        <h1 id="组合游戏"><a href="#组合游戏" class="headerlink" title="组合游戏"></a>组合游戏</h1><ol>
+<li>两个游戏者轮流操作</li>
+<li>游戏的状态集有限，每种状态最多出现一次（游戏可以结束）</li>
+<li>无法操作的输，另一个获胜（游戏必有胜负）</li>
+<li>公平游戏。两个游戏者面对相同的状态允许有相同的操作。</li>
+</ol>
+<a id="more"></a>
+<h3 id="状态判定"><a href="#状态判定" class="headerlink" title="状态判定"></a>状态判定</h3><ol>
+<li>一个状态是必胜状态(N)当且仅当它至少有一个后继是必败状态。</li>
+<li>一个状态是必败状态(P)当且仅当它的所有后继都是必胜状态。</li>
+<li>特别地，没有后继的状态是必败状态。</li>
+</ol>
+<h3 id="后手必胜的必要条件"><a href="#后手必胜的必要条件" class="headerlink" title="后手必胜的必要条件"></a>后手必胜的必要条件</h3><p>如果后手有必胜策略，则无论先手怎么取，都会存在后继可导致必败状态（即先手的所有后继都是必胜）。若先手能直接到达必败状态，则后手必输。</p>
+<p>如Chomp!游戏（m*n棋盘，每次取某个点的所有右上格子，取到最后一个输）中，只要格子大于1，先手取最右上的一个格子，若后手能导致必败状态，则开局先手模仿后手的策略即可。故格子大于1时后手必败。</p>
+<h2 id="SG函数"><a href="#SG函数" class="headerlink" title="SG函数"></a>SG函数</h2><p>设有状态x，令SG(x) = mex(S), S为x的所有后继状态的SG值的集合，mex(S)为不在集合中的最小非负整数。对于没有后继的状态，SG=0，因为S是空集。其余的SG值可由递推得到。<br>当且仅当SG(x) == 0, x是必败状态。</p>
+<h2 id="SG定理"><a href="#SG定理" class="headerlink" title="SG定理"></a>SG定理</h2><p>一个总游戏的SG值等于子游戏的SG值的Nim和（异或和）</p>
+<h3 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h3><ol>
+<li>证明P状态的所有后继都是N状态<ol>
+<li>异或和为零，对转移任意一状态，则异或和必不为零（新状态异或旧状态不为零），即后继必为N</li>
+</ol>
+</li>
+<li>证明N状态的后继存在P状态<ol>
+<li>异或和不为零，</li>
+</ol>
 </li>
 </ol>
-<script type="math/tex; mode=display">
-\begin{matrix}
-    Step & Reason \\
-   1. xxx & Premise \\
-   2. xxx & Contrapositive,of,(1) \\
-   3. xxx & XXrule,using,(n),and,(m)
-\end{matrix}</script><h2 id="Fallacies-谬误"><a href="#Fallacies-谬误" class="headerlink" title="Fallacies 谬误"></a>Fallacies 谬误</h2><ol>
-<li>fallacy of affirming the conclusion 肯定结论的谬误 由结论推出条件</li>
-<li>fallacy of denying the hypothesis  /haɪ’pɒθɪsɪs/ 否定假设的谬误 从否定条件推出否定结论</li>
+<h3 id="Nim游戏"><a href="#Nim游戏" class="headerlink" title="Nim游戏"></a>Nim游戏</h3><p>有n堆火柴，每堆有ai根火柴。每次选择一堆取走任意根，不能取的游戏者输。</p>
+<p>考虑只有一堆的情况，设剩余火柴数为x。若x==0，没有后继状态，SG(0) = 0; 若x==1，所有后继状态的SG集合{0}，则SG(1) = 1; 若x==2，对应的S=={0，1}，SG(2) = 2; 归纳法证明SG(x) = x;</p>
+<p>应用SG定理，对于多堆游戏，总游戏SG值为所有子游戏的SG值的Nim和，即所有堆火柴数的异或和。当且仅当异或和为0，先手必败。</p>
+<h2 id="组合游戏题解法"><a href="#组合游戏题解法" class="headerlink" title="组合游戏题解法"></a>组合游戏题解法</h2><p>小范围内暴力计算子游戏SG值，找规律找到SG公式。</p>
+<h1 id="题"><a href="#题" class="headerlink" title="题"></a>题</h1><ol>
+<li>圆桌放圆盘<ol>
+<li>对称性。先手占领圆心，后面被一步都模仿另一方。</li>
 </ol>
-<h2 id="Rules-of-Inference-for-Quantified-Statements-量化命题的推理规则"><a href="#Rules-of-Inference-for-Quantified-Statements-量化命题的推理规则" class="headerlink" title="Rules of Inference for Quantified Statements 量化命题的推理规则"></a>Rules of Inference for Quantified Statements 量化命题的推理规则</h2><ol>
-<li>Universal instantiation 全称实例 $\forall xP(x) \implies P(c)$</li>
-<li>Universal generalization 全称引入 $P(c)$ for an arbitrary $c \implies \forall xP(x)$</li>
-<li>Existential instantiaion 存在实例 $\exists xP(x) \implies P(c)$ for some element $c$</li>
-<li>Existencial generalization 存在引入 $P(c)$ for some element $c \implies \exists xP(x)$</li>
+</li>
+<li>硬币环取1-K连续<ol>
+<li>分类讨论K</li>
 </ol>
-<h2 id="Combining-Rules-of-Inference-for-Propositions-and-Quantified-Statements"><a href="#Combining-Rules-of-Inference-for-Propositions-and-Quantified-Statements" class="headerlink" title="Combining Rules of Inference for Propositions and Quantified Statements"></a>Combining Rules of Inference for Propositions and Quantified Statements</h2><ol>
-<li>Universal modus ponens 全称假言推理 对某个全称实例应用假言推理</li>
-<li>Universal modus tollens 全称取拒式 对某个全称实例应用取拒式（否定结论推出否定条件）</li>
-</ol>
-<hr>
-<h1 id="1-7-Introduction-to-Proofs"><a href="#1-7-Introduction-to-Proofs" class="headerlink" title="1.7 Introduction to Proofs"></a>1.7 Introduction to Proofs</h1><ol>
-<li>theorem /‘θɪərəm/ 定理 （定理的证明有定义、其他定理、公理、推断规则）</li>
-<li>lemma /‘lemə/ 引理 用于证明定理的其他定理</li>
-<li>corollary /kə’rɒlərɪ/ 推论 定理下的直接结论</li>
-<li>propositions 命题 偶尔用来称呼不重要的定理，或称事实、结论</li>
-<li>conjecture /kən’dʒektʃə/ 猜想 一旦找到证明，猜想就变成定理；也有可能被证伪</li>
-</ol>
-<h2 id="To-Proof-p-gt-q-or-to-proof-p"><a href="#To-Proof-p-gt-q-or-to-proof-p" class="headerlink" title="To Proof p-&gt;q (or to proof p)"></a>To Proof p-&gt;q (or to proof p)</h2><ol>
-<li>Trivial Proof : 平凡证明 if q is true then p-&gt;q is true.</li>
-<li>Vacuous Proof : 空证明 if p is false then p-&gt;q is true.</li>
-<li>Direct Proof : Assume p is true and show that q is true by using inferences, axioms, logical equivalences.</li>
-<li>Indirect Proof : not begin with the premises and not end with the conclusion</li>
-<li>Proof by contraposition 反证法 : Assume !q and show !p is true also. 直接证明法无效时尝试反证法</li>
-<li>Proof by Contradiction 归谬证明法 : To proof p, first find a r such that !p -&gt; (r &amp;&amp; !r) is true, therefore !p is false and p is true. 假设结论的否定为真，引出一个矛盾</li>
-<li>反例证明法 : 指明一个反例，从而证伪</li>
-</ol>
-<hr>
-<h1 id="1-8-Proof-Methods-and-Strategy-证明的方法和策略"><a href="#1-8-Proof-Methods-and-Strategy-证明的方法和策略" class="headerlink" title="1.8 Proof Methods and Strategy 证明的方法和策略"></a>1.8 Proof Methods and Strategy 证明的方法和策略</h1><ol>
-<li>Proof by cases 分情形证明法 tautology : (p1Vp2V…pn)-&gt;q &lt;-&gt; (p1-&gt;q)&amp;&amp;(p2-&gt;q)&amp;&amp;…(pn-&gt;q) 类似分类讨论</li>
-<li>Exhaustive Proof 穷举证明法 当变量的取值比较少的时候，通过测试所有情形来证明。</li>
-<li>Without loss of generality (WLOG) 不失一般性 省略非常类似的情形（证明过程几乎相同）的证明</li>
-</ol>
-<h2 id="Existence-Proof-存在性证明"><a href="#Existence-Proof-存在性证明" class="headerlink" title="Existence Proof 存在性证明"></a>Existence Proof 存在性证明</h2><p>To proof $\exists x P(x)$ :</p>
-<ol>
-<li>Constructive existence proof 构造性 : Find an explicit c, for which P(c) is true.</li>
-<li>Nonconstructive existence proof 非构造性证明 ： 不直接构造例子，但说明多种情况之一必有符合的例子；或若不存在，就得到某些矛盾。</li>
-</ol>
-<h2 id="Uniqueness-Proof-唯一性证明"><a href="#Uniqueness-Proof-唯一性证明" class="headerlink" title="Uniqueness Proof 唯一性证明"></a>Uniqueness Proof 唯一性证明</h2><p>同时证明存在性和唯一性，即x符合某种期望，而若y!=x，则y不符合这种期望。也可以等价地证明若y符合这种期望，则y=x。</p>
-<hr>
-<h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><ol>
-<li>The cardinality of  a finite set A 集合的基数，|A|</li>
-<li>finite 有限的 /faɪnaɪt/</li>
-<li>infinite 无限的 /‘ɪnfɪnət/</li>
-<li>Power Set 幂集 P(A) The set of all subsets of a set A. $|P(A)| = 2^{|A|}$</li>
-<li>Cartesian Product 笛卡尔积 A x B x C的意义和(A x B) x C不一样！</li>
-<li>coordinate</li>
-</ol>
-<h2 id="Set-Operations"><a href="#Set-Operations" class="headerlink" title="Set Operations"></a>Set Operations</h2><ol>
-<li>Union /‘junɪən/</li>
-<li>Intersection</li>
-<li>Complementation : complement 补集，必须有universal set U。A上一横杠</li>
-<li>Difference 不满足交换律，A-B</li>
-<li>Symmetric Difference 对称差 异或</li>
-</ol>
-<h3 id="Set-Identities-集合恒等式"><a href="#Set-Identities-集合恒等式" class="headerlink" title="Set Identities 集合恒等式"></a>Set Identities 集合恒等式</h3><ol>
-<li>注意一下分配率，德摩根律（否定去括号）</li>
-<li>其他不管啊太简单了</li>
-<li>Membership Tables 成员表，枚举任意元素属于各个集合情况，从而验证恒等式（和真值表类似）</li>
-</ol>
-<h2 id="Funtion-f-maps-A-to-B-f-is-a-mapping-from-A-to-B"><a href="#Funtion-f-maps-A-to-B-f-is-a-mapping-from-A-to-B" class="headerlink" title="Funtion (f maps A to B) (f is a mapping from A to B)"></a>Funtion (f maps A to B) (f is a mapping from A to B)</h2><ol>
-<li>assignment 指派，分配。 指定f(a)=b。</li>
-<li>domain 定义域 A</li>
-<li>codomain 陪域 B</li>
-<li>image 像 b is an image of a under f</li>
-<li>preimage 原像 可能是单个元素，也可能是一个集合。</li>
-<li>f(A) range 值域</li>
-<li>等价的函数具有相同的domain &amp; codomain &amp; map each element to the same element of the codomain</li>
-<li>$f(S) = \{f(s)|s\isin S\}$</li>
-<li>$(f_1+f_2)(x) = f_1(x)+f_2(x)$</li>
-<li>$(f_1<em>f_2)(x) = f_1(x)</em>f_2(x)$</li>
-<li>injection injective 单射 one-to-one 可在值域上定义反函数</li>
-<li>surjection surjective (or onto) 满射 映上 陪域中每个元素都能找到原像</li>
-<li>injective and surjective =&gt; bijection or one-to-one correspondence 双射 一一对应</li>
-<li>invertible 可逆的 Inverse Function 反函数</li>
-<li>Composition 复合函数 $f \circ g = f(g(x))$</li>
-<li>Factorial/fæk’tɔrɪəl/ Function 阶乘函数</li>
-<li>Partial Function 局部函数，对某个函数截取部分domain</li>
-</ol>
-<h2 id="Sequence-序列-a-n"><a href="#Sequence-序列-a-n" class="headerlink" title="Sequence 序列 $\{a_n\}$"></a>Sequence 序列 $\{a_n\}$</h2><p>A funtion from N or N+ to S</p>
-<script type="math/tex; mode=display">a_n = f(n)</script><ol>
-<li>term 项</li>
-<li>Geometric Progression 几何级数 a*r^n, n=0,1…  (a and r are real numbers)</li>
-<li>Arithmetic Progression 算术级数 （等差数列）</li>
-<li>Recurrence relation 递推关系 </li>
-<li>a solution of a recurrence relation 满足递推关系的序列称为这个递推关系的一个解</li>
-<li>initial conditions 初始条件 递推关系生效前的所有terms</li>
-<li>solving the recurrence relation 找到通项公式 这样的公式叫closed formula闭公式</li>
-<li>iteration 迭代法，正向替换 working upward； 反向替换 working downward。 用于猜测formula，然后用the method of induction数学归纳法证明。</li>
-<li>Summation （序列的部分）总和</li>
-<li>in lexicographic order /,lɛksɪkə’græfɪk/ 字典序</li>
-</ol>
-<h2 id="Matrices-矩阵"><a href="#Matrices-矩阵" class="headerlink" title="Matrices 矩阵"></a>Matrices 矩阵</h2><ol>
-<li>Boolean Product 布尔积 类似矩阵乘法，各项求交之后求并</li>
-<li>Boolean Powers 多次布尔积。 写作$A^{[n]}$, 记$A^{[n]}=I$</li>
-</ol>
-<hr>
-<h1 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h1><ol>
-<li>pseudocode /‘sju:doˌkod/ 伪代码</li>
-<li>Halt Problem 停机问题，无解</li>
-<li>Big-O f(x) of big-O of g(x)</li>
-<li>|f(x)| &lt; |c*g(x)| (x &gt; k) : the constants c and k are called witnesses. Only one pair of witnesses is needed.</li>
-<li>if f = O(g) &amp;&amp; g = O(f), then the two functions are of the same order.</li>
-<li>polynomial /,pɒlɪ’nəʊmɪəl/ 多项式</li>
-<li>if |f(x)| &gt; |C*g(x)| (x &gt; k) : Big-Omega</li>
-<li>if f = O(g) &amp;&amp; g = O(f), then f = θ(g) : Big-Theta; f(x) is of order g(x).</li>
-<li>brute-force 蛮力（算法）</li>
-<li>Tractable Problem ：P类问题，多项式时间内解决</li>
-<li>Intractable Problem</li>
-<li>Unsolvable Problem 无解的问题，例如Halt Problem</li>
-<li>Class NP: 可在多项式时间内验证一个解的问题</li>
-<li>NP Complete Class: NPC问题，所有的NP问题都能约化为NPC问题。</li>
-</ol>
-<hr>
-<h1 id="Number-Theory-and-Cryptography-数论和密码学"><a href="#Number-Theory-and-Cryptography-数论和密码学" class="headerlink" title="Number Theory and Cryptography 数论和密码学"></a>Number Theory and Cryptography 数论和密码学</h1><p>/krɪp’tɑgrəfi/</p>
-<ol>
-<li>divisibility /di,vizi’biləti/ 可除性</li>
-<li>hexadecimal /,hɛksə’dɛsɪml/ 十六进制（的）</li>
-<li>modular /‘mɑdjʊlɚ/ 模的</li>
-<li>congruence 同余 /‘kɑŋgrʊəns/</li>
-<li>a divides b  a除b， a is a factor or divisor of b, b is a multiple of a.</li>
-<li>quotient /‘kwoʃnt/商; remainder /rɪ’mendɚ/余数</li>
-<li>-11 / 3 = -4 … 1</li>
-<li>The notation a  ≡  b (mod m)  says  that a is <strong>congruent</strong> to b modulo m.   a  ≡  b (mod m) is a congruence and that m is its modulus.</li>
-<li>doing arithmatic modulo m: $a+_mb = (a+b) \mod m; a<em>_mb = (a</em>b) \mod m$</li>
-</ol>
-<h2 id="Zm-0…m-1"><a href="#Zm-0…m-1" class="headerlink" title="Zm = {0…m-1}"></a>Zm = {0…m-1}</h2><ol>
-<li>Closure 封闭性</li>
-<li>Associativity 结合律</li>
-<li>Commutativity 交换律</li>
-<li>Identity element 单位元 （加法0，乘法1）</li>
-<li>Additive inverse 加法逆元</li>
-<li>Distributivity 分配率</li>
-<li>判定同余式，左边减右边是m的倍数。</li>
-</ol>
-<h2 id="Prime"><a href="#Prime" class="headerlink" title="Prime"></a>Prime</h2><ol>
-<li>composite /kɑm’pɑzɪt/ 合数</li>
-<li>divisible by 7 能被7整除</li>
-<li>Mersenne Primes 梅森素数：满足2的素数次方减一的素数。检验2的素数次方减一是否素数是容易的，由此得到已知的最大素数。$2^{11}-1不是素数$</li>
-<li>Prime Number Theorem: 不超过x的素数个数大约是(x / ln x)，任取一个不超过n的数，则这个数是素数的概率是1/lnx。</li>
-<li>对两个互质的数a,b:ak+b可以生成无限个素数。</li>
-<li>存在由任意个素数组成的等差数列（Arithmetic Progression）</li>
-<li>现阶段没有发现高效生成素数的算法f(n)</li>
-<li>不存在多项式函数f(n)使得其值一定是素数</li>
-<li>Goldbach’s Conjecture 哥德巴赫猜想：所有大于2的偶数都能表示为两个素数的和。</li>
-<li>Conjecture: There are infinitly many primes of the form $n^2+1$.</li>
-<li>The Twin Prime Conjecture: 相差2的素数有无限多组</li>
-</ol>
-<h2 id="Great-Commom-Divisor-dɪ’vaɪzɚ"><a href="#Great-Commom-Divisor-dɪ’vaɪzɚ" class="headerlink" title="Great Commom Divisor /dɪ’vaɪzɚ/"></a>Great Commom Divisor /dɪ’vaɪzɚ/</h2><ol>
-<li>relatively prime 互质数</li>
-<li>pairwise relatively prime 两两互质</li>
-<li>Prime Factorizations /,fæktərai’zeiʃən/ 质因数分解</li>
-<li>Least Common Multiple 最小公倍数 lcm(a,b)</li>
-<li>Euclidean /ju:’klidiən/ 欧几里得的</li>
-<li>Bézout’s Theorem 贝祖定理 gcd(a,b) = sa+tb. （求s、t用扩展欧几里得）</li>
-<li>if gcd(a,b)=1 &amp;&amp; a|bc, then a|c; Therefore, a ≡ b (mod m) if ac ≡ bc (mod m) &amp;&amp; gcd(c,m)=1.</li>
-</ol>
-<h2 id="Solving-Congruences"><a href="#Solving-Congruences" class="headerlink" title="Solving Congruences"></a>Solving Congruences</h2><ol>
-<li>linear congruences 线性同余方程 ax≡b ( mod m)</li>
-<li>an inverse of A modulo m 模m下a的乘法逆元</li>
-<li>逆元存在的充要条件：若gcd(a,m)=1, 则存在a在模m下的乘法逆元。 Proof: Since gcd(a,m)=1, there are integers s and t such that sa+tm=1. Hence, sa+tm ≡ 1 ( mod m), and it follows that sa ≡ 1 ( mod m). 用扩展欧几里得求出s即逆元。</li>
-<li>coefficient /koʊəˈfɪʃənt/ 系数</li>
-<li>Chinese Remainder Theorem: 对于模数两两互质的同余方程组（一条方程的形式为$x≡a_i (\mod m_i), m&gt;1$）,在$模M=\prod\limits_{i=1}^n m_i系$中有且仅有唯一解。一个解的构造为$x = \sum\limits_{i=1}^n a_i M_i y_i$, 其中$M_i = M\div m_i, y_i<em>M_i≡1 (\mod m_i)$。如此构造后，对任意的i，都满足同余方程$x ≡ a_i M_i y_i ≡ a_i (\mod m_i)$。模系下的唯一性<em>*待证 练习30</em></em>。</li>
-<li>Fermat’s Little Theorem： $有质数p，有整数a不是p的倍数，则a^{p-1}≡1(\mod p)$</li>
-<li>利用费马小定理可以简化$a^q \mod p$的运算，其中q很大。可以将q替换为$(q \mod (p-1))$</li>
-<li>满足$b^{n-1}≡1(\mod n)$的非质数n成为以b为基的伪质数 Pseudoprimes to the base b。（苏豆）</li>
-<li>因为在一定范围内的对于某个基的pseudoprimes总是很少，所以可以进行质数近似判定测试。可惜，对于某些数n，对于所有基b满足gcd(b,n)=1，总是能通过伪素数测试，即$b^{n-1}≡1(\mod n)$，这些数称为Carmichael Numbers（卡麦抠 卡米切尔）。 Carmichael Numbers有无穷多个。</li>
-<li>欧拉定理：费马小定理的推广。$有互质整数a,n.则a^{\phi(n)}≡1 (\mod n)$，而a在模n意义下存在逆元的充要条件就是a,n互质，从而得到推论：若a的逆元存在，则为$a^{\Phi(n)-1}$。</li>
-<li>Discrete Logarithms (模p意义下的)离散对数 对已知质数p，在模p意义下存在唯一一个primitive root $r$ 原始根，使得$r^n$取遍所有模p意义下所有非零数。 对任意$a\in [1,p-1]$，若有$r^e≡a(\mod p), e \in [1, p-1]$ ，则即$\log_r a=e$</li>
-<li>求discrete logarithms $\log_r a$(模质数p意义下)没有找到多项式时间的算法。这个问题是密码学的一部分。</li>
+</li>
 <li></li>
 </ol>
 
@@ -460,7 +308,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/06/30/离散数学/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/07/08/博弈/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -474,15 +322,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/07/01/职业生涯规划书/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          我的职业生涯规划书
-        
-      </div>
-    </a>
   
+    <a href="/2019/07/07/Suffix-Automaton/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Suffix Automaton</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -507,7 +351,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-6-Rules-of-Inference"><span class="toc-number">1.</span> <span class="toc-text">1.6 Rules of Inference</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Fallacies-谬误"><span class="toc-number">1.1.</span> <span class="toc-text">Fallacies 谬误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rules-of-Inference-for-Quantified-Statements-量化命题的推理规则"><span class="toc-number">1.2.</span> <span class="toc-text">Rules of Inference for Quantified Statements 量化命题的推理规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Combining-Rules-of-Inference-for-Propositions-and-Quantified-Statements"><span class="toc-number">1.3.</span> <span class="toc-text">Combining Rules of Inference for Propositions and Quantified Statements</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-7-Introduction-to-Proofs"><span class="toc-number">2.</span> <span class="toc-text">1.7 Introduction to Proofs</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#To-Proof-p-gt-q-or-to-proof-p"><span class="toc-number">2.1.</span> <span class="toc-text">To Proof p-&gt;q (or to proof p)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-8-Proof-Methods-and-Strategy-证明的方法和策略"><span class="toc-number">3.</span> <span class="toc-text">1.8 Proof Methods and Strategy 证明的方法和策略</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Existence-Proof-存在性证明"><span class="toc-number">3.1.</span> <span class="toc-text">Existence Proof 存在性证明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Uniqueness-Proof-唯一性证明"><span class="toc-number">3.2.</span> <span class="toc-text">Uniqueness Proof 唯一性证明</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Set"><span class="toc-number">4.</span> <span class="toc-text">Set</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Set-Operations"><span class="toc-number">4.1.</span> <span class="toc-text">Set Operations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Set-Identities-集合恒等式"><span class="toc-number">4.1.1.</span> <span class="toc-text">Set Identities 集合恒等式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Funtion-f-maps-A-to-B-f-is-a-mapping-from-A-to-B"><span class="toc-number">4.2.</span> <span class="toc-text">Funtion (f maps A to B) (f is a mapping from A to B)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sequence-序列-a-n"><span class="toc-number">4.3.</span> <span class="toc-text">Sequence 序列 $\{a_n\}$</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Matrices-矩阵"><span class="toc-number">4.4.</span> <span class="toc-text">Matrices 矩阵</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Algorithm"><span class="toc-number">5.</span> <span class="toc-text">Algorithm</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Number-Theory-and-Cryptography-数论和密码学"><span class="toc-number">6.</span> <span class="toc-text">Number Theory and Cryptography 数论和密码学</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Zm-0…m-1"><span class="toc-number">6.1.</span> <span class="toc-text">Zm = {0…m-1}</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Prime"><span class="toc-number">6.2.</span> <span class="toc-text">Prime</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Great-Commom-Divisor-dɪ’vaɪzɚ"><span class="toc-number">6.3.</span> <span class="toc-text">Great Commom Divisor /dɪ’vaɪzɚ/</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solving-Congruences"><span class="toc-number">6.4.</span> <span class="toc-text">Solving Congruences</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#组合游戏"><span class="toc-number">1.</span> <span class="toc-text">组合游戏</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#状态判定"><span class="toc-number">1.0.1.</span> <span class="toc-text">状态判定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后手必胜的必要条件"><span class="toc-number">1.0.2.</span> <span class="toc-text">后手必胜的必要条件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SG函数"><span class="toc-number">1.1.</span> <span class="toc-text">SG函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SG定理"><span class="toc-number">1.2.</span> <span class="toc-text">SG定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#证明"><span class="toc-number">1.2.1.</span> <span class="toc-text">证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nim游戏"><span class="toc-number">1.2.2.</span> <span class="toc-text">Nim游戏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组合游戏题解法"><span class="toc-number">1.3.</span> <span class="toc-text">组合游戏题解法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#题"><span class="toc-number">2.</span> <span class="toc-text">题</span></a></li></ol>
                     </div>
                 </span>
             </div>

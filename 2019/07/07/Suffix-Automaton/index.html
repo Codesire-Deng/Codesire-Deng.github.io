@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="自动机的五个部分 alpha 字符集 state 状态集合。另让null表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令trans(s, str)表示在状态s时读入字符串str后，所达到的状态。trans应具有传递性。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-07T16:09:14.102Z">
+<meta property="og:updated_time" content="2019-07-07T16:10:19.621Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Suffix Automaton">
 <meta name="twitter:description" content="自动机的五个部分 alpha 字符集 state 状态集合。另让null表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令trans(s, str)表示在状态s时读入字符串str后，所达到的状态。trans应具有传递性。">
@@ -281,6 +281,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2019/07/08/博弈/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          博弈
+        
+      </div>
+    </a>
+  
   
     <a href="/2019/07/01/职业生涯规划书/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">我的职业生涯规划书</div>
@@ -447,11 +456,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">职业生涯规划</a>
+                <a href="javascript:void(0)" class="js-tag color3">数学</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">数学</a>
+                <a href="javascript:void(0)" class="js-tag color2">职业生涯规划</a>
               </li>
             
             <div class="clearfix"></div>
@@ -608,5 +617,21 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
