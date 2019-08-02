@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m\, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-02T07:07:25.424Z">
+<meta property="og:updated_time" content="2019-08-02T07:26:05.690Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初等数论">
 <meta name="twitter:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m\, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
@@ -203,7 +203,9 @@ a\equiv b \mod lcm(m_1, m_2,\dotsm, m_n);</script><blockquote>
 </blockquote>
 <h2 id="高级定理"><a href="#高级定理" class="headerlink" title="高级定理"></a>高级定理</h2><h3 id="贝祖定理"><a href="#贝祖定理" class="headerlink" title="贝祖定理"></a>贝祖定理</h3><script type="math/tex; mode=display">
 gcd(a,b)是a,b的线性组合。即存在整数x,y,使得xa+yb=gcd(a,b).</script><blockquote>
-<p>$证明：当a=b是结论显然成立。当a\neq b时，不妨设a\neq0，取d为a,b的所有线性组合中最小的正整数。作带余除法a=qd+r，则0\leq r&lt;d. 若r\neq 0,则r=a-qd是比d更小的线性组合，与假设矛盾,则r=0,d是a的因子;同理可得d是b的因子,故d是a,b的公因子.取c为a,b的任意公因子,对d=(xa+yb)提取c得d=c(xa’+yb’),可知c是d的因子,所以|c|\leq d,故d=gcd(a,b).$</p>
+<p>证明：</p>
+<p>当$a=b$是结论显然成立。</p>
+<p>当$a\neq b$时，不妨设$a\neq0$，取$d$为$a,b$的所有线性组合中最小的正整数。作带余除法$a=qd+r$，则$0\leq r&lt;d$. 若$r\neq 0$,则$r=a-qd$是比d更小的线性组合，与假设矛盾,所以$r=0$,$d$是$a$的因子;同理可得$d$是$b$的因子,故$d$是$a,b$的公因子.取$c$为$a,b$的任意公因子,对$d=(xa+yb)$提取$c$得$d=c(xa’+yb’)$,可知$c$是$d$的因子,所以$|c|\leq d$,故$d=gcd(a,b)$.</p>
 </blockquote>
 <h3 id="中国剩余定理"><a href="#中国剩余定理" class="headerlink" title="中国剩余定理"></a>中国剩余定理</h3><script type="math/tex; mode=display">
 有线性同余方程组\\
@@ -214,18 +216,24 @@ x\equiv a_3 \mod m_n \\
 其中m_i两两互质，则在模M=m_1m_2\dotsm m_n意义下解有且只有一个。\\
 构造方法如下：
 设M_i为\frac{M}{m_i}，在模m_i意义下M_i的逆为t_i。则\\
-x=\sum_{i=1}^{n} a_it_iM_i</script><h2 id="gt-证明：-构造解x的正确性。对于方程i-t-iM-i-equiv-1-mod-m-i-M-j-equiv-0-mod-m-i。所以解满足每一条方程式。-在模M意义下解的唯一性。令x-1-x-2为方程组的两个不同的解-则-x-1-x-2-分别是m-1-m-2-dotsm-m-n的倍数，则-x-1-x-2-geq-M，则在模M意义下解是唯一的。"><a href="#gt-证明：-构造解x的正确性。对于方程i-t-iM-i-equiv-1-mod-m-i-M-j-equiv-0-mod-m-i。所以解满足每一条方程式。-在模M意义下解的唯一性。令x-1-x-2为方程组的两个不同的解-则-x-1-x-2-分别是m-1-m-2-dotsm-m-n的倍数，则-x-1-x-2-geq-M，则在模M意义下解是唯一的。" class="headerlink" title="&gt; $证明：\\构造解x的正确性。对于方程i,t_iM_i\equiv 1 \mod m_i, M_j\equiv 0 \mod m_i。所以解满足每一条方程式。\ 在模M意义下解的唯一性。令x_1,x_2为方程组的两个不同的解,则(x_1-x_2)分别是m_1,m_2\dotsm m_n的倍数，则|(x_1-x_2)|\geq M，则在模M意义下解是唯一的。$"></a>&gt; $证明：\\构造解x的正确性。对于方程i,t_iM_i\equiv 1 \mod m_i, M_j\equiv 0 \mod m_i。所以解满足每一条方程式。\ 在模M意义下解的唯一性。令x_1,x_2为方程组的两个不同的解,则(x_1-x_2)分别是m_1,m_2\dotsm m_n的倍数，则|(x_1-x_2)|\geq M，则在模M意义下解是唯一的。$</h2><h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="欧几里得算法（辗转相除法）"><a href="#欧几里得算法（辗转相除法）" class="headerlink" title="欧几里得算法（辗转相除法）"></a><strong>欧几里得算法</strong>（辗转相除法）</h2><p>求gcd(a,b)。</p>
+x=\sum_{i=1}^{n} a_it_iM_i</script><blockquote>
+<p>证明：</p>
+<p>构造解$x$的正确性。对于方程$i$,$t_iM_i\equiv 1 \mod m_i, M_j\equiv 0 \mod m_i$。所以解满足每一条方程式。</p>
+<p>在模$M$意义下解的唯一性。令$x_1,x_2$为方程组的两个不同的解,则$(x_1-x_2)$分别是$m_1,m_2\dotsm m_n$的倍数，则$|(x_1-x_2)|\geq M$，则在模$M$意义下解是唯一的。</p>
+</blockquote>
+<hr>
+<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="欧几里得算法（辗转相除法）"><a href="#欧几里得算法（辗转相除法）" class="headerlink" title="欧几里得算法（辗转相除法）"></a><strong>欧几里得算法</strong>（辗转相除法）</h2><p>求$gcd(a,b)$。</p>
 <ol>
-<li>gcd(a, 0)的结果显然等于a。</li>
-<li>当a，b全不为零，则gcd(a,b) = gcd(b, a%b)使问题规模减小。<br>证明：令c=a%b,则a=kb+c.设r是a,b的公约数，则r|a-kb即r|c.设r是b,c的公约数,则r|kb+c即r|a.可见a,b的公约数和b,a%b的公约数完全相同，则最大公约数也必然相同。</li>
+<li>$gcd(a, 0)$的结果显然等于$a$。</li>
+<li>当$a，b$全不为零，则$gcd(a,b) = gcd(b, a \mod b )$使问题规模减小。<br>证明：令$c=a\mod b$,则$a=kb+c$.设$r$是$a,b$的公约数，则$r|a-kb$即$r|c$.设$r$是$b,c$的公约数,则$r|kb+c$即$r|a$.可见$a,b$的公约数和$b,a\mod b$的公约数完全相同，则最大公约数也必然相同。</li>
 </ol>
-<h2 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a><strong>扩展欧几里得算法</strong></h2><p>求ax+by=gcd(a,b)的一组整数解x,y。</p>
+<h2 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a><strong>扩展欧几里得算法</strong></h2><p>求$ax+by=gcd(a,b)$的一组整数解$x,y$。</p>
 <ol>
-<li>直接由贝祖定理可知整数解一定存在。（贝祖定理：存在整数s，t使得sa+tb=gcd(a,b)）</li>
+<li>直接由贝祖定理可知整数解一定存在。（贝祖定理：存在整数$s，t$使得$sa+tb=gcd(a,b)$）</li>
 <li>由辗转相除法</li>
 </ol>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
-<li>质因数分解时，质因数要么小于等于sqrt(n)，要么等于n。不要漏掉等于n的情况。</li>
+<li>质因数分解时，质因数要么小于等于$\sqrt{n}$，要么等于$n$。不要漏掉等于$n$的情况。</li>
 <li>1e8+7以内的质数<br>有5761456个，约为6e6，约为范围的1/15。<br><strong>范围越大，质数的占比越小</strong></li>
 </ol>
 
@@ -360,7 +368,7 @@ x=\sum_{i=1}^{n} a_it_iM_i</script><h2 id="gt-证明：-构造解x的正确性�
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#模方程"><span class="toc-number">1.</span> <span class="toc-text">模方程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础性质"><span class="toc-number">1.1.</span> <span class="toc-text">基础性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模的等价关系"><span class="toc-number">1.1.1.</span> <span class="toc-text">模的等价关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#等式的性质"><span class="toc-number">1.1.2.</span> <span class="toc-text">等式的性质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级定理"><span class="toc-number">1.2.</span> <span class="toc-text">高级定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#贝祖定理"><span class="toc-number">1.2.1.</span> <span class="toc-text">贝祖定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#中国剩余定理"><span class="toc-number">1.2.2.</span> <span class="toc-text">中国剩余定理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gt-证明：-构造解x的正确性。对于方程i-t-iM-i-equiv-1-mod-m-i-M-j-equiv-0-mod-m-i。所以解满足每一条方程式。-在模M意义下解的唯一性。令x-1-x-2为方程组的两个不同的解-则-x-1-x-2-分别是m-1-m-2-dotsm-m-n的倍数，则-x-1-x-2-geq-M，则在模M意义下解是唯一的。"><span class="toc-number">1.3.</span> <span class="toc-text">&gt; $证明：\\构造解x的正确性。对于方程i,t_iM_i\equiv 1 \mod m_i, M_j\equiv 0 \mod m_i。所以解满足每一条方程式。\ 在模M意义下解的唯一性。令x_1,x_2为方程组的两个不同的解,则(x_1-x_2)分别是m_1,m_2\dotsm m_n的倍数，则|(x_1-x_2)|\geq M，则在模M意义下解是唯一的。$</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#杂项"><span class="toc-number">2.</span> <span class="toc-text">杂项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#欧几里得算法（辗转相除法）"><span class="toc-number">2.1.</span> <span class="toc-text">欧几里得算法（辗转相除法）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展欧几里得算法"><span class="toc-number">2.2.</span> <span class="toc-text">扩展欧几里得算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-number">2.3.</span> <span class="toc-text">注意事项</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#模方程"><span class="toc-number">1.</span> <span class="toc-text">模方程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础性质"><span class="toc-number">1.1.</span> <span class="toc-text">基础性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模的等价关系"><span class="toc-number">1.1.1.</span> <span class="toc-text">模的等价关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#等式的性质"><span class="toc-number">1.1.2.</span> <span class="toc-text">等式的性质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级定理"><span class="toc-number">1.2.</span> <span class="toc-text">高级定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#贝祖定理"><span class="toc-number">1.2.1.</span> <span class="toc-text">贝祖定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#中国剩余定理"><span class="toc-number">1.2.2.</span> <span class="toc-text">中国剩余定理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#杂项"><span class="toc-number">2.</span> <span class="toc-text">杂项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#欧几里得算法（辗转相除法）"><span class="toc-number">2.1.</span> <span class="toc-text">欧几里得算法（辗转相除法）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展欧几里得算法"><span class="toc-number">2.2.</span> <span class="toc-text">扩展欧几里得算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-number">2.3.</span> <span class="toc-text">注意事项</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
