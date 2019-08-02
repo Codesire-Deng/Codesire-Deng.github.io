@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="组合游戏 两个游戏者轮流操作 游戏的状态集有限，每种状态最多出现一次（游戏可以结束） 无法操作的输，另一个获胜（游戏必有胜负） 公平游戏。两个游戏者面对相同的状态允许有相同的操作。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-08T02:01:39.056Z">
+<meta property="og:updated_time" content="2019-07-08T03:26:36.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="博弈">
 <meta name="twitter:description" content="组合游戏 两个游戏者轮流操作 游戏的状态集有限，每种状态最多出现一次（游戏可以结束） 无法操作的输，另一个获胜（游戏必有胜负） 公平游戏。两个游戏者面对相同的状态允许有相同的操作。">
@@ -197,6 +197,7 @@
 <p>考虑只有一堆的情况，设剩余火柴数为x。若x==0，没有后继状态，SG(0) = 0; 若x==1，所有后继状态的SG集合{0}，则SG(1) = 1; 若x==2，对应的S=={0，1}，SG(2) = 2; 归纳法证明SG(x) = x;</p>
 <p>应用SG定理，对于多堆游戏，总游戏SG值为所有子游戏的SG值的Nim和，即所有堆火柴数的异或和。当且仅当异或和为0，先手必败。</p>
 <h2 id="组合游戏题解法"><a href="#组合游戏题解法" class="headerlink" title="组合游戏题解法"></a>组合游戏题解法</h2><p>小范围内暴力计算子游戏SG值，找规律找到SG公式。</p>
+<h1 id="博弈搜索"><a href="#博弈搜索" class="headerlink" title="博弈搜索"></a>博弈搜索</h1><p>CF ROUND 460 DIV2 F</p>
 <h1 id="题"><a href="#题" class="headerlink" title="题"></a>题</h1><ol>
 <li>圆桌放圆盘<ol>
 <li>对称性。先手占领圆心，后面被一步都模仿另一方。</li>
@@ -206,7 +207,49 @@
 <li>分类讨论K</li>
 </ol>
 </li>
+<li>威佐夫博弈：两堆石子，取任意个时可对两堆同时操作<ol>
+<li>记结论(x0=0, y0=0),(xk=mex{xi,yi}, yk=xk+k)必败</li>
+<li>$a_k=\frac{\sqrt{5}+1}{2}k$</li>
+<li>扩展：三堆，可同时操作两堆<ol>
+<li>必败态少，跳过必胜态</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>每次一堆分别成异或加数两堆（每堆小于源堆）</li>
+<li>反NIM游戏，先手必胜条件<ol>
+<li>每堆石子只有一个，NIM和为零</li>
+<li>有一堆石子多于一个，NIM和不为零</li>
+</ol>
+</li>
+<li>SJ定理（泛化反NIM游戏）先手必胜条件<ol>
+<li>每个子游戏SG值&lt;=1，SG异或和为零</li>
+<li>存在一个子游戏SG&gt;1，SG异或和不为零</li>
+</ol>
+</li>
+<li>Every-SG策略<ol>
+<li>必胜态使步骤尽量长</li>
+<li>必败态使步骤尽量短</li>
+<li>先手获胜充要条件：所有单一游戏SG值最大值是奇数</li>
+</ol>
+</li>
+<li>有根无向图删边游戏<ol>
+<li>若无环，Colon定理</li>
+<li>可能有环，Fushion等价缩环变树</li>
+</ol>
+</li>
+<li>齐肯多夫定理：任何正整数可以唯一的表示为若干个不连续的斐波那契数之和</li>
+<li>动态减法游戏（一倍，两倍，k倍）</li>
+<li>翻硬币，最右必须由正变反<ol>
+<li>多种扩展</li>
+<li>打表吧</li>
+<li>tartan定理<ol>
+<li>二维硬币分解成一维硬币的积，logn2求nim积。这种积有结合律，可扩展到更高维</li>
 <li></li>
+</ol>
+</li>
+</ol>
+</li>
 </ol>
 
       
@@ -322,6 +365,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2019/08/02/初等数论/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          初等数论
+        
+      </div>
+    </a>
+  
   
     <a href="/2019/07/07/Suffix-Automaton/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">Suffix Automaton</div>
@@ -351,7 +403,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#组合游戏"><span class="toc-number">1.</span> <span class="toc-text">组合游戏</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#状态判定"><span class="toc-number">1.0.1.</span> <span class="toc-text">状态判定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后手必胜的必要条件"><span class="toc-number">1.0.2.</span> <span class="toc-text">后手必胜的必要条件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SG函数"><span class="toc-number">1.1.</span> <span class="toc-text">SG函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SG定理"><span class="toc-number">1.2.</span> <span class="toc-text">SG定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#证明"><span class="toc-number">1.2.1.</span> <span class="toc-text">证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nim游戏"><span class="toc-number">1.2.2.</span> <span class="toc-text">Nim游戏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组合游戏题解法"><span class="toc-number">1.3.</span> <span class="toc-text">组合游戏题解法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#题"><span class="toc-number">2.</span> <span class="toc-text">题</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#组合游戏"><span class="toc-number">1.</span> <span class="toc-text">组合游戏</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#状态判定"><span class="toc-number">1.0.1.</span> <span class="toc-text">状态判定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后手必胜的必要条件"><span class="toc-number">1.0.2.</span> <span class="toc-text">后手必胜的必要条件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SG函数"><span class="toc-number">1.1.</span> <span class="toc-text">SG函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SG定理"><span class="toc-number">1.2.</span> <span class="toc-text">SG定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#证明"><span class="toc-number">1.2.1.</span> <span class="toc-text">证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nim游戏"><span class="toc-number">1.2.2.</span> <span class="toc-text">Nim游戏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组合游戏题解法"><span class="toc-number">1.3.</span> <span class="toc-text">组合游戏题解法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#博弈搜索"><span class="toc-number">2.</span> <span class="toc-text">博弈搜索</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#题"><span class="toc-number">3.</span> <span class="toc-text">题</span></a></li></ol>
                     </div>
                 </span>
             </div>
