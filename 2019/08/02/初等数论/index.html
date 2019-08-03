@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-03T04:48:13.880Z">
+<meta property="og:updated_time" content="2019-08-03T04:49:33.239Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初等数论">
 <meta name="twitter:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
@@ -239,9 +239,9 @@ m的化简剩余系的元素个数，即|Z_m|</script><h2 id="性质"><a href="#
 </li>
 <li><p><strong>欧拉函数是积性函数</strong>，即对于互质的两数$m_1,m_2$，有$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$</p>
 <blockquote>
-<p>证明：设$a\isin Z_{m_1}, b\isin Z_{m_2}$，则有同余方程组</p>
+<p>证明：设$a\in Z_{m_1}, b\in Z_{m_2}$，则有同余方程组</p>
 <script type="math/tex; mode=display">N \equiv a \mod m_1\\
-N \equiv b \mod m_2\\</script><p>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$互质。则N在模$m_1m_2$下有且仅有唯一解$N=am_2^{-1}m_2+bm_1^{-1}m_1$，显然$N$与$m_1,m_2$都互质，故与$m_1m_2$互质，$N\isin Z_{m_1m_2}$。对任意的$N\isin Z_{m_1m_2}$，其对应的$(a,b)$也是唯一的。综上，映射$Z_{m_1m_2}\rightarrow Z_{m_1}\times Z_{m_2}$是满射也是单射，则此映射是双射，故$|Z_{m_1m_2}|=|Z_{m_1}||Z_{m_2}|$，即$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$。</p>
+N \equiv b \mod m_2\\</script><p>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$互质。则N在模$m_1m_2$下有且仅有唯一解$N=am_2^{-1}m_2+bm_1^{-1}m_1$，显然$N$与$m_1,m_2$都互质，故与$m_1m_2$互质，$N\in Z_{m_1m_2}$。对任意的$N\in Z_{m_1m_2}$，其对应的$(a,b)$也是唯一的。综上，映射$Z_{m_1m_2}\rightarrow Z_{m_1}\times Z_{m_2}$是满射也是单射，则此映射是双射，故$|Z_{m_1m_2}|=|Z_{m_1}||Z_{m_2}|$，即$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$。</p>
 </blockquote>
 </li>
 <li><p>对于质数$p$，且$p|a$，则$\phi(ap)=\phi(a)p$</p>
@@ -722,21 +722,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
