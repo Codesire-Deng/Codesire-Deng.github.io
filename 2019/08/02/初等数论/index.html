@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-02T14:02:38.421Z">
+<meta property="og:updated_time" content="2019-08-03T04:48:13.880Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初等数论">
 <meta name="twitter:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
@@ -226,11 +226,51 @@ x=\sum_{i=1}^{n} a_it_iM_i</script><blockquote>
 <p>构造解$x$的正确性。对于方程$i$,$t_iM_i\equiv 1 \mod m_i, M_j\equiv 0 \mod m_i$。所以解满足每一条方程式。</p>
 <p>在模$M$意义下解的唯一性。令$x_1,x_2$为方程组的两个不同的解,则$(x_1-x_2)$分别是$m_1,m_2\dotsm m_n$的倍数，则$|(x_1-x_2)|\geq M$，则在模$M$意义下解是唯一的。</p>
 </blockquote>
-<hr>
+<h1 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>m的化简剩余系（又称既约剩余系，缩系），<strong>本文记为$Z_m$</strong></p>
+<script type="math/tex; mode=display">
+m的剩余系中与m互质的数构成的子集</script><p>欧拉函数$\phi(n)$</p>
+<script type="math/tex; mode=display">
+m的化简剩余系的元素个数，即|Z_m|</script><h2 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h2><ol>
+<li>对于质数$p$，$\phi(p)=p-1$ </li>
+<li><p>对于质数$p$，$\phi(p^k)=p^{k-1}(p-1)$</p>
+<blockquote>
+<p>证明：在$[1,p^k]$中，不与$p^k$互质的有$\{p,2p,3p,\dotsc,p^k\}$共$\frac{p^k}{p}=p^{k-1}$个数，则互质的有$p^k-p^{k-1}=p^{k-1}(p-1)$个数。</p>
+</blockquote>
+</li>
+<li><p><strong>欧拉函数是积性函数</strong>，即对于互质的两数$m_1,m_2$，有$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$</p>
+<blockquote>
+<p>证明：设$a\isin Z_{m_1}, b\isin Z_{m_2}$，则有同余方程组</p>
+<script type="math/tex; mode=display">N \equiv a \mod m_1\\
+N \equiv b \mod m_2\\</script><p>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$互质。则N在模$m_1m_2$下有且仅有唯一解$N=am_2^{-1}m_2+bm_1^{-1}m_1$，显然$N$与$m_1,m_2$都互质，故与$m_1m_2$互质，$N\isin Z_{m_1m_2}$。对任意的$N\isin Z_{m_1m_2}$，其对应的$(a,b)$也是唯一的。综上，映射$Z_{m_1m_2}\rightarrow Z_{m_1}\times Z_{m_2}$是满射也是单射，则此映射是双射，故$|Z_{m_1m_2}|=|Z_{m_1}||Z_{m_2}|$，即$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$。</p>
+</blockquote>
+</li>
+<li><p>对于质数$p$，且$p|a$，则$\phi(ap)=\phi(a)p$</p>
+<blockquote>
+<p>证明：提取$a$的所有p因子得$ap=a’p^xp=a’p^{x+1}$，由积性函数得</p>
+<script type="math/tex; mode=display">\begin{aligned}
+  \phi(ap)=&\phi(a')\phi(p^{x+1}) \\
+  =&\phi(a')p^x(p-1)\\
+  =&\phi(a')p^{x-1}(p-1)p\\
+  =&\phi(a')\phi(p^x)p\\
+  =&\phi(a'p^x)p\\
+  =&\phi(a)p
+\end{aligned}</script></blockquote>
+</li>
+</ol>
+<ol>
+<li>$\phi(n)(n&gt;2)$是偶数</li>
+</ol>
+<h2 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h2><h3 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h3><script type="math/tex; mode=display">
+对于互质的两个数a,n有\\
+a^{\phi(n)} \equiv 1 \mod n</script><h3 id="欧拉降幂"><a href="#欧拉降幂" class="headerlink" title="欧拉降幂"></a>欧拉降幂</h3><hr>
 <h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="欧几里得算法（辗转相除法）"><a href="#欧几里得算法（辗转相除法）" class="headerlink" title="欧几里得算法（辗转相除法）"></a><strong>欧几里得算法</strong>（辗转相除法）</h2><p>求$gcd(a,b)$。</p>
 <ol>
 <li>$gcd(a, 0)$的结果显然等于$a$。</li>
-<li>当$a，b$全不为零，则$gcd(a,b) = gcd(b, a \mod b )$使问题规模减小。<br>证明：令$c=a\mod b$,则$a=kb+c$.设$r$是$a,b$的公约数，则$r|a-kb$即$r|c$.设$r$是$b,c$的公约数,则$r|kb+c$即$r|a$.可见$a,b$的公约数和$b,a\mod b$的公约数完全相同，则最大公约数也必然相同。</li>
+<li>当$a，b$全不为零，则$gcd(a,b) = gcd(b, a \mod b )$使问题规模减小。<blockquote>
+<p>证明：令$c=a\mod b$,则$a=kb+c$.设$r$是$a,b$的公约数，则$r|a-kb$即$r|c$.设$r$是$b,c$的公约数,则$r|kb+c$即$r|a$.可见$a,b$的公约数和$b,a\mod b$的公约数完全相同，则最大公约数也必然相同。</p>
+<p>应用：从$1$到$n(n&gt;2)$中与$n$互质的数成对出现，每一对和为$n$</p>
+</blockquote>
+</li>
 </ol>
 <h2 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a><strong>扩展欧几里得算法</strong></h2><p>求$ax+by=gcd(a,b)$的一组整数解$x,y$。</p>
 <ol>
@@ -384,7 +424,7 @@ x=\sum_{i=1}^{n} a_it_iM_i</script><blockquote>
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#模方程"><span class="toc-number">1.</span> <span class="toc-text">模方程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础性质"><span class="toc-number">1.1.</span> <span class="toc-text">基础性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模的等价关系"><span class="toc-number">1.1.1.</span> <span class="toc-text">模的等价关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#等式的性质"><span class="toc-number">1.1.2.</span> <span class="toc-text">等式的性质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级定理"><span class="toc-number">1.2.</span> <span class="toc-text">高级定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#贝祖定理"><span class="toc-number">1.2.1.</span> <span class="toc-text">贝祖定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#中国剩余定理"><span class="toc-number">1.2.2.</span> <span class="toc-text">中国剩余定理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#杂项"><span class="toc-number">2.</span> <span class="toc-text">杂项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#欧几里得算法（辗转相除法）"><span class="toc-number">2.1.</span> <span class="toc-text">欧几里得算法（辗转相除法）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展欧几里得算法"><span class="toc-number">2.2.</span> <span class="toc-text">扩展欧几里得算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-number">2.3.</span> <span class="toc-text">注意事项</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#模方程"><span class="toc-number">1.</span> <span class="toc-text">模方程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础性质"><span class="toc-number">1.1.</span> <span class="toc-text">基础性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模的等价关系"><span class="toc-number">1.1.1.</span> <span class="toc-text">模的等价关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#等式的性质"><span class="toc-number">1.1.2.</span> <span class="toc-text">等式的性质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级定理"><span class="toc-number">1.2.</span> <span class="toc-text">高级定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#贝祖定理"><span class="toc-number">1.2.1.</span> <span class="toc-text">贝祖定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#中国剩余定理"><span class="toc-number">1.2.2.</span> <span class="toc-text">中国剩余定理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#欧拉函数"><span class="toc-number">2.</span> <span class="toc-text">欧拉函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性质"><span class="toc-number">2.2.</span> <span class="toc-text">性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定理"><span class="toc-number">2.3.</span> <span class="toc-text">定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#欧拉定理"><span class="toc-number">2.3.1.</span> <span class="toc-text">欧拉定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#欧拉降幂"><span class="toc-number">2.3.2.</span> <span class="toc-text">欧拉降幂</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#杂项"><span class="toc-number">3.</span> <span class="toc-text">杂项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#欧几里得算法（辗转相除法）"><span class="toc-number">3.1.</span> <span class="toc-text">欧几里得算法（辗转相除法）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展欧几里得算法"><span class="toc-number">3.2.</span> <span class="toc-text">扩展欧几里得算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-number">3.3.</span> <span class="toc-text">注意事项</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
