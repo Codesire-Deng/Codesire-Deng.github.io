@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-03T04:49:33.239Z">
+<meta property="og:updated_time" content="2019-08-03T10:20:20.531Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初等数论">
 <meta name="twitter:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
@@ -256,6 +256,19 @@ N \equiv b \mod m_2\\</script><p>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$
   =&\phi(a)p
 \end{aligned}</script></blockquote>
 </li>
+<li><p>欧拉函数通项</p>
+<script type="math/tex; mode=display">
+令\{p_1,p_2,\dotsc,p_m\}为n的所有质因子\\
+\phi(n)=n\prod_{i=1}^m(1-\frac{1}{p_i})</script><blockquote>
+<p>证明：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+  设n=&\prod_{i=1}^mp_i^{x_i}\\
+  由积性&函数得\\
+  \phi(n)=&\prod_{i=1}^{m}\phi(p_i^{x_i})\\
+  =&\prod_{i=1}^{m}p_i^{x_i}(1-\frac{1}{p_i})\\
+  =&n\prod_{i=1}^m(1-\frac{1}{p_i})
+  \end{aligned}</script></blockquote>
+</li>
 </ol>
 <ol>
 <li>$\phi(n)(n&gt;2)$是偶数</li>
@@ -263,7 +276,7 @@ N \equiv b \mod m_2\\</script><p>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$
 <h2 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h2><h3 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h3><script type="math/tex; mode=display">
 对于互质的两个数a,n有\\
 a^{\phi(n)} \equiv 1 \mod n</script><h3 id="欧拉降幂"><a href="#欧拉降幂" class="headerlink" title="欧拉降幂"></a>欧拉降幂</h3><hr>
-<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="欧几里得算法（辗转相除法）"><a href="#欧几里得算法（辗转相除法）" class="headerlink" title="欧几里得算法（辗转相除法）"></a><strong>欧几里得算法</strong>（辗转相除法）</h2><p>求$gcd(a,b)$。</p>
+<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="线性筛质数"><a href="#线性筛质数" class="headerlink" title="线性筛质数"></a>线性筛质数</h2><h2 id="线性筛欧拉函数"><a href="#线性筛欧拉函数" class="headerlink" title="线性筛欧拉函数"></a>线性筛欧拉函数</h2><h2 id="欧几里得算法（辗转相除法）"><a href="#欧几里得算法（辗转相除法）" class="headerlink" title="欧几里得算法（辗转相除法）"></a><strong>欧几里得算法</strong>（辗转相除法）</h2><p>求$gcd(a,b)$。</p>
 <ol>
 <li>$gcd(a, 0)$的结果显然等于$a$。</li>
 <li>当$a，b$全不为零，则$gcd(a,b) = gcd(b, a \mod b )$使问题规模减小。<blockquote>
@@ -277,7 +290,7 @@ a^{\phi(n)} \equiv 1 \mod n</script><h3 id="欧拉降幂"><a href="#欧拉降幂
 <li>直接由贝祖定理可知整数解一定存在。（贝祖定理：存在整数$s，t$使得$sa+tb=gcd(a,b)$）</li>
 <li>由辗转相除法</li>
 </ol>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
 <li>质因数分解时，质因数要么小于等于$\sqrt{n}$，要么等于$n$。不要漏掉等于$n$的情况。</li>
 <li>1e8+7以内的质数<br>有5761456个，约为6e6，约为范围的1/15。<br><strong>范围越大，质数的占比越小</strong></li>
 </ol>
@@ -424,7 +437,7 @@ a^{\phi(n)} \equiv 1 \mod n</script><h3 id="欧拉降幂"><a href="#欧拉降幂
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#模方程"><span class="toc-number">1.</span> <span class="toc-text">模方程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础性质"><span class="toc-number">1.1.</span> <span class="toc-text">基础性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模的等价关系"><span class="toc-number">1.1.1.</span> <span class="toc-text">模的等价关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#等式的性质"><span class="toc-number">1.1.2.</span> <span class="toc-text">等式的性质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级定理"><span class="toc-number">1.2.</span> <span class="toc-text">高级定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#贝祖定理"><span class="toc-number">1.2.1.</span> <span class="toc-text">贝祖定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#中国剩余定理"><span class="toc-number">1.2.2.</span> <span class="toc-text">中国剩余定理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#欧拉函数"><span class="toc-number">2.</span> <span class="toc-text">欧拉函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性质"><span class="toc-number">2.2.</span> <span class="toc-text">性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定理"><span class="toc-number">2.3.</span> <span class="toc-text">定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#欧拉定理"><span class="toc-number">2.3.1.</span> <span class="toc-text">欧拉定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#欧拉降幂"><span class="toc-number">2.3.2.</span> <span class="toc-text">欧拉降幂</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#杂项"><span class="toc-number">3.</span> <span class="toc-text">杂项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#欧几里得算法（辗转相除法）"><span class="toc-number">3.1.</span> <span class="toc-text">欧几里得算法（辗转相除法）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展欧几里得算法"><span class="toc-number">3.2.</span> <span class="toc-text">扩展欧几里得算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-number">3.3.</span> <span class="toc-text">注意事项</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#模方程"><span class="toc-number">1.</span> <span class="toc-text">模方程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础性质"><span class="toc-number">1.1.</span> <span class="toc-text">基础性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模的等价关系"><span class="toc-number">1.1.1.</span> <span class="toc-text">模的等价关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#等式的性质"><span class="toc-number">1.1.2.</span> <span class="toc-text">等式的性质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级定理"><span class="toc-number">1.2.</span> <span class="toc-text">高级定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#贝祖定理"><span class="toc-number">1.2.1.</span> <span class="toc-text">贝祖定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#中国剩余定理"><span class="toc-number">1.2.2.</span> <span class="toc-text">中国剩余定理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#欧拉函数"><span class="toc-number">2.</span> <span class="toc-text">欧拉函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性质"><span class="toc-number">2.2.</span> <span class="toc-text">性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定理"><span class="toc-number">2.3.</span> <span class="toc-text">定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#欧拉定理"><span class="toc-number">2.3.1.</span> <span class="toc-text">欧拉定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#欧拉降幂"><span class="toc-number">2.3.2.</span> <span class="toc-text">欧拉降幂</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#算法"><span class="toc-number">3.</span> <span class="toc-text">算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#线性筛质数"><span class="toc-number">3.1.</span> <span class="toc-text">线性筛质数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线性筛欧拉函数"><span class="toc-number">3.2.</span> <span class="toc-text">线性筛欧拉函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#欧几里得算法（辗转相除法）"><span class="toc-number">3.3.</span> <span class="toc-text">欧几里得算法（辗转相除法）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展欧几里得算法"><span class="toc-number">3.4.</span> <span class="toc-text">扩展欧几里得算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#杂项"><span class="toc-number">4.</span> <span class="toc-text">杂项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-number">4.1.</span> <span class="toc-text">注意事项</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
