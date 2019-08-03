@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-03T12:56:23.984Z">
+<meta property="og:updated_time" content="2019-08-03T13:07:43.673Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初等数论">
 <meta name="twitter:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
@@ -274,7 +274,14 @@ N \equiv b \mod m_2\\</script><p>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$
 </ol>
 <h2 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h2><h3 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h3><script type="math/tex; mode=display">
 对于互质的两个数a,n有\\
-a^{\phi(n)} \equiv 1 \mod n</script><h3 id="欧拉降幂"><a href="#欧拉降幂" class="headerlink" title="欧拉降幂"></a>欧拉降幂</h3><hr>
+a^{\phi(n)} \equiv 1 \mod n</script><blockquote>
+<p>证明：设$Z_n=\{x_1,x_2,\dotsc,x_{\phi(n)}\}$，因$a,n互质$，则$ax_i \mod n \in Z_n$；而对$x_i\neq x_j$，有$ax_i\neq ax_j$。故模n意义下$Z_n=\{ax_1,ax_2,\dotsc,ax_{\phi(n)}\}$。</p>
+<script type="math/tex; mode=display">
+故\\
+\prod_{i=1}^{\phi(n)}x_i \equiv \prod_{i=1}^{\phi(n)}ax_i \mod n\\
+由消去律得\\
+a^{\phi(n)} \equiv 1 \mod n</script></blockquote>
+<h3 id="欧拉降幂"><a href="#欧拉降幂" class="headerlink" title="欧拉降幂"></a>欧拉降幂</h3><hr>
 <h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="线性筛质数"><a href="#线性筛质数" class="headerlink" title="线性筛质数"></a>线性筛质数</h2><p>求$[1,n]$内的所有素数。</p>
 <ol>
 <li>算法核心是<strong>每个合数只被其最小质因子筛到</strong>。</li>
