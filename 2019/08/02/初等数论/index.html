@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-04T10:49:45.575Z">
+<meta property="og:updated_time" content="2019-08-05T08:12:41.967Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初等数论">
 <meta name="twitter:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
@@ -171,31 +171,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="模方程"><a href="#模方程" class="headerlink" title="模方程"></a>模方程</h1><h2 id="基础性质"><a href="#基础性质" class="headerlink" title="基础性质"></a>基础性质</h2><h3 id="模的等价关系"><a href="#模的等价关系" class="headerlink" title="模的等价关系"></a>模的等价关系</h3><p>自反性</p>
-<script type="math/tex; mode=display">a\equiv a \mod m</script><p>对称性</p>
-<script type="math/tex; mode=display">a\equiv b \mod m\Leftrightarrow b\equiv a \mod m</script><p>传递性</p>
+        <h1 id="模方程"><a href="#模方程" class="headerlink" title="模方程"></a>模方程</h1><h2 id="基础性质"><a href="#基础性质" class="headerlink" title="基础性质"></a>基础性质</h2><h3 id="模的等价关系"><a href="#模的等价关系" class="headerlink" title="模的等价关系"></a>模的等价关系</h3><p><strong>自反性</strong></p>
+<script type="math/tex; mode=display">a\equiv a \mod m</script><p><strong>对称性</strong></p>
+<script type="math/tex; mode=display">a\equiv b \mod m\Leftrightarrow b\equiv a \mod m</script><p><strong>传递性</strong></p>
 <script type="math/tex; mode=display">
 a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m</script><a id="more"></a>
-<h3 id="等式的性质"><a href="#等式的性质" class="headerlink" title="等式的性质"></a>等式的性质</h3><p>可加减性</p>
+<h3 id="等式的性质"><a href="#等式的性质" class="headerlink" title="等式的性质"></a>等式的性质</h3><p><strong>可加减性</strong></p>
 <script type="math/tex; mode=display">
 模m意义下\\
-a\equiv b, c\equiv d \Rightarrow a+c\equiv b+d</script><p>可乘性</p>
+a\equiv b, c\equiv d \Rightarrow a+c\equiv b+d</script><p><strong>可乘性</strong></p>
 <script type="math/tex; mode=display">
 模m意义下\\
 a\equiv b, c\equiv d \Rightarrow ac\equiv bd</script><blockquote>
 <p>证明：设$a-b=km$, $c-d=lm$. 则$a=b+km$, $c=d+lm$, $ac=klm^2+(bl+ck)m+bd$, 显然$m|(ac-bd)$</p>
 <p>推论：模$m$意义下,$a\equiv b \Rightarrow an\equiv bn$, $n$是自然数</p>
 </blockquote>
-<p>消去律（乘法逆元的充要条件）</p>
+<p><strong>消去律</strong>（乘法逆元的充要条件）</p>
 <script type="math/tex; mode=display">
 模m意义下\\
 ac\equiv bc, gcd(c,m)=1 \Rightarrow a\equiv b</script><blockquote>
 <p>证明：m|c(a-b), 因为c,m公因子为1，所以m|(a-b).</p>
 </blockquote>
-<p>幂保持恒等</p>
+<p><strong>幂保持恒等</strong></p>
 <script type="math/tex; mode=display">
 模m意义下\\
-a\equiv b \Rightarrow a^n\equiv b^n</script><p>恒等的最大空间</p>
+a\equiv b \Rightarrow a^n\equiv b^n</script><p><strong>恒等的最大空间</strong></p>
 <script type="math/tex; mode=display">
 a\equiv b \mod m_1\\
 a\equiv b \mod m_2\\
@@ -205,6 +205,24 @@ a\equiv b \mod m_n \\
 a\equiv b \mod lcm(m_1, m_2,\dotsm, m_n);</script><blockquote>
 <p>证明：(a-b)是$m_1,m_2,\dotsm,m_n$的倍数，而lcm包含了所有质因子的最大次幂。</p>
 <p>推论：若$m_1,m_2,\dotsm,m_n$互质，则$a\equiv b \mod m_1m_2\dotsm m_n;$</p>
+</blockquote>
+<p><strong>换模的另一种途径</strong></p>
+<script type="math/tex; mode=display">
+a\equiv b \mod c \\
+\Downarrow \\
+ad \equiv bd \mod cd</script><blockquote>
+<p>证明：$c|(a-b)\Rightarrow cd|d(a-b)$。</p>
+</blockquote>
+<p><strong>质因子的次数不超过欧拉函数值</strong></p>
+<script type="math/tex; mode=display">
+设n=p^xs，其中gcd(p,s)=1，则x\leq \phi(n)</script><blockquote>
+<p>证明：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\phi(n)=&\phi(p^x)\phi(s) \\
+\geq& \phi(p^x) = p^{x-1}(p-1)
+\end{aligned}\\
+下面证明x\leq p^{x-1}(p-1)</script><p>取$p=2$，验证得当$x=1,2,3$时不等式都成立。由归纳法可知$p=2$时不等式成立。取$p&gt;2$，等式左边不变，右边变大，不等式仍成立。</p>
 </blockquote>
 <h2 id="高级定理"><a href="#高级定理" class="headerlink" title="高级定理"></a>高级定理</h2><h3 id="贝祖定理"><a href="#贝祖定理" class="headerlink" title="贝祖定理"></a>贝祖定理</h3><script type="math/tex; mode=display">
 gcd(a,b)是a,b的线性组合。即存在整数x,y,使得xa+yb=gcd(a,b).</script><blockquote>
