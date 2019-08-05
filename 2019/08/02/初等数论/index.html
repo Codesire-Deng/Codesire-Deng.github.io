@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-05T10:58:00.604Z">
+<meta property="og:updated_time" content="2019-08-05T11:01:25.213Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初等数论">
 <meta name="twitter:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
@@ -283,9 +283,7 @@ N \equiv b \mod m_2\\</script><p>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$
 </li>
 <li><p><strong>质因子的次数不超过欧拉函数值</strong></p>
 <script type="math/tex; mode=display">
-设n=p^xs，其中gcd(p,s)=1，则x\leq \phi(n)</script></li>
-</ol>
-<blockquote>
+设n=p^xs，其中gcd(p,s)=1，则x\leq \phi(n)</script><blockquote>
 <p>证明：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
@@ -294,8 +292,9 @@ N \equiv b \mod m_2\\</script><p>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$
 \end{aligned}\\
 下面证明x\leq p^{x-1}(p-1)</script><p>取$p=2$，验证得当$x=1,2,3$时不等式都成立。由归纳法可知$p=2$时不等式成立。取$p&gt;2$，等式左边不变，右边变大，不等式仍成立。</p>
 </blockquote>
-<ol>
-<li>$\sum\limits_{d|n}\phi(d) = n$<blockquote>
+</li>
+<li><p>$\sum\limits_{d|n}\phi(d) = n$</p>
+<blockquote>
 <p>证明：$\forall k \in [1,n]$，对应有一个$d=gcd(k,n)$。所有可能的$d$取遍了$n$的所有因子。对$d|n$，考虑其对应的$k$，不妨设$k=k_1d,n=k_2d，且gcd(k_1,k_2)=1,那么k_1\leq k_2$。显然$k_2=\frac{n}{d}$是固定的，那么可能的$k_1$的取值有$\phi(k_2)=\phi(\frac{n}{d})$种。所以</p>
 <script type="math/tex; mode=display">
 n=\sum\limits_{d|n}\phi(\frac{n}{d})=\sum\limits_{d|n}\phi(d)</script></blockquote>
