@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>数位DP | 欲乘风归去</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="例题求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数分析 题目涉及位操作，对所有数以二进制看待。x和y的最高位应相同，这是因为$y\%x&amp;lt;x$，其二进制最高位有限制。 两数最高位相同，则y不超过x的两倍。$y\%x = y-x = y\oplus x$。 $y-x$不可能退位。由$y\geq x$找到两者不同的最高位（y一定是1，x一定是0）">
+  <meta name="description" content="例题求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数">
 <meta name="keywords" content="动态规划">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数位DP">
 <meta property="og:url" content="http://yoursite.com/2019/08/20/数位DP/index.html">
 <meta property="og:site_name" content="欲乘风归去">
-<meta property="og:description" content="例题求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数分析 题目涉及位操作，对所有数以二进制看待。x和y的最高位应相同，这是因为$y\%x&amp;lt;x$，其二进制最高位有限制。 两数最高位相同，则y不超过x的两倍。$y\%x = y-x = y\oplus x$。 $y-x$不可能退位。由$y\geq x$找到两者不同的最高位（y一定是1，x一定是0）">
+<meta property="og:description" content="例题求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-20T11:00:11.085Z">
+<meta property="og:updated_time" content="2019-08-20T11:00:52.468Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数位DP">
-<meta name="twitter:description" content="例题求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数分析 题目涉及位操作，对所有数以二进制看待。x和y的最高位应相同，这是因为$y\%x&amp;lt;x$，其二进制最高位有限制。 两数最高位相同，则y不超过x的两倍。$y\%x = y-x = y\oplus x$。 $y-x$不可能退位。由$y\geq x$找到两者不同的最高位（y一定是1，x一定是0）">
+<meta name="twitter:description" content="例题求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数">
   
     <link rel="alternative" href="/atom.xml" title="欲乘风归去" type="application/atom+xml">
   
@@ -179,7 +179,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数"><a href="#求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数" class="headerlink" title="求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数"></a>求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数</h2><h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><ol>
+        <h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数"><a href="#求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数" class="headerlink" title="求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数"></a>求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数</h2><a id="more"></a>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><ol>
 <li>题目涉及位操作，对所有数以二进制看待。x和y的最高位应相同，这是因为$y\%x&lt;x$，其二进制最高位有限制。</li>
 <li>两数最高位相同，则y不超过x的两倍。$y\%x = y-x = y\oplus x$。</li>
 <li>$y-x$不可能退位。由$y\geq x$找到两者不同的最高位（y一定是1，x一定是0），这一位异或和为1，若低位退位，则差为0，矛盾，故低位不能退位。由低位不能退位，分类讨论$1-0, 1-1, 0-0$三种情况，发现更低位也不能退位，由归纳法可知$y-x$不可能退位。</li>
