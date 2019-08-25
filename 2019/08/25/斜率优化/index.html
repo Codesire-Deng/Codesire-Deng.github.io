@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: 动态规划 | 欲乘风归去</title>
+  <title>斜率优化DP | 欲乘风归去</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="欲乘风归去">
-<meta property="og:url" content="http://yoursite.com/tags/动态规划/index.html">
+  <meta name="description" content="单状态的斜率优化写出状态转移方程，形如： f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}由于$F_3$涉及i和j，若枚举两个变量会超时。 化简方程，得到 f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)这里涉及的每个函数都能事先算出。于是求最大值转化为线性规划：将$f[j]$看作">
+<meta name="keywords" content="动态规划">
+<meta property="og:type" content="article">
+<meta property="og:title" content="斜率优化DP">
+<meta property="og:url" content="http://yoursite.com/2019/08/25/斜率优化/index.html">
 <meta property="og:site_name" content="欲乘风归去">
+<meta property="og:description" content="单状态的斜率优化写出状态转移方程，形如： f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}由于$F_3$涉及i和j，若枚举两个变量会超时。 化简方程，得到 f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)这里涉及的每个函数都能事先算出。于是求最大值转化为线性规划：将$f[j]$看作">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-25T12:08:07.349Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="欲乘风归去">
+<meta name="twitter:title" content="斜率优化DP">
+<meta name="twitter:description" content="单状态的斜率优化写出状态转移方程，形如： f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}由于$F_3$涉及i和j，若枚举两个变量会超时。 化简方程，得到 f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)这里涉及的每个函数都能事先算出。于是求最大值转化为线性规划：将$f[j]$看作">
   
     <link rel="alternative" href="/atom.xml" title="欲乘风归去" type="application/atom+xml">
   
@@ -154,36 +159,76 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-斜率优化" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      斜率优化DP
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/25/斜率优化/" class="archive-article-date">
+
+        
+        <a href="/2019/08/25/斜率优化/" class="archive-article-date">
   	<time datetime="2019-08-25T12:07:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-25</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/25/斜率优化/">斜率优化DP</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="单状态的斜率优化"><a href="#单状态的斜率优化" class="headerlink" title="单状态的斜率优化"></a>单状态的斜率优化</h2><p>写出状态转移方程，形如：</p>
+<script type="math/tex; mode=display">f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}</script><p>由于$F_3$涉及i和j，若枚举两个变量会超时。</p>
+<p>化简方程，得到</p>
+<script type="math/tex; mode=display">f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)</script><p>这里涉及的每个函数都能事先算出。于是求最大值转化为线性规划：将$f[j]$看作b，$F_2(j)$看作y，$-F_4(j)$看作k，$F_5(i)$看作x，则形式可转化为$b=y-kx$，求b的最大值。维护可能的点队列，则这是一条上凸线，用二分找到最相近斜率的线段的对应点即可。</p>
+<p>某些题目的$F_4(j)$具有单调性，即目标直线的斜率有单调性，则可用朴素单调队列代替二分。</p>
+<p>也可以将max改成min，这时求最小的b，维护下凸线即可。</p>
+<h2 id="双状态的斜率优化"><a href="#双状态的斜率优化" class="headerlink" title="双状态的斜率优化"></a>双状态的斜率优化</h2><p>拓展单状态下的方程，形如：</p>
+<script type="math/tex; mode=display">f(j,k]=\max_{i=1}^{j} \{ F_1(j,k]+F_2(i,j]+F_3(i,j,k)\}</script><p>同样化简方程，得到</p>
+<script type="math/tex; mode=display">f(j,k]=\max_{i=1}^{j} \{ F_2(i,j]+F_4(i)*F_5(j,k]\} + const(j,k]</script><p>类似地令$F_4(i)$为横坐标x，待求的$f(j,k]$看作截距b，$F_2(i,j]$看作纵坐标y构建线性规划。之后的步骤同上。</p>
+<p>斜率优化的目的是减少枚举前驱状态的时间，用O(1)或O(log n)完成状态转移。这将要求在完成状态计算后，将新获得的点加入凸线中。加点后，视情况选择是否维护凸性。<br>对于双状态的题目，不同的j对应不同的凸线（这是因为$F_2(i,j]$会随j变化，即点的坐标会变化）。应当判断对于同一个j、不同的k，能否从同一条凸线得到答案。</p>
+<p>如果加点操作的横坐标具有非单调性，可能需要数据结构支持二分查找、中间加点、中间删点的操作。如果不需要即时维护，可以用排序完成维护。</p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>感谢你的支持！<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/zhifubao.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -195,57 +240,154 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/25/斜率优化/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/20/数位DP/" class="archive-article-date">
-  	<time datetime="2019-08-20T10:35:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/08/20/数位DP/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">数位DP</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/20/数位DP/">数位DP</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">动态规划</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#单状态的斜率优化"><span class="toc-number">1.</span> <span class="toc-text">单状态的斜率优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#双状态的斜率优化"><span class="toc-number">2.</span> <span class="toc-text">双状态的斜率优化</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
+  <div id="gitalk-container"></div>
+<!-- <link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css"> -->
+<!-- <script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
+<!-- <link rel="stylesheet" href="https://billts.site/extra_css/gitment.css"> -->
+<!-- <script src="https://billts.site/js/gitment.js"></script> -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+!function(n){"use strict";function d(n,t){var r=(65535&n)+(65535&t);return(n>>16)+(t>>16)+(r>>16)<<16|65535&r}function f(n,t,r,e,o,u){return d(function(n,t){return n<<t|n>>>32-t}(d(d(t,n),d(e,u)),o),r)}function l(n,t,r,e,o,u,c){return f(t&r|~t&e,n,t,o,u,c)}function g(n,t,r,e,o,u,c){return f(t&e|r&~e,n,t,o,u,c)}function v(n,t,r,e,o,u,c){return f(t^r^e,n,t,o,u,c)}function m(n,t,r,e,o,u,c){return f(r^(t|~e),n,t,o,u,c)}function i(n,t){var r,e,o,u,c;n[t>>5]|=128<<t%32,n[14+(t+64>>>9<<4)]=t;var f=1732584193,i=-271733879,a=-1732584194,h=271733878;for(r=0;r<n.length;r+=16)i=m(i=m(i=m(i=m(i=v(i=v(i=v(i=v(i=g(i=g(i=g(i=g(i=l(i=l(i=l(i=l(o=i,a=l(u=a,h=l(c=h,f=l(e=f,i,a,h,n[r],7,-680876936),i,a,n[r+1],12,-389564586),f,i,n[r+2],17,606105819),h,f,n[r+3],22,-1044525330),a=l(a,h=l(h,f=l(f,i,a,h,n[r+4],7,-176418897),i,a,n[r+5],12,1200080426),f,i,n[r+6],17,-1473231341),h,f,n[r+7],22,-45705983),a=l(a,h=l(h,f=l(f,i,a,h,n[r+8],7,1770035416),i,a,n[r+9],12,-1958414417),f,i,n[r+10],17,-42063),h,f,n[r+11],22,-1990404162),a=l(a,h=l(h,f=l(f,i,a,h,n[r+12],7,1804603682),i,a,n[r+13],12,-40341101),f,i,n[r+14],17,-1502002290),h,f,n[r+15],22,1236535329),a=g(a,h=g(h,f=g(f,i,a,h,n[r+1],5,-165796510),i,a,n[r+6],9,-1069501632),f,i,n[r+11],14,643717713),h,f,n[r],20,-373897302),a=g(a,h=g(h,f=g(f,i,a,h,n[r+5],5,-701558691),i,a,n[r+10],9,38016083),f,i,n[r+15],14,-660478335),h,f,n[r+4],20,-405537848),a=g(a,h=g(h,f=g(f,i,a,h,n[r+9],5,568446438),i,a,n[r+14],9,-1019803690),f,i,n[r+3],14,-187363961),h,f,n[r+8],20,1163531501),a=g(a,h=g(h,f=g(f,i,a,h,n[r+13],5,-1444681467),i,a,n[r+2],9,-51403784),f,i,n[r+7],14,1735328473),h,f,n[r+12],20,-1926607734),a=v(a,h=v(h,f=v(f,i,a,h,n[r+5],4,-378558),i,a,n[r+8],11,-2022574463),f,i,n[r+11],16,1839030562),h,f,n[r+14],23,-35309556),a=v(a,h=v(h,f=v(f,i,a,h,n[r+1],4,-1530992060),i,a,n[r+4],11,1272893353),f,i,n[r+7],16,-155497632),h,f,n[r+10],23,-1094730640),a=v(a,h=v(h,f=v(f,i,a,h,n[r+13],4,681279174),i,a,n[r],11,-358537222),f,i,n[r+3],16,-722521979),h,f,n[r+6],23,76029189),a=v(a,h=v(h,f=v(f,i,a,h,n[r+9],4,-640364487),i,a,n[r+12],11,-421815835),f,i,n[r+15],16,530742520),h,f,n[r+2],23,-995338651),a=m(a,h=m(h,f=m(f,i,a,h,n[r],6,-198630844),i,a,n[r+7],10,1126891415),f,i,n[r+14],15,-1416354905),h,f,n[r+5],21,-57434055),a=m(a,h=m(h,f=m(f,i,a,h,n[r+12],6,1700485571),i,a,n[r+3],10,-1894986606),f,i,n[r+10],15,-1051523),h,f,n[r+1],21,-2054922799),a=m(a,h=m(h,f=m(f,i,a,h,n[r+8],6,1873313359),i,a,n[r+15],10,-30611744),f,i,n[r+6],15,-1560198380),h,f,n[r+13],21,1309151649),a=m(a,h=m(h,f=m(f,i,a,h,n[r+4],6,-145523070),i,a,n[r+11],10,-1120210379),f,i,n[r+2],15,718787259),h,f,n[r+9],21,-343485551),f=d(f,e),i=d(i,o),a=d(a,u),h=d(h,c);return[f,i,a,h]}function a(n){var t,r="",e=32*n.length;for(t=0;t<e;t+=8)r+=String.fromCharCode(n[t>>5]>>>t%32&255);return r}function h(n){var t,r=[];for(r[(n.length>>2)-1]=void 0,t=0;t<r.length;t+=1)r[t]=0;var e=8*n.length;for(t=0;t<e;t+=8)r[t>>5]|=(255&n.charCodeAt(t/8))<<t%32;return r}function e(n){var t,r,e="0123456789abcdef",o="";for(r=0;r<n.length;r+=1)t=n.charCodeAt(r),o+=e.charAt(t>>>4&15)+e.charAt(15&t);return o}function r(n){return unescape(encodeURIComponent(n))}function o(n){return function(n){return a(i(h(n),8*n.length))}(r(n))}function u(n,t){return function(n,t){var r,e,o=h(n),u=[],c=[];for(u[15]=c[15]=void 0,16<o.length&&(o=i(o,8*n.length)),r=0;r<16;r+=1)u[r]=909522486^o[r],c[r]=1549556828^o[r];return e=i(u.concat(h(t)),512+8*t.length),a(i(c.concat(e),640))}(r(n),r(t))}function t(n,t,r){return t?r?u(t,n):function(n,t){return e(u(n,t))}(t,n):r?o(n):function(n){return e(o(n))}(n)}"function"==typeof define&&define.amd?define(function(){return t}):"object"==typeof module&&module.exports?module.exports=t:n.md5=t}(this);  
+</script>
+<script>
+  const gitalk = new Gitalk({
+  clientID: '00a098064772784393ca',
+  clientSecret: '578fbe40ff6dcd550b4df318fc9143bda83b0bac',
+  repo: 'Gitment-for-Codesire-Deng-s-Blog',
+  owner: 'Codesire-Deng',
+  admin: ['Codesire-Deng'],
+  id: md5(location.pathname),      // Ensure uniqueness and length less than 50
+  distractionFreeMode: false  // Facebook-like distraction free mode
+})
+
+gitalk.render('gitalk-container')
+// var gitment = new Gitment({
+//   id: 'http://yoursite.com/2019/08/25/斜率优化/',
+//   owner: 'Codesire-Deng',
+//   repo: 'Gitment-for-Codesire-Deng-s-Blog',
+//   oauth: {
+//     client_id: '00a098064772784393ca',
+//     client_secret: '578fbe40ff6dcd550b4df318fc9143bda83b0bac',
+//   },
+// })
+// gitment.render('gitment-ctn')
+// gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -268,9 +410,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

@@ -156,6 +156,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-斜率优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/25/斜率优化/">斜率优化DP</a>
+    </h1>
+  
+
+        
+        <a href="/2019/08/25/斜率优化/" class="archive-article-date">
+  	<time datetime="2019-08-25T12:07:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="单状态的斜率优化"><a href="#单状态的斜率优化" class="headerlink" title="单状态的斜率优化"></a>单状态的斜率优化</h2><p>写出状态转移方程，形如：</p>
+<script type="math/tex; mode=display">f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}</script><p>由于$F_3$涉及i和j，若枚举两个变量会超时。</p>
+<p>化简方程，得到</p>
+<script type="math/tex; mode=display">f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)</script><p>这里涉及的每个函数都能事先算出。于是求最大值转化为线性规划：将$f[j]$看作b，$F_2(j)$看作y，$-F_4(j)$看作k，$F_5(i)$看作x，则形式可转化为$b=y-kx$，求b的最大值。维护可能的点队列，则这是一条上凸线，用二分找到最相近斜率的线段的对应点即可。</p>
+<p>某些题目的$F_4(j)$具有单调性，即目标直线的斜率有单调性，则可用朴素单调队列代替二分。</p>
+<p>也可以将max改成min，这时求最小的b，维护下凸线即可。</p>
+<h2 id="双状态的斜率优化"><a href="#双状态的斜率优化" class="headerlink" title="双状态的斜率优化"></a>双状态的斜率优化</h2><p>拓展单状态下的方程，形如：</p>
+<script type="math/tex; mode=display">f(j,k]=\max_{i=1}^{j} \{ F_1(j,k]+F_2(i,j]+F_3(i,j,k)\}</script><p>同样化简方程，得到</p>
+<script type="math/tex; mode=display">f(j,k]=\max_{i=1}^{j} \{ F_2(i,j]+F_4(i)*F_5(j,k]\} + const(j,k]</script><p>类似地令$F_4(i)$为横坐标x，待求的$f(j,k]$看作截距b，$F_2(i,j]$看作纵坐标y构建线性规划。之后的步骤同上。</p>
+<p>斜率优化的目的是减少枚举前驱状态的时间，用O(1)或O(log n)完成状态转移。这将要求在完成状态计算后，将新获得的点加入凸线中。加点后，视情况选择是否维护凸性。<br>对于双状态的题目，不同的j对应不同的凸线（这是因为$F_2(i,j]$会随j变化，即点的坐标会变化）。应当判断对于同一个j、不同的k，能否从同一条凸线得到答案。</p>
+<p>如果加点操作的横坐标具有非单调性，可能需要数据结构支持二分查找、中间加点、中间删点的操作。如果不需要即时维护，可以用排序完成维护。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">动态规划</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/08/25/斜率优化/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-数位DP" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -822,19 +906,19 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">动态规划</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">杂项</a>
+                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">数学</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">杂项</a>
               </li>
              
               <li class="article-tag-list-item">
