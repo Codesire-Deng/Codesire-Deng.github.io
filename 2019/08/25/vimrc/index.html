@@ -6,20 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>斜率优化DP | 欲乘风归去</title>
+  <title>.vimrc | 欲乘风归去</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="单状态的斜率优化写出状态转移方程，形如： f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}由于$F_3$涉及i和j，若枚举两个变量会超时。 化简方程，得到 f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)">
-<meta name="keywords" content="动态规划">
+  <meta name="description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980&quot; All system-wide defaults are set in $VIMRUNTIME">
 <meta property="og:type" content="article">
-<meta property="og:title" content="斜率优化DP">
-<meta property="og:url" content="http://yoursite.com/2019/08/25/斜率优化/index.html">
+<meta property="og:title" content=".vimrc">
+<meta property="og:url" content="http://yoursite.com/2019/08/25/vimrc/index.html">
 <meta property="og:site_name" content="欲乘风归去">
-<meta property="og:description" content="单状态的斜率优化写出状态转移方程，形如： f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}由于$F_3$涉及i和j，若枚举两个变量会超时。 化简方程，得到 f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)">
+<meta property="og:description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980&quot; All system-wide defaults are set in $VIMRUNTIME">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-25T12:13:20.375Z">
+<meta property="og:updated_time" content="2019-08-25T12:33:26.585Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="斜率优化DP">
-<meta name="twitter:description" content="单状态的斜率优化写出状态转移方程，形如： f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}由于$F_3$涉及i和j，若枚举两个变量会超时。 化简方程，得到 f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)">
+<meta name="twitter:title" content=".vimrc">
+<meta name="twitter:description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980&quot; All system-wide defaults are set in $VIMRUNTIME">
   
     <link rel="alternative" href="/atom.xml" title="欲乘风归去" type="application/atom+xml">
   
@@ -159,39 +158,28 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-斜率优化" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-vimrc" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      斜率优化DP
+      .vimrc
     </h1>
   
 
         
-        <a href="/2019/08/25/斜率优化/" class="archive-article-date">
-  	<time datetime="2019-08-25T12:07:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-25</time>
+        <a href="/2019/08/25/vimrc/" class="archive-article-date">
+  	<time datetime="2019-08-25T12:25:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-25</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="单状态的斜率优化"><a href="#单状态的斜率优化" class="headerlink" title="单状态的斜率优化"></a>单状态的斜率优化</h2><p>写出状态转移方程，形如：</p>
-<script type="math/tex; mode=display">f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}</script><p>由于$F_3$涉及i和j，若枚举两个变量会超时。</p>
-<p>化简方程，得到</p>
-<script type="math/tex; mode=display">f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)</script><a id="more"></a>
-<p>这里涉及的每个函数都能事先算出。于是求最大值转化为线性规划：将$f[j]$看作b，$F_2(i)$看作y，$-F_4(j)$看作k，$F_5(i)$看作x，则形式可转化为$b=y-kx$，求b的最大值。维护可能的点队列，则这是一条上凸线，用二分找到最相近斜率的线段的对应点即可。</p>
-<p>某些题目的$F_4(j)$具有单调性，即目标直线的斜率有单调性，则可用朴素单调队列代替二分。</p>
-<p>也可以将max改成min，这时求最小的b，维护下凸线即可。</p>
-<h2 id="双状态的斜率优化"><a href="#双状态的斜率优化" class="headerlink" title="双状态的斜率优化"></a>双状态的斜率优化</h2><p>拓展单状态下的方程，形如：</p>
-<script type="math/tex; mode=display">f(j,k]=\max_{i=1}^{j} \{ F_1(j,k]+F_2(i,j]+F_3(i,j,k)\}</script><p>同样化简方程，得到</p>
-<script type="math/tex; mode=display">f(j,k]=\max_{i=1}^{j} \{ F_2(i,j]+F_4(i)*F_5(j,k]\} + const(j,k]</script><p>类似地令$F_4(i)$为横坐标x，待求的$f(j,k]$看作截距b，$F_2(i,j]$看作纵坐标y构建线性规划。之后的步骤同上。</p>
-<p>斜率优化的目的是减少枚举前驱状态的时间，用O(1)或O(log n)完成状态转移。这将要求在完成状态计算后，将新获得的点加入凸线中。加点后，视情况选择是否维护凸性。<br>对于双状态的题目，不同的j对应不同的凸线（这是因为$F_2(i,j]$会随j变化，即点的坐标会变化）。应当判断对于同一个j、不同的k，能否从同一条凸线得到答案。</p>
-<p>如果加点操作的横坐标具有非单调性，可能需要数据结构支持二分查找、中间加点、中间删点的操作。如果不需要即时维护，可以用排序完成维护。</p>
-
+        <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">" All system-wide defaults are set in $VIMRUNTIME/debian.vim and sourced by</span></span><br><span class="line"><span class="comment">" the call to :runtime you can find below.  If you wish to change any of those</span></span><br><span class="line"><span class="comment">" settings, you should do it in this file (/etc/vim/vimrc), since debian.vim</span></span><br><span class="line"><span class="comment">" will be overwritten everytime an upgrade of the vim packages is performed.</span></span><br><span class="line"><span class="comment">" It is recommended to make changes after sourcing debian.vim since it alters</span></span><br><span class="line"><span class="comment">" the value of the 'compatible' option.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" This line should not be removed as it ensures that various options are</span></span><br><span class="line"><span class="comment">" properly set to work with the Vim-related packages available in Debian.</span></span><br><span class="line">runtime! debian.<span class="keyword">vim</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" Vim will load $VIMRUNTIME/defaults.vim if the user does not have a vimrc.</span></span><br><span class="line"><span class="comment">" This happens after /etc/vim/vimrc(.local) are loaded, so it will override</span></span><br><span class="line"><span class="comment">" any settings in these files.</span></span><br><span class="line"><span class="comment">" If you don't want that to happen, uncomment the below line to prevent</span></span><br><span class="line"><span class="comment">" defaults.vim from being loaded.</span></span><br><span class="line"><span class="comment">" let g:skip_defaults_vim = 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" Uncomment the next line to make Vim more Vi-compatible</span></span><br><span class="line"><span class="comment">" <span class="doctag">NOTE:</span> debian.vim sets 'nocompatible'.  Setting 'compatible' changes numerous</span></span><br><span class="line"><span class="comment">" options, so any other options should be set AFTER setting 'compatible'.</span></span><br><span class="line"><span class="comment">"set compatible</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" Vim5 and later versions support syntax highlighting. Uncommenting the next</span></span><br><span class="line"><span class="comment">" line enables syntax highlighting by default.</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">has</span>(<span class="string">"syntax"</span>)</span><br><span class="line">  <span class="keyword">syntax</span> <span class="keyword">on</span></span><br><span class="line"><span class="keyword">endif</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" If using a dark background within the editing area and syntax highlighting</span></span><br><span class="line"><span class="comment">" turn on this option as well</span></span><br><span class="line"><span class="keyword">set</span> background=dark</span><br><span class="line"></span><br><span class="line"><span class="comment">" Uncomment the following to have Vim jump to the last position when</span></span><br><span class="line"><span class="comment">" reopening a file</span></span><br><span class="line"><span class="string">"if has("</span><span class="keyword">autocmd</span><span class="comment">")</span></span><br><span class="line"><span class="string">"  au BufReadPost * if line("</span><span class="string">'\"") &gt; 1 &amp;&amp; line("'</span>\<span class="string">""</span>) &lt;= <span class="built_in">line</span>(<span class="string">"$"</span>) | <span class="keyword">exe</span> <span class="string">"normal! g'\""</span> | <span class="keyword">endif</span></span><br><span class="line"><span class="comment">"endif</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" Uncomment the following to have Vim load indentation rules and plugins</span></span><br><span class="line"><span class="comment">" according to the detected filetype.</span></span><br><span class="line"><span class="string">"if has("</span><span class="keyword">autocmd</span><span class="comment">")</span></span><br><span class="line"><span class="comment">"  filetype plugin indent on</span></span><br><span class="line"><span class="comment">"endif</span></span><br><span class="line"></span><br><span class="line"><span class="comment">" The following are commented out as they cause vim to behave a lot</span></span><br><span class="line"><span class="comment">" differently from regular Vi. They are highly recommended though.</span></span><br><span class="line"><span class="keyword">set</span> showcmd		<span class="comment">" Show (partial) command in status line.</span></span><br><span class="line"><span class="keyword">set</span> showmatch		<span class="comment">" Show matching brackets.</span></span><br><span class="line"><span class="keyword">set</span> ignorecase		<span class="comment">" Do case insensitive matching</span></span><br><span class="line"><span class="keyword">set</span> smartcase		<span class="comment">" Do smart case matching</span></span><br><span class="line"><span class="string">"set incsearch		"</span> Incremental <span class="built_in">search</span></span><br><span class="line"><span class="keyword">set</span> autowrite		<span class="comment">" Automatically save before commands like :next and :make</span></span><br><span class="line"><span class="keyword">set</span> hidden		<span class="comment">" Hide buffers when they are abandoned</span></span><br><span class="line"><span class="keyword">set</span> mouse=<span class="keyword">a</span>		<span class="comment">" Enable mouse usage (all modes)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">cindent</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">number</span></span><br><span class="line"><span class="keyword">set</span> tabstop=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> softtabstop=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> autoread</span><br><span class="line"></span><br><span class="line"><span class="comment">" Source a global configuration file if available</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">filereadable</span>(<span class="string">"/etc/vim/vimrc.local"</span>)</span><br><span class="line">  <span class="keyword">source</span> /etc/<span class="keyword">vim</span>/vimrc.local</span><br><span class="line"><span class="keyword">endif</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">nnoremap</span> <span class="symbol">&lt;F9&gt;</span> :<span class="keyword">call</span> CompileCPP()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line">func! CompileCPP()</span><br><span class="line">	exec <span class="string">"w"</span></span><br><span class="line">	<span class="keyword">if</span> &amp;<span class="keyword">filetype</span> == <span class="string">'cpp'</span></span><br><span class="line">		exec <span class="string">'!g++ -Wall -DDEBUG % -o %&lt;'</span></span><br><span class="line">	<span class="keyword">endif</span></span><br><span class="line">endfunc</span><br><span class="line"></span><br><span class="line"><span class="keyword">nnoremap</span> <span class="symbol">&lt;F10&gt;</span> :<span class="keyword">call</span> RunOUT()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line">func! RunOUT()</span><br><span class="line">	exec <span class="string">'!./%&lt;'</span></span><br><span class="line">endfunc</span><br></pre></td></tr></table></figure>
+<h2 id="ps-bashrc"><a href="#ps-bashrc" class="headerlink" title="ps. bashrc"></a>ps. bashrc</h2><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">TEXT::</span><br><span class="line">terminal size : <span class="number">90</span> * <span class="number">34</span></span><br><span class="line"></span><br><span class="line">custom font Fira Code Retina <span class="number">14</span></span><br><span class="line">Cell spaceing <span class="number">1.00</span> <span class="number">1.00</span></span><br><span class="line"></span><br><span class="line">Cursor : Block, Default</span><br><span class="line"></span><br><span class="line">COLORS::</span><br><span class="line">Custom::</span><br><span class="line">	Default: <span class="meta">#D3D7CF, #020F20</span></span><br><span class="line">	Bold: disabled</span><br><span class="line">	Cursor: <span class="meta">#FFFFFF, #0350C9</span></span><br><span class="line">	Hightlight: disabled</span><br><span class="line">	palette: (Tango), blue: <span class="meta">#4A7DBE #7EA9D6</span></span><br></pre></td></tr></table></figure>
       
 
       
@@ -230,17 +218,6 @@
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">动态规划</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -291,7 +268,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/25/斜率优化/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/25/vimrc/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -305,18 +282,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/08/25/vimrc/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          .vimrc
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/08/20/数位DP/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">数位DP</div>
+    <a href="/2019/08/25/斜率优化/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">斜率优化DP</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -343,7 +311,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#单状态的斜率优化"><span class="toc-number">1.</span> <span class="toc-text">单状态的斜率优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#双状态的斜率优化"><span class="toc-number">2.</span> <span class="toc-text">双状态的斜率优化</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ps-bashrc"><span class="toc-number">1.</span> <span class="toc-text">ps. bashrc</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -386,7 +354,7 @@
 
 gitalk.render('gitalk-container')
 // var gitment = new Gitment({
-//   id: 'http://yoursite.com/2019/08/25/斜率优化/',
+//   id: 'http://yoursite.com/2019/08/25/vimrc/',
 //   owner: 'Codesire-Deng',
 //   repo: 'Gitment-for-Codesire-Deng-s-Blog',
 //   oauth: {
