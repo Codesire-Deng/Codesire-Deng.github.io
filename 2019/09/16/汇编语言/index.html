@@ -6,20 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>数位DP | 欲乘风归去</title>
+  <title>汇编语言 | 欲乘风归去</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="例题求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数">
-<meta name="keywords" content="动态规划">
+  <meta name="description" content="不会汇编，强行肛软保，瑟瑟发抖 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数位DP">
-<meta property="og:url" content="http://yoursite.com/2019/08/20/数位DP/index.html">
+<meta property="og:title" content="汇编语言">
+<meta property="og:url" content="http://yoursite.com/2019/09/16/汇编语言/index.html">
 <meta property="og:site_name" content="欲乘风归去">
-<meta property="og:description" content="例题求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数">
+<meta property="og:description" content="不会汇编，强行肛软保，瑟瑟发抖 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-08-20T11:05:39.056Z">
+<meta property="og:updated_time" content="2019-09-16T10:45:47.376Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数位DP">
-<meta name="twitter:description" content="例题求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数">
+<meta name="twitter:title" content="汇编语言">
+<meta name="twitter:description" content="不会汇编，强行肛软保，瑟瑟发抖 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！">
   
     <link rel="alternative" href="/atom.xml" title="欲乘风归去" type="application/atom+xml">
   
@@ -159,37 +158,31 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-数位DP" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-汇编语言" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      数位DP
+      汇编语言
     </h1>
   
 
         
-        <a href="/2019/08/20/数位DP/" class="archive-article-date">
-  	<time datetime="2019-08-20T10:35:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-20</time>
+        <a href="/2019/09/16/汇编语言/" class="archive-article-date">
+  	<time datetime="2019-09-16T10:39:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-16</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数"><a href="#求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数" class="headerlink" title="求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数"></a>求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数</h2><a id="more"></a>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><ol>
-<li>题目涉及位操作，对所有数以二进制看待。x和y的最高位应相同，这是因为$y\%x&lt;x$，其二进制最高位有限制。</li>
-<li>两数最高位相同，则y不超过x的两倍。$y\%x = y-x = y\oplus x$。</li>
-<li>$y-x$不可能退位。由$y\geq x$找到两者不同的最高位（y一定是1，x一定是0），这一位异或和为1，若低位退位，则差为0，矛盾，故低位不能退位。由低位不能退位，分类讨论$1-0, 1-1, 0-0$三种情况，发现更低位也不能退位，由归纳法可知$y-x$不可能退位。</li>
-<li>综上，以bitset看待，$x\subseteq y$。</li>
-<li>考虑记忆化搜索。$x,y$都受到上下界限制，且$y\geq x$，故分别dp枚举$x,y$的合法取值。另外要记录状态保证$x,y$的最高位相同。</li>
+        <p>不会汇编，强行肛软保，瑟瑟发抖</p>
+<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="C语法"><a href="#C语法" class="headerlink" title="C语法"></a>C语法</h2><ol>
+<li>指针作差得到区间元素个数。<strong>指针的类型参与计算！</strong></li>
 </ol>
-<script type="math/tex; mode=display">
-设f[pos][xDown][xUp][yUp][lead]\\
-表示第pos位之后，x是否压下界，x是否压上界，y是否压上界，xy是否取过最高位时的合法方案数</script><h3 id="解"><a href="#解" class="headerlink" title="解"></a>解</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ULL <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> pos, <span class="keyword">bool</span> xDown, <span class="keyword">bool</span> xUp, <span class="keyword">bool</span> yUp, <span class="keyword">bool</span> lead)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (pos &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	ULL &amp;res = ans[pos][xDown][xUp][yUp][lead];</span><br><span class="line">	<span class="keyword">if</span> (res != <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> xLow = xDown ? L[pos] : <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> xHigh = xUp ? R[pos] : <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> yHigh = yUp ? R[pos] : <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=xLow; i&lt;=xHigh; ++i) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j=i; j&lt;=yHigh; ++j) &#123;</span><br><span class="line">			<span class="keyword">if</span> (lead &amp;&amp; i!=j) <span class="keyword">continue</span>;</span><br><span class="line">			res += dfs(pos<span class="number">-1</span>, xDown&amp;&amp;i==xLow, xUp&amp;&amp;i==xHigh, yUp&amp;&amp;j==yHigh, lead&amp;&amp;i==<span class="number">0</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> (res %= MOD);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
       
 
       
@@ -228,17 +221,6 @@
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">动态规划</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -289,7 +271,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/20/数位DP/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/09/16/汇编语言/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -303,18 +285,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/08/25/斜率优化/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          斜率优化DP
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/08/02/初等数论/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">初等数论</div>
+    <a href="/2019/08/28/在ACM中使用C/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">在ACM中使用C++</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -341,7 +314,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#例题"><span class="toc-number">1.</span> <span class="toc-text">例题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数"><span class="toc-number">1.1.</span> <span class="toc-text">求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">1.1.1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解"><span class="toc-number">1.1.2.</span> <span class="toc-text">解</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#C语法"><span class="toc-number">1.1.</span> <span class="toc-text">C语法</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -384,7 +357,7 @@
 
 gitalk.render('gitalk-container')
 // var gitment = new Gitment({
-//   id: 'http://yoursite.com/2019/08/20/数位DP/',
+//   id: 'http://yoursite.com/2019/09/16/汇编语言/',
 //   owner: 'Codesire-Deng',
 //   repo: 'Gitment-for-Codesire-Deng-s-Blog',
 //   oauth: {
