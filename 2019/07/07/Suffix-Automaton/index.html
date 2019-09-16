@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="自动机的五个部分 alpha 字符集 state 状态集合。另让null表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令trans(s, str)表示在状态s时读入字符串str后，所达到的状态。trans应具有传递性。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-07T16:10:19.621Z">
+<meta property="og:updated_time" content="2019-09-16T12:08:16.478Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Suffix Automaton">
 <meta name="twitter:description" content="自动机的五个部分 alpha 字符集 state 状态集合。另让null表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令trans(s, str)表示在状态s时读入字符串str后，所达到的状态。trans应具有传递性。">
@@ -206,9 +206,10 @@
 </li>
 <li><p>状态数是线性的。状态由Right集合决定，考虑两个状态a,b的Right集合Ra,Rb。假设Ra,Rb有交集，设r$\in$Ra$\cap$Rb。由于一个子串只能属于一个状态，所以a，b所表示的子串不会有交集，即由r往前不能有长度相同的子串，故[Min(a), Max(a)]和[Min(b), Max(b)]没有交集，不妨设Max(a)&lt;Min(b)，由于a，b包含的所有串都可以视为r往前的子串，故a的所有串都是b的任意串的后缀。因b的任意串都能找到后缀属于a，两者Right集合又不相等，故Rb$\subset$Ra。那么任意两个状态的Right集合要么不相交，要么一个是另一个的真子集。不考虑字符串这个主题，满足以上性质的集合数量易证是线性的（类比线段树开4n空间），实际上，SAM的结点个数最多为2n。</p>
 </li>
-<li><p>假设有一个状态包含所有的元素（为根），则所有状态可以根据是否真子集的关系构成一棵树，即令满足Right(s)$\subset$Right(fa)的最小|Right(fa)|的fa为状态s的父亲。易知Max(fa)==Min(s)-1。</p>
+<li><p>假设有一个状态包含所有的元素（为根），则所有状态可以根据是否真子集的关系构成一棵树，即令满足Right(s)$\subset$Right(fa)的最小|Right(fa)|的fa为状态s的父亲。易知Max(fa)+1==Min(s)。</p>
 </li>
-<li></li>
+<li><p>自动机的边数是线性的。</p>
+</li>
 </ol>
 
       
