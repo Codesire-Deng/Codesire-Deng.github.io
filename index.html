@@ -179,8 +179,13 @@
         <p>不会汇编，强行肛软保，瑟瑟发抖</p>
 <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="C语法"><a href="#C语法" class="headerlink" title="C语法"></a>C语法</h2><ol>
 <li>指针作差得到区间元素个数。<strong>指针的类型参与计算！</strong></li>
-<li>要动态改变函数体，需要在编译期赋予权限。<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(linker, <span class="meta-string">"/section:test,RWE"</span>)</span></span><br></pre></td></tr></table></figure>
+<li><p>要动态改变函数体，需要在编译期赋予权限。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(linker, <span class="meta-string">"/section:test,RWE"</span>)</span></span><br></pre></td></tr></table></figure>
 </li>
+<li><p><code>__asm int 3</code>加入汇编断点（OD）</p>
+</li>
+<li></li>
+<li></li>
 </ol>
 <h2 id="Windows-exe结构"><a href="#Windows-exe结构" class="headerlink" title="Windows exe结构"></a>Windows exe结构</h2><ol>
 <li>401000H这个内存地址对应的文件地址是1000H</li>
