@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>汇编语言 | 欲乘风归去</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="不会汇编，强行肛软保，瑟瑟发抖 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！">
+  <meta name="description" content="不会汇编，强行肛软保，瑟瑟发抖 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。1#pragma comment(linker, &quot;/section:test,RWE&quot;)   Windows exe结构 401000H这个内存地址对应的文件地址是1000H">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汇编语言">
 <meta property="og:url" content="http://yoursite.com/2019/09/16/汇编语言/index.html">
 <meta property="og:site_name" content="欲乘风归去">
-<meta property="og:description" content="不会汇编，强行肛软保，瑟瑟发抖 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！">
+<meta property="og:description" content="不会汇编，强行肛软保，瑟瑟发抖 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。1#pragma comment(linker, &quot;/section:test,RWE&quot;)   Windows exe结构 401000H这个内存地址对应的文件地址是1000H">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-16T10:45:47.376Z">
+<meta property="og:updated_time" content="2019-09-16T11:07:21.897Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="汇编语言">
-<meta name="twitter:description" content="不会汇编，强行肛软保，瑟瑟发抖 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！">
+<meta name="twitter:description" content="不会汇编，强行肛软保，瑟瑟发抖 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。1#pragma comment(linker, &quot;/section:test,RWE&quot;)   Windows exe结构 401000H这个内存地址对应的文件地址是1000H">
   
     <link rel="alternative" href="/atom.xml" title="欲乘风归去" type="application/atom+xml">
   
@@ -181,8 +181,19 @@
         <p>不会汇编，强行肛软保，瑟瑟发抖</p>
 <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="C语法"><a href="#C语法" class="headerlink" title="C语法"></a>C语法</h2><ol>
 <li>指针作差得到区间元素个数。<strong>指针的类型参与计算！</strong></li>
+<li>要动态改变函数体，需要在编译期赋予权限。<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(linker, <span class="meta-string">"/section:test,RWE"</span>)</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="Windows-exe结构"><a href="#Windows-exe结构" class="headerlink" title="Windows exe结构"></a>Windows exe结构</h2><ol>
+<li>401000H这个内存地址对应的文件地址是1000H</li>
 </ol>
 <a id="more"></a>
+<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><h2 id="Quickview：更改EXE数据"><a href="#Quickview：更改EXE数据" class="headerlink" title="Quickview：更改EXE数据"></a>Quickview：更改EXE数据</h2><ol>
+<li>按<code>F5</code>可以按地址定位</li>
+<li>提供三种模式：16进制格式，汇编格式，纯文本格式；按<code>F2</code>切换到32位模式</li>
+<li>按<code>Alt+F9</code>保存</li>
+</ol>
+<h2 id="OD：单步跟踪EXE"><a href="#OD：单步跟踪EXE" class="headerlink" title="OD：单步跟踪EXE"></a>OD：单步跟踪EXE</h2>
       
 
       
@@ -314,7 +325,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#C语法"><span class="toc-number">1.1.</span> <span class="toc-text">C语法</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#C语法"><span class="toc-number">1.1.</span> <span class="toc-text">C语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-exe结构"><span class="toc-number">1.2.</span> <span class="toc-text">Windows exe结构</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#工具"><span class="toc-number">2.</span> <span class="toc-text">工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quickview：更改EXE数据"><span class="toc-number">2.1.</span> <span class="toc-text">Quickview：更改EXE数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OD：单步跟踪EXE"><span class="toc-number">2.2.</span> <span class="toc-text">OD：单步跟踪EXE</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -482,15 +493,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">杂项</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -499,6 +506,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">动态规划</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
             
             <div class="clearfix"></div>
