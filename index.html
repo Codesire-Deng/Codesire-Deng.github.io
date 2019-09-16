@@ -182,7 +182,7 @@
 <li><p>要动态改变函数体，需要在编译期赋予权限。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(linker, <span class="meta-string">"/section:test,RWE"</span>)</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p><code>__asm int 3</code>加入汇编断点（OD）</p>
+<li><p><code>__asm int 3</code>加入汇编断点（OD）。要在OD中启用StrongOD，禁用跳过int3；并设置测试选项</p>
 </li>
 <li></li>
 <li></li>
