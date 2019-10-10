@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-10-10T13:57:32.580Z">
+<meta property="og:updated_time" content="2019-10-10T14:05:24.385Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="后缀自动机 Suffix Automaton">
 <meta name="twitter:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
@@ -216,9 +216,9 @@
 <li><p>后缀自动机是一个有向无环图</p>
 <script type="math/tex; mode=display">
 SAM = \{分裂树的点，自动机的有向边\}</script></li>
-<li><p>SAM的构造算法是在线的，即从左到右逐个添加字符。根据数学归纳法，<strong>下文假设已有字符串T的后缀自动机</strong>。</p>
+<li><p>SAM的构造算法是在线的，即从左到右逐个添加字符。根据数学归纳法，<strong>下文假设已有字符串$T$的后缀自动机</strong>。</p>
 </li>
-<li><p>考虑一个状态$s$，它的$Right(s)=\{r_1, r_2, \cdots, r_n\}$，假如有状态转移$trans(s,c) = t$（即状态$s$后添加一个字符$c$得到状态$t$），</p>
+<li><p>考虑一个状态$s$，它的$Right(s)=\{r_1, r_2, \cdots, r_n\}$，假如有状态转移$trans(s,c) = t$（即状态$s$后添加一个字符$c$得到状态$t$），由于向右扩展了一位字符，$Right(s)$中只有$T[r_i]=c$的满足要求。所以$Right(t)=\{r_i+1 | T[r_i]=c\}$。<br>　　如果$trans(s,c)$存在，那么$trans(Pa(s), c)$必定存在，其中$Pa(s)$表示分裂树上状态$s$的父亲。</p>
 </li>
 </ol>
 
