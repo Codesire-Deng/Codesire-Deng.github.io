@@ -17,7 +17,7 @@
 <meta property="og:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/10/01/Suffix-Automaton/强行插入的反例.png">
-<meta property="og:updated_time" content="2019-10-10T15:42:00.376Z">
+<meta property="og:updated_time" content="2019-10-10T15:48:11.803Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="后缀自动机 Suffix Automaton">
 <meta name="twitter:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
@@ -226,7 +226,7 @@ SAM = \{分裂树的点，自动机的有向边\}</script></li>
 </li>
 </ol>
 <h3 id="添加一位字符更新自动机"><a href="#添加一位字符更新自动机" class="headerlink" title="添加一位字符更新自动机"></a>添加一位字符更新自动机</h3><p>&emsp;&emsp;令当前字符串为$T$，长度为$L$；末尾添加一个字符$x$，要将$SAM(T)$更新为$SAM(Tx)$。<br><br>　　那么新增的子串是$Tx$的所有后缀，可看作$T$的所有后缀后添加了$x$。令$SAM(T)$中表示$T$的后缀的节点为$\{v_1, v_2, \cdots, v_k=root\}$。因为后缀在字符串的末尾出现，所以$L\in Right(v_i)$，可知$v_i$在分裂树上恰好构成一条从叶子到$root$的链，不妨设$\{v_1, v_2, \cdots, v_k=root\}$已经按从叶子到祖先排序。<br><br>　　添加字符$x$后，首先新建状态$np$表示$ST(Tx)$，这是一个已确定的状态（因为没有出边），可知$Right(np)=\{L+1\}$。<br><br>　　回头考虑旧自动机的$v_i$，设$Right(v_i)=\{r_1, r_2, \cdots, r_n=L\}$。如果能在后面添加字符$x$（注意现在仍是字符串$T$的自动机），即$nv=trans(v_i, x)$存在，我们已经知道$Right(nv)=\{r_i+1|T[r_i]=x\}$；反之如果$v_i$没有$x$的出边，意味着没有$r_i$满足$T[r_i]=x$。由于分裂树上父亲的$Right$扩大，如果$trans(v_i,x)$存在，那么$trans(v_{i+1}, x)$也存在。<br><br>　　对于所有$trans(v,x)=null$的$v$，而只有$Tx[r_n=L]=x$满足转移条件，于是添加一条边$trans(v,x)=np$。<br><br>　　令$v_p$是$v_1, v_2, \cdots, v_k$中第一个有$x$出边（即$trans(v_p, x)$存在）的状态。令$q=trans(v_p, x)$，注意，现在仍是旧的自动机。我们能不能直接在$Right(q)$中直接插入$L+1$呢？答案是不能。这是因为有可能$Max(q) &gt; Max(v_p)+1$，隐含意思是$q$在”$v_p$末尾添加$x$”的基础上，由于$Right$集合的缩减，纳入了左端更多字符；如果强行在$Right(q)$中插入$L+1$，会导致$Max(q)$减小而丢失了原来的状态，破坏了自动机的正确性。</p>
-<p><img src="./强行插入的反例.png" alt="强行插入的反例"></p>
+<p><img src="./强行插入的反例.png" alt="强行插入的反例"><br><br>　　如图所示，$v_p$含有的最长字符串是红色5个“A”，但$trans(v_p,x)=q$含有的最长字符串是蓝色6个“A”1个“x”，如果在$Right(q)$中强行插入$L+1$即纳入绿色部分，会使$Max(q)$从7减少到6从而丢失信息。</p>
 
       
 
