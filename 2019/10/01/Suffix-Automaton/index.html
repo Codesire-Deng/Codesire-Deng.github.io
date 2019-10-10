@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-10-10T14:05:24.385Z">
+<meta property="og:updated_time" content="2019-10-10T14:56:06.192Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="后缀自动机 Suffix Automaton">
 <meta name="twitter:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
@@ -211,16 +211,19 @@
 <li><p>自动机的边数是线性的。<br>　　直观地看，自动机是一个DAG（否则可以无限地在自动机上走，即识别无限长的字符串，显然这是不可能的），而能从$init$走到某个$end$点的肯定是字符串的某一个后缀。字符串只有$n$个后缀，意味着从$init$到$end$只能有$n$种路径；另一方面，节点数只有$O(n)$，所以猜测边数也是$O(n)$的。<br>　　标出自动机任意一个生成树，则对于一条非树边$(a\rightarrow b)$，存在若干路径$\{init \rightarrowtail a \rightarrow b \rightarrowtail e(e\in end)\}$对应着一个后缀。对每一个后缀，对应在自动机上走到的第一条非树边。如此每个后缀最多对应一个非树边，而非树边至少被一个后缀对应，所以后缀数量$\geq$非树边数量。所以边数是$O(n)$的。</p>
 </li>
 </ol>
-<h2 id="归纳法构造SAM"><a href="#归纳法构造SAM" class="headerlink" title="归纳法构造SAM"></a>归纳法构造SAM</h2><p><em>这一部分是SAM构造算法的重要依据。<br>请确认上文所有加粗内容都已理解。</em></p>
+<h2 id="归纳法构造SAM"><a href="#归纳法构造SAM" class="headerlink" title="归纳法构造SAM"></a>归纳法构造SAM</h2><h3 id="SAM的更多性质"><a href="#SAM的更多性质" class="headerlink" title="SAM的更多性质"></a>SAM的更多性质</h3><p><em>这一部分是SAM构造算法的重要依据。<br>请确认上文所有加粗内容都已理解。</em></p>
 <ol>
 <li><p>后缀自动机是一个有向无环图</p>
 <script type="math/tex; mode=display">
 SAM = \{分裂树的点，自动机的有向边\}</script></li>
 <li><p>SAM的构造算法是在线的，即从左到右逐个添加字符。根据数学归纳法，<strong>下文假设已有字符串$T$的后缀自动机</strong>。</p>
 </li>
-<li><p>考虑一个状态$s$，它的$Right(s)=\{r_1, r_2, \cdots, r_n\}$，假如有状态转移$trans(s,c) = t$（即状态$s$后添加一个字符$c$得到状态$t$），由于向右扩展了一位字符，$Right(s)$中只有$T[r_i]=c$的满足要求。所以$Right(t)=\{r_i+1 | T[r_i]=c\}$。<br>　　如果$trans(s,c)$存在，那么$trans(Pa(s), c)$必定存在，其中$Pa(s)$表示分裂树上状态$s$的父亲。</p>
+<li><p>考虑一个状态$s$，它的$Right(s)=\{r_1, r_2, \cdots, r_n\}$，假如有状态转移$trans(s,c) = t$（即状态$s$后添加一个字符$c$得到状态$t$），由于向右扩展了一位字符，$Right(s)$中只有$T[r_i]=c$的满足要求。所以$Right(t)=\{r_i+1 | T[r_i]=c\}$。<br>　　如果$trans(s,c)$存在，那么$trans(Pa(s), c)$必定存在，其中$Pa(s)$表示分裂树上状态$s$的父亲。并且$Right(trans(s,c)) \subseteq Right(trans(Pa(s),c))$。<br>　　另一个显然的结论是$Max(s)&lt;Max(t)$。</p>
+</li>
+<li><p>初始状态时母串$T$为空字符串，自动机只有一个节点$root$。</p>
 </li>
 </ol>
+<h3 id="添加一位字符更新自动机"><a href="#添加一位字符更新自动机" class="headerlink" title="添加一位字符更新自动机"></a>添加一位字符更新自动机</h3><p>&emsp;&emsp;令当前字符串为$T$，长度为$L$；末尾添加一个字符$x$，要将$SAM(T)$更新为$SAM(Tx)$。<br><br>　　那么新增的子串是$Tx$的所有后缀，可看作$T$的所有后缀后添加了$x$。令$SAM(T)$中表示$T$的后缀的节点为$\{v_1, v_2, \cdots, v_k=root\}$。因为后缀在字符串的末尾出现，所以$L\in Right(v_i)$，可知$v_i$在分裂树上恰好构成一条从叶子到$root$的链，不妨设$\{v_1, v_2, \cdots, v_k=root\}$已经按从叶子到祖先排序。<br><br>　　添加字符$x$后，首先新建状态$np$表示$ST(Tx)$，这是一个已确定的状态（因为没有出边），可知$Right(np)=\{L+1\}$。<br><br>　　回头考虑旧自动机的$v_i$，设$Right(v_i)=\{r_1, r_2, \cdots, r_n=L\}$。如果能在后面添加字符$x$（注意现在仍是字符串$T$的自动机），即$nv=trans(v_i, x)$存在，我们已经知道$Right(nv)=\{r_i+1|T[r_i]=x\}$；反之如果$v_i$没有$x$的出边，意味着没有$r_i$满足$T[r_i]=x$。由于分裂树上父亲的$Right$扩大，如果$trans(v_i,x)$存在，那么$trans(v_{i+1}, x)$也存在。<br><br>　　对于所有$trans(v,x)=null$的$v$，而只有$Tx[r_n=L]=x$满足转移条件，于是添加一条边$trans(v,x)=np$。<br><br></p>
 
       
 
@@ -373,7 +376,7 @@ SAM = \{分裂树的点，自动机的有向边\}</script></li>
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动机的五个部分"><span class="toc-number">1.1.</span> <span class="toc-text">自动机的五个部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设"><span class="toc-number">1.2.</span> <span class="toc-text">设</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SAM的可行性分析"><span class="toc-number">2.1.</span> <span class="toc-text">SAM的可行性分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#归纳法构造SAM"><span class="toc-number">2.2.</span> <span class="toc-text">归纳法构造SAM</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动机的五个部分"><span class="toc-number">1.1.</span> <span class="toc-text">自动机的五个部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设"><span class="toc-number">1.2.</span> <span class="toc-text">设</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SAM的可行性分析"><span class="toc-number">2.1.</span> <span class="toc-text">SAM的可行性分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#归纳法构造SAM"><span class="toc-number">2.2.</span> <span class="toc-text">归纳法构造SAM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SAM的更多性质"><span class="toc-number">2.2.1.</span> <span class="toc-text">SAM的更多性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加一位字符更新自动机"><span class="toc-number">2.2.2.</span> <span class="toc-text">添加一位字符更新自动机</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
