@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="欲乘风归去">
 <meta property="og:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让null表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令trans(s, str)表示在状态s时读入字符串str后，所达到的状态。trans应具有传递性。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-10-10T13:13:36.782Z">
+<meta property="og:updated_time" content="2019-10-10T13:28:32.681Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="后缀自动机 Suffix Automaton">
 <meta name="twitter:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让null表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令trans(s, str)表示在状态s时读入字符串str后，所达到的状态。trans应具有传递性。">
@@ -206,13 +206,17 @@
 </li>
 <li><p>状态数是线性的。<br>　　状态由Right集合决定，考虑两个状态a,b的Right集合Ra,Rb。假设Ra,Rb有交集，设r$\in$Ra$\cap$Rb。由于一个子串只能属于一个状态，所以a，b所表示的子串不会有交集，即由r往前不能有长度相同的子串，故[Min(a), Max(a)]和[Min(b), Max(b)]没有交集，不妨设Max(a)&lt;Min(b)，由于a，b包含的所有串都可以视为r往前的子串，故a的所有串都是b的任意串的后缀。因b的任意串都能找到后缀属于a，两者Right集合又不相等，故Rb$\subset$Ra。那么任意两个状态的Right集合要么不相交，要么一个是另一个的真子集。<br>　　疾风将以状态为节点，以Right包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，SAM的结点个数最多为2n。</p>
 </li>
-<li><p>更严谨的分裂树定义：令满足Right(s)$\subset$Right(fa)的最小|Right(fa)|的fa为状态s的父亲。<br>易知Max(fa)+1=Min(s)。</p>
+<li><p>更严谨的分裂树定义：令满足Right(s)$\subset$Right(fa)的最小|Right(fa)|的fa为状态s的父亲。<br>　　直观地看，一定是fa中最长的字符串向前扩展一位导致了Right集合分裂，所以<strong>Max(fa)+1=Min(s)</strong>。</p>
 </li>
 <li><p>自动机的边数是线性的。<br>　　直观地看，自动机是一个DAG（否则可以无限地在自动机上走，即识别无限长的字符串，显然这是不可能的），而能从init走到某个end点的肯定是字符串的某一个后缀。字符串只有n个后缀，意味着从init到end只能有n种路径；另一方面，节点数只有O(n)，所以猜测边数也是O(n)的。<br>　　标出自动机任意一个生成树，则对于一条非树边$(a\rightarrow b)$，存在若干路径$\{init \rightarrowtail a \rightarrow b \rightarrowtail e(e\in end)\}$对应着一个后缀。对每一个后缀，对应在自动机上走到的第一条非树边。如此每个后缀最多对应一个非树边，而非树边至少被一个后缀对应，所以后缀数量$\geq$非树边数量。所以边数是O(n)的。</p>
 </li>
 </ol>
-<h2 id="SAM的更多性质"><a href="#SAM的更多性质" class="headerlink" title="SAM的更多性质"></a>SAM的更多性质</h2><p>这一部分是SAM构造算法的重要依据。</p>
-<p>　　</p>
+<h2 id="归纳法构造SAM"><a href="#归纳法构造SAM" class="headerlink" title="归纳法构造SAM"></a>归纳法构造SAM</h2><p><em>这一部分是SAM构造算法的重要依据。<br>请确认上文所有加粗内容都已理解。</em></p>
+<ol>
+<li><p>SAM的构造算法是在线的，即从左到右逐个添加字符。因此可以运用数学归纳法证明构造正确性。</p>
+</li>
+<li></li>
+</ol>
 
       
 
@@ -365,7 +369,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动机的五个部分"><span class="toc-number">1.1.</span> <span class="toc-text">自动机的五个部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设"><span class="toc-number">1.2.</span> <span class="toc-text">设</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SAM的可行性分析"><span class="toc-number">2.1.</span> <span class="toc-text">SAM的可行性分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SAM的更多性质"><span class="toc-number">2.2.</span> <span class="toc-text">SAM的更多性质</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动机的五个部分"><span class="toc-number">1.1.</span> <span class="toc-text">自动机的五个部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设"><span class="toc-number">1.2.</span> <span class="toc-text">设</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SAM的可行性分析"><span class="toc-number">2.1.</span> <span class="toc-text">SAM的可行性分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#归纳法构造SAM"><span class="toc-number">2.2.</span> <span class="toc-text">归纳法构造SAM</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
