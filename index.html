@@ -188,6 +188,7 @@
 <li>指针板构造采用内存池技术</li>
 <li>$Max$可能的取值仅有$[1,n]$，所以要采用计数排序</li>
 <li>不要真的修改内存池，而是新开指针做排序</li>
+<li>如果不得不写常规拓扑排序，bfs时请注意DAG的重复访问</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cnt; ++i) ++num[sam[i].Max];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) num[i] += num[i+<span class="number">1</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cnt; ++i) b[--num[sam[i].Max]] = &amp;sam[i];</span><br><span class="line"><span class="comment">// sam[] has been top sorted by b[].</span></span><br></pre></td></tr></table></figure>
 <p>剩余细节在例题中呈现。</p>

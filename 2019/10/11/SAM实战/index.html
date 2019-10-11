@@ -17,7 +17,7 @@
 <meta property="og:description" content="试问有多少次实战因为不会SAM而痛失一整题？不想打铁？是时候全部拿下了！  在自动机上游走&amp;emsp;&amp;emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。 求最小表示&amp;emsp;&amp;emsp;求字符串$S$的最小表示。　　网络上有$O(n)$的特殊做法，此处不赘述。　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/10/11/SAM实战/abaTree.png">
-<meta property="og:updated_time" content="2019-10-11T17:51:13.858Z">
+<meta property="og:updated_time" content="2019-10-11T17:53:02.339Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SAM实战剖析">
 <meta name="twitter:description" content="试问有多少次实战因为不会SAM而痛失一整题？不想打铁？是时候全部拿下了！  在自动机上游走&amp;emsp;&amp;emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。 求最小表示&amp;emsp;&amp;emsp;求字符串$S$的最小表示。　　网络上有$O(n)$的特殊做法，此处不赘述。　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最">
@@ -193,6 +193,7 @@
 <li>指针板构造采用内存池技术</li>
 <li>$Max$可能的取值仅有$[1,n]$，所以要采用计数排序</li>
 <li>不要真的修改内存池，而是新开指针做排序</li>
+<li>如果不得不写常规拓扑排序，bfs时请注意DAG的重复访问</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cnt; ++i) ++num[sam[i].Max];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) num[i] += num[i+<span class="number">1</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cnt; ++i) b[--num[sam[i].Max]] = &amp;sam[i];</span><br><span class="line"><span class="comment">// sam[] has been top sorted by b[].</span></span><br></pre></td></tr></table></figure>
 <p>剩余细节在例题中呈现。</p>
