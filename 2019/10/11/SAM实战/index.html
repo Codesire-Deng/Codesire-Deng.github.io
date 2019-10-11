@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>SAM实战剖析 | 欲乘风归去</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="试问有多少次实战因为不会SAM而痛失一整题？不想打铁？是时候全部拿下了！  在自动机上游走&amp;emsp;&amp;emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。 求最小表示&amp;emsp;&amp;emsp;求字符串$S$的最小表示。　　网络上有$O(n)$的特殊做法，此处不赘述。　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最">
+  <meta name="description" content="试问有多少次实战因为不会SAM而痛失一整题？不想打铁？是时候全部拿下了！">
 <meta name="keywords" content="字符串">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SAM实战剖析">
 <meta property="og:url" content="http://yoursite.com/2019/10/11/SAM实战/index.html">
 <meta property="og:site_name" content="欲乘风归去">
-<meta property="og:description" content="试问有多少次实战因为不会SAM而痛失一整题？不想打铁？是时候全部拿下了！  在自动机上游走&amp;emsp;&amp;emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。 求最小表示&amp;emsp;&amp;emsp;求字符串$S$的最小表示。　　网络上有$O(n)$的特殊做法，此处不赘述。　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最">
+<meta property="og:description" content="试问有多少次实战因为不会SAM而痛失一整题？不想打铁？是时候全部拿下了！">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/10/11/SAM实战/abaTree.png">
-<meta property="og:updated_time" content="2019-10-11T17:53:02.339Z">
+<meta property="og:updated_time" content="2019-10-11T17:53:55.678Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SAM实战剖析">
-<meta name="twitter:description" content="试问有多少次实战因为不会SAM而痛失一整题？不想打铁？是时候全部拿下了！  在自动机上游走&amp;emsp;&amp;emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。 求最小表示&amp;emsp;&amp;emsp;求字符串$S$的最小表示。　　网络上有$O(n)$的特殊做法，此处不赘述。　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最">
+<meta name="twitter:description" content="试问有多少次实战因为不会SAM而痛失一整题？不想打铁？是时候全部拿下了！">
 <meta name="twitter:image" content="http://yoursite.com/2019/10/11/SAM实战/abaTree.png">
   
     <link rel="alternative" href="/atom.xml" title="欲乘风归去" type="application/atom+xml">
@@ -184,6 +184,7 @@
         <ul>
 <li><em>试问有多少次实战因为不会SAM而痛失一整题？</em><br><em><br>不想打铁？是时候全部拿下了！</em></li>
 </ul>
+<a id="more"></a>
 <h1 id="在自动机上游走"><a href="#在自动机上游走" class="headerlink" title="在自动机上游走"></a>在自动机上游走</h1><p>&emsp;&emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。</p>
 <h2 id="求最小表示"><a href="#求最小表示" class="headerlink" title="求最小表示"></a>求最小表示</h2><p>&emsp;&emsp;求字符串$S$的最小表示。<br><br>　　<em>网络上有$O(n)$的特殊做法，此处不赘述。</em><br><br>　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最小的出边走，走n步就得到了$SS$中长度为n的最小子串，即$S$的最小表示。</p>
 <h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算$|Right|$"></a>离线计算$|Right|$</h1><p>&emsp;&emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| = 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br><img src="./abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"><br><br>　　如上图所示，“1”在分裂的过程中消失了，不存在叶子节点中。<br><br>　　为什么$Right$集合的元素无法往下分裂？这是因为它表示的子串无法向左端扩展，换句话说，它是前缀。注意到叶子节点也是前缀。综上所述，只要对前缀所在节点的$|Right|$预置为$1$（其他节点预置为$0$），然后自底向上更新分裂树即可得到所有$|Right|$</p>
