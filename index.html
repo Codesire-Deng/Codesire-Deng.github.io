@@ -181,8 +181,15 @@
 </ul>
 <h1 id="在自动机上游走"><a href="#在自动机上游走" class="headerlink" title="在自动机上游走"></a>在自动机上游走</h1><p>&emsp;&emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。</p>
 <h2 id="最小表示法"><a href="#最小表示法" class="headerlink" title="最小表示法"></a>最小表示法</h2><p>&emsp;&emsp;求字符串$S$的最小表示。<br><br>　　<em>网络上有$O(n)$的特殊做法，此处不赘述。</em><br><br>　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最小的出边走，走n步就得到了$SS$中长度为n的最小子串，即$S$的最小表示。</p>
-<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算$|Right|$"></a>离线计算$|Right|$</h1><p>&emsp;&emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| = 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br><img src="./abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"></p>
-
+<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算$|Right|$"></a>离线计算$|Right|$</h1><p>&emsp;&emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| = 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br><img src="./abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"><br><br>　　如上图所示，“1”在分裂的过程中消失了，不存在叶子节点中。<br><br>　　为什么$Right$集合的元素无法往下分裂？这是因为它表示的子串无法向左端扩展，换句话说，它是前缀。注意到叶子节点也是前缀。综上所述，只要对前缀所在节点的$|Right|$预置为$1$（其他节点预置为$0$），然后自底向上更新分裂树即可得到所有$|Right|$</p>
+<p>&emsp;&emsp;上文引出了一个新问题，如何自底向上地访问分裂树？一种直观的办法是bfs遍历SAM所有节点再做裸拓扑排序，这逻辑复杂而代码繁琐。一种更好的办法是，在构造SAM时采用内存池技术，之后对内存池按照$Max$降序排序即可。原因是</p>
+<script type="math/tex; mode=display">Max(fa)+1=Min(s) \Rightarrow Max(s) > Max(fa)</script><p>要点：</p>
+<ol>
+<li>指针板构造采用内存池技术</li>
+<li>$Max$可能的取值仅有$[1,n]$，所以要采用计数排序</li>
+<li>不要真的修改内存池，而是新开指针做排序</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cnt; ++i) ++num[sam[i].Max];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) num[i] += num[i+<span class="number">1</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cnt; ++i) b[--num[sam[i].Max]] = &amp;sam[i];</span><br><span class="line"><span class="comment">// sam[] has been top sorted by b[].</span></span><br></pre></td></tr></table></figure>
       
 
       
