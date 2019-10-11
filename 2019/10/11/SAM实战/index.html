@@ -17,7 +17,7 @@
 <meta property="og:description" content="试问有多少次实战因为不会SAM而痛失一整题？不想打铁？是时候全部拿下了！  在自动机上游走&amp;emsp;&amp;emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。 最小表示法&amp;emsp;&amp;emsp;求字符串$S$的最小表示。　　网络上有$O(n)$的特殊做法，此处不赘述。　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/10/11/SAM实战/abaTree.png">
-<meta property="og:updated_time" content="2019-10-11T17:09:06.265Z">
+<meta property="og:updated_time" content="2019-10-11T17:09:35.247Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SAM实战剖析">
 <meta name="twitter:description" content="试问有多少次实战因为不会SAM而痛失一整题？不想打铁？是时候全部拿下了！  在自动机上游走&amp;emsp;&amp;emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。 最小表示法&amp;emsp;&amp;emsp;求字符串$S$的最小表示。　　网络上有$O(n)$的特殊做法，此处不赘述。　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最">
@@ -186,7 +186,7 @@
 </ul>
 <h1 id="在自动机上游走"><a href="#在自动机上游走" class="headerlink" title="在自动机上游走"></a>在自动机上游走</h1><p>&emsp;&emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。</p>
 <h2 id="最小表示法"><a href="#最小表示法" class="headerlink" title="最小表示法"></a>最小表示法</h2><p>&emsp;&emsp;求字符串$S$的最小表示。<br><br>　　<em>网络上有$O(n)$的特殊做法，此处不赘述。</em><br><br>　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最小的出边走，走n步就得到了$SS$中长度为n的最小子串，即$S$的最小表示。</p>
-<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算$|Right|$"></a>离线计算$|Right|$</h1><p>&emsp;&emsp;构造好的后缀自动机隐含了一颗分裂树。只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| = 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br><img src="./abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"></p>
+<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算$|Right|$"></a>离线计算$|Right|$</h1><p>&emsp;&emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| = 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br><img src="./abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"></p>
 
       
 
