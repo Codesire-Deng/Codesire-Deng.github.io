@@ -173,7 +173,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>不会汇编，强行刚软保，<del>瑟瑟发抖</del>稳得一匹</p>
-<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="C语法"><a href="#C语法" class="headerlink" title="C语法"></a>C语法</h2><ol>
+<h1><span id="前置知识">前置知识</span></h1><h2><span id="c语法">C语法</span></h2><ol>
 <li>指针作差得到区间元素个数。<strong>指针的类型参与计算！</strong></li>
 <li>要动态改变函数体，需要在编译期赋予权限。</li>
 </ol>
@@ -184,36 +184,36 @@
 <li></li>
 <li></li>
 </ol>
-<h2 id="Windows-exe结构"><a href="#Windows-exe结构" class="headerlink" title="Windows exe结构"></a>Windows exe结构</h2><ol>
+<h2><span id="windows-exe结构">Windows exe结构</span></h2><ol>
 <li>401000H这个内存地址对应的文件地址是1000H</li>
 </ol>
-<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><h2 id="Quickview：更改EXE数据"><a href="#Quickview：更改EXE数据" class="headerlink" title="Quickview：更改EXE数据"></a>Quickview：更改EXE数据</h2><ol>
+<h1><span id="工具">工具</span></h1><h2><span id="quickview更改exe数据">Quickview：更改EXE数据</span></h2><ol>
 <li>按<code>F5</code>可以按地址定位</li>
 <li>提供三种模式：16进制格式，汇编格式，纯文本格式；按<code>F2</code>切换到32位模式</li>
 <li>按<code>Alt+F9</code>保存</li>
 <li>按<code>ins</code>选择块（开始和结束各按一次），选择后按<code>shift</code>底部出现块工具</li>
 <li></li>
 </ol>
-<h2 id="OD：单步跟踪EXE"><a href="#OD：单步跟踪EXE" class="headerlink" title="OD：单步跟踪EXE"></a>OD：单步跟踪EXE</h2><ol>
+<h2><span id="od单步跟踪exe">OD：单步跟踪EXE</span></h2><ol>
 <li>可以用来追踪去壳代码</li>
 <li>可以dump数据块到文件</li>
 <li>可以设置硬件断点，当某储存位置发生更改时中断</li>
 <li><code>Alt+B</code>管理断点，<code>空格</code>切换</li>
 <li></li>
 </ol>
-<h2 id="IDA：静态分析EXE"><a href="#IDA：静态分析EXE" class="headerlink" title="IDA：静态分析EXE"></a>IDA：静态分析EXE</h2><ol>
+<h2><span id="ida静态分析exe">IDA：静态分析EXE</span></h2><ol>
 <li>按<code>G</code>定位</li>
 <li>可通过加壳反抗静态分析。</li>
 </ol>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="面对加壳"><a href="#面对加壳" class="headerlink" title="面对加壳"></a>面对加壳</h2><ol>
+<h1><span id="方法">方法</span></h1><h2><span id="面对加壳">面对加壳</span></h2><ol>
 <li>用OD动态追踪，尝试还原被加壳代码（等待去壳），再用QV还原EXE（用块复制的办法加快速度）</li>
 </ol>
-<h2 id="面对序列号"><a href="#面对序列号" class="headerlink" title="面对序列号"></a>面对序列号</h2><ol>
+<h2><span id="面对序列号">面对序列号</span></h2><ol>
 <li>观察到现象：弹框并消失。可行办法：跟踪CreateWindow/ShowWindow/DestoryWindow（推荐）</li>
 <li>用OD动态追踪，尝试中断DestoryWindow，观察堆栈顶端找到出栈后的程序运行位置（或直接跑retn)</li>
 <li>\</li>
 </ol>
-<h1 id="汇编规则"><a href="#汇编规则" class="headerlink" title="汇编规则"></a>汇编规则</h1><ol>
+<h1><span id="汇编规则">汇编规则</span></h1><ol>
 <li>cdq edx:eax, idiv, edx = edx:eax %n</li>
 </ol>
 
@@ -357,7 +357,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#C语法"><span class="toc-number">1.1.</span> <span class="toc-text">C语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-exe结构"><span class="toc-number">1.2.</span> <span class="toc-text">Windows exe结构</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#工具"><span class="toc-number">2.</span> <span class="toc-text">工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quickview：更改EXE数据"><span class="toc-number">2.1.</span> <span class="toc-text">Quickview：更改EXE数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OD：单步跟踪EXE"><span class="toc-number">2.2.</span> <span class="toc-text">OD：单步跟踪EXE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IDA：静态分析EXE"><span class="toc-number">2.3.</span> <span class="toc-text">IDA：静态分析EXE</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#方法"><span class="toc-number">3.</span> <span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#面对加壳"><span class="toc-number">3.1.</span> <span class="toc-text">面对加壳</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#面对序列号"><span class="toc-number">3.2.</span> <span class="toc-text">面对序列号</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#汇编规则"><span class="toc-number">4.</span> <span class="toc-text">汇编规则</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.1.</span> <span class="toc-text">C语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.2.</span> <span class="toc-text">Windows exe结构</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">2.</span> <span class="toc-text">工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">2.1.</span> <span class="toc-text">Quickview：更改EXE数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">2.2.</span> <span class="toc-text">OD：单步跟踪EXE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">2.3.</span> <span class="toc-text">IDA：静态分析EXE</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">3.</span> <span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">3.1.</span> <span class="toc-text">面对加壳</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">3.2.</span> <span class="toc-text">面对序列号</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">4.</span> <span class="toc-text">汇编规则</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -439,7 +439,7 @@ gitalk.render('gitalk-container')
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
-		toc_hide_index: false,
+		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
 		showTags: false
@@ -529,11 +529,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">数学</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -541,7 +541,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
+                <a href="javascript:void(0)" class="js-tag color3">数学</a>
               </li>
             
             <div class="clearfix"></div>

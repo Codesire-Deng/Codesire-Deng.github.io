@@ -173,12 +173,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="模方程"><a href="#模方程" class="headerlink" title="模方程"></a>模方程</h1><h2 id="基础性质"><a href="#基础性质" class="headerlink" title="基础性质"></a>基础性质</h2><h3 id="模的等价关系"><a href="#模的等价关系" class="headerlink" title="模的等价关系"></a>模的等价关系</h3><p><strong>自反性</strong></p>
+        <h1><span id="模方程">模方程</span></h1><h2><span id="基础性质">基础性质</span></h2><h3><span id="模的等价关系">模的等价关系</span></h3><p><strong>自反性</strong></p>
 <script type="math/tex; mode=display">a\equiv a \mod m</script><p><strong>对称性</strong></p>
 <script type="math/tex; mode=display">a\equiv b \mod m\Leftrightarrow b\equiv a \mod m</script><p><strong>传递性</strong></p>
 <script type="math/tex; mode=display">
 a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m</script><a id="more"></a>
-<h3 id="等式的性质"><a href="#等式的性质" class="headerlink" title="等式的性质"></a>等式的性质</h3><p><strong>可加减性</strong></p>
+<h3><span id="等式的性质">等式的性质</span></h3><p><strong>可加减性</strong></p>
 <script type="math/tex; mode=display">
 模m意义下\\
 a\equiv b, c\equiv d \Rightarrow a+c\equiv b+d</script><p><strong>可乘性</strong></p>
@@ -215,13 +215,13 @@ a\equiv b \mod c \\
 ad \equiv bd \mod cd</script><blockquote>
 <p>证明：$c|(a-b)\Rightarrow cd|d(a-b)$。</p>
 </blockquote>
-<h2 id="高级定理"><a href="#高级定理" class="headerlink" title="高级定理"></a>高级定理</h2><h3 id="贝祖定理"><a href="#贝祖定理" class="headerlink" title="贝祖定理"></a>贝祖定理</h3><script type="math/tex; mode=display">
+<h2><span id="高级定理">高级定理</span></h2><h3><span id="贝祖定理">贝祖定理</span></h3><script type="math/tex; mode=display">
 gcd(a,b)是a,b的线性组合。即存在整数x,y,使得xa+yb=gcd(a,b).</script><blockquote>
 <p>证明：</p>
 <p>当$a=b$时结论显然成立。</p>
 <p>当$a\neq b$时，不妨设$a\neq0$，取$d$为$a,b$的所有线性组合中最小的正整数。作带余除法$a=qd+r$，则$0\leq r&lt;d$. 若$r\neq 0$,则$r=a-qd$是比d更小的线性组合，与假设矛盾,所以$r=0$,$d$是$a$的因子;同理可得$d$是$b$的因子,故$d$是$a,b$的公因子.取$c$为$a,b$的任意公因子,对$d=(xa+yb)$提取$c$得$d=c(xa’+yb’)$,可知$c$是$d$的因子,所以$|c|\leq d$,故$d=gcd(a,b)$.</p>
 </blockquote>
-<h3 id="中国剩余定理"><a href="#中国剩余定理" class="headerlink" title="中国剩余定理"></a>中国剩余定理</h3><script type="math/tex; mode=display">
+<h3><span id="中国剩余定理">中国剩余定理</span></h3><script type="math/tex; mode=display">
 有线性同余方程组\\
 x\equiv a_1 \mod m_1\\
 x\equiv a_2 \mod m_2\\
@@ -235,11 +235,11 @@ x=\sum_{i=1}^{n} a_it_iM_i</script><blockquote>
 <p>构造解$x$的正确性。对于方程$i$,$\quad t_iM_i\equiv 1 \mod m_i, M_j\equiv 0 \mod m_i$。所以解满足每一条方程式。</p>
 <p>在模$M$意义下解的唯一性。令$x_1,x_2$为方程组的两个不同的解,则$(x_1-x_2)$分别是$m_1,m_2\dotsm m_n$的倍数，则$|(x_1-x_2)|\geq M$，则在模$M$意义下解是唯一的。</p>
 </blockquote>
-<h1 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>m的化简剩余系（又称既约剩余系，缩系），<strong>本文记为$Z_m$</strong></p>
+<h1><span id="欧拉函数">欧拉函数</span></h1><h2><span id="定义">定义</span></h2><p>m的化简剩余系（又称既约剩余系，缩系），<strong>本文记为$Z_m$</strong></p>
 <script type="math/tex; mode=display">
 m的剩余系中与m互质的数构成的子集</script><p>欧拉函数$\phi(n)$</p>
 <script type="math/tex; mode=display">
-m的化简剩余系的元素个数，即|Z_m|</script><h2 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h2><ol>
+m的化简剩余系的元素个数，即|Z_m|</script><h2><span id="性质">性质</span></h2><ol>
 <li><p>对于质数$p$，$\phi(p)=p-1$ </p>
 </li>
 <li><p>对于质数$p$，$\phi(p^k)=p^{k-1}(p-1)$</p>
@@ -308,7 +308,7 @@ N \equiv b \mod m_2\\</script><p>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$
 <p>证明：$\forall k \in [1,n]$，对应有一个$d=gcd(k,n)$。所有可能的$d$取遍了$n$的所有因子。对$d|n$，考虑其对应的$k$，不妨设$k=k_1d,n=k_2d，且gcd(k_1,k_2)=1,那么k_1\leq k_2$。显然$k_2=\frac{n}{d}$是固定的，那么可能的$k_1$的取值有$\phi(k_2)=\phi(\frac{n}{d})$种。所以</p>
 <script type="math/tex; mode=display">
 n=\sum\limits_{d|n}\phi(\frac{n}{d})=\sum\limits_{d|n}\phi(d)</script></blockquote>
-<h2 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h2><h3 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h3><script type="math/tex; mode=display">
+<h2><span id="定理">定理</span></h2><h3><span id="欧拉定理">欧拉定理</span></h3><script type="math/tex; mode=display">
 对于互质的两个数a,n有\\
 a^{\phi(n)} \equiv 1 \mod n</script><blockquote>
 <p>证明：设$Z_n=\{x_1,x_2,\dotsc,x_{\phi(n)}\}$，因$a,n互质$，则$ax_i \mod n \in Z_n$；而对$x_i\neq x_j$，由消去律有$ax_i\neq ax_j \mod n$。故模n意义下$Z_n=\{ax_1,ax_2,\dotsc,ax_{\phi(n)}\}$。</p>
@@ -318,7 +318,7 @@ a^{\phi(n)} \equiv 1 \mod n</script><blockquote>
 <script type="math/tex; mode=display">
 a^{\phi(n)} \equiv 1 \mod n</script><p>推论：<strong>费马小定理</strong>。</p>
 </blockquote>
-<h3 id="扩展欧拉定理（欧拉降幂）"><a href="#扩展欧拉定理（欧拉降幂）" class="headerlink" title="扩展欧拉定理（欧拉降幂）"></a>扩展欧拉定理（欧拉降幂）</h3><script type="math/tex; mode=display">
+<h3><span id="扩展欧拉定理欧拉降幂">扩展欧拉定理（欧拉降幂）</span></h3><script type="math/tex; mode=display">
 模m意义下\\
 a^c\equiv
 \begin{cases}
@@ -347,19 +347,19 @@ p^c\equiv p^{c \mod \phi(m) + \phi(m)} \mod m \\</script><p>对$p$的幂$p^k$，
   \equiv & a^{c \mod \phi(m) + \phi(m)} \mod m
 \end{aligned}</script></blockquote>
 <hr>
-<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="线性筛质数"><a href="#线性筛质数" class="headerlink" title="线性筛质数"></a>线性筛质数</h2><p>求$[1,n]$内的所有素数。</p>
+<h1><span id="算法">算法</span></h1><h2><span id="线性筛质数">线性筛质数</span></h2><p>求$[1,n]$内的所有素数。</p>
 <ol>
 <li>算法核心是<strong>每个合数只被其最小质因子筛到</strong>。</li>
 <li>当前判断完$i$是否质数。接下来筛去i的倍数。枚举已知质数$p_j$，筛去$p_j*i$。若$p_j$是$i$的最小质因子则break。这是因为i以后筛的数都以$p_j$为最小质因子，这些数肯定能被其他的$i$枚举$p_j$筛去，不必重复筛。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getPrime</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// memset(vis, 0, sizeof(vis));</span></span><br><span class="line">    pcnt = <span class="number">0</span>;</span><br><span class="line">    vis[<span class="number">0</span>] = vis[<span class="number">1</span>] = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;=n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!vis[i]) prime[pcnt++] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;pcnt &amp;&amp; prime[j]*i&lt;=n; ++j) &#123;</span><br><span class="line">            vis[prime[j]*i] = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % prime[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="线性筛欧拉函数"><a href="#线性筛欧拉函数" class="headerlink" title="线性筛欧拉函数"></a>线性筛欧拉函数</h2><p>求$[1,n]$内所有欧拉函数值</p>
+<h2><span id="线性筛欧拉函数">线性筛欧拉函数</span></h2><p>求$[1,n]$内所有欧拉函数值</p>
 <ol>
 <li>算法核心是<strong>积性函数</strong>和<strong>欧拉函数性质4</strong></li>
 <li>在线性筛的同时完成欧拉函数计算。当前判断完$i$是否质数，若是合数，则函数值在前面计算过了；若是质数，直接赋值$\phi(i)=i-1$。枚举已知质数$p_j$时，若$p_j$不是$i$的因子，由积性函数可知$\phi(i\cdot p_j)=\phi(i)\cdot \phi(p_j)=\phi(i)\cdot (p_j-1)$ ; 若$p_j$是$i$的因子，由<strong>性质4</strong>得$\phi(i\cdot p_j)=\phi(i)\cdot p_j$，然后break。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getPhi</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// memset(phi, 0, sizeof(phi));</span></span><br><span class="line">    pcnt = <span class="number">0</span>;</span><br><span class="line">    phi[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;=n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (phi[i] == <span class="number">0</span>) &#123;</span><br><span class="line">            prime[pcnt++] = i;</span><br><span class="line">            phi[i] = i - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;pcnt &amp;&amp; i*prime[j]&lt;=n; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i % prime[j] == <span class="number">0</span>) &#123;</span><br><span class="line">                phi[i * prime[j]] = phi[i] * prime[j];</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                phi[i * prime[j]] = phi[i] * (prime[j]<span class="number">-1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="欧几里得算法（辗转相除法）"><a href="#欧几里得算法（辗转相除法）" class="headerlink" title="欧几里得算法（辗转相除法）"></a><strong>欧几里得算法</strong>（辗转相除法）</h2><p>求$gcd(a,b)$。</p>
+<h2><span id="欧几里得算法辗转相除法"><strong>欧几里得算法</strong>（辗转相除法）</span></h2><p>求$gcd(a,b)$。</p>
 <ol>
 <li>$gcd(a, 0)$的结果显然等于$a$。</li>
 <li>当$a，b$全不为零，则$gcd(a,b) = gcd(b, a \mod b )$使问题规模减小。<blockquote>
@@ -368,7 +368,7 @@ p^c\equiv p^{c \mod \phi(m) + \phi(m)} \mod m \\</script><p>对$p$的幂$p^k$，
 </blockquote>
 </li>
 </ol>
-<h2 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a><strong>扩展欧几里得算法</strong></h2><p>求$ax+by=gcd(a,b)$的一组整数解$x,y$。</p>
+<h2><span id="扩展欧几里得算法"><strong>扩展欧几里得算法</strong></span></h2><p>求$ax+by=gcd(a,b)$的一组整数解$x,y$。</p>
 <ol>
 <li>直接由<strong>贝祖定理</strong>可知整数解一定存在。（贝祖定理：存在整数$s，t$使得$sa+tb=gcd(a,b)$）</li>
 <li>由辗转相除法知$bx’+(a\%b)y’=gcd(b,a\%b)=gcd(a,b)$的解也存在。由整数除法得<script type="math/tex; mode=display">\begin{aligned}
@@ -379,7 +379,7 @@ p^c\equiv p^{c \mod \phi(m) + \phi(m)} \mod m \\</script><p>对$p$的幂$p^k$，
 <li>实际写代码时用引用，减少临时变量。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">exgcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> &amp;d, <span class="keyword">int</span> &amp;x, <span class="keyword">int</span> &amp;y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (b == <span class="number">0</span>) &#123;</span><br><span class="line">        x = <span class="number">1</span>; y = <span class="number">0</span>;</span><br><span class="line">        d = a;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    exgcd(b, a%b, d, y, x); <span class="comment">// x和y完成了交换</span></span><br><span class="line">    y -= a / b * x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="类欧几里得算法"><a href="#类欧几里得算法" class="headerlink" title="类欧几里得算法"></a><strong>类欧几里得算法</strong></h2><p>求等差数列对每一项做整数除法的和，即</p>
+<h2><span id="类欧几里得算法"><strong>类欧几里得算法</strong></span></h2><p>求等差数列对每一项做整数除法的和，即</p>
 <script type="math/tex; mode=display">
 lgcd(a, b, c, n) = \sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor</script><ol>
 <li>首先标准化$a,b$，使满足$a\geq 0, b\geq 0$，在答案中预先减去补上的$c$即可。</li>
@@ -402,8 +402,8 @@ lgcd(a, b, c, n) = \sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor</script><ol>
 令m={\lfloor\frac{a'(n-1)+b'}{c}\rfloor} \\
 \sum_{j=0}^{m-1}[n-(\lfloor\frac{(j+1)c-b'-1}{a'}\rfloor+1)] = (n-1)m-lgcd(c, c-b'-1,a',m)</script></li>
 </ol>
-<h3 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Sum&#123;(ai+b)/c&#125; for i=0..n-1</span></span><br><span class="line"><span class="function">LL <span class="title">lgcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c, LL n)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span> || c == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	LL res = n*(b/c) + (n<span class="number">-1</span>)*n/<span class="number">2</span>*(a/c);</span><br><span class="line">	a = a % c; b = b % c;</span><br><span class="line">	LL m = (a*(n<span class="number">-1</span>)+b)/c;</span><br><span class="line">	<span class="keyword">return</span> (n<span class="number">-1</span>)*m - lgcd(c, c-b<span class="number">-1</span>, a, m) + res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<h3><span id="模板">模板</span></h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Sum&#123;(ai+b)/c&#125; for i=0..n-1</span></span><br><span class="line"><span class="function">LL <span class="title">lgcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c, LL n)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span> || c == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	LL res = n*(b/c) + (n<span class="number">-1</span>)*n/<span class="number">2</span>*(a/c);</span><br><span class="line">	a = a % c; b = b % c;</span><br><span class="line">	LL m = (a*(n<span class="number">-1</span>)+b)/c;</span><br><span class="line">	<span class="keyword">return</span> (n<span class="number">-1</span>)*m - lgcd(c, c-b<span class="number">-1</span>, a, m) + res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1><span id="杂项">杂项</span></h1><h2><span id="注意事项">注意事项</span></h2><ol>
 <li>质因数分解时，质因数要么小于等于$\sqrt{n}$，要么等于$n$。不要漏掉等于$n$的情况。</li>
 <li>1e8+7以内的质数<br>有5761456个，约为6e6，约为范围的1/15。<br><strong>范围越大，质数的占比越小</strong></li>
 </ol>
@@ -559,7 +559,7 @@ lgcd(a, b, c, n) = \sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor</script><ol>
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#模方程"><span class="toc-number">1.</span> <span class="toc-text">模方程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础性质"><span class="toc-number">1.1.</span> <span class="toc-text">基础性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模的等价关系"><span class="toc-number">1.1.1.</span> <span class="toc-text">模的等价关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#等式的性质"><span class="toc-number">1.1.2.</span> <span class="toc-text">等式的性质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#高级定理"><span class="toc-number">1.2.</span> <span class="toc-text">高级定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#贝祖定理"><span class="toc-number">1.2.1.</span> <span class="toc-text">贝祖定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#中国剩余定理"><span class="toc-number">1.2.2.</span> <span class="toc-text">中国剩余定理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#欧拉函数"><span class="toc-number">2.</span> <span class="toc-text">欧拉函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定义"><span class="toc-number">2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#性质"><span class="toc-number">2.2.</span> <span class="toc-text">性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定理"><span class="toc-number">2.3.</span> <span class="toc-text">定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#欧拉定理"><span class="toc-number">2.3.1.</span> <span class="toc-text">欧拉定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#扩展欧拉定理（欧拉降幂）"><span class="toc-number">2.3.2.</span> <span class="toc-text">扩展欧拉定理（欧拉降幂）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#算法"><span class="toc-number">3.</span> <span class="toc-text">算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#线性筛质数"><span class="toc-number">3.1.</span> <span class="toc-text">线性筛质数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线性筛欧拉函数"><span class="toc-number">3.2.</span> <span class="toc-text">线性筛欧拉函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#欧几里得算法（辗转相除法）"><span class="toc-number">3.3.</span> <span class="toc-text">欧几里得算法（辗转相除法）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#扩展欧几里得算法"><span class="toc-number">3.4.</span> <span class="toc-text">扩展欧几里得算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类欧几里得算法"><span class="toc-number">3.5.</span> <span class="toc-text">类欧几里得算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模板"><span class="toc-number">3.5.1.</span> <span class="toc-text">模板</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#杂项"><span class="toc-number">4.</span> <span class="toc-text">杂项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-number">4.1.</span> <span class="toc-text">注意事项</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">1.</span> <span class="toc-text">模方程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.1.</span> <span class="toc-text">基础性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.1.1.</span> <span class="toc-text">模的等价关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.1.2.</span> <span class="toc-text">等式的性质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.2.</span> <span class="toc-text">高级定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.2.1.</span> <span class="toc-text">贝祖定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.2.2.</span> <span class="toc-text">中国剩余定理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">2.</span> <span class="toc-text">欧拉函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">2.2.</span> <span class="toc-text">性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">2.3.</span> <span class="toc-text">定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">2.3.1.</span> <span class="toc-text">欧拉定理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">2.3.2.</span> <span class="toc-text">扩展欧拉定理（欧拉降幂）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">3.</span> <span class="toc-text">算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">3.1.</span> <span class="toc-text">线性筛质数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">3.2.</span> <span class="toc-text">线性筛欧拉函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">3.3.</span> <span class="toc-text">欧几里得算法（辗转相除法）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">3.4.</span> <span class="toc-text">扩展欧几里得算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">3.5.</span> <span class="toc-text">类欧几里得算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">3.5.1.</span> <span class="toc-text">模板</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">4.</span> <span class="toc-text">杂项</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">4.1.</span> <span class="toc-text">注意事项</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -641,7 +641,7 @@ gitalk.render('gitalk-container')
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
-		toc_hide_index: false,
+		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
 		showTags: false
@@ -731,11 +731,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">数学</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -743,7 +743,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
+                <a href="javascript:void(0)" class="js-tag color3">数学</a>
               </li>
             
             <div class="clearfix"></div>

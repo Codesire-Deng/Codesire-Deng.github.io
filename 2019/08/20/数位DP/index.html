@@ -173,8 +173,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数"><a href="#求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数" class="headerlink" title="求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数"></a>求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数</h2><a id="more"></a>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><ol>
+        <h1><span id="例题">例题</span></h1><h2><span id="求lr中满足ygeq-x且yxxoplus-y的数对xy的个数">求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数</span></h2><a id="more"></a>
+<h3><span id="分析">分析</span></h3><ol>
 <li>题目涉及位操作，对所有数以二进制看待。x和y的最高位应相同，这是因为$y\%x&lt;x$，其二进制最高位有限制。</li>
 <li>两数最高位相同，则y不超过x的两倍。$y\%x = y-x = y\oplus x$。</li>
 <li>$y-x$不可能退位。由$y\geq x$找到两者不同的最高位（y一定是1，x一定是0），这一位异或和为1，若低位退位，则差为0，矛盾，故低位不能退位。由低位不能退位，分类讨论$1-0, 1-1, 0-0$三种情况，发现更低位也不能退位，由归纳法可知$y-x$不可能退位。</li>
@@ -183,7 +183,7 @@
 </ol>
 <script type="math/tex; mode=display">
 设f[pos][xDown][xUp][yUp][lead]\\
-表示第pos位之后，x是否压下界，x是否压上界，y是否压上界，xy是否取过最高位时的合法方案数</script><h3 id="解"><a href="#解" class="headerlink" title="解"></a>解</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ULL <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> pos, <span class="keyword">bool</span> xDown, <span class="keyword">bool</span> xUp, <span class="keyword">bool</span> yUp, <span class="keyword">bool</span> lead)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (pos &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	ULL &amp;res = ans[pos][xDown][xUp][yUp][lead];</span><br><span class="line">	<span class="keyword">if</span> (res != <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> xLow = xDown ? L[pos] : <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> xHigh = xUp ? R[pos] : <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> yHigh = yUp ? R[pos] : <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=xLow; i&lt;=xHigh; ++i) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j=i; j&lt;=yHigh; ++j) &#123;</span><br><span class="line">			<span class="keyword">if</span> (lead &amp;&amp; i!=j) <span class="keyword">continue</span>;</span><br><span class="line">			res += dfs(pos<span class="number">-1</span>, xDown&amp;&amp;i==xLow, xUp&amp;&amp;i==xHigh, yUp&amp;&amp;j==yHigh, lead&amp;&amp;i==<span class="number">0</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> (res %= MOD);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+表示第pos位之后，x是否压下界，x是否压上界，y是否压上界，xy是否取过最高位时的合法方案数</script><h3><span id="解">解</span></h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ULL <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> pos, <span class="keyword">bool</span> xDown, <span class="keyword">bool</span> xUp, <span class="keyword">bool</span> yUp, <span class="keyword">bool</span> lead)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (pos &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	ULL &amp;res = ans[pos][xDown][xUp][yUp][lead];</span><br><span class="line">	<span class="keyword">if</span> (res != <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> xLow = xDown ? L[pos] : <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> xHigh = xUp ? R[pos] : <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">int</span> yHigh = yUp ? R[pos] : <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=xLow; i&lt;=xHigh; ++i) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j=i; j&lt;=yHigh; ++j) &#123;</span><br><span class="line">			<span class="keyword">if</span> (lead &amp;&amp; i!=j) <span class="keyword">continue</span>;</span><br><span class="line">			res += dfs(pos<span class="number">-1</span>, xDown&amp;&amp;i==xLow, xUp&amp;&amp;i==xHigh, yUp&amp;&amp;j==yHigh, lead&amp;&amp;i==<span class="number">0</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> (res %= MOD);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
 
       
@@ -335,7 +335,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#例题"><span class="toc-number">1.</span> <span class="toc-text">例题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数"><span class="toc-number">1.1.</span> <span class="toc-text">求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">1.1.1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解"><span class="toc-number">1.1.2.</span> <span class="toc-text">解</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">1.</span> <span class="toc-text">例题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.1.</span> <span class="toc-text">求$[L,R]$中满足$y\geq x,且y\%x=x\oplus y$的数对$(x,y)$的个数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.1.1.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.1.2.</span> <span class="toc-text">解</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -417,7 +417,7 @@ gitalk.render('gitalk-container')
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
-		toc_hide_index: false,
+		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
 		showTags: false
@@ -507,11 +507,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">数学</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -519,7 +519,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
+                <a href="javascript:void(0)" class="js-tag color3">数学</a>
               </li>
             
             <div class="clearfix"></div>
