@@ -128,6 +128,7 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
     <title>汇编语言</title>
     <url>/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</url>
     <content><![CDATA[<p>不会汇编，强行刚软保，<del>瑟瑟发抖</del>稳得一匹</p>
+<p><em>本文的编撰仅面向作者自己</em></p>
 <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="C语法"><a href="#C语法" class="headerlink" title="C语法"></a>C语法</h2><ol>
 <li>指针作差得到区间元素个数。<strong>指针的类型参与计算！</strong></li>
 <li>要动态改变函数体，需要在编译期赋予权限。</li>
@@ -754,7 +755,8 @@ lgcd(a, b, c, n) = \sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor</script><ol>
   <entry>
     <title>离散数学随笔</title>
     <url>/2019/06/30/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/</url>
-    <content><![CDATA[<h1 id="1-6-Rules-of-Inference"><a href="#1-6-Rules-of-Inference" class="headerlink" title="1.6 Rules of Inference"></a>1.6 Rules of Inference</h1><ol>
+    <content><![CDATA[<p><em>本文的编撰仅面向作者自己</em></p>
+<h1 id="1-6-Rules-of-Inference"><a href="#1-6-Rules-of-Inference" class="headerlink" title="1.6 Rules of Inference"></a>1.6 Rules of Inference</h1><ol>
 <li>Modus ponens 假言推理 p &amp; p-&gt;q =&gt; q </li>
 <li>Modus tollens 取拒式 !q &amp; p-&gt;q =&gt; !p</li>
 <li>Hypothetical syllogism /,haɪpə’θɛtɪk, ‘sɪlə,dʒɪz(ə)m/ 假言三段论 p-&gt;q &amp; q-&gt;r =&gt; p-&gt;r </li>
