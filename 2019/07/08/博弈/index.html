@@ -6,22 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>博弈 | 欲乘风归去</title>
+  <title>博弈 | 临江仙</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="组合游戏 两个游戏者轮流操作 游戏的状态集有限，每种状态最多出现一次（游戏可以结束） 无法操作的输，另一个获胜（游戏必有胜负） 公平游戏。两个游戏者面对相同的状态允许有相同的操作。">
 <meta name="keywords" content="数学">
 <meta property="og:type" content="article">
 <meta property="og:title" content="博弈">
 <meta property="og:url" content="http://yoursite.com/2019/07/08/博弈/index.html">
-<meta property="og:site_name" content="欲乘风归去">
+<meta property="og:site_name" content="临江仙">
 <meta property="og:description" content="组合游戏 两个游戏者轮流操作 游戏的状态集有限，每种状态最多出现一次（游戏可以结束） 无法操作的输，另一个获胜（游戏必有胜负） 公平游戏。两个游戏者面对相同的状态允许有相同的操作。">
-<meta property="og:locale" content="default">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-08-02T14:00:20.971Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="博弈">
 <meta name="twitter:description" content="组合游戏 两个游戏者轮流操作 游戏的状态集有限，每种状态最多出现一次（游戏可以结束） 无法操作的输，另一个获胜（游戏必有胜负） 公平游戏。两个游戏者面对相同的状态允许有相同的操作。">
   
-    <link rel="alternative" href="/atom.xml" title="欲乘风归去" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="临江仙" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -54,7 +54,7 @@
 		  <h1 class="header-author"><a href="/">邓子烽</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">又恐琼楼玉宇</p>
+		<p class="header-subtitle">琼窗梦醒留残日，当年得恨何长！&lt;br/&gt;碧阑干外映垂杨。&lt;br/&gt;暂时相见，如梦懒思量。</p>
 		
 
 		<nav class="header-menu">
@@ -112,7 +112,7 @@
 			  <h1 class="header-author js-header-author">邓子烽</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>又恐琼楼玉宇<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>琼窗梦醒留残日，当年得恨何长！&lt;br/&gt;碧阑干外映垂杨。&lt;br/&gt;暂时相见，如梦懒思量。<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -173,23 +173,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1><span id="组合游戏">组合游戏</span></h1><ol>
+        <h1 id="组合游戏"><a href="#组合游戏" class="headerlink" title="组合游戏"></a>组合游戏</h1><ol>
 <li>两个游戏者轮流操作</li>
 <li>游戏的状态集有限，每种状态最多出现一次（游戏可以结束）</li>
 <li>无法操作的输，另一个获胜（游戏必有胜负）</li>
 <li>公平游戏。两个游戏者面对相同的状态允许有相同的操作。</li>
 </ol>
 <a id="more"></a>
-<h3><span id="状态判定">状态判定</span></h3><ol>
+<h3 id="状态判定"><a href="#状态判定" class="headerlink" title="状态判定"></a>状态判定</h3><ol>
 <li>一个状态是必胜状态(N)当且仅当它至少有一个后继是必败状态。</li>
 <li>一个状态是必败状态(P)当且仅当它的所有后继都是必胜状态。</li>
 <li>特别地，没有后继的状态是必败状态。</li>
 </ol>
-<h3><span id="后手必胜的必要条件">后手必胜的必要条件</span></h3><p>如果后手有必胜策略，则无论先手怎么取，都会存在后继可导致必败状态（即先手的所有后继都是必胜）。若先手能直接到达必败状态，则后手必输。</p>
+<h3 id="后手必胜的必要条件"><a href="#后手必胜的必要条件" class="headerlink" title="后手必胜的必要条件"></a>后手必胜的必要条件</h3><p>如果后手有必胜策略，则无论先手怎么取，都会存在后继可导致必败状态（即先手的所有后继都是必胜）。若先手能直接到达必败状态，则后手必输。</p>
 <p>如Chomp!游戏（m*n棋盘，每次取某个点的所有右上格子，取到最后一个输）中，只要格子大于1，先手取最右上的一个格子，若后手能导致必败状态，则开局先手模仿后手的策略即可。故格子大于1时后手必败。</p>
-<h2><span id="sg函数">SG函数</span></h2><p>设有状态x，令SG(x) = mex(S), S为x的所有后继状态的SG值的集合，mex(S)为不在集合中的最小非负整数。对于没有后继的状态，SG=0，因为S是空集。其余的SG值可由递推得到。<br>当且仅当SG(x) == 0, x是必败状态。</p>
-<h2><span id="sg定理">SG定理</span></h2><p>一个总游戏的SG值等于子游戏的SG值的Nim和（异或和）</p>
-<h3><span id="证明">证明</span></h3><ol>
+<h2 id="SG函数"><a href="#SG函数" class="headerlink" title="SG函数"></a>SG函数</h2><p>设有状态x，令SG(x) = mex(S), S为x的所有后继状态的SG值的集合，mex(S)为不在集合中的最小非负整数。对于没有后继的状态，SG=0，因为S是空集。其余的SG值可由递推得到。<br>当且仅当SG(x) == 0, x是必败状态。</p>
+<h2 id="SG定理"><a href="#SG定理" class="headerlink" title="SG定理"></a>SG定理</h2><p>一个总游戏的SG值等于子游戏的SG值的Nim和（异或和）</p>
+<h3 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h3><ol>
 <li>证明P状态的所有后继都是N状态<ol>
 <li>异或和为零，对转移任意一状态，则异或和必不为零（新状态异或旧状态不为零），即后继必为N</li>
 </ol>
@@ -199,12 +199,12 @@
 </ol>
 </li>
 </ol>
-<h3><span id="nim游戏">Nim游戏</span></h3><p>有n堆火柴，每堆有ai根火柴。每次选择一堆取走任意根，不能取的游戏者输。</p>
+<h3 id="Nim游戏"><a href="#Nim游戏" class="headerlink" title="Nim游戏"></a>Nim游戏</h3><p>有n堆火柴，每堆有ai根火柴。每次选择一堆取走任意根，不能取的游戏者输。</p>
 <p>考虑只有一堆的情况，设剩余火柴数为x。若x==0，没有后继状态，SG(0) = 0; 若x==1，所有后继状态的SG集合{0}，则SG(1) = 1; 若x==2，对应的S=={0，1}，SG(2) = 2; 归纳法证明SG(x) = x;</p>
 <p>应用SG定理，对于多堆游戏，总游戏SG值为所有子游戏的SG值的Nim和，即所有堆火柴数的异或和。当且仅当异或和为0，先手必败。</p>
-<h2><span id="组合游戏题解法">组合游戏题解法</span></h2><p>小范围内暴力计算子游戏SG值，找规律找到SG公式。</p>
-<h1><span id="博弈搜索">博弈搜索</span></h1><p>CF ROUND 460 DIV2 F</p>
-<h1><span id="题">题</span></h1><ol>
+<h2 id="组合游戏题解法"><a href="#组合游戏题解法" class="headerlink" title="组合游戏题解法"></a>组合游戏题解法</h2><p>小范围内暴力计算子游戏SG值，找规律找到SG公式。</p>
+<h1 id="博弈搜索"><a href="#博弈搜索" class="headerlink" title="博弈搜索"></a>博弈搜索</h1><p>CF ROUND 460 DIV2 F</p>
+<h1 id="题"><a href="#题" class="headerlink" title="题"></a>题</h1><ol>
 <li>圆桌放圆盘<ol>
 <li>对称性。先手占领圆心，后面被一步都模仿另一方。</li>
 </ol>
@@ -250,7 +250,8 @@
 <li>多种扩展</li>
 <li>打表吧</li>
 <li>tartan定理<ol>
-<li>二维硬币分解成一维硬币的积，logn2求nim积。这种积有结合律，可扩展到更高维<br>2.</li>
+<li>二维硬币分解成一维硬币的积，logn2求nim积。这种积有结合律，可扩展到更高维</li>
+<li></li>
 </ol>
 </li>
 </ol>
@@ -408,7 +409,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">1.</span> <span class="toc-text">组合游戏</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.0.1.</span> <span class="toc-text">状态判定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.0.2.</span> <span class="toc-text">后手必胜的必要条件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.1.</span> <span class="toc-text">SG函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.2.</span> <span class="toc-text">SG定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.2.1.</span> <span class="toc-text">证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.2.2.</span> <span class="toc-text">Nim游戏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.3.</span> <span class="toc-text">组合游戏题解法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">2.</span> <span class="toc-text">博弈搜索</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">3.</span> <span class="toc-text">题</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#组合游戏"><span class="toc-number">1.</span> <span class="toc-text">组合游戏</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#状态判定"><span class="toc-number">1.0.1.</span> <span class="toc-text">状态判定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后手必胜的必要条件"><span class="toc-number">1.0.2.</span> <span class="toc-text">后手必胜的必要条件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SG函数"><span class="toc-number">1.1.</span> <span class="toc-text">SG函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SG定理"><span class="toc-number">1.2.</span> <span class="toc-text">SG定理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#证明"><span class="toc-number">1.2.1.</span> <span class="toc-text">证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nim游戏"><span class="toc-number">1.2.2.</span> <span class="toc-text">Nim游戏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组合游戏题解法"><span class="toc-number">1.3.</span> <span class="toc-text">组合游戏题解法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#博弈搜索"><span class="toc-number">2.</span> <span class="toc-text">博弈搜索</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#题"><span class="toc-number">3.</span> <span class="toc-text">题</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -580,7 +581,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
+                <a href="javascript:void(0)" class="js-tag color5">动态规划</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">数学</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -588,11 +593,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">动态规划</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">数学</a>
+                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
               </li>
             
             <div class="clearfix"></div>
@@ -733,5 +734,20 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

@@ -6,22 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Suffix Automaton | 欲乘风归去</title>
+  <title>测试 | 临江仙</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让null表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令trans(s, str)表示在状态s时读入字符串str后，所达到的状态。trans应具有传递性。">
-<meta name="keywords" content="字符串">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Suffix Automaton">
-<meta property="og:url" content="http://yoursite.com/2019/10/07/Suffix-Automaton/index.html">
-<meta property="og:site_name" content="欲乘风归去">
-<meta property="og:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让null表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令trans(s, str)表示在状态s时读入字符串str后，所达到的状态。trans应具有传递性。">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-10-10T13:07:41.439Z">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="测试">
+<meta property="og:url" content="http://yoursite.com/2019/10/13/测试/index.html">
+<meta property="og:site_name" content="临江仙">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-13T09:17:50.524Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Suffix Automaton">
-<meta name="twitter:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让null表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令trans(s, str)表示在状态s时读入字符串str后，所达到的状态。trans应具有传递性。">
+<meta name="twitter:title" content="测试">
   
-    <link rel="alternative" href="/atom.xml" title="欲乘风归去" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="临江仙" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -54,15 +50,13 @@
 		  <h1 class="header-author"><a href="/">邓子烽</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">又恐琼楼玉宇</p>
+		<p class="header-subtitle">琼窗梦醒留残日，当年得恨何长！&lt;br/&gt;碧阑干外映垂杨。&lt;br/&gt;暂时相见，如梦懒思量。</p>
 		
 
 		<nav class="header-menu">
 			<ul>
 			
 				<li><a href="/">主页</a></li>
-	        
-				<li><a href="/tags/随笔/">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -114,11 +108,9 @@
 			  <h1 class="header-author js-header-author">邓子烽</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>又恐琼楼玉宇<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>琼窗梦醒留残日，当年得恨何长！&lt;br/&gt;碧阑干外映垂杨。&lt;br/&gt;暂时相见，如梦懒思量。<i class="icon icon-quo-right"></i></p>
 			
 			
-			
-				
 			
 				
 			
@@ -142,9 +134,7 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
-		        
-					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+					<li style="width: 100%"><a href="/">主页</a></li>
 		        
 				</ul>
 			</nav>
@@ -159,61 +149,27 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Suffix-Automaton" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-测试" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Suffix Automaton
+      测试
     </h1>
   
 
         
-        <a href="/2019/10/07/Suffix-Automaton/" class="archive-article-date">
-  	<time datetime="2019-10-07T15:03:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-07</time>
+        <a href="/2019/10/13/测试/" class="archive-article-date">
+  	<time datetime="2019-10-13T09:17:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="自动机的五个部分"><a href="#自动机的五个部分" class="headerlink" title="自动机的五个部分"></a>自动机的五个部分</h2><ol>
-<li><strong>alpha</strong> 字符集</li>
-<li><strong>state</strong> 状态集合。另让null表示不存在的状态或转移</li>
-<li><strong>init</strong> 初始状态</li>
-<li><strong>end</strong> 结束状态集合</li>
-<li><strong>trans</strong> 状态转移函数：令trans(s, str)表示在状态s时读入字符串str后，所达到的状态。trans应具有传递性。</li>
-</ol>
-<a id="more"></a>
-<h2 id="设"><a href="#设" class="headerlink" title="设"></a>设</h2><ol>
-<li>自动机能识别的所有字符串集合 <strong>Reg(A)</strong>，其中的字符串x满足trans(init, x)$\in$end</li>
-<li>从状态s开始能识别的字符串 <strong>Reg(s)</strong></li>
-<li>后缀自动机<strong>SAM</strong>，一个能识别母串S的所有后缀的自动机。SAM(x)==true当且仅当x是S的后缀。</li>
-<li>trans(init, str)即从初始状态读入str后到达的状态<strong>ST(str)</strong> <em>（ST是state的缩写)</em></li>
-<li>母串S的所有后缀的集合<strong>Suf</strong>，从a位置开始的后缀<strong>Suffix(a)</strong></li>
-<li>母串S的所有连续子串的集合<strong>Fac</strong>，位置为[l,r)的子串<strong>S[l,r)</strong></li>
-</ol>
-<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><h2 id="SAM的可行性分析"><a href="#SAM的可行性分析" class="headerlink" title="SAM的可行性分析"></a>SAM的可行性分析</h2><ol>
-<li><p>对于字符串s，若s$\in$Fac，则ST(s)应存在，这是因为可以在s后面加上一些字符使其变成S的后缀。<em>反之s$\notin$Fac，则应有ST(s)==null以节省空间</em></p>
-</li>
-<li><p>考虑ST(a)能识别哪些字符串，即Reg(ST(a))。若x$\in$Reg(ST(a))，则ax$\in$Suf，故ax是后缀，x也是后缀。Reg(ST(a))是每次a出现后接下来的后缀。设<strong>Right(a)</strong> 为a每次出现的开区间末位置，则Reg(ST(a))完全由Right(a)决定。</p>
-</li>
-<li><p>对于状态s（不是单个字符串），我们关心Reg(s)。如果对于a,b$\in$Fac有Right(a)==Right(b)，那么可令ST(a)==ST(b)，因为它们的Right集合完全相同。所以一个状态s由所有Right集合是<strong>Right(s)</strong> 的字符串组成。</p>
-</li>
-<li><p>考虑状态s包括的字符串长度，易证若s包含长度为l,r的字符串，那么一定包含长度为m(l$\leq$m$\leq$r)的字符串。所以这些字符串长度一定可以组成一个区间，设为 <strong>[Min(s), Max(s)]</strong></p>
-</li>
-<li><p>状态数是线性的。<br>　　状态由Right集合决定，考虑两个状态a,b的Right集合Ra,Rb。假设Ra,Rb有交集，设r$\in$Ra$\cap$Rb。由于一个子串只能属于一个状态，所以a，b所表示的子串不会有交集，即由r往前不能有长度相同的子串，故[Min(a), Max(a)]和[Min(b), Max(b)]没有交集，不妨设Max(a)&lt;Min(b)，由于a，b包含的所有串都可以视为r往前的子串，故a的所有串都是b的任意串的后缀。因b的任意串都能找到后缀属于a，两者Right集合又不相等，故Rb$\subset$Ra。那么任意两个状态的Right集合要么不相交，要么一个是另一个的真子集。<br>　　疾风将以状态为节点，以Right包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，SAM的结点个数最多为2n。</p>
-</li>
-<li><p>更严谨的分裂树定义：令满足Right(s)$\subset$Right(fa)的最小|Right(fa)|的fa为状态s的父亲。<br>易知Max(fa)+1=Min(s)。</p>
-</li>
-<li><p>自动机的边数是线性的。<br>　　直观地看，自动机是一个DAG（否则可以无限地在自动机上走，即识别无限长的字符串，显然这是不可能的），而能从init走到某个end点的肯定是字符串的某一个后缀。字符串只有n个后缀，意味着从init到end只能有n种路径；另一方面，节点数只有O(n)，所以猜测边数也是O(n)的。<br>　　标出自动机任意一个生成树，则对于一条非树边$(a\rarr b)$，存在若干路径$\{init \rightarrowtail a \rarr b \rightarrowtail e(e\isin end)\}$对应着一个后缀。对每一个后缀，对应在自动机上走到的第一条非树边。如此每个后缀最多对应一个非树边，而非树边至少被一个后缀对应，所以后缀数量$\geq$非树边数量。所以边数是O(n)的。</p>
-</li>
-</ol>
-<h2 id="SAM的更多性质"><a href="#SAM的更多性质" class="headerlink" title="SAM的更多性质"></a>SAM的更多性质</h2><p>这一部分是SAM构造算法的重要依据。</p>
-<p>　　</p>
-
+        
       
 
       
@@ -252,17 +208,6 @@
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">字符串</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -313,7 +258,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/07/Suffix-Automaton/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/13/测试/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -328,8 +273,8 @@
 <nav id="article-nav">
   
   
-    <a href="/2019/10/03/生命科学讨论课/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">生命科学课程资料</div>
+    <a href="/2019/10/13/tes/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">tes</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -356,7 +301,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前置知识"><span class="toc-number">1.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#自动机的五个部分"><span class="toc-number">1.1.</span> <span class="toc-text">自动机的五个部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设"><span class="toc-number">1.2.</span> <span class="toc-text">设</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SAM的可行性分析"><span class="toc-number">2.1.</span> <span class="toc-text">SAM的可行性分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SAM的更多性质"><span class="toc-number">2.2.</span> <span class="toc-text">SAM的更多性质</span></a></li></ol></li></ol>
+                    oops, 目录不存在…
                     </div>
                 </span>
             </div>
@@ -399,7 +344,7 @@
 
 gitalk.render('gitalk-container')
 // var gitment = new Gitment({
-//   id: 'http://yoursite.com/2019/10/07/Suffix-Automaton/',
+//   id: 'http://yoursite.com/2019/10/13/测试/',
 //   owner: 'Codesire-Deng',
 //   repo: 'Gitment-for-Codesire-Deng-s-Blog',
 //   oauth: {
@@ -528,15 +473,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">动态规划</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">数学</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">C++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">动态规划</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -607,7 +552,7 @@ MathJax.Hub.Queue(function() {
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">本人蒟蒻，请大神指教&lt;br&gt;&lt;br&gt;来自Codesire，浙江大学&lt;br&gt;谢谢大家</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">时间可以拉长缩短，但就是不能回到过去</div>
   	  	
     	</section>
     
@@ -681,5 +626,20 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

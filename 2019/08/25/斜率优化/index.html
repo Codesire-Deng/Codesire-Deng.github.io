@@ -6,22 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>斜率优化DP | 欲乘风归去</title>
+  <title>斜率优化DP | 临江仙</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="单状态的斜率优化写出状态转移方程，形如： f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}由于$F_3$涉及i和j，若枚举两个变量会超时。 化简方程，得到 f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)">
 <meta name="keywords" content="动态规划">
 <meta property="og:type" content="article">
 <meta property="og:title" content="斜率优化DP">
 <meta property="og:url" content="http://yoursite.com/2019/08/25/斜率优化/index.html">
-<meta property="og:site_name" content="欲乘风归去">
+<meta property="og:site_name" content="临江仙">
 <meta property="og:description" content="单状态的斜率优化写出状态转移方程，形如： f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}由于$F_3$涉及i和j，若枚举两个变量会超时。 化简方程，得到 f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)">
-<meta property="og:locale" content="default">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-08-25T12:13:20.375Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="斜率优化DP">
 <meta name="twitter:description" content="单状态的斜率优化写出状态转移方程，形如： f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}由于$F_3$涉及i和j，若枚举两个变量会超时。 化简方程，得到 f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)">
   
-    <link rel="alternative" href="/atom.xml" title="欲乘风归去" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="临江仙" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -54,7 +54,7 @@
 		  <h1 class="header-author"><a href="/">邓子烽</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">又恐琼楼玉宇</p>
+		<p class="header-subtitle">琼窗梦醒留残日，当年得恨何长！&lt;br/&gt;碧阑干外映垂杨。&lt;br/&gt;暂时相见，如梦懒思量。</p>
 		
 
 		<nav class="header-menu">
@@ -112,7 +112,7 @@
 			  <h1 class="header-author js-header-author">邓子烽</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>又恐琼楼玉宇<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>琼窗梦醒留残日，当年得恨何长！&lt;br/&gt;碧阑干外映垂杨。&lt;br/&gt;暂时相见，如梦懒思量。<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -173,14 +173,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2><span id="单状态的斜率优化">单状态的斜率优化</span></h2><p>写出状态转移方程，形如：</p>
+        <h2 id="单状态的斜率优化"><a href="#单状态的斜率优化" class="headerlink" title="单状态的斜率优化"></a>单状态的斜率优化</h2><p>写出状态转移方程，形如：</p>
 <script type="math/tex; mode=display">f[j]=\max_{i=1}^{j-1} \{ F_1(j)+F_2(i)+F_3(i,j)\}</script><p>由于$F_3$涉及i和j，若枚举两个变量会超时。</p>
 <p>化简方程，得到</p>
 <script type="math/tex; mode=display">f[j]=\max_{i=1}^{j-1} \{F_2(i)+F_4(j)*F_5(i) \} + const(j)</script><a id="more"></a>
 <p>这里涉及的每个函数都能事先算出。于是求最大值转化为线性规划：将$f[j]$看作b，$F_2(i)$看作y，$-F_4(j)$看作k，$F_5(i)$看作x，则形式可转化为$b=y-kx$，求b的最大值。维护可能的点队列，则这是一条上凸线，用二分找到最相近斜率的线段的对应点即可。</p>
 <p>某些题目的$F_4(j)$具有单调性，即目标直线的斜率有单调性，则可用朴素单调队列代替二分。</p>
 <p>也可以将max改成min，这时求最小的b，维护下凸线即可。</p>
-<h2><span id="双状态的斜率优化">双状态的斜率优化</span></h2><p>拓展单状态下的方程，形如：</p>
+<h2 id="双状态的斜率优化"><a href="#双状态的斜率优化" class="headerlink" title="双状态的斜率优化"></a>双状态的斜率优化</h2><p>拓展单状态下的方程，形如：</p>
 <script type="math/tex; mode=display">f(j,k]=\max_{i=1}^{j} \{ F_1(j,k]+F_2(i,j]+F_3(i,j,k)\}</script><p>同样化简方程，得到</p>
 <script type="math/tex; mode=display">f(j,k]=\max_{i=1}^{j} \{ F_2(i,j]+F_4(i)*F_5(j,k]\} + const(j,k]</script><p>类似地令$F_4(i)$为横坐标x，待求的$f(j,k]$看作截距b，$F_2(i,j]$看作纵坐标y构建线性规划。之后的步骤同上。</p>
 <p>斜率优化的目的是减少枚举前驱状态的时间，用O(1)或O(log n)完成状态转移。这将要求在完成状态计算后，将新获得的点加入凸线中。加点后，视情况选择是否维护凸性。<br>对于双状态的题目，不同的j对应不同的凸线（这是因为$F_2(i,j]$会随j变化，即点的坐标会变化）。应当判断对于同一个j、不同的k，能否从同一条凸线得到答案。</p>
@@ -337,7 +337,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.</span> <span class="toc-text">单状态的斜率优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">2.</span> <span class="toc-text">双状态的斜率优化</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#单状态的斜率优化"><span class="toc-number">1.</span> <span class="toc-text">单状态的斜率优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#双状态的斜率优化"><span class="toc-number">2.</span> <span class="toc-text">双状态的斜率优化</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -509,7 +509,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
+                <a href="javascript:void(0)" class="js-tag color5">动态规划</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">数学</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -517,11 +521,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">动态规划</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">数学</a>
+                <a href="javascript:void(0)" class="js-tag color4">字符串</a>
               </li>
             
             <div class="clearfix"></div>
@@ -662,5 +662,20 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
