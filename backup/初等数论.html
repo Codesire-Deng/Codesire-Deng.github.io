@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
+<meta name="keywords" content="数学">
+<meta property="og:type" content="website">
+<meta property="og:title" content="初等数论">
+<meta property="og:url" content="http://yoursite.com/backup/初等数论.html">
+<meta property="og:site_name" content="临江仙">
+<meta property="og:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-25T12:20:36.906Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="初等数论">
+<meta name="twitter:description" content="模方程基础性质模的等价关系自反性 a\equiv a \mod m对称性 a\equiv b \mod m\Leftrightarrow b\equiv a \mod m传递性  a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m">
+  <link rel="canonical" href="http://yoursite.com/backup/初等数论">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false,
+    isPage: true,
+    isArchive: false
+  };
+</script>
+
+  <title>
+      初等数论 | 临江仙
+    
+  </title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">临江仙</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">琼窗梦醒留残日，当年得恨何长！<br/>碧阑干外映垂杨。<br/>暂时相见，如梦懒思量。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+        
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      
+    
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+  
+    
+    
+  
+    
+    
+  
+  
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+    
+    
+    
+    <div class="post-block" lang="zh-CN">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">初等数论
+  
+
+</h1>
+
+<div class="post-meta">
+  
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h1 id="模方程"><a href="#模方程" class="headerlink" title="模方程"></a>模方程</h1><h2 id="基础性质"><a href="#基础性质" class="headerlink" title="基础性质"></a>基础性质</h2><h3 id="模的等价关系"><a href="#模的等价关系" class="headerlink" title="模的等价关系"></a>模的等价关系</h3><p><strong>自反性</strong></p>
+<script type="math/tex; mode=display">a\equiv a \mod m</script><p><strong>对称性</strong></p>
+<script type="math/tex; mode=display">a\equiv b \mod m\Leftrightarrow b\equiv a \mod m</script><p><strong>传递性</strong></p>
+<script type="math/tex; mode=display">
+a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m</script><a id="more"></a>
+<h3 id="等式的性质"><a href="#等式的性质" class="headerlink" title="等式的性质"></a>等式的性质</h3><p><strong>可加减性</strong></p>
+<script type="math/tex; mode=display">
+模m意义下\\
+a\equiv b, c\equiv d \Rightarrow a+c\equiv b+d</script><p><strong>可乘性</strong></p>
+<script type="math/tex; mode=display">
+模m意义下\\
+a\equiv b, c\equiv d \Rightarrow ac\equiv bd</script><blockquote>
+<p>证明：设$a-b=km$, $c-d=lm$. 则$a=b+km$, $c=d+lm$, $ac=klm^2+(bl+ck)m+bd$, 显然$m|(ac-bd)$</p>
+<p>推论：模$m$意义下,$a\equiv b \Rightarrow an\equiv bn$, $n$是自然数</p>
+</blockquote>
+<p><strong>消去律</strong>（乘法逆元的充要条件）</p>
+<script type="math/tex; mode=display">
+模m意义下\\
+ac\equiv bc, gcd(c,m)=1 \Rightarrow a\equiv b</script><blockquote>
+<p>证明：m|c(a-b), 因为c,m公因子为1，所以m|(a-b).</p>
+</blockquote>
+<p><strong>幂保持恒等</strong></p>
+<script type="math/tex; mode=display">
+模m意义下\\
+a\equiv b \Rightarrow a^n\equiv b^n</script><p><strong>恒等的最大空间</strong></p>
+<script type="math/tex; mode=display">
+a\equiv b \mod m_1\\
+a\equiv b \mod m_2\\
+\dotsm \\
+a\equiv b \mod m_n \\
+\Downarrow \\
+a\equiv b \mod lcm(m_1, m_2,\dotsm, m_n);</script><blockquote>
+<p>证明：(a-b)是$m_1,m_2,\dotsm,m_n$的倍数，而lcm包含了所有质因子的最大次幂。</p>
+<p>推论：若$m_1,m_2,\dotsm,m_n$互质，则$a\equiv b \mod m_1m_2\dotsm m_n;$</p>
+</blockquote>
+<p><strong>换模的另一种途径</strong></p>
+<script type="math/tex; mode=display">
+a\equiv b \mod c \\
+\Downarrow \\
+ad \equiv bd \mod cd</script><blockquote>
+<p>证明：$c|(a-b)\Rightarrow cd|d(a-b)$。</p>
+</blockquote>
+<h2 id="高级定理"><a href="#高级定理" class="headerlink" title="高级定理"></a>高级定理</h2><h3 id="贝祖定理"><a href="#贝祖定理" class="headerlink" title="贝祖定理"></a>贝祖定理</h3><script type="math/tex; mode=display">
+gcd(a,b)是a,b的线性组合。即存在整数x,y,使得xa+yb=gcd(a,b).</script><blockquote>
+<p>证明：</p>
+<p>当$a=b$时结论显然成立。</p>
+<p>当$a\neq b$时，不妨设$a\neq0$，取$d$为$a,b$的所有线性组合中最小的正整数。作带余除法$a=qd+r$，则$0\leq r&lt;d$. 若$r\neq 0$,则$r=a-qd$是比d更小的线性组合，与假设矛盾,所以$r=0$,$d$是$a$的因子;同理可得$d$是$b$的因子,故$d$是$a,b$的公因子.取$c$为$a,b$的任意公因子,对$d=(xa+yb)$提取$c$得$d=c(xa’+yb’)$,可知$c$是$d$的因子,所以$|c|\leq d$,故$d=gcd(a,b)$.</p>
+</blockquote>
+<h3 id="中国剩余定理"><a href="#中国剩余定理" class="headerlink" title="中国剩余定理"></a>中国剩余定理</h3><script type="math/tex; mode=display">
+有线性同余方程组\\
+x\equiv a_1 \mod m_1\\
+x\equiv a_2 \mod m_2\\
+\dotsm \\
+x\equiv a_3 \mod m_n \\
+其中m_i两两互质，则在模M=m_1m_2\dotsm m_n意义下解有且只有一个。\\
+构造方法如下：
+设M_i为\frac{M}{m_i}，在模m_i意义下M_i的逆为t_i。则\\
+x=\sum_{i=1}^{n} a_it_iM_i</script><blockquote>
+<p>证明：</p>
+<p>构造解$x$的正确性。对于方程$i$,$\quad t_iM_i\equiv 1 \mod m_i, M_j\equiv 0 \mod m_i$。所以解满足每一条方程式。</p>
+<p>在模$M$意义下解的唯一性。令$x_1,x_2$为方程组的两个不同的解,则$(x_1-x_2)$分别是$m_1,m_2\dotsm m_n$的倍数，则$|(x_1-x_2)|\geq M$，则在模$M$意义下解是唯一的。</p>
+</blockquote>
+<h1 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>m的化简剩余系（又称既约剩余系，缩系），<strong>本文记为$Z_m$</strong></p>
+<script type="math/tex; mode=display">
+m的剩余系中与m互质的数构成的子集</script><p>欧拉函数$\phi(n)$</p>
+<script type="math/tex; mode=display">
+m的化简剩余系的元素个数，即|Z_m|</script><h2 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h2><ol>
+<li><p>对于质数$p$，$\phi(p)=p-1$ </p>
+</li>
+<li><p>对于质数$p$，$\phi(p^k)=p^{k-1}(p-1)$</p>
+<blockquote>
+<p>证明：在$[1,p^k]$中，不与$p^k$互质的有$\{p,2p,3p,\dotsc,p^k\}$共$\frac{p^k}{p}=p^{k-1}$个数，则互质的有$p^k-p^{k-1}=p^{k-1}(p-1)$个数。</p>
+</blockquote>
+</li>
+<li><p><strong>欧拉函数是积性函数</strong>，即对于互质的两数$m_1,m_2$，有$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$</p>
+</li>
+</ol>
+<blockquote>
+<p>证明：设$a\in Z_{m_1}, b\in Z_{m_2}$，则有同余方程组</p>
+<script type="math/tex; mode=display">N \equiv a \mod m_1\\
+N \equiv b \mod m_2\\</script><p>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$互质。则N在模$m_1m_2$下有且仅有唯一解$N=am_2^{-1}m_2+bm_1^{-1}m_1$，显然$N$与$m_1,m_2$都互质，故与$m_1m_2$互质，$N\in Z_{m_1m_2}$。对任意的$N\in Z_{m_1m_2}$，其对应的$(a,b)$也是唯一的。综上，映射$Z_{m_1m_2}\rightarrow Z_{m_1}\times Z_{m_2}$是满射也是单射，则此映射是双射，故$|Z_{m_1m_2}|=|Z_{m_1}||Z_{m_2}|$，即$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$。</p>
+</blockquote>
+<ol>
+<li>对于质数$p$，且$p|a$，则$\phi(ap)=\phi(a)p$</li>
+</ol>
+<blockquote>
+<p>证明：提取$a$的所有p因子得$ap=a’p^xp=a’p^{x+1}$，由积性函数得</p>
+<script type="math/tex; mode=display">\begin{aligned}
+  \phi(ap)=&\phi(a')\phi(p^{x+1}) \\
+  =&\phi(a')p^x(p-1)\\
+  =&\phi(a')p^{x-1}(p-1)p\\
+  =&\phi(a')\phi(p^x)p\\
+  =&\phi(a'p^x)p\\
+  =&\phi(a)p
+\end{aligned}</script></blockquote>
+<ol>
+<li>欧拉函数通项<script type="math/tex; mode=display">
+令\{p_1,p_2,\dotsc,p_m\}为n的所有质因子\\
+\phi(n)=n\prod_{i=1}^m(1-\frac{1}{p_i})</script></li>
+</ol>
+<blockquote>
+<p>证明：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+  设n=&\prod_{i=1}^mp_i^{x_i}\\
+  由积性&函数得\\
+  \phi(n)=&\prod_{i=1}^{m}\phi(p_i^{x_i})\\
+  =&\prod_{i=1}^{m}p_i^{x_i}(1-\frac{1}{p_i})\\
+  =&n\prod_{i=1}^m(1-\frac{1}{p_i})
+  \end{aligned}</script></blockquote>
+<ol>
+<li>$\phi(n)(n&gt;2)$是偶数</li>
+</ol>
+<blockquote>
+<p>证明：由欧几里得算法可知$\forall i \in [1,n]$且$i$与n互质，则$(n-i)$也与$n$互质。并且$i \neq (n-i)$，这是因为若相等，有$2i=n$，此时$i(i&gt;1)$不与$n$互质。所以与$n$互质的数成对出现，$\phi(n)(n&gt;2)$是偶数。</p>
+</blockquote>
+<ol>
+<li><strong>质因子的次数不超过欧拉函数值</strong><script type="math/tex; mode=display">
+设n=p^xs，其中gcd(p,s)=1，则x\leq \phi(n)</script></li>
+</ol>
+<blockquote>
+<p>证明：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\phi(n)=&\phi(p^x)\phi(s) \\
+\geq& \phi(p^x) = p^{x-1}(p-1)
+\end{aligned}\\
+下面证明x\leq p^{x-1}(p-1)</script><p>取$p=2$，验证得当$x=1,2,3$时不等式都成立。由归纳法可知$p=2$时不等式成立。取$p&gt;2$，等式左边不变，右边变大，不等式仍成立。</p>
+</blockquote>
+<ol>
+<li>$\sum\limits_{d|n}\phi(d) = n$</li>
+</ol>
+<blockquote>
+<p>证明：$\forall k \in [1,n]$，对应有一个$d=gcd(k,n)$。所有可能的$d$取遍了$n$的所有因子。对$d|n$，考虑其对应的$k$，不妨设$k=k_1d,n=k_2d，且gcd(k_1,k_2)=1,那么k_1\leq k_2$。显然$k_2=\frac{n}{d}$是固定的，那么可能的$k_1$的取值有$\phi(k_2)=\phi(\frac{n}{d})$种。所以</p>
+<script type="math/tex; mode=display">
+n=\sum\limits_{d|n}\phi(\frac{n}{d})=\sum\limits_{d|n}\phi(d)</script></blockquote>
+<h2 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h2><h3 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h3><script type="math/tex; mode=display">
+对于互质的两个数a,n有\\
+a^{\phi(n)} \equiv 1 \mod n</script><blockquote>
+<p>证明：设$Z_n=\{x_1,x_2,\dotsc,x_{\phi(n)}\}$，因$a,n互质$，则$ax_i \mod n \in Z_n$；而对$x_i\neq x_j$，由消去律有$ax_i\neq ax_j \mod n$。故模n意义下$Z_n=\{ax_1,ax_2,\dotsc,ax_{\phi(n)}\}$。</p>
+<p>故</p>
+<script type="math/tex; mode=display">
+\prod_{i=1}^{\phi(n)}x_i \equiv \prod_{i=1}^{\phi(n)}ax_i \mod n\\</script><p>由消去律得</p>
+<script type="math/tex; mode=display">
+a^{\phi(n)} \equiv 1 \mod n</script><p>推论：<strong>费马小定理</strong>。</p>
+</blockquote>
+<h3 id="扩展欧拉定理（欧拉降幂）"><a href="#扩展欧拉定理（欧拉降幂）" class="headerlink" title="扩展欧拉定理（欧拉降幂）"></a>扩展欧拉定理（欧拉降幂）</h3><script type="math/tex; mode=display">
+模m意义下\\
+a^c\equiv
+\begin{cases}
+    a^{c \mod \phi(m)}, \qquad &a,m互质\\
+    a^c, \qquad &a,m不互质，c<\phi(m)\\
+    a^{c \mod \phi(m)+\phi(m)}, \qquad &a,m不互质，c\geq \phi(m)
+\end{cases}</script><blockquote>
+<p>证明：$当a,m互质时$，由欧拉定理知$a^{\phi(m)}\equiv 1 \mod m$，定理显然成立。</p>
+<p>$当a,m不互质，c&lt;\phi(m)时$，定理显然成立。</p>
+<p>$当 a,m不互质，c\geq \phi(m)时$，取$a$的任意质因子$p$，即$a=p^xs且gcd(p,s)=1$，由欧拉定理知</p>
+<script type="math/tex; mode=display">p^{\phi(s)}\equiv 1 \mod s</script><p>由积性函数知$\phi(s)|\phi(m)$，故</p>
+<script type="math/tex; mode=display">p^{\phi(m)}\equiv 1 \mod s</script><p>同余方程同乘$p^x$(<strong>换模的另一种途径</strong>)得</p>
+<script type="math/tex; mode=display">
+p^{\phi(m)+x} \equiv p^x \mod m</script><p>由<strong>欧拉函数的性质7</strong>知$x\leq \phi(m)$，已知$\phi(m)\leq c$，所以</p>
+<script type="math/tex; mode=display">
+x \leq \phi(m) \leq c\\
+p^c\equiv p^{x+(c-x)}\equiv p^{\phi(m)+x+(c-x)}\equiv p^{\phi(m)+c} \mod m</script><p>由$c(c\geq \phi(m))$的任意性和数学归纳法得</p>
+<script type="math/tex; mode=display">
+p^c\equiv p^{c \mod \phi(m) + \phi(m)} \mod m \\</script><p>对$p$的幂$p^k$，易得</p>
+<script type="math/tex; mode=display">
+(p^k)^c\equiv p^{kc}\equiv p^{kc \mod \phi(m)+\phi(m)}\\
+\equiv p^{kc\mod \phi(m)+k\phi(m)}\equiv (p^k)^{c \mod \phi(m)+\phi(m)} \mod m</script><p>对$a=\prod\limits_{i=1}^np_i^{x_i}$，得</p>
+<script type="math/tex; mode=display">\begin{aligned}
+  a^c\equiv & \prod\limits_{i=1}^n(p_i^{x_i})^c \\
+  \equiv & \prod\limits_{i=1}^n(p_i^{x_i})^{c \mod \phi(m)+\phi(m)} \\
+  \equiv & a^{c \mod \phi(m) + \phi(m)} \mod m
+\end{aligned}</script></blockquote>
+<hr>
+<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="线性筛质数"><a href="#线性筛质数" class="headerlink" title="线性筛质数"></a>线性筛质数</h2><p>求$[1,n]$内的所有素数。</p>
+<ol>
+<li>算法核心是<strong>每个合数只被其最小质因子筛到</strong>。</li>
+<li>当前判断完$i$是否质数。接下来筛去i的倍数。枚举已知质数$p_j$，筛去$p_j*i$。若$p_j$是$i$的最小质因子则break。这是因为i以后筛的数都以$p_j$为最小质因子，这些数肯定能被其他的$i$枚举$p_j$筛去，不必重复筛。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getPrime</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// memset(vis, 0, sizeof(vis));</span></span><br><span class="line">    pcnt = <span class="number">0</span>;</span><br><span class="line">    vis[<span class="number">0</span>] = vis[<span class="number">1</span>] = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;=n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!vis[i]) prime[pcnt++] = i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;pcnt &amp;&amp; prime[j]*i&lt;=n; ++j) &#123;</span><br><span class="line">            vis[prime[j]*i] = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % prime[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="线性筛欧拉函数"><a href="#线性筛欧拉函数" class="headerlink" title="线性筛欧拉函数"></a>线性筛欧拉函数</h2><p>求$[1,n]$内所有欧拉函数值</p>
+<ol>
+<li>算法核心是<strong>积性函数</strong>和<strong>欧拉函数性质4</strong></li>
+<li>在线性筛的同时完成欧拉函数计算。当前判断完$i$是否质数，若是合数，则函数值在前面计算过了；若是质数，直接赋值$\phi(i)=i-1$。枚举已知质数$p_j$时，若$p_j$不是$i$的因子，由积性函数可知$\phi(i\cdot p_j)=\phi(i)\cdot \phi(p_j)=\phi(i)\cdot (p_j-1)$ ; 若$p_j$是$i$的因子，由<strong>性质4</strong>得$\phi(i\cdot p_j)=\phi(i)\cdot p_j$，然后break。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getPhi</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// memset(phi, 0, sizeof(phi));</span></span><br><span class="line">    pcnt = <span class="number">0</span>;</span><br><span class="line">    phi[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;=n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (phi[i] == <span class="number">0</span>) &#123;</span><br><span class="line">            prime[pcnt++] = i;</span><br><span class="line">            phi[i] = i - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;pcnt &amp;&amp; i*prime[j]&lt;=n; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i % prime[j] == <span class="number">0</span>) &#123;</span><br><span class="line">                phi[i * prime[j]] = phi[i] * prime[j];</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                phi[i * prime[j]] = phi[i] * (prime[j]<span class="number">-1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="欧几里得算法（辗转相除法）"><a href="#欧几里得算法（辗转相除法）" class="headerlink" title="欧几里得算法（辗转相除法）"></a><strong>欧几里得算法</strong>（辗转相除法）</h2><p>求$gcd(a,b)$。</p>
+<ol>
+<li>$gcd(a, 0)$的结果显然等于$a$。</li>
+<li>当$a，b$全不为零，则$gcd(a,b) = gcd(b, a \mod b )$使问题规模减小。<blockquote>
+<p>证明：令$c=a\mod b$,则$a=kb+c$.设$r$是$a,b$的公约数，则$r|a-kb$即$r|c$.设$r$是$b,c$的公约数,则$r|kb+c$即$r|a$.可见$a,b$的公约数和$b,a\mod b$的公约数完全相同，则最大公约数也必然相同。</p>
+<p>应用：从$1$到$n(n&gt;2)$中与$n$互质的数成对出现，每一对和为$n$</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a><strong>扩展欧几里得算法</strong></h2><p>求$ax+by=gcd(a,b)$的一组整数解$x,y$。</p>
+<ol>
+<li>直接由<strong>贝祖定理</strong>可知整数解一定存在。（贝祖定理：存在整数$s，t$使得$sa+tb=gcd(a,b)$）</li>
+<li>由辗转相除法知$bx’+(a\%b)y’=gcd(b,a\%b)=gcd(a,b)$的解也存在。由整数除法得<script type="math/tex; mode=display">\begin{aligned}
+ bx'+(a\%b)y'=&bx'+(a-\frac{a}{b}b)y'\\
+ =&b(x'-\frac{a}{b}y')+ay'=gcd(a,b)
+\end{aligned}</script></li>
+<li>递归进行求解，直到$b=0$，显然有解$1a+0b=gcd(a,b)$，令$x=1, y=0$，回溯，得解$x=y’, y=x’-\frac{a}{b}y’$</li>
+<li>实际写代码时用引用，减少临时变量。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">exgcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> &amp;d, <span class="keyword">int</span> &amp;x, <span class="keyword">int</span> &amp;y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (b == <span class="number">0</span>) &#123;</span><br><span class="line">        x = <span class="number">1</span>; y = <span class="number">0</span>;</span><br><span class="line">        d = a;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    exgcd(b, a%b, d, y, x); <span class="comment">// x和y完成了交换</span></span><br><span class="line">    y -= a / b * x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="类欧几里得算法"><a href="#类欧几里得算法" class="headerlink" title="类欧几里得算法"></a><strong>类欧几里得算法</strong></h2><p>求等差数列对每一项做整数除法的和，即</p>
+<script type="math/tex; mode=display">
+lgcd(a, b, c, n) = \sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor</script><ol>
+<li>首先标准化$a,b$，使满足$a\geq 0, b\geq 0$，在答案中预先减去补上的$c$即可。</li>
+<li><p>把$a,b$中含$c$的贡献拆出来，使问题规模变小。答案加上$n\lfloor \frac{b}{c}\rfloor + \frac{(n-1)n}{2}\lfloor \frac{a}{c}\rfloor$。即</p>
+<script type="math/tex; mode=display">
+\sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor = \sum_{i=0}^{n-1}\lfloor \frac{(a\%c)i+(b\%c)}{c}\rfloor + n\lfloor \frac{b}{c}\rfloor + \frac{(n-1)n}{2}\lfloor \frac{a}{c}\rfloor</script><p>现在可以令$a’=a\%c,\quad b’=b\%c$。</p>
+</li>
+<li><p>计算$\sum\limits_{i=0}^{n-1}\lfloor \frac{a’i+b’}{c}\rfloor$，得到的商肯定介于$[0,\lfloor\frac{a’(n-1)+b’}{c}\rfloor]$，设某次除法得到的商是$x$，可以认为$[1,x]$中每一个数对答案贡献了$1$，考虑每个数的总贡献，则</p>
+<script type="math/tex; mode=display">
+\sum\limits_{i=0}^{n-1}\lfloor \frac{a'i+b'}{c}\rfloor = \sum_{j=1}^{\lfloor\frac{a'(n-1)+b'}{c}\rfloor} \sum_{i=0}^{n-1} [\lfloor \frac{a'i+b'}{c}\rfloor \geq j]</script></li>
+<li><p>接下来变换不等式$\lfloor \frac{a’i+b’}{c}\rfloor \geq j$。 取整符号不影响大于等于号的判断，可直接去掉；可直接通分；移项得$a’i\geq jc-b’$。整数除法的同除会影响大于等于号的判断，但不影响大于号，于是右边减一，两边同除$a’$得$i&gt;\frac{jc-b’-1}{a’}$。</p>
+</li>
+<li><p>为了方便统计合法的$i$，也为了转化形式满足递归，利用补集统计数量。对于固定的$j$，</p>
+<script type="math/tex; mode=display">\begin{aligned}
+ \sum\limits_{i=0}^{n-1} [i>\frac{jc-b'-1}{a'}] =& n-\sum\limits_{i=0}^{n-1} [i\leq\frac{jc-b'-1}{a'}] \\
+ =& n-(\lfloor\frac{jc-b'-1}{a'}\rfloor+1)
+\end{aligned}</script></li>
+<li><p>套上前一层Sigma，得到递归形式（<strong>注意j变成从0开始</strong>）</p>
+<script type="math/tex; mode=display">
+令m={\lfloor\frac{a'(n-1)+b'}{c}\rfloor} \\
+\sum_{j=0}^{m-1}[n-(\lfloor\frac{(j+1)c-b'-1}{a'}\rfloor+1)] = (n-1)m-lgcd(c, c-b'-1,a',m)</script></li>
+</ol>
+<h3 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Sum&#123;(ai+b)/c&#125; for i=0..n-1</span></span><br><span class="line"><span class="function">LL <span class="title">lgcd</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c, LL n)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span> || c == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	LL res = n*(b/c) + (n<span class="number">-1</span>)*n/<span class="number">2</span>*(a/c);</span><br><span class="line">	a = a % c; b = b % c;</span><br><span class="line">	LL m = (a*(n<span class="number">-1</span>)+b)/c;</span><br><span class="line">	<span class="keyword">return</span> (n<span class="number">-1</span>)*m - lgcd(c, c-b<span class="number">-1</span>, a, m) + res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>质因数分解时，质因数要么小于等于$\sqrt{n}$，要么等于$n$。不要漏掉等于$n$的情况。</li>
+<li>1e8+7以内的质数<br>有5761456个，约为6e6，约为范围的1/15。<br><strong>范围越大，质数的占比越小</strong></li>
+</ol>
+
+        
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#模方程"><span class="nav-number">1.</span> <span class="nav-text">模方程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础性质"><span class="nav-number">1.1.</span> <span class="nav-text">基础性质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模的等价关系"><span class="nav-number">1.1.1.</span> <span class="nav-text">模的等价关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#等式的性质"><span class="nav-number">1.1.2.</span> <span class="nav-text">等式的性质</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高级定理"><span class="nav-number">1.2.</span> <span class="nav-text">高级定理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#贝祖定理"><span class="nav-number">1.2.1.</span> <span class="nav-text">贝祖定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中国剩余定理"><span class="nav-number">1.2.2.</span> <span class="nav-text">中国剩余定理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#欧拉函数"><span class="nav-number">2.</span> <span class="nav-text">欧拉函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性质"><span class="nav-number">2.2.</span> <span class="nav-text">性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定理"><span class="nav-number">2.3.</span> <span class="nav-text">定理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#欧拉定理"><span class="nav-number">2.3.1.</span> <span class="nav-text">欧拉定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展欧拉定理（欧拉降幂）"><span class="nav-number">2.3.2.</span> <span class="nav-text">扩展欧拉定理（欧拉降幂）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法"><span class="nav-number">3.</span> <span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线性筛质数"><span class="nav-number">3.1.</span> <span class="nav-text">线性筛质数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线性筛欧拉函数"><span class="nav-number">3.2.</span> <span class="nav-text">线性筛欧拉函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#欧几里得算法（辗转相除法）"><span class="nav-number">3.3.</span> <span class="nav-text">欧几里得算法（辗转相除法）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展欧几里得算法"><span class="nav-number">3.4.</span> <span class="nav-text">扩展欧几里得算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类欧几里得算法"><span class="nav-number">3.5.</span> <span class="nav-text">类欧几里得算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模板"><span class="nav-number">3.5.1.</span> <span class="nav-text">模板</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#杂项"><span class="nav-number">4.</span> <span class="nav-text">杂项</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注意事项"><span class="nav-number">4.1.</span> <span class="nav-text">注意事项</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邓子烽</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.1
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+  
+
+  
+
+  
+
+</body>
+</html>

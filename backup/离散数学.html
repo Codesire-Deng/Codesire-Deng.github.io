@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.1" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.1">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.1',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="1.6 Rules of Inference Modus ponens 假言推理 p &amp;amp; p-&amp;gt;q =&amp;gt; q  Modus tollens 取拒式 !q &amp;amp; p-&amp;gt;q =&amp;gt; !p Hypothetical syllogism /,haɪpə’θɛtɪk, ‘sɪlə,dʒɪz(ə)m/ 假言三段论 p-&amp;gt;q &amp;amp; q-&amp;gt;r =&amp;gt; p-">
+<meta name="keywords" content="数学">
+<meta property="og:type" content="website">
+<meta property="og:title" content="离散数学随笔">
+<meta property="og:url" content="http://yoursite.com/backup/离散数学.html">
+<meta property="og:site_name" content="临江仙">
+<meta property="og:description" content="1.6 Rules of Inference Modus ponens 假言推理 p &amp;amp; p-&amp;gt;q =&amp;gt; q  Modus tollens 取拒式 !q &amp;amp; p-&amp;gt;q =&amp;gt; !p Hypothetical syllogism /,haɪpə’θɛtɪk, ‘sɪlə,dʒɪz(ə)m/ 假言三段论 p-&amp;gt;q &amp;amp; q-&amp;gt;r =&amp;gt; p-">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-04T15:16:10.519Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="离散数学随笔">
+<meta name="twitter:description" content="1.6 Rules of Inference Modus ponens 假言推理 p &amp;amp; p-&amp;gt;q =&amp;gt; q  Modus tollens 取拒式 !q &amp;amp; p-&amp;gt;q =&amp;gt; !p Hypothetical syllogism /,haɪpə’θɛtɪk, ‘sɪlə,dʒɪz(ə)m/ 假言三段论 p-&amp;gt;q &amp;amp; q-&amp;gt;r =&amp;gt; p-">
+  <link rel="canonical" href="http://yoursite.com/backup/离散数学">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false,
+    isPage: true,
+    isArchive: false
+  };
+</script>
+
+  <title>
+      离散数学随笔 | 临江仙
+    
+  </title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">临江仙</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">琼窗梦醒留残日，当年得恨何长！<br/>碧阑干外映垂杨。<br/>暂时相见，如梦懒思量。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+        
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+      
+    
+      
+      
+        
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      
+    
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+  
+    
+    
+  
+    
+    
+  
+  
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+    
+    
+    
+    <div class="post-block" lang="zh-CN">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">离散数学随笔
+  
+
+</h1>
+
+<div class="post-meta">
+  
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h1 id="1-6-Rules-of-Inference"><a href="#1-6-Rules-of-Inference" class="headerlink" title="1.6 Rules of Inference"></a>1.6 Rules of Inference</h1><ol>
+<li>Modus ponens 假言推理 p &amp; p-&gt;q =&gt; q </li>
+<li>Modus tollens 取拒式 !q &amp; p-&gt;q =&gt; !p</li>
+<li>Hypothetical syllogism /,haɪpə’θɛtɪk, ‘sɪlə,dʒɪz(ə)m/ 假言三段论 p-&gt;q &amp; q-&gt;r =&gt; p-&gt;r </li>
+<li>Disjunctive syllogism 析取三段论 pVq &amp; !p = p</li>
+<li>Addtion 附加律 p =&gt; pVq  （附加在析取式中）</li>
+<li>Simplification 化简律 p&amp;&amp;q =&gt; p （合取条件的拆分）</li>
+<li>Resolution 消解律 pVq &amp; !pVr =&gt; qVr 条件相斥必有一T</li>
+<li>? Logical equivalence<a id="more"></a>
+</li>
+</ol>
+<script type="math/tex; mode=display">
+\begin{matrix}
+    Step & Reason \\
+   1. xxx & Premise \\
+   2. xxx & Contrapositive,of,(1) \\
+   3. xxx & XXrule,using,(n),and,(m)
+\end{matrix}</script><h2 id="Fallacies-谬误"><a href="#Fallacies-谬误" class="headerlink" title="Fallacies 谬误"></a>Fallacies 谬误</h2><ol>
+<li>fallacy of affirming the conclusion 肯定结论的谬误 由结论推出条件</li>
+<li>fallacy of denying the hypothesis  /haɪ’pɒθɪsɪs/ 否定假设的谬误 从否定条件推出否定结论</li>
+</ol>
+<h2 id="Rules-of-Inference-for-Quantified-Statements-量化命题的推理规则"><a href="#Rules-of-Inference-for-Quantified-Statements-量化命题的推理规则" class="headerlink" title="Rules of Inference for Quantified Statements 量化命题的推理规则"></a>Rules of Inference for Quantified Statements 量化命题的推理规则</h2><ol>
+<li>Universal instantiation 全称实例 $\forall xP(x) \implies P(c)$</li>
+<li>Universal generalization 全称引入 $P(c)$ for an arbitrary $c \implies \forall xP(x)$</li>
+<li>Existential instantiaion 存在实例 $\exists xP(x) \implies P(c)$ for some element $c$</li>
+<li>Existencial generalization 存在引入 $P(c)$ for some element $c \implies \exists xP(x)$</li>
+</ol>
+<h2 id="Combining-Rules-of-Inference-for-Propositions-and-Quantified-Statements"><a href="#Combining-Rules-of-Inference-for-Propositions-and-Quantified-Statements" class="headerlink" title="Combining Rules of Inference for Propositions and Quantified Statements"></a>Combining Rules of Inference for Propositions and Quantified Statements</h2><ol>
+<li>Universal modus ponens 全称假言推理 对某个全称实例应用假言推理</li>
+<li>Universal modus tollens 全称取拒式 对某个全称实例应用取拒式（否定结论推出否定条件）</li>
+</ol>
+<hr>
+<h1 id="1-7-Introduction-to-Proofs"><a href="#1-7-Introduction-to-Proofs" class="headerlink" title="1.7 Introduction to Proofs"></a>1.7 Introduction to Proofs</h1><ol>
+<li>theorem /‘θɪərəm/ 定理 （定理的证明有定义、其他定理、公理、推断规则）</li>
+<li>lemma /‘lemə/ 引理 用于证明定理的其他定理</li>
+<li>corollary /kə’rɒlərɪ/ 推论 定理下的直接结论</li>
+<li>propositions 命题 偶尔用来称呼不重要的定理，或称事实、结论</li>
+<li>conjecture /kən’dʒektʃə/ 猜想 一旦找到证明，猜想就变成定理；也有可能被证伪</li>
+</ol>
+<h2 id="To-Proof-p-gt-q-or-to-proof-p"><a href="#To-Proof-p-gt-q-or-to-proof-p" class="headerlink" title="To Proof p-&gt;q (or to proof p)"></a>To Proof p-&gt;q (or to proof p)</h2><ol>
+<li>Trivial Proof : 平凡证明 if q is true then p-&gt;q is true.</li>
+<li>Vacuous Proof : 空证明 if p is false then p-&gt;q is true.</li>
+<li>Direct Proof : Assume p is true and show that q is true by using inferences, axioms, logical equivalences.</li>
+<li>Indirect Proof : not begin with the premises and not end with the conclusion</li>
+<li>Proof by contraposition 反证法 : Assume !q and show !p is true also. 直接证明法无效时尝试反证法</li>
+<li>Proof by Contradiction 归谬证明法 : To proof p, first find a r such that !p -&gt; (r &amp;&amp; !r) is true, therefore !p is false and p is true. 假设结论的否定为真，引出一个矛盾</li>
+<li>反例证明法 : 指明一个反例，从而证伪</li>
+</ol>
+<hr>
+<h1 id="1-8-Proof-Methods-and-Strategy-证明的方法和策略"><a href="#1-8-Proof-Methods-and-Strategy-证明的方法和策略" class="headerlink" title="1.8 Proof Methods and Strategy 证明的方法和策略"></a>1.8 Proof Methods and Strategy 证明的方法和策略</h1><ol>
+<li>Proof by cases 分情形证明法 tautology : (p1Vp2V…pn)-&gt;q &lt;-&gt; (p1-&gt;q)&amp;&amp;(p2-&gt;q)&amp;&amp;…(pn-&gt;q) 类似分类讨论</li>
+<li>Exhaustive Proof 穷举证明法 当变量的取值比较少的时候，通过测试所有情形来证明。</li>
+<li>Without loss of generality (WLOG) 不失一般性 省略非常类似的情形（证明过程几乎相同）的证明</li>
+</ol>
+<h2 id="Existence-Proof-存在性证明"><a href="#Existence-Proof-存在性证明" class="headerlink" title="Existence Proof 存在性证明"></a>Existence Proof 存在性证明</h2><p>To proof $\exists x P(x)$ :</p>
+<ol>
+<li>Constructive existence proof 构造性 : Find an explicit c, for which P(c) is true.</li>
+<li>Nonconstructive existence proof 非构造性证明 ： 不直接构造例子，但说明多种情况之一必有符合的例子；或若不存在，就得到某些矛盾。</li>
+</ol>
+<h2 id="Uniqueness-Proof-唯一性证明"><a href="#Uniqueness-Proof-唯一性证明" class="headerlink" title="Uniqueness Proof 唯一性证明"></a>Uniqueness Proof 唯一性证明</h2><p>同时证明存在性和唯一性，即x符合某种期望，而若y!=x，则y不符合这种期望。也可以等价地证明若y符合这种期望，则y=x。</p>
+<hr>
+<h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><ol>
+<li>The cardinality of  a finite set A 集合的基数，|A|</li>
+<li>finite 有限的 /faɪnaɪt/</li>
+<li>infinite 无限的 /‘ɪnfɪnət/</li>
+<li>Power Set 幂集 P(A) The set of all subsets of a set A. $|P(A)| = 2^{|A|}$</li>
+<li>Cartesian Product 笛卡尔积 A x B x C的意义和(A x B) x C不一样！</li>
+<li>coordinate</li>
+</ol>
+<h2 id="Set-Operations"><a href="#Set-Operations" class="headerlink" title="Set Operations"></a>Set Operations</h2><ol>
+<li>Union /‘junɪən/</li>
+<li>Intersection</li>
+<li>Complementation : complement 补集，必须有universal set U。A上一横杠</li>
+<li>Difference 不满足交换律，A-B</li>
+<li>Symmetric Difference 对称差 异或</li>
+</ol>
+<h3 id="Set-Identities-集合恒等式"><a href="#Set-Identities-集合恒等式" class="headerlink" title="Set Identities 集合恒等式"></a>Set Identities 集合恒等式</h3><ol>
+<li>注意一下分配率，德摩根律（否定去括号）</li>
+<li>其他不管啊太简单了</li>
+<li>Membership Tables 成员表，枚举任意元素属于各个集合情况，从而验证恒等式（和真值表类似）</li>
+</ol>
+<h2 id="Funtion-f-maps-A-to-B-f-is-a-mapping-from-A-to-B"><a href="#Funtion-f-maps-A-to-B-f-is-a-mapping-from-A-to-B" class="headerlink" title="Funtion (f maps A to B) (f is a mapping from A to B)"></a>Funtion (f maps A to B) (f is a mapping from A to B)</h2><ol>
+<li>assignment 指派，分配。 指定f(a)=b。</li>
+<li>domain 定义域 A</li>
+<li>codomain 陪域 B</li>
+<li>image 像 b is an image of a under f</li>
+<li>preimage 原像 可能是单个元素，也可能是一个集合。</li>
+<li>f(A) range 值域</li>
+<li>等价的函数具有相同的domain &amp; codomain &amp; map each element to the same element of the codomain</li>
+<li>$f(S) = \{f(s)|s\in S\}$</li>
+<li>$(f_1+f_2)(x) = f_1(x)+f_2(x)$</li>
+<li>$(f_1<em>f_2)(x) = f_1(x)</em>f_2(x)$</li>
+<li>injection injective 单射 one-to-one 可在值域上定义反函数</li>
+<li>surjection surjective (or onto) 满射 映上 陪域中每个元素都能找到原像</li>
+<li>injective and surjective =&gt; bijection or one-to-one correspondence 双射 一一对应</li>
+<li>invertible 可逆的 Inverse Function 反函数</li>
+<li>Composition 复合函数 $f \circ g = f(g(x))$</li>
+<li>Factorial/fæk’tɔrɪəl/ Function 阶乘函数</li>
+<li>Partial Function 局部函数，对某个函数截取部分domain</li>
+</ol>
+<h2 id="Sequence-序列-a-n"><a href="#Sequence-序列-a-n" class="headerlink" title="Sequence 序列 $\{a_n\}$"></a>Sequence 序列 $\{a_n\}$</h2><p>A funtion from N or N+ to S</p>
+<script type="math/tex; mode=display">a_n = f(n)</script><ol>
+<li>term 项</li>
+<li>Geometric Progression 几何级数 a*r^n, n=0,1…  (a and r are real numbers)</li>
+<li>Arithmetic Progression 算术级数 （等差数列）</li>
+<li>Recurrence relation 递推关系 </li>
+<li>a solution of a recurrence relation 满足递推关系的序列称为这个递推关系的一个解</li>
+<li>initial conditions 初始条件 递推关系生效前的所有terms</li>
+<li>solving the recurrence relation 找到通项公式 这样的公式叫closed formula闭公式</li>
+<li>iteration 迭代法，正向替换 working upward； 反向替换 working downward。 用于猜测formula，然后用the method of induction数学归纳法证明。</li>
+<li>Summation （序列的部分）总和</li>
+<li>in lexicographic order /,lɛksɪkə’græfɪk/ 字典序</li>
+</ol>
+<h2 id="Matrices-矩阵"><a href="#Matrices-矩阵" class="headerlink" title="Matrices 矩阵"></a>Matrices 矩阵</h2><ol>
+<li>Boolean Product 布尔积 类似矩阵乘法，各项求交之后求并</li>
+<li>Boolean Powers 多次布尔积。 写作$A^{[n]}$, 记$A^{[n]}=I$</li>
+</ol>
+<hr>
+<h1 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h1><ol>
+<li>pseudocode /‘sju:doˌkod/ 伪代码</li>
+<li>Halt Problem 停机问题，无解</li>
+<li>Big-O f(x) of big-O of g(x)</li>
+<li>|f(x)| &lt; |c*g(x)| (x &gt; k) : the constants c and k are called witnesses. Only one pair of witnesses is needed.</li>
+<li>if f = O(g) &amp;&amp; g = O(f), then the two functions are of the same order.</li>
+<li>polynomial /,pɒlɪ’nəʊmɪəl/ 多项式</li>
+<li>if |f(x)| &gt; |C*g(x)| (x &gt; k) : Big-Omega</li>
+<li>if f = O(g) &amp;&amp; g = O(f), then f = θ(g) : Big-Theta; f(x) is of order g(x).</li>
+<li>brute-force 蛮力（算法）</li>
+<li>Tractable Problem ：P类问题，多项式时间内解决</li>
+<li>Intractable Problem</li>
+<li>Unsolvable Problem 无解的问题，例如Halt Problem</li>
+<li>Class NP: 可在多项式时间内验证一个解的问题</li>
+<li>NP Complete Class: NPC问题，所有的NP问题都能约化为NPC问题。</li>
+</ol>
+<hr>
+<h1 id="Number-Theory-and-Cryptography-数论和密码学"><a href="#Number-Theory-and-Cryptography-数论和密码学" class="headerlink" title="Number Theory and Cryptography 数论和密码学"></a>Number Theory and Cryptography 数论和密码学</h1><p>/krɪp’tɑgrəfi/</p>
+<ol>
+<li>divisibility /di,vizi’biləti/ 可除性</li>
+<li>hexadecimal /,hɛksə’dɛsɪml/ 十六进制（的）</li>
+<li>modular /‘mɑdjʊlɚ/ 模的</li>
+<li>congruence 同余 /‘kɑŋgrʊəns/</li>
+<li>a divides b  a除b， a is a factor or divisor of b, b is a multiple of a.</li>
+<li>quotient /‘kwoʃnt/商; remainder /rɪ’mendɚ/余数</li>
+<li>-11 / 3 = -4 … 1</li>
+<li>The notation a  ≡  b (mod m)  says  that a is <strong>congruent</strong> to b modulo m.   a  ≡  b (mod m) is a congruence and that m is its modulus.</li>
+<li>doing arithmatic modulo m: $a+_mb = (a+b) \mod m; a<em>_mb = (a</em>b) \mod m$</li>
+</ol>
+<h2 id="Zm-0…m-1"><a href="#Zm-0…m-1" class="headerlink" title="Zm = {0…m-1}"></a>Zm = {0…m-1}</h2><ol>
+<li>Closure 封闭性</li>
+<li>Associativity 结合律</li>
+<li>Commutativity 交换律</li>
+<li>Identity element 单位元 （加法0，乘法1）</li>
+<li>Additive inverse 加法逆元</li>
+<li>Distributivity 分配率</li>
+<li>判定同余式，左边减右边是m的倍数。</li>
+</ol>
+<h2 id="Prime"><a href="#Prime" class="headerlink" title="Prime"></a>Prime</h2><ol>
+<li>composite /kɑm’pɑzɪt/ 合数</li>
+<li>divisible by 7 能被7整除</li>
+<li>Mersenne Primes 梅森素数：满足2的素数次方减一的素数。检验2的素数次方减一是否素数是容易的，由此得到已知的最大素数。$2^{11}-1不是素数$</li>
+<li>Prime Number Theorem: 不超过x的素数个数大约是(x / ln x)，任取一个不超过n的数，则这个数是素数的概率是1/lnx。</li>
+<li>对两个互质的数a,b:ak+b可以生成无限个素数。</li>
+<li>存在由任意个素数组成的等差数列（Arithmetic Progression）</li>
+<li>现阶段没有发现高效生成素数的算法f(n)</li>
+<li>不存在多项式函数f(n)使得其值一定是素数</li>
+<li>Goldbach’s Conjecture 哥德巴赫猜想：所有大于2的偶数都能表示为两个素数的和。</li>
+<li>Conjecture: There are infinitly many primes of the form $n^2+1$.</li>
+<li>The Twin Prime Conjecture: 相差2的素数有无限多组</li>
+</ol>
+<h2 id="Great-Commom-Divisor-dɪ’vaɪzɚ"><a href="#Great-Commom-Divisor-dɪ’vaɪzɚ" class="headerlink" title="Great Commom Divisor /dɪ’vaɪzɚ/"></a>Great Commom Divisor /dɪ’vaɪzɚ/</h2><ol>
+<li>relatively prime 互质数</li>
+<li>pairwise relatively prime 两两互质</li>
+<li>Prime Factorizations /,fæktərai’zeiʃən/ 质因数分解</li>
+<li>Least Common Multiple 最小公倍数 lcm(a,b)</li>
+<li>Euclidean /ju:’klidiən/ 欧几里得的</li>
+<li>Bézout’s Theorem 贝祖定理 gcd(a,b) = sa+tb. （求s、t用扩展欧几里得）</li>
+<li>if gcd(a,b)=1 &amp;&amp; a|bc, then a|c; Therefore, a ≡ b (mod m) if ac ≡ bc (mod m) &amp;&amp; gcd(c,m)=1.</li>
+</ol>
+<h2 id="Solving-Congruences"><a href="#Solving-Congruences" class="headerlink" title="Solving Congruences"></a>Solving Congruences</h2><ol>
+<li>linear congruences 线性同余方程 ax≡b ( mod m)</li>
+<li>an inverse of A modulo m 模m下a的乘法逆元</li>
+<li>逆元存在的充要条件：若gcd(a,m)=1, 则存在a在模m下的乘法逆元。 Proof: Since gcd(a,m)=1, there are integers s and t such that sa+tm=1. Hence, sa+tm ≡ 1 ( mod m), and it follows that sa ≡ 1 ( mod m). 用扩展欧几里得求出s即逆元。</li>
+<li>coefficient /koʊəˈfɪʃənt/ 系数</li>
+<li>Chinese Remainder Theorem: 对于模数两两互质的同余方程组（一条方程的形式为$x≡a_i (\mod m_i), m&gt;1$）,在$模M=\prod\limits_{i=1}^n m_i系$中有且仅有唯一解。一个解的构造为$x = \sum\limits_{i=1}^n a_i M_i y_i$, 其中$M_i = M\div m_i, y_i<em>M_i≡1 (\mod m_i)$。如此构造后，对任意的i，都满足同余方程$x ≡ a_i M_i y_i ≡ a_i (\mod m_i)$。模系下的唯一性<em>*待证 练习30</em></em>。</li>
+<li>Fermat’s Little Theorem： $有质数p，有整数a不是p的倍数，则a^{p-1}≡1(\mod p)$</li>
+<li>利用费马小定理可以简化$a^q \mod p$的运算，其中q很大。可以将q替换为$(q \mod (p-1))$</li>
+<li>满足$b^{n-1}≡1(\mod n)$的非质数n成为以b为基的伪质数 Pseudoprimes to the base b。（苏豆）</li>
+<li>因为在一定范围内的对于某个基的pseudoprimes总是很少，所以可以进行质数近似判定测试。可惜，对于某些数n，对于所有基b满足gcd(b,n)=1，总是能通过伪素数测试，即$b^{n-1}≡1(\mod n)$，这些数称为Carmichael Numbers（卡麦抠 卡米切尔）。 Carmichael Numbers有无穷多个。</li>
+<li>欧拉定理：费马小定理的推广。$有互质整数a,n.则a^{\phi(n)}≡1 (\mod n)$，而a在模n意义下存在逆元的充要条件就是a,n互质，从而得到推论：若a的逆元存在，则为$a^{\Phi(n)-1}$。</li>
+<li>Discrete Logarithms (模p意义下的)离散对数 对已知质数p，在模p意义下存在唯一一个primitive root $r$ 原始根，使得$r^n$取遍所有模p意义下所有非零数。 对任意$a\in [1,p-1]$，若有$r^e≡a(\mod p), e \in [1, p-1]$ ，则即$\log_r a=e$</li>
+<li>求discrete logarithms $\log_r a$(模质数p意义下)没有找到多项式时间的算法。这个问题是密码学的一部分。</li>
+<li></li>
+</ol>
+
+        
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-6-Rules-of-Inference"><span class="nav-number">1.</span> <span class="nav-text">1.6 Rules of Inference</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Fallacies-谬误"><span class="nav-number">1.1.</span> <span class="nav-text">Fallacies 谬误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rules-of-Inference-for-Quantified-Statements-量化命题的推理规则"><span class="nav-number">1.2.</span> <span class="nav-text">Rules of Inference for Quantified Statements 量化命题的推理规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Combining-Rules-of-Inference-for-Propositions-and-Quantified-Statements"><span class="nav-number">1.3.</span> <span class="nav-text">Combining Rules of Inference for Propositions and Quantified Statements</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-7-Introduction-to-Proofs"><span class="nav-number">2.</span> <span class="nav-text">1.7 Introduction to Proofs</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#To-Proof-p-gt-q-or-to-proof-p"><span class="nav-number">2.1.</span> <span class="nav-text">To Proof p-&gt;q (or to proof p)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-8-Proof-Methods-and-Strategy-证明的方法和策略"><span class="nav-number">3.</span> <span class="nav-text">1.8 Proof Methods and Strategy 证明的方法和策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Existence-Proof-存在性证明"><span class="nav-number">3.1.</span> <span class="nav-text">Existence Proof 存在性证明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Uniqueness-Proof-唯一性证明"><span class="nav-number">3.2.</span> <span class="nav-text">Uniqueness Proof 唯一性证明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set"><span class="nav-number">4.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-Operations"><span class="nav-number">4.1.</span> <span class="nav-text">Set Operations</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Set-Identities-集合恒等式"><span class="nav-number">4.1.1.</span> <span class="nav-text">Set Identities 集合恒等式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Funtion-f-maps-A-to-B-f-is-a-mapping-from-A-to-B"><span class="nav-number">4.2.</span> <span class="nav-text">Funtion (f maps A to B) (f is a mapping from A to B)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequence-序列-a-n"><span class="nav-number">4.3.</span> <span class="nav-text">Sequence 序列 $\{a_n\}$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Matrices-矩阵"><span class="nav-number">4.4.</span> <span class="nav-text">Matrices 矩阵</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Algorithm"><span class="nav-number">5.</span> <span class="nav-text">Algorithm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Number-Theory-and-Cryptography-数论和密码学"><span class="nav-number">6.</span> <span class="nav-text">Number Theory and Cryptography 数论和密码学</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Zm-0…m-1"><span class="nav-number">6.1.</span> <span class="nav-text">Zm = {0…m-1}</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prime"><span class="nav-number">6.2.</span> <span class="nav-text">Prime</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Great-Commom-Divisor-dɪ’vaɪzɚ"><span class="nav-number">6.3.</span> <span class="nav-text">Great Commom Divisor /dɪ’vaɪzɚ/</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solving-Congruences"><span class="nav-number">6.4.</span> <span class="nav-text">Solving Congruences</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">邓子烽</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.1
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/js/utils.js?v=7.4.1"></script><script src="/js/motion.js?v=7.4.1"></script>
+<script src="/js/schemes/pisces.js?v=7.4.1"></script>
+
+<script src="/js/next-boot.js?v=7.4.1"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+  
+
+  
+
+  
+
+</body>
+</html>
