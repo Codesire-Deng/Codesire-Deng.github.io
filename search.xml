@@ -16,13 +16,9 @@
 <h2 id="分裂树上拓扑排序"><a href="#分裂树上拓扑排序" class="headerlink" title="分裂树上拓扑排序"></a>分裂树上拓扑排序</h2><p>&emsp;&emsp;上文引出了一个新问题，如何自底向上地访问分裂树？一种直观的办法是bfs收集SAM所有节点再做拓扑排序，这逻辑复杂而代码繁琐。一种更好的办法是，在构造SAM时采用内存池技术，之后对内存池按照$Max$降序排序即可。原因是</p>
 <script type="math/tex; mode=display">Max(fa)+1=Min(s) \Rightarrow Max(s) > Max(fa)</script><p>有趣的是，分裂树的拓扑序也是自动机的拓扑序！原因是</p>
 <script type="math/tex; mode=display">trans(s, *)=t \Rightarrow Max(t) > Max(s)</script><p>如果你忘记了，请复习<a href="/2019/10/01/Suffix-Automaton/" title="后缀自动机的更多性质">后缀自动机的更多性质</a>。</p>
-<p>要点：</p>
-<ol>
-<li>指针板构造采用内存池技术</li>
-<li>$Max$可能的取值仅有$[1,n]$，所以要采用计数排序</li>
-<li>不要真的修改内存池，而是新开指针做排序</li>
-<li>如果不得不写常规拓扑排序，bfs时请注意DAG的重复访问</li>
-</ol>
+<div class="note primary">
+            <h4 id="拓扑排序要点"><a href="#拓扑排序要点" class="headerlink" title="拓扑排序要点"></a>拓扑排序要点</h4><ol><li>指针板构造采用内存池技术</li><li>$Max$可能的取值仅有$[1,n]$，所以要采用计数排序</li><li>不要真的修改内存池，而是新开指针做排序</li><li>如果不得不写常规拓扑排序，bfs时请注意DAG的重复访问</li></ol>
+          </div>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cnt; ++i) ++num[sam[i].Max];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) num[i] += num[i+<span class="number">1</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cnt; ++i) b[--num[sam[i].Max]] = &amp;sam[i];</span><br><span class="line"><span class="comment">// sam[] has been top sorted by b[].</span></span><br></pre></td></tr></table></figure>
 <p>剩余细节在<a href="#%e6%b1%82%e6%9c%ac%e8%b4%a8%e4%b8%8d%e5%90%8c%e7%9a%84%e7%ac%ack%e5%b0%8f%e5%ad%90%e4%b8%b2">例题1</a>、<a href="#%e6%b1%82%e9%95%bf%e5%ba%a6%e4%b8%ba-i-%e7%9a%84%e5%ad%90%e4%b8%b2%e7%9a%84%e6%9c%80%e5%a4%a7%e5%87%ba%e7%8e%b0%e6%ac%a1%e6%95%b0">例题2</a>中体现</p>
 <h2 id="求长度为i的子串的最大出现次数"><a href="#求长度为i的子串的最大出现次数" class="headerlink" title="求长度为i的子串的最大出现次数"></a>求长度为i的子串的最大出现次数</h2><p><a href="https://www.spoj.com/problems/NSUBSTR/" target="_blank" rel="noopener">SPOJ NSUBSTR</a> 题意：给出字符串S（长度&lt;=2.5e5），设f(x)为S中长度为x的子串的最大出现次数，求f(1…length(s))。</p>
