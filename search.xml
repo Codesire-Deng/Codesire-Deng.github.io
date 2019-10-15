@@ -33,30 +33,6 @@
       </tags>
   </entry>
   <entry>
-    <title>生命科学课程资料</title>
-    <url>/2019/10/03/%E7%94%9F%E5%91%BD%E7%A7%91%E5%AD%A6%E8%AE%A8%E8%AE%BA%E8%AF%BE/</url>
-    <content><![CDATA[<h1 id="讨论课资料"><a href="#讨论课资料" class="headerlink" title="讨论课资料"></a>讨论课资料</h1><h2 id="演示文稿"><a href="#演示文稿" class="headerlink" title="演示文稿"></a>演示文稿</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">时间</th>
-<th style="text-align:center">主题</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">第六周</td>
-<td style="text-align:center"><a href="https://codesire-deng.github.io/HelloRevealjs/index.html" target="_blank" rel="noopener">生物伦理与物种平等</a></td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <tags>
-        <tag>杂项</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>后缀自动机 Suffix Automaton</title>
     <url>/2019/10/01/Suffix-Automaton/</url>
     <content><![CDATA[<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="自动机的五个部分"><a href="#自动机的五个部分" class="headerlink" title="自动机的五个部分"></a>自动机的五个部分</h2><ol>
