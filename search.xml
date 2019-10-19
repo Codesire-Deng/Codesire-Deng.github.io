@@ -167,7 +167,7 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <h2 id="面对序列号"><a href="#面对序列号" class="headerlink" title="面对序列号"></a>面对序列号</h2><ol>
 <li>观察到现象：弹框并消失。可行办法：跟踪CreateWindow/ShowWindow/DestoryWindow（推荐）</li>
 <li>用OD动态追踪，尝试中断DestoryWindow，观察堆栈顶端找到出栈后的程序运行位置（或直接跑retn)</li>
-<li>\</li>
+<li>对不当场判断的场合（没有明显现象） <code>FileMon + RegMon = ProcMon</code></li>
 </ol>
 <h1 id="汇编规则"><a href="#汇编规则" class="headerlink" title="汇编规则"></a>汇编规则</h1><ol>
 <li>cdq edx:eax, idiv, edx = edx:eax %n</li>
