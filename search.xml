@@ -169,8 +169,11 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <li>用OD动态追踪，尝试中断DestoryWindow，观察堆栈顶端找到出栈后的程序运行位置（或直接跑retn)</li>
 <li><p>对不当场判断的场合（没有明显现象） 怀疑有文件/注册表读写 <code>FileMon + RegMon = ProcMon</code></p>
 <p> RegCreateKey()<br> RegQueryValue()<br> RegSetValue()</p>
-<p> CreateFile<br> CreateFileEx<br> ReadFile()</p>
+<p> CreateFile<br> CreateFileEx<br> ReadFile<br> WriteFile</p>
 </li>
+<li><p>软件断点：当前断点指令的首字节改为<code>0xCC</code>（对应的汇编指令为int 3）。 可能被程序自检</p>
+</li>
+<li>硬件断点。</li>
 </ol>
 <h1 id="汇编规则"><a href="#汇编规则" class="headerlink" title="汇编规则"></a>汇编规则</h1><ol>
 <li>cdq edx:eax, idiv, edx = edx:eax %n</li>
