@@ -177,6 +177,8 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 </li>
 <li><p>利用读/写硬件断点，当操作序列号时就能断住。<code>Ctrl+B</code>搜索已输入的序列号找到内存地址。</p>
 </li>
+<li>如果进入系统代码，则应跳出到用户代码<code>Alt+F9</code>，再按<code>Ctrl+F9</code>跳出一些函数。</li>
+<li><code>CallWindowProcA</code>的作用是由系统内核来回调用户事先写的消息处理函数</li>
 </ol>
 <h1 id="汇编规则"><a href="#汇编规则" class="headerlink" title="汇编规则"></a>汇编规则</h1><ol>
 <li>cdq edx:eax, idiv, edx = edx:eax %n</li>
