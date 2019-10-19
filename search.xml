@@ -171,9 +171,9 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <p> RegCreateKey()<br> RegQueryValue()<br> RegSetValue()</p>
 <p> CreateFile<br> CreateFileEx<br> ReadFile<br> WriteFile</p>
 </li>
-<li><p>软件断点：当前断点指令的首字节改为<code>0xCC</code>（对应的汇编指令为int 3）。 可能被程序自检</p>
+<li><p>软件断点：当前断点指令的首字节改为<code>0xCC</code>（对应的汇编指令为int 3）。 可能被程序自检。</p>
 </li>
-<li>硬件断点。</li>
+<li>硬件断点：选中某条指令-&gt;断点-&gt;硬件执行。  检查已设置的断点：调试-&gt;硬件断点… 原理：CPU调试寄存器保存了断点地址和断点条件，每个周期都会检查条件。触发条件有<code>execute</code>，<code>read</code>, <code>write</code>。  要设置读/写断点，选中变量的首字节-&gt;右键-&gt;断点-&gt;硬件写入-&gt;DWORD（对应的类型）。要设置DWORD断点对变量首字节有要求。读/写完成后到达断点。<br>可以用<code>printf(&quot;%p&quot;,...)</code>知道要跟踪的变量的地址。</li>
 </ol>
 <h1 id="汇编规则"><a href="#汇编规则" class="headerlink" title="汇编规则"></a>汇编规则</h1><ol>
 <li>cdq edx:eax, idiv, edx = edx:eax %n</li>
