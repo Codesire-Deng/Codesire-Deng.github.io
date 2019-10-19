@@ -62,7 +62,7 @@
 <meta property="og:site_name" content="临江仙">
 <meta property="og:description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  1#pragma comment(linker, &quot;/section:test,RWE&quot;)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-19T11:25:35.965Z">
+<meta property="og:updated_time" content="2019-10-19T11:39:26.530Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="汇编语言">
 <meta name="twitter:description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  1#pragma comment(linker, &quot;/section:test,RWE&quot;)">
@@ -279,7 +279,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-19 19:25:35" itemprop="dateModified" datetime="2019-10-19T19:25:35+08:00">2019-10-19</time>
+                <time title="修改时间：2019-10-19 19:39:26" itemprop="dateModified" datetime="2019-10-19T19:39:26+08:00">2019-10-19</time>
               </span>
             
           
@@ -341,7 +341,10 @@
 </li>
 <li><p>软件断点：当前断点指令的首字节改为<code>0xCC</code>（对应的汇编指令为int 3）。 可能被程序自检。</p>
 </li>
-<li>硬件断点：选中某条指令-&gt;断点-&gt;硬件执行。  检查已设置的断点：调试-&gt;硬件断点… 原理：CPU调试寄存器保存了断点地址和断点条件，每个周期都会检查条件。触发条件有<code>execute</code>，<code>read</code>, <code>write</code>。  要设置读/写断点，选中变量的首字节-&gt;右键-&gt;断点-&gt;硬件写入-&gt;DWORD（对应的类型）。要设置DWORD断点对变量首字节有要求。读/写完成后到达断点。<br>可以用<code>printf(&quot;%p&quot;,...)</code>知道要跟踪的变量的地址。</li>
+<li><p>硬件断点：选中某条指令-&gt;断点-&gt;硬件执行。  检查已设置的断点：调试-&gt;硬件断点… 原理：CPU调试寄存器保存了断点地址和断点条件，每个周期都会检查条件。触发条件有<code>execute</code>，<code>read</code>, <code>write</code>。  要设置读/写断点，选中变量的首字节-&gt;右键-&gt;断点-&gt;硬件写入-&gt;DWORD（对应的类型）。要设置DWORD断点对变量首字节有要求。读/写完成后到达断点。<br>可以用<code>printf(&quot;%p&quot;,...)</code>知道要跟踪的变量的地址。</p>
+</li>
+<li><p>利用读/写硬件断点，当操作序列号时就能断住。<code>Ctrl+B</code>搜索已输入的序列号找到内存地址。</p>
+</li>
 </ol>
 <h1 id="汇编规则"><a href="#汇编规则" class="headerlink" title="汇编规则"></a>汇编规则</h1><ol>
 <li>cdq edx:eax, idiv, edx = edx:eax %n</li>
