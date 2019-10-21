@@ -175,7 +175,7 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 </li>
 <li><p>硬件断点：选中某条指令-&gt;断点-&gt;硬件执行。  检查已设置的断点：调试-&gt;硬件断点… 原理：CPU调试寄存器保存了断点地址和断点条件，每个周期都会检查条件。触发条件有<code>execute</code>，<code>read</code>, <code>write</code>。  要设置读/写断点，选中变量的首字节-&gt;右键-&gt;断点-&gt;硬件写入-&gt;DWORD（对应的类型）。要设置DWORD断点对变量首字节有要求。读/写完成后到达断点。<br>可以用<code>printf(&quot;%p&quot;,...)</code>知道要跟踪的变量的地址。</p>
 </li>
-<li><p>利用读/写硬件断点，当操作序列号时就能断住。<code>Ctrl+B</code>搜索已输入的序列号找到内存地址。</p>
+<li><p>利用读/写硬件断点，当操作序列号时就能断住。<code>Ctrl+B</code>搜索已输入的序列号找到内存地址。跳跃几次看到<code>rep movs</code>（字符串拷贝），此时取消断点，回到用户代码，跳出几次，看到getText</p>
 </li>
 <li>如果进入系统代码，则应跳出到用户代码<code>Alt+F9</code>，再按<code>Ctrl+F9</code>跳出一些函数。</li>
 <li><code>CallWindowProcA</code>的作用是由系统内核来回调用户事先写的消息处理函数</li>
@@ -183,7 +183,21 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <h1 id="汇编规则"><a href="#汇编规则" class="headerlink" title="汇编规则"></a>汇编规则</h1><ol>
 <li>cdq edx:eax, idiv, edx = edx:eax %n</li>
 </ol>
+<h1 id="逆向工程历史"><a href="#逆向工程历史" class="headerlink" title="逆向工程历史"></a>逆向工程历史</h1><ol>
+<li>微软开发<code>debug</code>，<code>codeview</code>, 宝蓝开发<code>TurboDebug</code>;</li>
+</ol>
+<h2 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h2><ol>
+<li><code>debug</code> 编程：a(assemble) 地址+汇编语言，偏移地址固定从100开始</li>
+<li>u(unassemble) 反汇编，指定开始地址和末地址（l+长度亦可)，反汇编对应地址内的机器语言。</li>
+<li>r(register) 查看寄存器 SF+PL-NG UP上DN下</li>
+<li>p (optional 地址) 单步前进，目标地址是执行完毕的</li>
+<li>g (optional 地址 (optional) 末地址) 跳跃直到int 3(末地址是未执行的);</li>
+<li></li>
+</ol>
 ]]></content>
+      <tags>
+        <tag>杂项</tag>
+      </tags>
   </entry>
   <entry>
     <title>在ACM中使用C++</title>
