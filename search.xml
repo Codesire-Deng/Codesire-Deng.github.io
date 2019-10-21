@@ -194,7 +194,11 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <li>g (optional =首地址 (optional) 末地址) (从csip)跳跃直到int 3(末地址是未执行的);</li>
 <li>d(dump) 查看内存 可以指定(d cs:100 120 || d cs:100 l20)</li>
 <li>e(edit) 修改内存 地址 + “string” || hex</li>
-<li>t (track in)</li>
+<li>t(track in)</li>
+</ol>
+<h2 id="加密软件"><a href="#加密软件" class="headerlink" title="加密软件"></a>加密软件</h2><ol>
+<li><code>lock89</code>, <code>lockup</code>, 作者：杨道沅, 硬盘指纹加密技术</li>
+<li></li>
 </ol>
 ]]></content>
       <tags>
