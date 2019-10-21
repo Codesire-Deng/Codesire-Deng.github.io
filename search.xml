@@ -198,6 +198,8 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 </ol>
 <h2 id="加密软件"><a href="#加密软件" class="headerlink" title="加密软件"></a>加密软件</h2><ol>
 <li><code>lock89</code>, <code>lockup</code>, 作者：杨道沅, 硬盘指纹加密技术</li>
+<li><code>lock93</code>, <code>lock93NT</code>, 周辉</li>
+<li><code>BitLock</code>, 雷军</li>
 <li></li>
 </ol>
 ]]></content>
