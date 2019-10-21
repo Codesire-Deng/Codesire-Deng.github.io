@@ -63,7 +63,7 @@
 <meta property="og:site_name" content="临江仙">
 <meta property="og:description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  1#pragma comment(linker, &quot;/section:test,RWE&quot;)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-21T11:09:52.523Z">
+<meta property="og:updated_time" content="2019-10-21T11:36:34.447Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="汇编语言">
 <meta name="twitter:description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  1#pragma comment(linker, &quot;/section:test,RWE&quot;)">
@@ -280,7 +280,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-21 19:09:52" itemprop="dateModified" datetime="2019-10-21T19:09:52+08:00">2019-10-21</time>
+                <time title="修改时间：2019-10-21 19:36:34" itemprop="dateModified" datetime="2019-10-21T19:36:34+08:00">2019-10-21</time>
               </span>
             
           
@@ -356,12 +356,14 @@
 <li>微软开发<code>debug</code>，<code>codeview</code>, 宝蓝开发<code>TurboDebug</code>;</li>
 </ol>
 <h2 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h2><ol>
-<li><code>debug</code> 编程：a(assemble) 地址+汇编语言，偏移地址固定从100开始</li>
+<li><code>debug</code> 编程：a(assemble) 地址+汇编语言，偏移地址固定从100开始   (OD中改指令相当于a，若下一条语句实效，会有安全措施，改90NULL)。</li>
 <li>u(unassemble) 反汇编，指定开始地址和末地址（l+长度亦可)，反汇编对应地址内的机器语言。</li>
-<li>r(register) 查看寄存器 SF+PL-NG UP上DN下</li>
+<li>r(register) 查看寄存器 SF+PL-NG UP上DN下.  r + 寄存器名字, 修改内存</li>
 <li>p (optional 地址) 单步前进，目标地址是执行完毕的</li>
-<li>g (optional 地址 (optional) 末地址) 跳跃直到int 3(末地址是未执行的);</li>
-<li></li>
+<li>g (optional =首地址 (optional) 末地址) (从csip)跳跃直到int 3(末地址是未执行的);</li>
+<li>d(dump) 查看内存 可以指定(d cs:100 120 || d cs:100 l20)</li>
+<li>e(edit) 修改内存 地址 + “string” || hex</li>
+<li>t (track in)</li>
 </ol>
 
     </div>
@@ -504,7 +506,7 @@
             <a href="/tags/">
           
         
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">标签</span>
         </a>
       </div>

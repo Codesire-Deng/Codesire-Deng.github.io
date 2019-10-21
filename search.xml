@@ -187,12 +187,14 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <li>微软开发<code>debug</code>，<code>codeview</code>, 宝蓝开发<code>TurboDebug</code>;</li>
 </ol>
 <h2 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h2><ol>
-<li><code>debug</code> 编程：a(assemble) 地址+汇编语言，偏移地址固定从100开始</li>
+<li><code>debug</code> 编程：a(assemble) 地址+汇编语言，偏移地址固定从100开始   (OD中改指令相当于a，若下一条语句实效，会有安全措施，改90NULL)。</li>
 <li>u(unassemble) 反汇编，指定开始地址和末地址（l+长度亦可)，反汇编对应地址内的机器语言。</li>
-<li>r(register) 查看寄存器 SF+PL-NG UP上DN下</li>
+<li>r(register) 查看寄存器 SF+PL-NG UP上DN下.  r + 寄存器名字, 修改内存</li>
 <li>p (optional 地址) 单步前进，目标地址是执行完毕的</li>
-<li>g (optional 地址 (optional) 末地址) 跳跃直到int 3(末地址是未执行的);</li>
-<li></li>
+<li>g (optional =首地址 (optional) 末地址) (从csip)跳跃直到int 3(末地址是未执行的);</li>
+<li>d(dump) 查看内存 可以指定(d cs:100 120 || d cs:100 l20)</li>
+<li>e(edit) 修改内存 地址 + “string” || hex</li>
+<li>t (track in)</li>
 </ol>
 ]]></content>
       <tags>
