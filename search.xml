@@ -200,8 +200,16 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <li><code>lock89</code>, <code>lockup</code>, 作者：杨道沅, 硬盘指纹加密技术</li>
 <li><code>lock93</code>, <code>lock93NT</code>, 周辉</li>
 <li><code>BitLock</code>, 雷军</li>
-<li></li>
 </ol>
+<h1 id="驻留内存程序"><a href="#驻留内存程序" class="headerlink" title="驻留内存程序"></a>驻留内存程序</h1><h2 id="需要技术"><a href="#需要技术" class="headerlink" title="需要技术"></a>需要技术</h2><ol>
+<li>驻留内存</li>
+<li>中断</li>
+</ol>
+<p><code>es:[bx]</code> 0:32是一个中断向量的地址</p>
+<p>0:0 ~ 0:3FF 是中断向量表，每个中断向量占用4字节。 例如<code>int 00h</code>的中断向量储存在0:0 ~ 0:3之间; <code>int 01h</code>的中断向量储存在0:4 ~ 0:7之间。</p>
+<p>当cpu执行<code>int 00h</code>时：<br>pushf 保护当前标志位（flag）的状态<br>push cs 当前短地址<br>push 下条指令的偏移地址<br>cli<br>jmp 8756h:3412h</p>
+<p>8756h:3412h 是中断服务程序的入口地址<br>    ……<br>    iret; 中断返回</p>
+<p>当cpu执行<code>iret</code>时：<br>pop ip;<br>pop cs;<br>popf;       从而实现恢复现场。</p>
 ]]></content>
       <tags>
         <tag>杂项</tag>
