@@ -208,9 +208,12 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <p><code>es:[bx]</code> 0:32是一个中断向量的地址</p>
 <p>0:0 ~ 0:3FF 是中断向量表，每个中断向量占用4字节。 例如<code>int 00h</code>的中断向量储存在0:0 ~ 0:3之间; <code>int 01h</code>的中断向量储存在0:4 ~ 0:7之间。</p>
 <p>当cpu执行<code>int 00h</code>时：<br>pushf 保护当前标志位（flag）的状态<br>push cs 当前短地址<br>push 下条指令的偏移地址<br>cli<br>jmp 8756h:3412h</p>
+<p>// cli disable interrupt    (clear interrupt)<br>// sti enable.              (set interrupt)</p>
 <p>8756h:3412h 是中断服务程序的入口地址<br>    ……<br>    iret; 中断返回</p>
 <p>当cpu执行<code>iret</code>时：<br>pop ip;<br>pop cs;<br>popf;       从而实现恢复现场。</p>
-]]></content>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cli</span><br><span class="line">mov word ptr es:[bx], offset int_8h</span><br><span class="line">mov es:[bx+2], cs</span><br><span class="line">sti</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jmp dword ptr cs:[old_8h] ; 中断链接</span><br><span class="line">; iret 导致旧程序不再执行</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int_8h:    ; 中断服务</span><br><span class="line">push ... ; 记忆所有寄存器   ax bx cb dx si di ds</span><br><span class="line"></span><br><span class="line">push cs</span><br><span class="line">pop ds</span><br><span class="line">push cs</span><br><span class="line">pop es</span><br><span class="line">mov al,4</span><br><span class="line">out 70,al</span><br><span class="line">in al,71h // hour</span><br><span class="line">call convert</span><br><span class="line">mov word ptr current_time[?], ax</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">jmp dword ptr cs:[old_8h]</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>杂项</tag>
       </tags>
