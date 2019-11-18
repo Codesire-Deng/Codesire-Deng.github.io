@@ -224,6 +224,10 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <h2 id="dosboxdeb"><a href="#dosboxdeb" class="headerlink" title="dosboxdeb"></a>dosboxdeb</h2><p>dos mcbs 获得当前程序的PSP （memory control block)<br>u 01dd:1785  // 查看反汇编</p>
 <h2 id="单步中断"><a href="#单步中断" class="headerlink" title="单步中断"></a>单步中断</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pushf</span><br><span class="line">pop ax</span><br><span class="line">or ax, 0100h</span><br><span class="line">push ax</span><br><span class="line">popf    ; 修改 TF = 1</span><br><span class="line"></span><br><span class="line">nop;    ; 当TF==1，执行一条指令后调用 int 1h</span><br></pre></td></tr></table></figure>
 <h2 id="某种病毒"><a href="#某种病毒" class="headerlink" title="某种病毒"></a>某种病毒</h2><p>修改<code>int 21h</code>中断向量为<code>xxxx:yyyy</code>，原向量保存在内部变量<code>old_21h</code>中。新指令为<code>cmp ah 4Bh</code>，判断是否要执行程度。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">je infect_exe</span><br><span class="line">jmp dword ptr cs:[old_21h]</span><br><span class="line"></span><br><span class="line">infect_exe:</span><br><span class="line">    mov ah, 3dh; AH==3DH 表示打开文件</span><br><span class="line">    mov al, 2; 读写方式</span><br><span class="line">    pushf</span><br><span class="line">    call dword ptr cs:[old_2h]; call 隐含push段地址、偏移地址 ..?</span><br></pre></td></tr></table></figure></p>
+<p>原始的<code>int 21h</code>中断向量的段地址&lt;=70h</p>
+<p>假装调用一个无用的<code>int 21h</code>功能，如获取dos版本号</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov ah, 30h</span><br><span class="line">pushf</span><br><span class="line">置位TF ; 不能手动int 21h，因为系统将flag置零</span><br><span class="line">call dword ptr [current_21h]</span><br></pre></td></tr></table></figure>
+<h2 id="EXE文件格式"><a href="#EXE文件格式" class="headerlink" title="EXE文件格式"></a>EXE文件格式</h2><p>+00 4D, 5A; EXE标志“MZ”<br>+02 50, 01; 最后一个扇区的字节数为150h （例外：如果是00 00则最后一个扇区是满载）<br>+04 02, 00; EXE占用的扇区数量（200字节/一个扇区）<br>+06 02, 00; 重定位项数<br>+08 02, 00; 文件头的节长度=20h，所以字节长度=200h<br>+0A 00, 00; 至少内存<br>+0  FF, FF; 至多内存<br>+</p>
 ]]></content>
       <tags>
         <tag>杂项</tag>
