@@ -9,7 +9,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.9.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.1">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.1">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.1">
@@ -59,17 +59,15 @@
 <meta name="keywords" content="字符串">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SAM实战剖析">
-<meta property="og:url" content="http://yoursite.com/2019/10/11/SAM实战/index.html">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;11&#x2F;SAM%E5%AE%9E%E6%88%98&#x2F;index.html">
 <meta property="og:site_name" content="临江仙">
 <meta property="og:description" content="实战不会SAM？导致比赛打铁？快 点 学 ！  前置知识后缀自动机(Suffix-Automaton)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2019/10/11/SAM实战/abaTree.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;11&#x2F;SAM%E5%AE%9E%E6%88%98&#x2F;abaTree.png">
 <meta property="og:updated_time" content="2019-10-14T11:30:55.233Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SAM实战剖析">
-<meta name="twitter:description" content="实战不会SAM？导致比赛打铁？快 点 学 ！  前置知识后缀自动机(Suffix-Automaton)">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/11/SAM实战/abaTree.png">
-  <link rel="canonical" href="http://yoursite.com/2019/10/11/SAM实战/">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;11&#x2F;SAM%E5%AE%9E%E6%88%98&#x2F;abaTree.png">
+  <link rel="canonical" href="http://yoursite.com/2019/10/11/SAM%E5%AE%9E%E6%88%98/">
 
 
 <script id="page-configurations">
@@ -240,7 +238,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/11/SAM实战/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/11/SAM%E5%AE%9E%E6%88%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="邓子烽">
@@ -307,7 +305,7 @@
 <h2 id="求最小表示"><a href="#求最小表示" class="headerlink" title="求最小表示"></a>求最小表示</h2><p>&emsp;&emsp;求字符串$S$的最小表示。<br><br>　　<em>度娘有$O(n)$的特殊做法，此处不赘述。</em><br><br>　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最小的出边走，走n步就得到了$SS$中长度为n的最小子串，即$S$的最小表示。</p>
 <h2 id="求本质不同的第k小子串"><a href="#求本质不同的第k小子串" class="headerlink" title="求本质不同的第k小子串"></a>求本质不同的第k小子串</h2><p><a href="https://www.spoj.com/problems/SUBLEX/" target="_blank" rel="noopener">SPOJ SUBLEX</a> 题意：求字符串$S$的所有本质不同子串中的第$k$小。$length(S)\le 9e4, 询问数量\le 500$。<br><br>　　SAM构造完成后得到一个DAG，利用拓扑序求从每个点出发可能的路径数目。见<a href="#SAM%e4%b8%8a%e6%8b%93%e6%89%91%e6%8e%92%e5%ba%8f">拓扑排序的方法</a>。最后用类似二分法求第k小即可。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 内存池+计数排序的SAM，相对优秀</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXW = <span class="number">26</span>, MAXN = <span class="number">9e4</span>+<span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">State</span> &#123;</span></span><br><span class="line">    State *pa;</span><br><span class="line">    State *go[MAXW];</span><br><span class="line">    <span class="keyword">int</span> Max;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> siz = <span class="number">1</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> cnt;    </span><br><span class="line">&#125;sam[MAXN&lt;&lt;<span class="number">1</span>], *last, *root;</span><br><span class="line"></span><br><span class="line"><span class="function">State* <span class="title">alloc</span><span class="params">(<span class="keyword">int</span> Max)</span> </span>&#123;</span><br><span class="line">    State&amp; ref = sam[State::cnt++];</span><br><span class="line">    ref.Max = Max;</span><br><span class="line">    <span class="keyword">return</span> &amp;ref;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">State* <span class="title">alloc</span><span class="params">(State* src)</span> </span>&#123;</span><br><span class="line">    State&amp; ref = sam[State::cnt++];</span><br><span class="line">    ref = *src;</span><br><span class="line">    <span class="keyword">return</span> &amp;ref;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">extend</span><span class="params">(<span class="keyword">int</span> c)</span> </span>&#123;</span><br><span class="line">    State *p = last, *np = alloc(p-&gt;Max+<span class="number">1</span>);</span><br><span class="line">    last = np;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (p &amp;&amp; !p-&gt;go[c])</span><br><span class="line">        p-&gt;go[c] = np, p = p-&gt;pa;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (!p) <span class="keyword">return</span> np-&gt;pa = root, <span class="keyword">void</span>();</span><br><span class="line">    </span><br><span class="line">    State* q = p-&gt;go[c];</span><br><span class="line">    <span class="keyword">if</span> (q-&gt;Max == p-&gt;Max+<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> np-&gt;pa = q, <span class="keyword">void</span>();</span><br><span class="line">    </span><br><span class="line">    State* nq = alloc(q);</span><br><span class="line">    nq-&gt;Max = p-&gt;Max + <span class="number">1</span>;</span><br><span class="line">    q-&gt;pa = np-&gt;pa = nq;</span><br><span class="line">    <span class="keyword">while</span> (p &amp;&amp; p-&gt;go[c] == q)</span><br><span class="line">        p-&gt;go[c] = nq, p = p-&gt;pa;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> State::cnt = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> st[MAXN];</span><br><span class="line"><span class="keyword">int</span> Q, len;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> num[MAXN];</span><br><span class="line">State* b[MAXN&lt;&lt;<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类似二分法求当前第lef小</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">const</span> State* now, <span class="keyword">int</span> dep, <span class="keyword">int</span> lef)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">char</span> ans[MAXN];</span><br><span class="line">    <span class="keyword">if</span> (lef == <span class="number">0</span>) &#123;</span><br><span class="line">        ans[dep] = <span class="string">'\0'</span>;</span><br><span class="line">        <span class="built_in">puts</span>(ans);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;MAXW; ++i) <span class="keyword">if</span> (now-&gt;go[i]) &#123;</span><br><span class="line">        <span class="keyword">const</span> State* g = now-&gt;go[i];</span><br><span class="line">        <span class="keyword">if</span> (lef &lt;= g-&gt;siz) &#123;</span><br><span class="line">            ans[dep] = i+<span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">return</span> dfs(g, dep+<span class="number">1</span>, lef<span class="number">-1</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            lef -= g-&gt;siz;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="meta">#<span class="meta-keyword">ifdef</span> DEBUG</span></span><br><span class="line">    freopen(<span class="string">"in"</span>, <span class="string">"r"</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    <span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    </span><br><span class="line">    last = root = alloc(<span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%s"</span>, st);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> &amp;i=len; st[i]!=<span class="string">'\0'</span>; ++i) &#123;</span><br><span class="line">        st[i] -= <span class="string">'a'</span>;</span><br><span class="line">        extend(st[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 拓扑排序</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;State::cnt; ++i) ++num[sam[i].Max];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) num[i] += num[i+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;State::cnt; ++i) b[--num[sam[i].Max]] = &amp;sam[i];</span><br><span class="line">    <span class="comment">// 沿拓扑序DP</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;State::cnt; ++i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;MAXW; ++j)</span><br><span class="line">            <span class="keyword">if</span> (b[i]-&gt;go[j])</span><br><span class="line">                 b[i]-&gt;siz += b[i]-&gt;go[j]-&gt;siz;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;Q);</span><br><span class="line">    <span class="keyword">while</span> (Q--) &#123;</span><br><span class="line">        <span class="keyword">int</span> aim;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;aim);</span><br><span class="line">        dfs(root, <span class="number">0</span>, aim);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算|Right|"></a>离线计算|Right|</h1><p>&emsp;&emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| = 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br><img src="/2019/10/11/SAM实战/abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"><br><br>　　如上图所示，“1”在分裂的过程中消失了，不存在叶子节点中。<br><br>　　为什么$Right$集合的元素无法往下分裂？这是因为它表示的子串无法向左端扩展，换句话说，它是前缀。注意到叶子节点也是前缀。综上所述，只要对前缀所在节点的$|Right|$预置为$1$（其他节点预置为$0$），然后自底向上更新分裂树即可得到所有$|Right|$</p>
+<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算|Right|"></a>离线计算|Right|</h1><p>&emsp;&emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| = 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br><img src="/2019/10/11/SAM%E5%AE%9E%E6%88%98/abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"><br><br>　　如上图所示，“1”在分裂的过程中消失了，不存在叶子节点中。<br><br>　　为什么$Right$集合的元素无法往下分裂？这是因为它表示的子串无法向左端扩展，换句话说，它是前缀。注意到叶子节点也是前缀。综上所述，只要对前缀所在节点的$|Right|$预置为$1$（其他节点预置为$0$），然后自底向上更新分裂树即可得到所有$|Right|$</p>
 <h2 id="分裂树上拓扑排序"><a href="#分裂树上拓扑排序" class="headerlink" title="分裂树上拓扑排序"></a>分裂树上拓扑排序</h2><p>&emsp;&emsp;上文引出了一个新问题，如何自底向上地访问分裂树？一种直观的办法是bfs收集SAM所有节点再做拓扑排序，这逻辑复杂而代码繁琐。一种更好的办法是，在构造SAM时采用内存池技术，之后对内存池按照$Max$降序排序即可。原因是</p>
 <script type="math/tex; mode=display">Max(fa)+1=Min(s) \Rightarrow Max(s) > Max(fa)</script><p>有趣的是，分裂树的拓扑序也是自动机的拓扑序！原因是</p>
 <script type="math/tex; mode=display">trans(s, *)=t \Rightarrow Max(t) > Max(s)</script><p>如果你忘记了，请复习<a href="/2019/10/01/Suffix-Automaton/" title="后缀自动机的更多性质">后缀自动机的更多性质</a>。</p>
@@ -360,7 +358,7 @@
           
           <div class="post-tags">
             
-              <a href="/tags/字符串/" rel="tag"><i class="fa fa-tag"></i> 字符串</a>
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"><i class="fa fa-tag"></i> 字符串</a>
             
           </div>
         
@@ -380,7 +378,7 @@
 
             <div class="post-nav-prev post-nav-item">
               
-                <a href="/2019/10/18/生命科学讨论课/" rel="prev" title="生命科学课程资料">
+                <a href="/2019/10/18/%E7%94%9F%E5%91%BD%E7%A7%91%E5%AD%A6%E8%AE%A8%E8%AE%BA%E8%AF%BE/" rel="prev" title="生命科学课程资料">
                   生命科学课程资料 <i class="fa fa-chevron-right"></i>
                 </a>
               
@@ -448,7 +446,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         
-          <a href="/archives/">
+          <a href="/archives/%20%7C%7C%20archive">
         
           <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
@@ -460,7 +458,7 @@
       <div class="site-state-item site-state-tags">
         
           
-            <a href="/tags/">
+            <a href="/tags/%20%7C%7C%20tags">
           
         
         <span class="site-state-item-count">5</span>
@@ -486,7 +484,7 @@
       
         
       
-        <a href="mailto:oi_dzf@qq.com" title="E-Mail &rarr; mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
+        <a href="/mailto:oi_dzf@qq.com" title="E-Mail &rarr; mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i></a>
       </span>
     
       <span class="links-of-author-item">
@@ -710,7 +708,7 @@ window.addEventListener('pjax:success', () => {
       repo: 'Gitment-for-Codesire-Deng-s-Blog',
       owner: 'Codesire-Deng',
       admin: ['Codesire-Deng'],
-      id: '9eea93890267bf35c90fdaca91dc6160',
+      id: '6673d3c9f401855181523e144f490ab1',
         language: window.navigator.language || window.navigator.userLanguage,
       
       distractionFreeMode: 'true'
