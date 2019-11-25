@@ -230,7 +230,9 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <p>原始的<code>int 21h</code>中断向量的段地址&lt;=70h</p>
 <p>假装调用一个无用的<code>int 21h</code>功能，如获取dos版本号</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov ah, 30h</span><br><span class="line">pushf</span><br><span class="line">置位TF ; 不能手动int 21h，因为系统将flag置零</span><br><span class="line">call dword ptr [current_21h]</span><br></pre></td></tr></table></figure>
-<h2 id="EXE文件格式"><a href="#EXE文件格式" class="headerlink" title="EXE文件格式"></a>EXE文件格式</h2><p>+00 4D, 5A; EXE标志“MZ”<br>+02 50, 01; 最后一个扇区的字节数为150h （例外：如果是00 00则最后一个扇区是满载）<br>+04 02, 00; EXE占用的扇区数量（200字节/一个扇区）<br>+06 02, 00; 重定位项数<br>+08 02, 00; 文件头的节长度=20h，所以字节长度=200h<br>+0A 00, 00; 至少内存<br>+0  FF, FF; 至多内存<br>+</p>
+<h2 id="EXE文件格式"><a href="#EXE文件格式" class="headerlink" title="EXE文件格式"></a>EXE文件格式</h2><p>+00 4D, 5A; EXE标志“MZ”<br>+02 50, 01; 最后一个扇区的字节数为150h （例外：如果是00 00则最后一个扇区是满载）<br>+04 02, 00; EXE占用的扇区数量（200字节/一个扇区）<br>+06 02, 00; 重定位项数<br>+08 02, 00; 文件头的节长度=20h，所以字节长度=200h (20h x 10h)<br>+0A 00, 00; 至少内存   DOS是单任务的，所以内存限制没有太大意义<br>+0C FF, FF; 至多内存<br>+0E 05, 00; SS与程序首段地址的距离 （程序首段地址在运行时确定, = psp+10h）<br>+10 00, 01; SP = 100h</p>
+<p>+12 E8, 20; EXE文件头的校验值<br>+14 28, 00; IP=0028h            ; 注意此处先IP后CS<br>+16 02, 00; CS与程序首段地址的距离<br>+18 1E, 00; 重定位表的偏移地址</p>
+<p>; 下面是重定位表。每个重定位项4个字节。每两个字节为一个信息。<br>+1E 01, 00; 重定位的偏移地址=0001h<br>+20 02, 00; Δ=0002h,<br>; 首段地址+Δ=重定位的段地址<br>;<br>+22 0D, 00; 重定位的偏移地址=000Dh<br>+24 02, 00; Δ=0002h,<br>; 首段地址+Δ=重定位的段地址</p>
 ]]></content>
       <tags>
         <tag>杂项</tag>
