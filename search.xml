@@ -23,6 +23,9 @@
 <tr>
 <td style="text-align:center"><a href="https://codesire-deng.github.io/bioDiet/index.html#/" target="_blank" rel="noopener">饮食与健康</a></td>
 </tr>
+<tr>
+<td style="text-align:center"><a href="https://codesire-deng.github.io/bioNobelPrizeThinking.html#/" target="_blank" rel="noopener">诺奖的思考</a></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -240,7 +243,10 @@ Max(nq) = Max(v_p)+1</script><p>显然$Right(nq)$是真包含$\{L+1\}$的最小�
 <p>注意加密堆栈后引发的解密对新数据的影响的问题。</p>
 <p>保存ss和sp，之后修改它为一段预留空间</p>
 <h1 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h1><p><em>32位系统下</em><br>|            |  保护模式  |      实模式       |<br>| :————: | :————: | :———————-: |<br>| 最大段长度 |     4G     |        64K        |<br>|  越界访问  | 运行时错误 |       允许        |<br>|  物理寻址  |  查gdt表   | 基址*10h+10h+偏移 |</p>
-]]></content>
+<h2 id="查gdt表"><a href="#查gdt表" class="headerlink" title="查gdt表"></a>查gdt表</h2><p>设<code>ds=10h</code>，现通过查gdt表获得其物理地址。gdt表储存描述符，每个占8字节。表的首地址存在于<code>gdtr</code>寄存器。</p>
+<p>gdt+10h xx xx xx xx xx xx xx xx</p>
+<h2 id="idt中断描述符表"><a href="#idt中断描述符表" class="headerlink" title="idt中断描述符表"></a>idt中断描述符表</h2><p>首地址存在于<code>idtr</code>中。每项有8字节。基址2字节，偏移4字节，剩余2字节记录权限。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lgdt fword ptr gdt ; 把gdt表的首地址和长度载入到gdtr寄存器</span><br><span class="line"></span><br><span class="line">cli</span><br><span class="line">smsw ax</span><br><span class="line">and ax, 1Fh</span><br><span class="line">or al, 1</span><br><span class="line">lmsw ax; enable PE bit of MSW or CR0</span><br><span class="line">db 0EAh ; JMP FAR PTR</span><br><span class="line">dw 00h</span><br><span class="line">dw pseg_</span><br></pre></td></tr></table></figure>]]></content>
       <tags>
         <tag>杂项</tag>
       </tags>
