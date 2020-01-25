@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Ubuntu双系统双显卡装机</title>
+    <url>/2020/01/25/Ubuntu%E8%A3%85%E6%9C%BA%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>很久之前就在Windows笔记本上装了ubuntu 18.04 LTS，因为是双系统，需要手动给硬盘分区，而当时ubuntu的系统分区贼多，埋下了某一个分区过小的伏笔。最近某Filesystem塞满了（500MB），才发现很多双系统安装教程没有卸载教程！</p>
+<p>于是探索的旅程又开始了。<strong>我们将卸载现有的Ubuntu系统，调整硬盘分区，然后重装ubuntu，并安装最棒的软件和驱动</strong>。</p>
+<h1 id="卸载原有ubuntu"><a href="#卸载原有ubuntu" class="headerlink" title="卸载原有ubuntu"></a>卸载原有ubuntu</h1><p>原有的系统是手动分区的，导致一个硬盘上分区数较多。</p>
+<ol>
+<li>启动Windows系统，使用分区助手将ubuntu占用的分区合并，并格式化成ext4系统。（格式化似乎不是必要步骤）</li>
+<li>准备好ubuntu装机u盘。应该都会吧！用UltraISO。</li>
+<li>调整BIOS设置。设置为u盘启动，关闭secure boot，华硕的主板还要关闭fast boot。</li>
+</ol>
+<h1 id="安装ubuntu-18-04-3-LTS"><a href="#安装ubuntu-18-04-3-LTS" class="headerlink" title="安装ubuntu 18.04.3 LTS"></a>安装ubuntu 18.04.3 LTS</h1><ol>
+<li>u盘启动，选择试用ubuntu。</li>
+<li>开始安装，接好wifi。在询问是否与windows共存的时候点自定义。在分区表中将刚刚在分区助手中合并的分区删除，归还的空间分配到windows的C盘上。然后后退，选择与windows共存。</li>
+<li>这时界面让你分割windows的C盘，供ubuntu使用。我分割了32GB，建议贪多，原因玄学。</li>
+<li>一路安装，没什么大问题。</li>
+</ol>
+<h1 id="登陆ubuntu"><a href="#登陆ubuntu" class="headerlink" title="登陆ubuntu"></a>登陆ubuntu</h1><p>因为是双显卡（Intel集显 + Geforece MX150），这可能会导致开机登陆困难，原因是默认的独显驱动有问题，导致机器卡死。</p>
+<ol>
+<li>在grub引导时，对ubuntu按”e”，倒数第二行找到<code>quiet splash *</code>，修改为<code>quiet splash acpi_osi=linux nomodeset *</code>，按”F10”引导。这么做是为了禁用所有显卡驱动。</li>
+<li>开机后分辨率是800*600的，操作不便时按”Alt+F7”移动窗口。</li>
+<li>安装vim。(喜欢gedit的不安装也完全可以)</li>
+<li>按照以下代码禁用Nvidia开源显卡驱动<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/modprobe.d/blacklist.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件内加入以下黑名单</span></span><br><span class="line">blacklist vga16fb</span><br><span class="line">blacklist nouveau</span><br><span class="line">blacklist rivafb</span><br><span class="line">blacklist rivatv</span><br><span class="line">blacklist nvidiafb</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存退出，然后更新boot配置</span></span><br><span class="line">sudo update-initramfs -u</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure></li>
+<li>现在可以正常开机了。接下来安装Nvidia官方闭源驱动（可跳过）。打开ubuntu自带软件Software &amp; Updates，在Additional Drivers里勾选闭源驱动，版本号选大一点，Apply Changes，等一段时间下载安装即可。</li>
+<li><p>重启电脑，Enjoy！可以根据喜好调整NVIDIA X Server Settings的内容。<br>PS：不要自行下载英伟达官网的驱动！亲测无效！相信我！</p>
+</li>
+<li><p>调整grub引导，自己看着办吧，当然不是必须的。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/default/grub</span><br><span class="line">sudo update-grub</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="VIM"><a href="#VIM" class="headerlink" title="VIM"></a>VIM</h1><p>ubuntu默认源已经很久没更新Vim，所以加上源<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo add-apt-repository ppa:jonathonf/vim</span><br></pre></td></tr></table></figure></p>
+<p>再给出竞赛用~/.vimrc岂不美哉！赶紧背下来！</p>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">number</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">cindent</span></span><br><span class="line"><span class="keyword">set</span> autoread</span><br><span class="line"><span class="keyword">set</span> tabstop=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> softtabstop=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">nnoremap</span> <span class="symbol">&lt;F9&gt;</span> :<span class="keyword">call</span> CompileCPP()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line">func! CompileCPP()</span><br><span class="line">    exec <span class="string">"w"</span></span><br><span class="line">    <span class="keyword">if</span> &amp;<span class="keyword">filetype</span> == <span class="string">'cpp'</span></span><br><span class="line">        exec <span class="string">"g++ -Wall -DDEBUG % -o %&lt;"</span></span><br><span class="line">    <span class="keyword">endif</span></span><br><span class="line">endfunc</span><br><span class="line"></span><br><span class="line"><span class="keyword">nnoremap</span> <span class="symbol">&lt;F10&gt;</span> :<span class="keyword">call</span> Run()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line">func! Run()</span><br><span class="line">    exec <span class="string">"!./%&lt;"</span></span><br><span class="line">endfunc</span><br></pre></td></tr></table></figure>
+<p>如果控制台”F10”被占用，就在preferences里取消掉。</p>
+<h1 id="Chrome"><a href="#Chrome" class="headerlink" title="Chrome"></a>Chrome</h1><p>没什么好说的，只想说：<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dpkg --get-selections | grep firefox</span><br><span class="line">sudo apt purge firefox firefox-locale-en firefox-locale-zh-hans</span><br><span class="line">sudo apt autoremove</span><br><span class="line"><span class="comment"># 司马笑</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="VSCode"><a href="#VSCode" class="headerlink" title="VSCode"></a>VSCode</h1><p>借助Settings Sync插件可以很快配置Code，但是各种task还需要自行备份。</p>
+<h1 id="飞机"><a href="#飞机" class="headerlink" title="飞机"></a>飞机</h1><p>第一次在~/.local下安装软件，需要注销重登陆才能正常使用。<br>某些算法需要额外的库，比如<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt install libsodium-dev</span><br></pre></td></tr></table></figure><br>搞定之后在Setting-&gt;…-&gt;Socks Host作调整即可。</p>
+<h1 id="美化"><a href="#美化" class="headerlink" title="美化"></a>美化</h1><p>调整控制台的配色和透明度，换壁纸等等，不多说了。</p>
+<p>ubuntu很鸡贼，用日本字来糊弄我，字体很不好看，统统干掉。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将SC挪到最前面，解决“门”等字显示不正常的问题。</span></span><br><span class="line">sudo vim /etc/fonts/conf.d/64-language-selector-prefer.conf</span><br></pre></td></tr></table></figure>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>其他杂七杂八的东西就自行解决吧，祝看官ubuntu旅程愉快！</p>
+]]></content>
+      <tags>
+        <tag>杂项</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>生命科学课程资料</title>
     <url>/2019/10/18/%E7%94%9F%E5%91%BD%E7%A7%91%E5%AD%A6%E8%AE%A8%E8%AE%BA%E8%AF%BE/</url>
     <content><![CDATA[<h1 id="讨论课资料"><a href="#讨论课资料" class="headerlink" title="讨论课资料"></a>讨论课资料</h1><h2 id="演示文稿"><a href="#演示文稿" class="headerlink" title="演示文稿"></a>演示文稿</h2><div class="table-container">
