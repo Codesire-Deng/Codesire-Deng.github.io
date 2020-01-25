@@ -63,7 +63,7 @@
 <meta property="og:site_name" content="临江仙">
 <meta property="og:description" content="前言很久之前就在Windows笔记本上装了ubuntu 18.04 LTS，因为是双系统，需要手动给硬盘分区，而当时ubuntu的系统分区贼多，埋下了某一个分区过小的伏笔。最近某Filesystem塞满了（500MB），才发现很多双系统安装教程没有卸载教程！ 于是探索的旅程又开始了。我们将卸载现有的Ubuntu系统，调整硬盘分区，然后重装ubuntu，并安装最棒的软件和驱动。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-25T07:16:06.476Z">
+<meta property="og:updated_time" content="2020-01-25T07:29:59.944Z">
 <meta name="twitter:card" content="summary">
   <link rel="canonical" href="http://yoursite.com/2020/01/25/Ubuntu%E8%A3%85%E6%9C%BA%E7%AC%94%E8%AE%B0/">
 
@@ -267,7 +267,7 @@
                 
               
 
-              <time title="创建时间：2020-01-25 21:28:00 / 修改时间：15:16:06" itemprop="dateCreated datePublished" datetime="2020-01-25T21:28:00+08:00">2020-01-25</time>
+              <time title="创建时间：2020-01-25 21:28:00 / 修改时间：15:29:59" itemprop="dateCreated datePublished" datetime="2020-01-25T21:28:00+08:00">2020-01-25</time>
             </span>
           
             
@@ -301,7 +301,7 @@
 <li>这时界面让你分割windows的C盘，供ubuntu使用。我分割了32GB，建议贪多，原因玄学。</li>
 <li>一路安装，没什么大问题。</li>
 </ol>
-<h1 id="登陆ubuntu"><a href="#登陆ubuntu" class="headerlink" title="登陆ubuntu"></a>登陆ubuntu</h1><p>因为是双显卡（Intel集显 + Geforece MX150），这可能会导致开机登陆困难，原因是默认的独显驱动有问题，导致机器卡死。</p>
+<h1 id="登陆ubuntu"><a href="#登陆ubuntu" class="headerlink" title="登陆ubuntu"></a>登陆ubuntu</h1><p>因为是双显卡（Intel集显 + Geforce MX150），这可能会导致开机登陆困难，原因是默认的独显驱动有问题，导致机器卡死。</p>
 <ol>
 <li>在grub引导时，对ubuntu按”e”，倒数第二行找到<code>quiet splash *</code>，修改为<code>quiet splash acpi_osi=linux nomodeset *</code>，按”F10”引导。这么做是为了禁用所有显卡驱动。</li>
 <li>开机后分辨率是800*600的，操作不便时按”Alt+F7”移动窗口。</li>
@@ -320,7 +320,7 @@
 <p>如果控制台”F10”被占用，就在preferences里取消掉。</p>
 <h1 id="Chrome"><a href="#Chrome" class="headerlink" title="Chrome"></a>Chrome</h1><p>没什么好说的，只想说：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dpkg --get-selections | grep firefox</span><br><span class="line">sudo apt purge firefox firefox-locale-en firefox-locale-zh-hans</span><br><span class="line">sudo apt autoremove</span><br><span class="line"><span class="comment"># 司马笑</span></span><br></pre></td></tr></table></figure></p>
 <h1 id="VSCode"><a href="#VSCode" class="headerlink" title="VSCode"></a>VSCode</h1><p>借助Settings Sync插件可以很快配置Code，但是各种task还需要自行备份。</p>
-<h1 id="飞机"><a href="#飞机" class="headerlink" title="飞机"></a>飞机</h1><p>第一次在~/.local下安装软件，需要注销重登陆才能正常使用。<br>某些算法需要额外的库，比如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install libsodium-dev</span><br></pre></td></tr></table></figure><br>搞定之后在Setting-&gt;…-&gt;Socks Host作调整即可。</p>
+<h1 id="飞机"><a href="#飞机" class="headerlink" title="飞机"></a>飞机</h1><p>第一次在~/.local下安装软件，需要注销重登陆才能正常使用。<br>某些算法需要额外的库，比如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install libsodium-dev</span><br></pre></td></tr></table></figure><br>搞定之后在Settings-&gt;…-&gt;Socks Host作调整即可。</p>
 <h1 id="美化"><a href="#美化" class="headerlink" title="美化"></a>美化</h1><p>调整控制台的配色和透明度，换壁纸等等，不多说了。</p>
 <p>ubuntu很鸡贼，用日本字来糊弄我，字体很不好看，统统干掉。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将SC挪到最前面，解决“门”等字显示不正常的问题。</span></span><br><span class="line">sudo vim /etc/fonts/conf.d/64-language-selector-prefer.conf</span><br></pre></td></tr></table></figure>
