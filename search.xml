@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>跟我一起写Makefile</title>
+    <url>/2020/02/01/Makefile/</url>
+    <content><![CDATA[<p>路过一篇写得很到位的Makefile介绍文章，转载一下：</p>
+<p><a href="https://seisman.github.io/how-to-write-makefile/overview.html" target="_blank" rel="noopener">seisman.github.io/how-to-write-makefile</a></p>
+]]></content>
+      <tags>
+        <tag>杂项</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Ubuntu双系统双显卡装机</title>
     <url>/2020/01/25/Ubuntu%E8%A3%85%E6%9C%BA%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>很久之前就在Windows笔记本上装了ubuntu 18.04 LTS，因为是双系统，需要手动给硬盘分区，而当时ubuntu的系统分区贼多，埋下了某一个分区过小的伏笔。最近某Filesystem塞满了（500MB），才发现很多双系统安装教程没有卸载教程！</p>
@@ -31,6 +41,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/default/grub</span><br><span class="line">sudo update-grub</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
+<h1 id="触摸板右键失灵"><a href="#触摸板右键失灵" class="headerlink" title="触摸板右键失灵"></a>触摸板右键失灵</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gsettings <span class="built_in">set</span> org.gnome.desktop.peripherals.touchpad click-method areas</span><br></pre></td></tr></table></figure>
 <h1 id="VIM"><a href="#VIM" class="headerlink" title="VIM"></a>VIM</h1><p>ubuntu默认源已经很久没更新Vim，所以加上源<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo add-apt-repository ppa:jonathonf/vim</span><br></pre></td></tr></table></figure></p>
 <p>再给出竞赛用~/.vimrc岂不美哉！赶紧背下来！</p>
 <figure class="highlight vim"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">number</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">cindent</span></span><br><span class="line"><span class="keyword">set</span> autoread</span><br><span class="line"><span class="keyword">set</span> tabstop=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> softtabstop=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">nnoremap</span> <span class="symbol">&lt;F9&gt;</span> :<span class="keyword">call</span> CompileCPP()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line">func! CompileCPP()</span><br><span class="line">    exec <span class="string">"w"</span></span><br><span class="line">    <span class="keyword">if</span> &amp;<span class="keyword">filetype</span> == <span class="string">'cpp'</span></span><br><span class="line">        exec <span class="string">"g++ -Wall -DDEBUG % -o %&lt;"</span></span><br><span class="line">    <span class="keyword">endif</span></span><br><span class="line">endfunc</span><br><span class="line"></span><br><span class="line"><span class="keyword">nnoremap</span> <span class="symbol">&lt;F10&gt;</span> :<span class="keyword">call</span> Run()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line">func! Run()</span><br><span class="line">    exec <span class="string">"!./%&lt;"</span></span><br><span class="line">endfunc</span><br></pre></td></tr></table></figure>
