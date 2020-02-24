@@ -3,7 +3,7 @@
   <entry>
     <title>微积分学备忘录</title>
     <url>/2020/02/03/%E5%BE%AE%E7%A7%AF%E5%88%86%E5%AD%A6%E5%A4%87%E5%BF%98%E5%BD%95/</url>
-    <content><![CDATA[<p>今日立志，做一个对数学敏感的大学生！</p>
+    <content><![CDATA[<!-- 今日立志，做一个对数学敏感的大学生！ -->
 <a id="more"></a>
 <h1 id="均值不等式"><a href="#均值不等式" class="headerlink" title="均值不等式"></a>均值不等式</h1><h2 id="四种均值"><a href="#四种均值" class="headerlink" title="四种均值"></a>四种均值</h2><ol>
 <li>平方平均值 $Q_n=\sqrt{ \frac{\sum_{i=1}^n x_i^2}{n} }$</li>
