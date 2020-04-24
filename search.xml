@@ -3,7 +3,8 @@
   <entry>
     <title>识趣</title>
     <url>/2020/04/07/%E8%AF%86%E8%B6%A3/</url>
-    <content><![CDATA[<h3 id="换底公式"><a href="#换底公式" class="headerlink" title="换底公式"></a>换底公式</h3><p>$\log_ab = \frac{\ln b}{\ln a}$</p>
+    <content><![CDATA[<a id="more"></a>
+<h3 id="换底公式"><a href="#换底公式" class="headerlink" title="换底公式"></a>换底公式</h3><p>$\log_ab = \frac{\ln b}{\ln a}$</p>
 <blockquote>
 <p>证明：<br>$e^{\ln a * \log_an} = b$ 两边取对数，移项。</p>
 </blockquote>
