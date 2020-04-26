@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>识趣</title>
-    <url>/2020/04/07/%E8%AF%86%E8%B6%A3/</url>
-    <content><![CDATA[<a id="more"></a>
-<h3 id="换底公式"><a href="#换底公式" class="headerlink" title="换底公式"></a>换底公式</h3><p>$\log_ab = \frac{\ln b}{\ln a}$</p>
-<blockquote>
-<p>证明：<br>$e^{\ln a * \log_an} = b$ 两边取对数，移项。</p>
-</blockquote>
-<p>$A^{\log_bC} = C^{\log_bA}$</p>
-<blockquote>
-<p>证明：两边取对数，得$\log_bC \ln A = \frac{\ln C}{\ln b}*\ln A$</p>
-</blockquote>
-<h3 id="分治的时间复杂度"><a href="#分治的时间复杂度" class="headerlink" title="分治的时间复杂度"></a>分治的时间复杂度</h3><p>$T(N) = aT(N/b) + \Theta(N^k \log_p N)$</p>
-<script type="math/tex; mode=display">
-T(N) = \begin{cases}
-O(N^{\log_b a})& \text{if }a > b^k \\
-O(N^k \log_{p+1} N)& \text{if }a = b^k \\
-O(N^k \log_{p} N)& \text{if }a < b^k \\
-\end{cases}</script>]]></content>
-  </entry>
-  <entry>
     <title>跟我一起写Makefile</title>
     <url>/2020/02/01/Makefile/</url>
     <content><![CDATA[<p>路过一篇写得很到位的Makefile介绍文章，转载一下：</p>
@@ -1107,6 +1087,27 @@ lgcd(a, b, c, n) = \sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor</script><ol>
       <tags>
         <tag>数学</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>识趣</title>
+    <url>/2019/04/07/%E8%AF%86%E8%B6%A3/</url>
+    <content><![CDATA[<a id="more"></a>
+<h3 id="换底公式"><a href="#换底公式" class="headerlink" title="换底公式"></a>换底公式</h3><p>$\log_ab = \frac{\ln b}{\ln a}$</p>
+<blockquote>
+<p>证明：<br>$e^{\ln a * \log_an} = b$ 两边取对数，移项。</p>
+</blockquote>
+<p>$A^{\log_bC} = C^{\log_bA}$</p>
+<blockquote>
+<p>证明：两边取对数，得$\log_bC \ln A = \frac{\ln C}{\ln b}*\ln A$</p>
+</blockquote>
+<h3 id="分治的时间复杂度"><a href="#分治的时间复杂度" class="headerlink" title="分治的时间复杂度"></a>分治的时间复杂度</h3><p>$T(N) = aT(N/b) + \Theta(N^k \log_p N)$</p>
+<script type="math/tex; mode=display">
+T(N) = \begin{cases}
+O(N^{\log_b a})& \text{if }a > b^k \\
+O(N^k \log_{p+1} N)& \text{if }a = b^k \\
+O(N^k \log_{p} N)& \text{if }a < b^k \\
+\end{cases}</script><h3 id="三角函数"><a href="#三角函数" class="headerlink" title="三角函数"></a>三角函数</h3><h4 id="sin-cos-tan知一求二"><a href="#sin-cos-tan知一求二" class="headerlink" title="sin,cos,tan知一求二"></a>sin,cos,tan知一求二</h4><p>试试$(\tan^2x)^{(-1)^k}+1 = ?$</p>
+]]></content>
   </entry>
   <entry>
     <title>微积分学备忘录</title>
