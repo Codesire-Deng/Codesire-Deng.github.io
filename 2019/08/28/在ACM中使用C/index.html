@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}};
+  </script>
+<meta name="description" content="今天又双叒叕来水博客了……（不务正业） 令人尖叫的STLalgorithm 系列fill, fill_n 填充数组12fill(a, a+n, INF);fill_n(a, n, INF);">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在ACM中使用C++">
+<meta property="og:url" content="https://codesire-deng.github.io/2019/08/28/%E5%9C%A8ACM%E4%B8%AD%E4%BD%BF%E7%94%A8C/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="今天又双叒叕来水博客了……（不务正业） 令人尖叫的STLalgorithm 系列fill, fill_n 填充数组12fill(a, a+n, INF);fill_n(a, n, INF);">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-08-28T05:08:12.000Z">
+<meta property="article:modified_time" content="2020-09-18T17:03:17.190Z">
+<meta property="article:author" content="等疾风">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2019/08/28/%E5%9C%A8ACM%E4%B8%AD%E4%BD%BF%E7%94%A8C/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>在ACM中使用C++ | 等疾风</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">等疾风</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">临江仙<br/>琼窗梦醒留残日，当年得恨何长！<br/>碧阑干外映垂杨。<br/>暂时相见，如梦懒思量。</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A4%E4%BA%BA%E5%B0%96%E5%8F%AB%E7%9A%84STL"><span class="nav-number">1.</span> <span class="nav-text">令人尖叫的STL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#algorithm-%E7%B3%BB%E5%88%97"><span class="nav-number">1.1.</span> <span class="nav-text">algorithm 系列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fill-fill-n-%E5%A1%AB%E5%85%85%E6%95%B0%E7%BB%84"><span class="nav-number">1.1.1.</span> <span class="nav-text">fill, fill_n 填充数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unique-unique-copy-%E5%AF%B9%E6%8E%92%E5%BA%8F%E5%90%8E%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D"><span class="nav-number">1.1.2.</span> <span class="nav-text">unique, unique_copy 对排序后数组去重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reverse-reverse-copy-%E9%95%9C%E5%83%8F%E7%BF%BB%E8%BD%AC%E6%95%B0%E7%BB%84"><span class="nav-number">1.1.3.</span> <span class="nav-text">reverse, reverse_copy 镜像翻转数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rotate-rotate-copy-%E6%95%B0%E7%BB%84%E8%BD%AE%E6%8D%A2"><span class="nav-number">1.1.4.</span> <span class="nav-text">rotate, rotate_copy 数组轮换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#random-shuffle-%E9%9A%8F%E6%9C%BA%E6%89%93%E4%B9%B1%E6%95%B0%E7%BB%84"><span class="nav-number">1.1.5.</span> <span class="nav-text">random_shuffle 随机打乱数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#partial-sort-%E6%95%B0%E7%BB%84%E4%B8%80%E6%AC%A1%E6%80%A7%E5%8F%96%E5%89%8Dk%E5%B0%8F"><span class="nav-number">1.1.6.</span> <span class="nav-text">partial_sort 数组一次性取前k小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#partition-partition-copy-%E5%85%83%E7%B4%A0%E5%88%86%E6%88%90%E4%B8%A4%E7%BB%84"><span class="nav-number">1.1.7.</span> <span class="nav-text">partition, partition_copy 元素分成两组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#merge-inplace-merge-%E5%BD%92%E5%B9%B6%E6%95%B0%E7%BB%84"><span class="nav-number">1.1.8.</span> <span class="nav-text">merge, inplace_merge 归并数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#equal-range-%E6%89%BE%E5%88%B0%E5%AD%98%E5%9C%A8%E5%8C%BA%E9%97%B4"><span class="nav-number">1.1.9.</span> <span class="nav-text">equal_range 找到存在区间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#make-heap-O-n-%E5%BB%BA%E5%A0%86"><span class="nav-number">1.1.10.</span> <span class="nav-text">make_heap O(n)建堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sort-heap-%E5%AF%B9%E5%A0%86%E6%8E%92%E5%BA%8F"><span class="nav-number">1.1.11.</span> <span class="nav-text">sort_heap 对堆排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push-heap-%E5%A0%86%E5%8A%A0%E5%85%A5%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0"><span class="nav-number">1.1.12.</span> <span class="nav-text">push_heap 堆加入一个元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pop-heap-%E5%A0%86%E5%88%A0%E9%99%A4%E9%A1%B6%E7%AB%AF%E5%85%83%E7%B4%A0"><span class="nav-number">1.1.13.</span> <span class="nav-text">pop_heap 堆删除顶端元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lexicographical-compare-%E5%AD%97%E5%85%B8%E5%BA%8F%E5%B0%8F%E4%BA%8E"><span class="nav-number">1.1.14.</span> <span class="nav-text">lexicographical_compare 字典序小于</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#next-permutation-prev-permutation-%E6%B1%82%E4%B8%8B%E4%B8%80%E6%8E%92%E5%88%97"><span class="nav-number">1.1.15.</span> <span class="nav-text">next_permutation, prev_permutation 求下一排列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Containers-%E7%B3%BB%E5%88%97"><span class="nav-number">1.2.</span> <span class="nav-text">Containers 系列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bitset"><span class="nav-number">1.2.1.</span> <span class="nav-text">bitset</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">常用函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">1.2.2.</span> <span class="nav-text">map</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0-1"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E6%80%A7-1"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-1"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">常用函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">1.2.3.</span> <span class="nav-text">set</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0-2"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">常用函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C%E6%A0%87%E5%87%86%E5%BA%93-%E7%B3%BB%E5%88%97"><span class="nav-number">1.3.</span> <span class="nav-text">C标准库 系列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#assert-%E6%96%AD%E8%A8%80"><span class="nav-number">1.3.1.</span> <span class="nav-text">assert 断言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#isdigit-%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E6%98%AF%E5%90%A6%E5%8D%81%E8%BF%9B%E5%88%B6%E6%95%B0"><span class="nav-number">1.3.2.</span> <span class="nav-text">isdigit 判断字符是否十进制数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%AF%E7%81%AD%E4%BA%BA%E6%80%A7%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">泯灭人性的数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">内存使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scanf%E5%92%8Cprintf"><span class="nav-number">2.2.</span> <span class="nav-text">scanf和printf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BB%E5%85%A5%E8%A1%8C"><span class="nav-number">2.3.</span> <span class="nav-text">读入行</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2019/08/28/%E5%9C%A8ACM%E4%B8%AD%E4%BD%BF%E7%94%A8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在ACM中使用C++
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-08-28 13:08:12" itemprop="dateCreated datePublished" datetime="2019-08-28T13:08:12+08:00">2019-08-28</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-19 01:03:17" itemprop="dateModified" datetime="2020-09-19T01:03:17+08:00">2020-09-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>今天又双叒叕来水博客了……（不务正业）</p>
+<h1 id="令人尖叫的STL"><a href="#令人尖叫的STL" class="headerlink" title="令人尖叫的STL"></a>令人尖叫的STL</h1><h2 id="algorithm-系列"><a href="#algorithm-系列" class="headerlink" title="algorithm 系列"></a><strong>algorithm</strong> 系列</h2><h3 id="fill-fill-n-填充数组"><a href="#fill-fill-n-填充数组" class="headerlink" title="fill, fill_n 填充数组"></a><strong>fill</strong>, <strong>fill_n</strong> 填充数组</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">fill</span>(a, a+n, INF);</span><br><span class="line"><span class="built_in">fill_n</span>(a, n, INF);</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h3 id="unique-unique-copy-对排序后数组去重"><a href="#unique-unique-copy-对排序后数组去重" class="headerlink" title="unique, unique_copy 对排序后数组去重"></a><strong>unique</strong>, <strong>unique_copy</strong> 对排序后数组去重</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sort</span>(a, a+n);</span><br><span class="line"><span class="built_in">unique_copy</span>(a, a+n, b, 重载==);</span><br><span class="line"><span class="built_in">unique</span>(a, a+n, 重载==);</span><br></pre></td></tr></table></figure>
+
+<h3 id="reverse-reverse-copy-镜像翻转数组"><a href="#reverse-reverse-copy-镜像翻转数组" class="headerlink" title="reverse, reverse_copy 镜像翻转数组"></a><strong>reverse</strong>, <strong>reverse_copy</strong> 镜像翻转数组</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">reverse_copy</span>(a, a+n, b);</span><br><span class="line"><span class="built_in">reverse</span>(a, a+n);</span><br></pre></td></tr></table></figure>
+
+<h3 id="rotate-rotate-copy-数组轮换"><a href="#rotate-rotate-copy-数组轮换" class="headerlink" title="rotate, rotate_copy 数组轮换"></a><strong>rotate</strong>, <strong>rotate_copy</strong> 数组轮换</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;;</span><br><span class="line"><span class="built_in">rotate_copy</span>(a, a+<span class="number">2</span>, a+<span class="number">6</span>, b); <span class="comment">// b == &#123;3, 4, 5, 6, 1, 2&#125;</span></span><br><span class="line"><span class="built_in">rotate</span>(a, a+<span class="number">5</span>, a+<span class="number">6</span>); <span class="comment">// a == &#123;6, 1, 2, 3, 4, 5&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="random-shuffle-随机打乱数组"><a href="#random-shuffle-随机打乱数组" class="headerlink" title="random_shuffle 随机打乱数组"></a><strong>random_shuffle</strong> 随机打乱数组</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">random_shuffle</span>(a, a+n);</span><br></pre></td></tr></table></figure>
+
+<h3 id="partial-sort-数组一次性取前k小"><a href="#partial-sort-数组一次性取前k小" class="headerlink" title="partial_sort 数组一次性取前k小"></a><strong>partial_sort</strong> 数组一次性取前k小</h3><p>时间复杂度$n \log m$</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">partial_sort</span>(a, a+k, a+n, 重载&lt;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="partition-partition-copy-元素分成两组"><a href="#partition-partition-copy-元素分成两组" class="headerlink" title="partition, partition_copy 元素分成两组"></a><strong>partition</strong>, <strong>partition_copy</strong> 元素分成两组</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Point* mid = <span class="built_in">partition</span>(p, p+n, [o1, o2](<span class="keyword">const</span> Point&amp; a) &#123;</span><br><span class="line">        <span class="built_in"><span class="keyword">return</span></span> (o2-o1).<span class="built_in">det</span>(a-o1) &gt; <span class="number">0</span>;</span><br><span class="line">    &#125;);</span><br><span class="line"><span class="comment">// 以直线(o1, o2)为界将平面上的点划分成两组</span></span><br></pre></td></tr></table></figure>
+<p>还有<code>stable_partition</code>版本</p>
+<h3 id="merge-inplace-merge-归并数组"><a href="#merge-inplace-merge-归并数组" class="headerlink" title="merge, inplace_merge 归并数组"></a><strong>merge</strong>, <strong>inplace_merge</strong> 归并数组</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 要求分别有序</span></span><br><span class="line"><span class="built_in">merge</span>(a, a+aLen, b, b+bLen, c, 重载&lt;); <span class="comment">// 非原地合并</span></span><br><span class="line"><span class="built_in">inplace_merge</span>(a, a+mid+<span class="number">1</span>, a+aLen, 重载&lt;); <span class="comment">// 原地合并</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="equal-range-找到存在区间"><a href="#equal-range-找到存在区间" class="headerlink" title="equal_range 找到存在区间"></a><strong>equal_range</strong> 找到存在区间</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sort</span>(a, a+n);</span><br><span class="line"><span class="comment">// 等价于使用lower_bound和upper_bound</span></span><br><span class="line">pair&lt;<span class="keyword">int</span>*, <span class="keyword">int</span>*&gt; bounds = <span class="built_in">equal_range</span>(a, a+n, <span class="number">10</span>, 重载&lt;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="make-heap-O-n-建堆"><a href="#make-heap-O-n-建堆" class="headerlink" title="make_heap O(n)建堆"></a><strong>make_heap</strong> O(n)建堆</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make_heap</span>(a, a+n, 重载&lt;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="sort-heap-对堆排序"><a href="#sort-heap-对堆排序" class="headerlink" title="sort_heap 对堆排序"></a><strong>sort_heap</strong> 对堆排序</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make_heap</span>(a, a+n, 重载&lt;);</span><br><span class="line"><span class="built_in">sort_heap</span>(a, a+n, 重载&lt;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="push-heap-堆加入一个元素"><a href="#push-heap-堆加入一个元素" class="headerlink" title="push_heap 堆加入一个元素"></a><strong>push_heap</strong> 堆加入一个元素</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a[n++] = <span class="number">666</span>;</span><br><span class="line"><span class="built_in">push_heap</span>(a, a+n, 重载&lt;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="pop-heap-堆删除顶端元素"><a href="#pop-heap-堆删除顶端元素" class="headerlink" title="pop_heap 堆删除顶端元素"></a><strong>pop_heap</strong> 堆删除顶端元素</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pop_heap</span>(a, a+n--, 重载&lt;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="lexicographical-compare-字典序小于"><a href="#lexicographical-compare-字典序小于" class="headerlink" title="lexicographical_compare 字典序小于"></a><strong>lexicographical_compare</strong> 字典序小于</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">lexicographical_compare</span>(s1, s1+len1, s2, s2+len2))</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;s1 &lt; s2\n&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="next-permutation-prev-permutation-求下一排列"><a href="#next-permutation-prev-permutation-求下一排列" class="headerlink" title="next_permutation, prev_permutation 求下一排列"></a><strong>next_permutation</strong>, <strong>prev_permutation</strong> 求下一排列</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;;</span><br><span class="line"><span class="built_in">prev_permutation</span>(a, a+<span class="number">5</span>);</span><br><span class="line"><span class="built_in">next_permutation</span>(a, a+<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Containers-系列"><a href="#Containers-系列" class="headerlink" title="Containers 系列"></a><strong>Containers</strong> 系列</h2><p><em>用到烂的知识点就不多提了。这里只写容易忘的。</em></p>
+<h3 id="bitset"><a href="#bitset" class="headerlink" title="bitset"></a><strong>bitset</strong></h3><h4 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h4><ol>
+<li><code>bitset&lt;size_t N&gt; foo(int);</code></li>
+<li><code>bitset&lt;size_t N&gt; foo(std::string);</code></li>
+</ol>
+<h4 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h4><ol>
+<li>长度在编译期确定</li>
+<li>高位在左，低位在右</li>
+<li>重载的方括号可以直接读取、操作位</li>
+</ol>
+<h4 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h4><ol>
+<li><code>size_t count()</code> 返回1的个数</li>
+<li><code>bool test(size_t pos)</code> 返回非引用的<code>foo[pos]</code></li>
+<li><code>bool any()</code> 是否有1</li>
+<li><code>bool none()</code> 是否全0</li>
+<li><code>bool all()</code> 是否全1</li>
+<li><code>bitset&amp; set()</code>  全部位设置为1</li>
+<li><code>bitset&amp; set(size_t pos, bool val=true)</code> 设置某个位</li>
+<li><code>bitset&amp; reset()</code> 全部设置为0  （也可有参数pos）</li>
+<li><code>bitset&amp; flip()</code> 反转全部位  （也可有参数pos）</li>
+<li><code>string to_string(char zero, char one)</code> 按要求转化为string</li>
+<li><code>unsigned long to_ulong()</code> 转化为UL</li>
+<li><code>ULL to_ullong</code> 转化为ULL （C++11）</li>
+</ol>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a><strong>map</strong></h3><h4 id="构造函数-1"><a href="#构造函数-1" class="headerlink" title="构造函数"></a>构造函数</h4><ol>
+<li><code>map&lt;type1, type2&gt; mymap;</code></li>
+<li><code>map&lt;type1, type2&gt; mymap(&#123;&#125;)</code></li>
+</ol>
+<h4 id="特性-1"><a href="#特性-1" class="headerlink" title="特性"></a>特性</h4><ol>
+<li>内部用平衡树实现</li>
+<li>不允许重复的Key</li>
+<li>访问必须用迭代器 <code>map&lt;type1, type2&gt;::iterator it;</code></li>
+<li><code>it-&gt;first</code> 是Key，不可更变，<code>it-&gt;second</code> 是Value，可以修改。</li>
+<li>查找元素必须用<code>it = mymap.find(Key)</code>，失败则返回<code>mymap.end();</code></li>
+</ol>
+<h4 id="常用函数-1"><a href="#常用函数-1" class="headerlink" title="常用函数"></a>常用函数</h4><ol>
+<li>重载方括号，若Key不存在则建立Key对应的默认构造Value。返回Value的引用。</li>
+<li><code>insert()</code> 比较复杂，常用例子：<code>mp.insert(pair&lt;char, int&gt;(&#39;a&#39;, 1));</code></li>
+<li><code>iterator begin()</code> 指向头元素的迭代器 （rbegin()指向最后一个元素）</li>
+<li><code>iterator end()</code> 指向尾元素的后一个迭代器（rend()指向头元素的前一个迭代器）</li>
+<li><code>iterator find(Key)</code> 返回Key对应的迭代器，失败则返回end()。</li>
+<li><code>clear()</code> 清空所有键值对，size归零。</li>
+<li><code>size_type erase (const key_type&amp; k);</code> 删除Key对应的键值对，返回删除个数</li>
+<li><code>iterator erase (const_iterator position);</code> 删除迭代器指向的键值对，返回紧接下一个键值对的迭代器。</li>
+<li><code>iterator erase (const_iterator first, const_iterator last);</code> 删除迭代器指向的左闭右开区间的键值对，返回紧接着下一个键值对的迭代器（或<code>end()</code>）。</li>
+<li>注意，C++98中<code>erase()</code>不会返回迭代器，而是返回void</li>
+<li><code>iterator lower_bound (const key_type&amp; k);</code> 所在上界迭代器</li>
+<li><code>iterator upper_bound (const key_type&amp; k);</code> 所在下界迭代器</li>
+</ol>
+<h3 id="set"><a href="#set" class="headerlink" title="set"></a><strong>set</strong></h3><p>结点只有一个元素，不允许重复的红黑树。</p>
+<h4 id="常用函数-2"><a href="#常用函数-2" class="headerlink" title="常用函数"></a>常用函数</h4><ol>
+<li>迭代器begin(), end(), rbegin(), rend().</li>
+<li>容量empty(), size();</li>
+<li>插入<ul>
+<li> <code>pair&lt;iterator, bool&gt; insert(const value_type&amp; val);</code> 同时有非const的右值引用版本。</li>
+<li> 返回的pair包括一个指向被插入值的迭代器，bool指明是否真的发生了插入操作。（如果元素被来就存在，就为false）</li>
+</ul>
+</li>
+<li>删除<ul>
+<li><code>iterator erase(const_iterator position);</code> 删除指定迭代器位置的元素。返回紧接着的下一个元素的迭代器。</li>
+<li><code>iterator erase(const_iterator first, cosnt_iterator last);</code> 删除指定迭代器的左闭右开区间的元素。返回紧接着的下一个元素的迭代器。</li>
+<li><code>size_type erase(const value_type&amp; val);</code> 删除指定的值。 返回被删除的元素个数（0或1）。</li>
+</ul>
+</li>
+<li>交换 <code>swap(set&amp; x);</code> 交换两个类型相同的set。</li>
+<li>清空 <code>clear();</code></li>
+<li>查找 <code>iterator find(const value_type&amp; val);</code></li>
+<li>计数 <code>size_type count(const value_type&amp; val) const;</code></li>
+<li>上下界（左闭右开）<ul>
+<li><code>iterator lower_bound (const value_type&amp; val);</code></li>
+<li><code>iterator upper_bound (const value_type&amp; val);</code></li>
+<li><code>pair&lt;iterator,iterator&gt; equal_range (const value_type&amp; val);</code> 包括了下界和上界。</li>
+</ul>
+</li>
+</ol>
+<h2 id="C标准库-系列"><a href="#C标准库-系列" class="headerlink" title="C标准库 系列"></a><strong>C标准库</strong> 系列</h2><h3 id="assert-断言"><a href="#assert-断言" class="headerlink" title="assert 断言"></a><strong>assert</strong> 断言</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cassert&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">assert</span>(<span class="keyword">this</span>-&gt;ch[<span class="number">0</span>]-&gt;fa == <span class="keyword">this</span>);</span><br><span class="line"><span class="built_in">assert</span>(<span class="keyword">this</span>-&gt;ch[<span class="number">1</span>]-&gt;fa == <span class="keyword">this</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NDEBUG</span></span><br><span class="line"><span class="comment">// NDEBUG 标记可删除assert</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="isdigit-判断字符是否十进制数"><a href="#isdigit-判断字符是否十进制数" class="headerlink" title="isdigit 判断字符是否十进制数"></a><strong>isdigit</strong> 判断字符是否十进制数</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cctype&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (!<span class="built_in">isdigit</span>(c=<span class="built_in">getchar</span>()))</span><br><span class="line">    <span class="keyword">if</span> (c==<span class="string">&#x27;-&#x27;</span>) minus = <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+
+<h1 id="泯灭人性的数据类型"><a href="#泯灭人性的数据类型" class="headerlink" title="泯灭人性的数据类型"></a>泯灭人性的数据类型</h1><h2 id="内存使用"><a href="#内存使用" class="headerlink" title="内存使用"></a>内存使用</h2><table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">字节数</th>
+<th align="center">估计范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">int</td>
+<td align="center">4</td>
+<td align="center">±2e9</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">2</td>
+<td align="center">±3e4</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">1</td>
+<td align="center">保有127</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">4</td>
+<td align="center">37数量级，7位</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">8</td>
+<td align="center">307数量级，15位</td>
+</tr>
+<tr>
+<td align="center">long double</td>
+<td align="center">16</td>
+<td align="center">4931数量级，20位</td>
+</tr>
+<tr>
+<td align="center">long long</td>
+<td align="center">8</td>
+<td align="center">9e18</td>
+</tr>
+<tr>
+<td align="center">__int128_t</td>
+<td align="center">16</td>
+<td align="center">8.5e37</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>计算struct内存时要小心！最好使用<code>sizeof</code>的方式计算内存。</p>
+</blockquote>
+<h2 id="scanf和printf"><a href="#scanf和printf" class="headerlink" title="scanf和printf"></a>scanf和printf</h2><table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">符号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">unsigned int</td>
+<td align="center">%u %o(8进制) %x(16进制)</td>
+</tr>
+<tr>
+<td align="center">unsigned long long</td>
+<td align="center">%llu</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">入%lf，出%f</td>
+</tr>
+<tr>
+<td align="center">long double</td>
+<td align="center">%Lf</td>
+</tr>
+<tr>
+<td align="center">__int128_t</td>
+<td align="center">不可用</td>
+</tr>
+</tbody></table>
+<h2 id="读入行"><a href="#读入行" class="headerlink" title="读入行"></a>读入行</h2><p>gets()已经被删除。</p>
+<p>读入int之类的操作不会吃掉行末，这会导致下一个<code>getline(st, size)</code>得到空串。</p>
+<p>保险起见，应当自定义读入行。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/08/25/vimrc/" rel="prev" title=".vimrc">
+                  <i class="fa fa-chevron-left"></i> .vimrc
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" rel="next" title="汇编语言">
+                  汇编语言 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fas fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'none'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.bootcdn.net/ajax/libs/mathjax/3.1.0/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '00a098064772784393ca',
+      clientSecret: '578fbe40ff6dcd550b4df318fc9143bda83b0bac',
+      repo        : 'Gitment-for-Codesire-Deng-s-Blog',
+      owner       : 'Codesire-Deng',
+      admin       : ['Codesire-Deng'],
+      id          : '51b8317fe4bbcbe0b6c4fd520199aefe',
+      proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        language: '',
+      distractionFreeMode: false
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

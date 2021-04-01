@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}};
+  </script>
+<meta name="description" content="Since 2018&#x2F;07&#x2F;12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java语法笔记">
+<meta property="og:url" content="https://codesire-deng.github.io/2020/10/11/java/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="Since 2018&#x2F;07&#x2F;12">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-11T05:11:41.000Z">
+<meta property="article:modified_time" content="2020-10-11T08:15:04.496Z">
+<meta property="article:author" content="等疾风">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2020/10/11/java/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>Java语法笔记 | 等疾风</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">等疾风</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">临江仙<br/>琼窗梦醒留残日，当年得恨何长！<br/>碧阑干外映垂杨。<br/>暂时相见，如梦懒思量。</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">1.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">3.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switch"><span class="nav-number">4.</span> <span class="nav-text">switch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="nav-number">5.</span> <span class="nav-text">构造代码块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF"><span class="nav-number">7.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97"><span class="nav-number">8.</span> <span class="nav-text">静态代码块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final"><span class="nav-number">9.</span> <span class="nav-text">final</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#abstract"><span class="nav-number">10.</span> <span class="nav-text">abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#interface"><span class="nav-number">11.</span> <span class="nav-text">interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85"><span class="nav-number">12.</span> <span class="nav-text">包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90"><span class="nav-number">13.</span> <span class="nav-text">数据权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-number">14.</span> <span class="nav-text">内部类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E8%B0%83%EF%BC%88%E6%80%9D%E6%83%B3%EF%BC%89"><span class="nav-number">15.</span> <span class="nav-text">回调（思想）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8"><span class="nav-number">16.</span> <span class="nav-text">异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81"><span class="nav-number">17.</span> <span class="nav-text">输入输出流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E6%B5%81"><span class="nav-number">17.1.</span> <span class="nav-text">字节流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E6%B5%81"><span class="nav-number">17.2.</span> <span class="nav-text">字符流</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B"><span class="nav-number">18.</span> <span class="nav-text">泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E7%B1%BB"><span class="nav-number">18.1.</span> <span class="nav-text">泛型类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E6%B3%9B%E5%9E%8B%E7%B1%BB%E7%94%A8%E4%BD%9C%E5%8F%82%E6%95%B0"><span class="nav-number">18.2.</span> <span class="nav-text">将泛型类用作参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E6%96%B9%E6%B3%95"><span class="nav-number">18.3.</span> <span class="nav-text">泛型方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collection"><span class="nav-number">19.</span> <span class="nav-text">Collection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Collections-%E7%94%B1%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%E6%9E%84%E6%88%90%E7%9A%84%E7%B1%BB"><span class="nav-number">19.1.</span> <span class="nav-text">Collections 由静态方法构成的类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#list-%E5%85%81%E8%AE%B8%E9%87%8D%E5%A4%8D%E7%9A%84%E5%88%97%E8%A1%A8"><span class="nav-number">20.</span> <span class="nav-text">list 允许重复的列表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayList"><span class="nav-number">20.1.</span> <span class="nav-text">ArrayList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedList"><span class="nav-number">20.2.</span> <span class="nav-text">LinkedList</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set-%E4%B8%8D%E5%85%81%E8%AE%B8%E9%87%8D%E5%A4%8D%E7%9A%84%E9%9B%86%E5%90%88"><span class="nav-number">21.</span> <span class="nav-text">set 不允许重复的集合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashSet"><span class="nav-number">21.1.</span> <span class="nav-text">HashSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TreeSet"><span class="nav-number">21.2.</span> <span class="nav-text">TreeSet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map-%E9%94%AE%E5%80%BC%E7%BB%91%E5%AE%9A"><span class="nav-number">22.</span> <span class="nav-text">Map 键值绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap"><span class="nav-number">22.1.</span> <span class="nav-text">HashMap</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2020/10/11/java/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java语法笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-10-11 13:11:41 / 修改时间：16:15:04" itemprop="dateCreated datePublished" datetime="2020-10-11T13:11:41+08:00">2020-10-11</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Since 2018/07/12</p>
+<span id="more"></span>
+
+<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><ul>
+<li>与C++不同,Java在新建变量时,不允许其名称与其上一级作用域的变量名相同.</li>
+<li>若某一时刻某一作用域中,某个名字的变量被销毁,则该名字可以再次使用.</li>
+</ul>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><ul>
+<li>整数默认为int, 小数默认为double(8字节), 字面值不能大于类型最大值.</li>
+<li>数字可以加后缀指定类型, long为<code>L</code>, double为<code>d</code>, float为<code>f</code>.</li>
+<li>缩窄转换会报错,除非强制类型转换(前置括号). 类型提升不会报错(如int-&gt;double)</li>
+<li>short是16位有符号类型, char是16位<strong>无符号</strong>类型.</li>
+<li>非基础的数据类型只有引用数据类型,像阉割的指针,使用点号时自动解引用.</li>
+</ul>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><ul>
+<li><code>int[] array = new int[n];       //    array.length 为数组长度, 越界会报错</code></li>
+<li><code>int[] array = new int[] &#123;2, 0, 4, 1&#125;;  //array长度为4, 仅分配内存可初始化</code></li>
+<li><code>T[][] array = &#123; &#123;new T(), new T()&#125;,  &#123;new T()&#125; &#125;  //低维长度不定</code></li>
+<li><code>int[][] array = new int[n1][];   array[1] = new int[n2]; //低维长度不定</code></li>
+<li>凡是new生成的东西都在堆内存中, 只有array作为一个引用存在于栈内存中</li>
+<li>与C++不同, 已有数组名(引用)可以赋值给另一个已有数组名(引用), 允许变动.</li>
+</ul>
+<h2 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>(value) &#123;  <span class="comment">//value范围在int内,且不为boolean</span></span><br><span class="line"><span class="keyword">case</span> value1:</span><br><span class="line">    <span class="keyword">do</span> sth;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">default</span>:        <span class="comment">//default可以放在前面,程序保证入口挑选正确且唯一.</span></span><br><span class="line">    <span class="keyword">do</span> sth;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<h2 id="构造代码块"><a href="#构造代码块" class="headerlink" title="构造代码块"></a>构造代码块</h2><ul>
+<li>类中用<code>&#123;&#125;</code>包裹的代码块，将在每次构造函数调用时执行</li>
+<li>构造对象触发的动作：初始化（静态代码块）-&gt;super()-&gt;构造代码块-&gt;构造函数剩余部分</li>
+</ul>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><ul>
+<li>构造函数的第一行可以用<code>this(...)</code>调用其它构造函数. 编译器会检测递归构造器调用并报错</li>
+<li>编译器保证若有父类,构造方法一定会调用父类构造方法,故<code>this(...)</code>意味着会调用<code>super(....)</code></li>
+</ul>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><ul>
+<li>只允许一个父类<code>class Son extends Father &#123;...&#125;</code></li>
+<li>当前对象的父类指针为<code>ThisClass.super</code> <strong>?</strong>,</li>
+<li>子类的构造函数的第一行都有隐式的<code>super()</code>调用,可以替换为各种显式调用</li>
+<li><strong>重写</strong> <em>针对成员方法</em><ul>
+<li>继承中当函数名, 参数列表(即特征标)相同时发生重写</li>
+<li>访问限制级别必须相同或放宽</li>
+<li>若父类函数返回类型为基础类型,则子类重写返回类型必须相同</li>
+<li>若父类返回引用类型, 则子类返回相同或其子类类型</li>
+<li>重写方法不能抛出新异常, 只可以抛出相同/更少异常</li>
+<li>抽象方法必须在具体类中被重写</li>
+<li>父类引用指向子类对象时,会动态绑定子类重写函数</li>
+</ul>
+</li>
+<li><strong>隐藏</strong> <em>针对所有成员变量和静态成员方法</em><ul>
+<li>成员变量类型可以改变</li>
+<li>父类引用指向子类对象时,静态绑定父类被隐藏成员.(由对象调用的静态方法将被翻译为由类调用的静态方法。因此是隐藏而不是重写)</li>
+<li>为什么是隐藏？因为子类的构造函数总会调用父类的构造函数。若一个变量被两次修改，可能产生隐患。</li>
+</ul>
+</li>
+<li><strong>向上转型</strong><ul>
+<li>成员方法<ol>
+<li>   编译时<strong>检查声明类型类</strong>中是否含有被调用的成员方法,而不检查子类对象</li>
+<li>   运行时<strong>根据对象</strong>调用最后重写的成员方法,而不依赖与声明类型类</li>
+<li>   被重写的方法没有丢失,但仅能通过类方法中super访问.</li>
+</ol>
+</li>
+<li>成员变量<ol>
+<li>   编译时<strong>检查声明类型类</strong>中是否含有被访问的成员变量, 而不检查子类对象</li>
+<li>   运行时<strong>访问声明类型类</strong>中的成员变量, 而不访问子类对象所重写的</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><code>instanceof</code><ul>
+<li>判断一个对象是否为某个类的实例或是否实现了某个接口.</li>
+<li>若判断是否类的实例, 则编译器要求引用类型和类有关联(至少有父子关系)</li>
+<li>常用于强制类型转换前.</li>
+</ul>
+</li>
+</ul>
+<h2 id="静态代码块"><a href="#静态代码块" class="headerlink" title="静态代码块"></a>静态代码块</h2><ul>
+<li>静态代码块在程序生命周期中最多执行一次</li>
+<li>执行静态代码块的行为叫做<strong>初始化</strong></li>
+<li>能触发初始化的动作是<strong>主动引用</strong><ol>
+<li>创建类的实例</li>
+<li>访问类的静态变量(常量除外, 因为常量在代码中被直接替换, 不会新开内存)</li>
+<li>访问类的静态方法</li>
+<li>反射</li>
+<li>当子类被初始化时, 父类还没初始化, 那么先执行父类初始化</li>
+<li>虚拟机启动时, 先初始化含main()定义的类</li>
+<li>接口(禁止了static代码块)不要求父类初始化,直到真正引用父接口</li>
+</ol>
+</li>
+<li>不会触发初始化的动作是<strong>被动引用</strong><ol>
+<li>子类调用父类静态变量或父类静态方法, 只初始化父类</li>
+<li>访问类的常量</li>
+<li>声明对象数组(因为声明的是数组头引用和引用数组, 实际不含任何访问)</li>
+<li>访问静态内部类的任何组份</li>
+</ol>
+</li>
+</ul>
+<h2 id="final"><a href="#final" class="headerlink" title="final"></a>final</h2><ul>
+<li>final修饰变量: 声明常量, 其内容不可修改<ul>
+<li>对于基本数据类型, 其值不可修改</li>
+<li>对于引用数据类型, 指向不能更换, 但所指向的内容仍可修改</li>
+<li>常量和普通变量一样可以重写/隐藏.</li>
+<li>每个对象都包含各自的final变量, 在构造其中初始化</li>
+</ul>
+</li>
+<li>final修饰类: 定义不可被继承类<ul>
+<li>一般出于安全性原因才会考虑final修饰类</li>
+<li>因为不可被继承, 所以类不可能为abstract, 方法不含abstract</li>
+</ul>
+</li>
+<li>final修饰方法: 定义不可被重写方法</li>
+</ul>
+<h2 id="abstract"><a href="#abstract" class="headerlink" title="abstract"></a>abstract</h2><ul>
+<li>abstract修饰类: 指明类是抽象类, 不能实例化. 含抽象方法的类必须用abstract修饰.<ul>
+<li>抽象类不可能含final方法, 但无其他限制, 可像普通类一样编写.</li>
+</ul>
+</li>
+<li>abstract修饰方法: 指明方法是抽象方法, 原型后加分号, 而不能写方法体.</li>
+</ul>
+<h2 id="interface"><a href="#interface" class="headerlink" title="interface"></a>interface</h2><ul>
+<li>对应关键字 <code>implements</code> 实现</li>
+<li>接口是对行为的抽象, 方便描述类的共同行为.</li>
+<li>接口的变量默认且仅限于<code>public static final</code>(意味着在接口外能访问)</li>
+<li>接口的方法默认且仅限于<code>public abstract</code></li>
+<li>新接口可以继承(extends)多个旧接口.</li>
+<li>类实现(implements)接口后必须重写接口方法, 否则必须定义为abstract类.</li>
+<li>类可以实现多个方法, 即使这些方法有同名常量或同一函数.<ul>
+<li>若实现多个方法后有同名常量, 则尝试访问它们时会产生编译时二义性错误.</li>
+</ul>
+</li>
+<li>接口作为一种数据类型, 可以引用, 可以向上转型以实现多态.</li>
+</ul>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><ul>
+<li>访问不同包中的类需要加上<code>包名.</code>, 或者使用import <code>包名.类名</code>或<code>包名.*</code></li>
+<li>包是开放的(可以跨单元). 一个包可拥有多个public类, 但一个单元最多拥有一个public类, 且必须与单元名相同(大小写敏感).</li>
+<li>同一包中的类可以互相访问非private成员.</li>
+<li>继承另一个包的类后, 继承所得成员所属包不变.</li>
+</ul>
+<h2 id="数据权限"><a href="#数据权限" class="headerlink" title="数据权限"></a>数据权限</h2><ul>
+<li>类中数据权限修饰符<ol>
+<li><code>private</code> : 数据能在本类中访问.</li>
+<li><code>(空, 即默认修饰符)</code> : 数据能在同包中访问.</li>
+<li><code>protected</code> : 当类为public时有意义, 数据能在包外继承类中访问.</li>
+<li><code>public</code> : 当类为public时有意义, 数据能在包外访问.</li>
+</ol>
+<ul>
+<li>同类对象可以互相访问本类的private成员.</li>
+<li>重写方法时, 权限不能降低, 否则会影响多态.</li>
+</ul>
+</li>
+<li>类权限修饰符<ol>
+<li><code>(空, 即默认修饰符)</code> : 本类能在同包中访问.</li>
+<li><code>public</code> : 本类能在包外访问. 一个单元最多拥有一个public类, 且必须与单元名相同(大小写敏感).</li>
+</ol>
+</li>
+</ul>
+<h2 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h2><ul>
+<li>成员内部类<ul>
+<li>在类中以成员形式定义的另一个类, 称为成员内部类.</li>
+<li>内部类是外部类的成员, 依赖于外部对象的存在,因此不能含有静态方法或静态变量(常量除外).</li>
+<li>其他类中声明示例  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">OuterClass p1 = <span class="keyword">new</span> OuterClass();</span><br><span class="line">OuterClass.InnerClass p2 = p1.<span class="function">new <span class="title">InnerClass</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>因为是成员之一, 可以访问任何外部类成员, 存在引用<code>OuterClass.this</code></li>
+</ul>
+</li>
+<li>静态内部类<ul>
+<li>在类中以静态成员形式定义的另一个类, 称为静态内部类.</li>
+<li>静态内部类的外部类一定全是静态的.==?_?==</li>
+<li>静态内部类可以访问外部类的静态成员.</li>
+<li>静态内部类可以定义静态成员变量,静态成员方法和静态内部类.</li>
+<li>初始化某个静态内部类不会触发外部类的初始化.</li>
+</ul>
+</li>
+<li>局部类<ul>
+<li>定义在方法中的, 有类名的类, 称为局部类.</li>
+<li>局部类依赖于方法的运行, 因此本身不是静态的, 不能含有静态成员(常量除外). </li>
+<li>局部类可以访问方法中的局部变量(jr8之前只能访问final).</li>
+<li>若方法是成员方法, 则能访问外部类的所有成员, 存在引用<code>OuterClass.this</code></li>
+<li>若方法是静态方法, 则只能访问外部类的静态成员.</li>
+</ul>
+</li>
+<li>匿名类<ul>
+<li>匿名类是没有类名的子类, 使用格式: <code>new FatherClassOrInterface() &#123;...&#125; ;</code></li>
+<li>匿名类通常意味着向上转型, 并即时生成一个实例, 因此本身不是静态的.</li>
+<li>匿名类可以出现在成员变量中/方法中.</li>
+<li>匿名类不能定义新的构造方法/实现新的接口/派生出子类.</li>
+<li>匿名类若出现在成员变量中, 则类似于成员内部类; 若出现在方法中, 则类似于局部类.</li>
+</ul>
+</li>
+</ul>
+<h2 id="回调（思想）"><a href="#回调（思想）" class="headerlink" title="回调（思想）"></a>回调（思想）</h2><ul>
+<li>某个对象A引发另一对象B的行为，同时使B持有A的引用。B在行为过程中再引发A的行为，此谓回调。</li>
+<li>A的引用，可能是直接引用，也可能是接口引用等</li>
+<li>令B持有A的引用，可能通过方法参数传递，也可能通过set成员变量引用</li>
+<li>在多线程中，回调尤为常用</li>
+</ul>
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><ul>
+<li>Throwable的直接子类有Error（JVM错误用），Exception（异常类）。Exception的直接子类有RuntimeException（算术异常，丢失资源，找不到类，空指针，非法参数，数组越界，未知异常），IOException（EOF异常，找不到文件）</li>
+<li>运行时异常无需手动管理，所有过程隐式进行。IOException需要显式处理。</li>
+<li>当程序发生异常时，需要手写<code>throw new XXException(..)</code>，则方法会抛出一个异常。在异常被抛出的地方，必须被处理。</li>
+<li>处理异常：<ul>
+<li>用<code>try&#123;&#125;</code>包括可能会抛出异常的代码块，后接<code>catch (XXExcepetion e)&#123;&#125; catch (BiggerException e)&#123;&#125;... finally&#123;&#125;</code>代码块。或在方法声明中注明<code>throws XXException</code>(则调用此方法的方法必须处理此异常)</li>
+<li>若<code>try&#123;&#125;</code>代码块中确实抛出异常，则程序跳至catch代码块，并用e接收异常实例以供分析。</li>
+<li>无论在<code>try&#123;&#125;</code>,<code>catch()&#123;&#125;</code>中有无遇到异常，程序必定执行<code>finally&#123;&#125;</code>，一般在其中回收资源。在<code>finally&#123;&#125;</code>中引发的异常会中止余下代码的执行。</li>
+<li>需要同一时间分别处理多个异常时（比如关闭多个流），常用try嵌套。注意在finally中判断引用是否为空。</li>
+</ul>
+</li>
+</ul>
+<h2 id="输入输出流"><a href="#输入输出流" class="headerlink" title="输入输出流"></a>输入输出流</h2><h3 id="字节流"><a href="#字节流" class="headerlink" title="字节流"></a>字节流</h3><ul>
+<li>抽象父类：InputStream，OutputStream（抽象方法是read(), write()）</li>
+<li>文件字节流：FileInputStream，FileOutputStream<ul>
+<li>构造方法（常用的）有(String name)， (File file), OutputStream还有(File file, boolean append), 若append，则文件写入在末尾</li>
+<li><code>int read()</code> 用int返回下一字节byte（无输入则返回-1）,对文件单个字节操作.</li>
+<li><code>int read(byte b[])</code> 将最多b.length的字节读入到b[]，返回实际读入的字节数。只遇到EOF则返回-1</li>
+<li><code>int read(byte b[], int off, int len)</code> 将最多len的字节读入到b[off]或以后，返回实际读入的字节数。只遇到EOF则返回-1</li>
+<li><code>void write(int b)</code> 写一个字节b（抛弃高位）</li>
+<li><code>void write(byte b[], int off, int len)</code> 从<code>b[off]</code>开始写出len个字节</li>
+<li><code>void write(byte b[])</code> 写出b.length个字节</li>
+<li></li>
+</ul>
+</li>
+<li><code>BufferedInputStream(InputStream)</code> 利用内置的缓冲数组加速读取</li>
+<li><code>BufferedOutputStream(OutputStream)</code> 加速写出</li>
+</ul>
+<h3 id="字符流"><a href="#字符流" class="headerlink" title="字符流"></a>字符流</h3><ul>
+<li>抽象父类：Reader, Writer</li>
+<li>文件字符流：FileReader, FileWriter(使用默认字符集)</li>
+<li>若要指定字符编码和字节缓冲区大小，应该构造InputStreamReader(FileInputStream in, String charsetName);</li>
+<li><code>BufferedReader(Reader in)</code>, <code>(Readerin int sz)</code> 加速读入</li>
+<li><code>BufferedWriter(Writer out)</code>, <code>(Writer out, int sz)</code> 加速写出</li>
+<li><code>PrintWriter(File file)</code> <code>(String fileName)</code>, <code>(OutputStream out)</code>, <code>(Writer out)</code>有格式的输出流</li>
+</ul>
+<h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><h3 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h3><ul>
+<li>可以定义泛型类<code>class&lt;T&gt; &#123;&#125;</code></li>
+<li>不能调用泛型参数的构造方法</li>
+<li>可以指定泛型类上界，以使用其成员<code>class&lt;T extends K&gt;</code>，编译器静态地禁止代码越过上界。泛型类在各处代码都能记住其上界。</li>
+<li>声明一个泛型类对象时，省略尖括号表示<code>&lt;Object&gt;</code></li>
+<li>在同一条声明语句中，后面的尖括号可以留空表示同上<code>&lt;&gt;</code></li>
+<li>类型参数是运行时构造对象才能确定的，因此静态方法不能使用类型参数</li>
+<li>泛型类是非协变的，<code>A&lt;Person&gt;</code>与<code>A&lt;Student&gt;</code>没有关联</li>
+<li>禁止声明类型为泛型类的数组(可以用arrayList代替)</li>
+</ul>
+<h3 id="将泛型类用作参数"><a href="#将泛型类用作参数" class="headerlink" title="将泛型类用作参数"></a>将泛型类用作参数</h3><ul>
+<li>使用通配符<code>&lt;?&gt;</code>, 此时可以指定泛型参数的下界（super）或更严格的上界（无视变得宽松的上界）</li>
+</ul>
+<h3 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h3><ul>
+<li>可以定义泛型方法<code>public static &lt;T&gt; T func()&#123; return null; &#125; </code></li>
+<li>不能调用泛型参数的构造方法</li>
+<li>可以指定泛型参数上界，以使用其成员<code>public static &lt;T extends K&gt; T func() &#123; return null; &#125;</code>，编译器静态地禁止代码越过上界</li>
+<li>类型参数视为方法接受的实数，因此可以用于定义静态方法</li>
+<li></li>
+<li>编译实现将把泛型改写成Object，并在适当的时候向下转型。因此，</li>
+</ul>
+<h2 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h2><ul>
+<li>接受泛型参数</li>
+<li><code>boolean add(E e)</code></li>
+<li><code>boolean addAll(Collention&lt;? extends E&gt; c)</code></li>
+<li><code>boolean contains(Object o), containsAll(Collect&lt;?&gt; c)</code></li>
+<li><code>boolean equals(Object o)</code></li>
+<li><code>boolean isEmpty()</code></li>
+<li><code>Iterator&lt;E&gt; iterator()</code></li>
+<li><code>boolean remove(Object o)</code> 删除成功返回ture</li>
+<li><code>boolean removeAll(Collenton&lt;?&gt; c)</code></li>
+<li><code>int size()</code></li>
+<li><code>Object[] toArray()</code></li>
+<li><code>&lt;T&gt; T[] toArray(T[])</code></li>
+</ul>
+<h3 id="Collections-由静态方法构成的类"><a href="#Collections-由静态方法构成的类" class="headerlink" title="Collections 由静态方法构成的类"></a>Collections 由静态方法构成的类</h3><ul>
+<li><code>void sort(Collection&lt;?&gt; c)</code></li>
+</ul>
+<h2 id="list-允许重复的列表"><a href="#list-允许重复的列表" class="headerlink" title="list 允许重复的列表"></a>list 允许重复的列表</h2><h3 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h3><ul>
+<li><code>void add(int index, E element)</code></li>
+<li><code>void add(int index, Collection&lt;? extends E&gt; c)</code></li>
+<li>常用<code>void ensureCapacity(int minCapacity)</code>可以优化新开内存的耗时</li>
+<li><code>int indexOf(Object o)</code> 返回第一次出现的位置，无则-1</li>
+<li><code>int lastIndexOf(Object o)</code></li>
+<li><code>E remove(int index)</code> 删除指定位置的元素</li>
+<li><code>E set(int index, E element)</code> 替换指定位置的元素</li>
+<li><code>void sort(Comparator&lt;? super E&gt; c)</code> 排序</li>
+</ul>
+<h3 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h3><ul>
+<li>同ArrayList</li>
+<li><code>void addFirst(E e)</code></li>
+<li><code>void addLast(E e)</code></li>
+<li><code>E getFirst()</code></li>
+<li><code>E getLast</code></li>
+<li><code>Iterator&lt;E&gt; descendingIterator()</code> 逆序迭代器</li>
+<li><code>E pop()</code></li>
+<li><code>void push(E e) == addFirst(E e)</code></li>
+</ul>
+<h2 id="set-不允许重复的集合"><a href="#set-不允许重复的集合" class="headerlink" title="set 不允许重复的集合"></a>set 不允许重复的集合</h2><ul>
+<li><code>boolean(如果集合发生改变) remainAll(Collection&lt;?&gt; c), removeAll(Collection&lt;?&gt; c)</code></li>
+<li><code>void clear()</code> 清空</li>
+</ul>
+<h3 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h3><ul>
+<li>依赖于<code>HashCode()</code>判断元素是否相同</li>
+<li>基于Object的<code>HashCode()</code>会将地址纳入计算，可以覆写<code>HashCode()</code>以忽略地址差异</li>
+<li>若<code>HashCode()</code>相同，则调用<code>equals()</code>判断。基于Object的<code>equals()</code>仅比较地址（String类已覆写好）。</li>
+</ul>
+<h3 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h3><ul>
+<li>依赖于接口Comparable的<code>compareTo()</code>或者比较类的<code>compare(,)</code>比较大小。优先使用比较类。小在前，大在后。</li>
+<li>比较类需要实现接口Comparator,并<code>@Override compare(,)</code></li>
+<li><code>Iterator&lt;E&gt; descendingIterator()</code> 逆序迭代器</li>
+<li><code>Comparator &lt;? super E&gt; comparator()</code> 返回比较器，或null</li>
+<li><code>E ceiling(E e)</code> 返回最小的大于等于e的元素，或null</li>
+<li><code>E floor(E e)</code> 返回最大的小于等于e的元素，或null</li>
+<li><code>E higher(E e)</code> 返回最小的大于e的元素，或null</li>
+<li><code>E lower(E e)</code> 返回最大的小于e的元素，或null</li>
+</ul>
+<h2 id="Map-键值绑定"><a href="#Map-键值绑定" class="headerlink" title="Map 键值绑定"></a>Map 键值绑定</h2><ul>
+<li><code>static interface Map.Entry&lt;K, V&gt;</code></li>
+<li><code>int size()</code></li>
+</ul>
+<h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><ul>
+<li>允许键值为null</li>
+<li><code>HashMap()</code> 默认容量为16，负载因子为0.75</li>
+<li><code>HashMap(int intialCapacity)</code></li>
+<li><code>HashMap(int intialCapacity, float loadFactor)</code></li>
+<li><code>HashMap(Map&lt;? extends K, ? extends V&gt; m)</code></li>
+<li><code>boolean containsKey(Object key)</code></li>
+<li><code>boolean containsValue(Object value)</code></li>
+<li><code>Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet()</code></li>
+<li><code>V get(Object key)</code></li>
+<li><code>Set&lt;K&gt; keySet()</code></li>
+<li><code>V put(K key, V value)</code> 返回上一个值或null</li>
+<li><code>void putAll(Map&lt;? extends K, ? extends V&gt; m)</code> 复制映射</li>
+<li><code>V remove(Object key)</code></li>
+<li><code>boolean remove(Object key, Object value)</code></li>
+<li><code>V replace(K key, V value)</code> 如果有键则替换</li>
+<li><code>boolean replace(K key, V oldValue, V newValue)</code> 如果键key映射到oldValue则替换</li>
+<li><code>Collection&lt;V&gt; values()</code>返回值的Collection</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="prev" title="计算机网络提纲">
+                  <i class="fa fa-chevron-left"></i> 计算机网络提纲
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/10/12/kotlin/" rel="next" title="Kotlin语法笔记">
+                  Kotlin语法笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fas fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '00a098064772784393ca',
+      clientSecret: '578fbe40ff6dcd550b4df318fc9143bda83b0bac',
+      repo        : 'Gitment-for-Codesire-Deng-s-Blog',
+      owner       : 'Codesire-Deng',
+      admin       : ['Codesire-Deng'],
+      id          : '6bf4aafdc6521d2e52f1f5e3249780da',
+      proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        language: '',
+      distractionFreeMode: false
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

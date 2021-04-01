@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}};
+  </script>
+<meta name="description" content="不同语言&#x2F;操作系统&#x2F;硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。C++ STL的线程库就是一个好例子。 Thread 线程cppreference thread">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ Multithreading">
+<meta property="og:url" content="https://codesire-deng.github.io/2021/04/01/C-thread/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="不同语言&#x2F;操作系统&#x2F;硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。C++ STL的线程库就是一个好例子。 Thread 线程cppreference thread">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-01T02:47:34.000Z">
+<meta property="article:modified_time" content="2021-04-01T12:36:40.322Z">
+<meta property="article:author" content="等疾风">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2021/04/01/C-thread/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>C++ Multithreading | 等疾风</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">等疾风</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">临江仙<br/>琼窗梦醒留残日，当年得恨何长！<br/>碧阑干外映垂杨。<br/>暂时相见，如梦懒思量。</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">Thread 线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mutex-%E4%BA%92%E6%96%A5%E9%94%81"><span class="nav-number">2.</span> <span class="nav-text">Mutex 互斥锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Condition-Variable-%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">Condition Variable 条件变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Future-%E6%9C%AA%E6%9D%A5"><span class="nav-number">4.</span> <span class="nav-text">Future 未来</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2021/04/01/C-thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ Multithreading
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-04-01 10:47:34 / 修改时间：20:36:40" itemprop="dateCreated datePublished" datetime="2021-04-01T10:47:34+08:00">2021-04-01</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>不同语言/操作系统/硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。<br>C++ STL的线程库就是一个好例子。</p>
+<h2 id="Thread-线程"><a href="#Thread-线程" class="headerlink" title="Thread 线程"></a>Thread 线程</h2><p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/thread">cppreference thread</a></p>
+<span id="more"></span>
+
+<p><code>#include &lt;thread&gt;</code></p>
+<p>起一个线程！</p>
+<ul>
+<li><p><code>thread</code> 类</p>
+<ul>
+<li>默认构造不代表任何线程</li>
+<li>构造函数完成后立即就绪</li>
+<li>若子线程抛出异常，则调用<code>std::terminate</code>中止进程</li>
+<li>使用<code>thread_local</code>关键字，令变量的生命周期和所属线程相同</li>
+<li><code>join()</code> 调用者等待，直到线程执行完毕</li>
+<li><code>detach()</code> 分离线程和线程对象，此时可以安全地销毁线程对象。</li>
+<li><code>joinable()</code> 是否可以使用<code>join()</code>。正在运行中、未分离的线程都是 joinable.</li>
+</ul>
+</li>
+<li><p><code>this_thread</code> 命名空间</p>
+<ul>
+<li><code>yield()</code> 建议当前线程进入就绪状态</li>
+<li><code>get_id()</code> 获取线程id。结果可用<code>&lt;&lt;</code>序列化</li>
+<li><code>sleep_for(duration)</code>/<code>sleep_until(time_point)</code> 当前线程阻塞一段时间</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>提到多线程，几乎避不开互斥、同步等概念。</p>
+<h2 id="Mutex-互斥锁"><a href="#Mutex-互斥锁" class="headerlink" title="Mutex 互斥锁"></a>Mutex 互斥锁</h2><p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/header/mutex">cppreference mutex</a></p>
+<p><code>#include &lt;mutex&gt;</code></p>
+<p>主要用于保护<strong>数据</strong>的操作原子性。</p>
+<p>若多个线程请求同一个锁，而此锁尚未被释放，则当锁释放时，其中一个线程获得锁（退出阻塞），其余线程维持阻塞。</p>
+<ul>
+<li><code>mutex</code> 类<ul>
+<li><code>lock()</code> 阻塞，直到获得锁</li>
+<li><code>unlock()</code></li>
+<li><code>try_lock()</code> 若无法获得锁，则返回 false 但不阻塞</li>
+<li>小心<code>mutex</code>的生命周期。销毁一个被其他线程持有的锁是后果无定义的。</li>
+<li>销毁线程前应当释放锁，否则后果无定义。</li>
+<li>不可拷贝，不可移动</li>
+<li>同一线程不可对同一<code>mutex</code>多次上锁，这样做的后果是无定义的。</li>
+</ul>
+</li>
+<li><code>recursive_mutex</code> 类<ul>
+<li>同一线程可以多次上锁。上锁和解锁应一一对应。</li>
+<li>例如<code>std::lock_guard&lt;std::recursive_mutex&gt; lk(m);</code></li>
+</ul>
+</li>
+<li><code>timed_mutex</code> 类<ul>
+<li><code>try_lock_for(timeout_duration)</code> 最多等待一段时间，无法获得锁则返回 false</li>
+<li><code>try_lock_until(timeout_time)</code> 最多等待至一个时间点，无法获得锁则返回 false</li>
+</ul>
+</li>
+<li><code>recursive_timed_mutex</code> 类<ul>
+<li>混合了两者的功能</li>
+</ul>
+</li>
+<li><code>void lock(Lockable1&amp; lock1, Lockable2&amp; lock2, LockableN&amp;... lockn)</code> 全局函数<ul>
+<li>安全地“同时”请求多个互斥锁</li>
+<li>保证不会引发死锁</li>
+</ul>
+</li>
+<li><code>lock_guard</code> 类<ul>
+<li>RAII 请求和释放一个锁</li>
+<li><code>lock_guard( mutex_type&amp; m, std::adopt_lock_t t );</code>假定已经获得了锁</li>
+</ul>
+</li>
+<li><code>scoped_lock</code> 类<ul>
+<li>RAII 同时请求和释放多个锁</li>
+<li>保证不会引发死锁</li>
+</ul>
+</li>
+<li><code>void call_once( std::once_flag&amp; flag, Callable&amp;&amp; f, Args&amp;&amp;... args );</code> 函数<ul>
+<li>全局仅执行函数<code>f(args)</code>一次</li>
+<li>若<code>flag</code>是复位，则允许执行<code>f(args)</code></li>
+<li>支持多线程并发</li>
+<li>若<code>f(args)</code>正常结束，则<code>flag</code>置位，防止第二次调用</li>
+<li>若<code>f(args)</code>抛出未处理的异常，则<code>flag</code>保持复位，允许第二次调用</li>
+<li>一个<code>flag</code>可以对应多个<code>f</code>，不保证哪个函数先执行。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Condition-Variable-条件变量"><a href="#Condition-Variable-条件变量" class="headerlink" title="Condition Variable 条件变量"></a>Condition Variable 条件变量</h2><p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/thread/condition_variable">cppreference condition_variable</a></p>
+<p>条件变量可以用来阻塞一个或多个线程，直到某个活动线程修改一个共享变量（即条件），并通知条件变量。</p>
+<ol>
+<li>为了保护上述共享变量，需要上互斥锁。</li>
+<li>对比互斥锁的优势是：定向唤醒，占用资源低，事件驱动。</li>
+<li>被唤醒的线程需要手动或自动地检查条件，若条件失败，则再次被阻塞，等待被唤醒。</li>
+</ol>
+<p><code>#include &lt;condition_variable&gt;</code></p>
+<ul>
+<li><code>condition_variable</code>类<ul>
+<li>只有默认构造函数</li>
+<li><code>void wait( std::unique_lock&lt;std::mutex&gt;&amp; lock );</code>成员函数。  原子性地释放锁，然后进入阻塞。</li>
+<li><code>void wait( std::unique_lock&lt;std::mutex&gt;&amp; lock, Predicate pred );</code>成员函数  被唤醒后，只要<code>pred</code>不满足，就会再次阻塞。</li>
+<li><code>notify_one()</code>/<code>notify_all()</code>成员函数，唤醒关联的阻塞线程。当前线程应当事先释放锁。</li>
+<li><code>void notify_all_at_thread_exit( std::condition_variable&amp; cond, std::unique_lock&lt;std::mutex&gt; lk );</code> 全局函数。 线程退出时（所有thread_local被销毁后），释放锁，然后唤醒全部。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="Future-未来"><a href="#Future-未来" class="headerlink" title="Future 未来"></a>Future 未来</h2><p>未来再写 [doge] [doge] [doge]。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/" rel="prev" title="Hexo & NexT 更新方式">
+                  <i class="fa fa-chevron-left"></i> Hexo & NexT 更新方式
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fas fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '00a098064772784393ca',
+      clientSecret: '578fbe40ff6dcd550b4df318fc9143bda83b0bac',
+      repo        : 'Gitment-for-Codesire-Deng-s-Blog',
+      owner       : 'Codesire-Deng',
+      admin       : ['Codesire-Deng'],
+      id          : '02659c694a5bebe3ebffe0773ad371e3',
+      proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        language: '',
+      distractionFreeMode: false
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

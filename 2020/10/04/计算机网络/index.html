@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}};
+  </script>
+<meta name="description" content="[TOC]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络提纲">
+<meta property="og:url" content="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="[TOC]">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%B8%B8%E7%94%A8%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E6%96%B9%E6%B3%95.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%94%B5%E8%AF%9D%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%84%E6%88%90.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E4%BF%A1%E9%81%93%E6%9C%80%E5%A4%A7%E4%BC%A0%E8%BE%93%E9%80%9F%E7%8E%87.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/PPP%E5%B8%A7%E7%9A%84%E6%A0%BC%E5%BC%8F.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/PPP%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%8A%B6%E6%80%81%E5%9B%BE.png">
+<meta property="article:published_time" content="2020-10-04T14:07:00.000Z">
+<meta property="article:modified_time" content="2020-10-16T11:30:25.146Z">
+<meta property="article:author" content="等疾风">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>计算机网络提纲 | 等疾风</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">等疾风</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">临江仙<br/>琼窗梦醒留残日，当年得恨何长！<br/>碧阑干外映垂杨。<br/>暂时相见，如梦懒思量。</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">1 概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E4%BA%92%E8%81%94%E7%BD%91%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-number">1.1.</span> <span class="nav-text">1.3 互联网的组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.1.</span> <span class="nav-text">交换方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E7%B1%BB%E5%88%AB"><span class="nav-number">1.2.</span> <span class="nav-text">1.5 计算机网络的类别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E7%85%A7%E7%BD%91%E7%BB%9C%E7%9A%84%E4%BD%9C%E7%94%A8%E8%8C%83%E5%9B%B4%E5%88%86%E7%B1%BB"><span class="nav-number">1.2.1.</span> <span class="nav-text">按照网络的作用范围分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%80%A7%E8%83%BD"><span class="nav-number">1.3.</span> <span class="nav-text">1.6 计算机网络的性能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="nav-number">1.3.1.</span> <span class="nav-text">性能指标</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9F%E7%8E%87"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">速率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%A6%E5%AE%BD"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">带宽</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">吞吐量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%B6%E5%BB%B6"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">时延</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%B6%E5%BB%B6%E5%B8%A6%E5%AE%BD%E7%A7%AF"><span class="nav-number">1.3.1.5.</span> <span class="nav-text">时延带宽积</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BE%80%E8%BF%94%E6%97%B6%E9%97%B4"><span class="nav-number">1.3.1.6.</span> <span class="nav-text">往返时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E7%8E%87"><span class="nav-number">1.3.1.7.</span> <span class="nav-text">利用率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-7-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="nav-number">1.4.</span> <span class="nav-text">1.7 计算机网络体系结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.4.1.</span> <span class="nav-text">协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%94%E5%B1%82%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">五层协议的体系结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">应用层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">1.4.1.5.</span> <span class="nav-text">数据链路层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%B1%82"><span class="nav-number">1.4.1.6.</span> <span class="nav-text">物理层</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%A0%E9%A2%98"><span class="nav-number">1.5.</span> <span class="nav-text">习题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%89%A9%E7%90%86%E5%B1%82"><span class="nav-number">2.</span> <span class="nav-text">2 物理层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E7%89%A9%E7%90%86%E5%B1%82%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 物理层的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 数据通信的基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.1.</span> <span class="nav-text">数据通信系统的模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%85%B3%E4%BF%A1%E9%81%93%E7%9A%84%E5%87%A0%E4%B8%AA%E6%A6%82%E5%BF%B5"><span class="nav-number">2.2.2.</span> <span class="nav-text">有关信道的几个概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">常用的编码方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">基本的带通调制方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E9%81%93%E7%9A%84%E6%9E%81%E9%99%90%E5%AE%B9%E9%87%8F"><span class="nav-number">2.2.3.</span> <span class="nav-text">信道的极限容量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E9%81%93%E8%83%BD%E9%80%9A%E8%BF%87%E7%9A%84%E9%A2%91%E7%8E%87%E8%8C%83%E5%9B%B4"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">信道能通过的频率范围</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E5%99%AA%E6%AF%94"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">信噪比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A6%99%E5%86%9C%E5%85%AC%E5%BC%8F"><span class="nav-number">2.2.3.3.</span> <span class="nav-text">香农公式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E7%89%A9%E7%90%86%E5%B1%82%E4%B8%8B%E9%9D%A2%E7%9A%84%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 物理层下面的传输媒体</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E5%AF%BC%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93"><span class="nav-number">2.3.1.</span> <span class="nav-text">引导型传输媒体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%BC%95%E5%AF%BC%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93"><span class="nav-number">2.3.2.</span> <span class="nav-text">非引导型传输媒体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E9%81%93%E5%A4%8D%E7%94%A8%E6%8A%80%E6%9C%AF"><span class="nav-number">2.4.</span> <span class="nav-text">信道复用技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E6%95%B0%E5%AD%97%E4%BC%A0%E8%BE%93%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 数字传输系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-%E5%AE%BD%E5%B8%A6%E6%8E%A5%E5%85%A5%E6%8A%80%E6%9C%AF"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 宽带接入技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ADSL%E6%8A%80%E6%9C%AF"><span class="nav-number">2.6.1.</span> <span class="nav-text">ADSL技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%A0%E9%A2%98-1"><span class="nav-number">2.7.</span> <span class="nav-text">习题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">3.</span> <span class="nav-text">3 数据链路层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%B9%E5%AF%B9%E7%82%B9%E4%BF%A1%E9%81%93%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">3.1.</span> <span class="nav-text">点对点信道的数据链路层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%92%8C%E5%B8%A7"><span class="nav-number">3.1.1.</span> <span class="nav-text">数据链路和帧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="nav-number">3.1.2.</span> <span class="nav-text">三个基本问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%B9%E5%AF%B9%E7%82%B9%E5%8D%8F%E8%AE%AEPPP"><span class="nav-number">3.2.</span> <span class="nav-text">点对点协议PPP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PPP%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">3.2.1.</span> <span class="nav-text">PPP协议的特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PPP%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%B8%A7%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.2.2.</span> <span class="nav-text">PPP协议的帧格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PPP%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%8A%B6%E6%80%81"><span class="nav-number">3.2.3.</span> <span class="nav-text">PPP协议的工作状态</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%A0%E9%A2%98-2"><span class="nav-number">3.3.</span> <span class="nav-text">习题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2020/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计算机网络提纲
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-04 22:07:00" itemprop="dateCreated datePublished" datetime="2020-10-04T22:07:00+08:00">2020-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-10-16 19:30:25" itemprop="dateModified" datetime="2020-10-16T19:30:25+08:00">2020-10-16</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>[TOC]</p>
+<span id="more"></span>
+
+<ul>
+<li><a href="#1-%E6%A6%82%E8%BF%B0">1 概述</a><ul>
+<li><a href="#13-%E4%BA%92%E8%81%94%E7%BD%91%E7%9A%84%E7%BB%84%E6%88%90">1.3 互联网的组成</a><ul>
+<li><a href="#%E4%BA%A4%E6%8D%A2%E6%96%B9%E5%BC%8F">交换方式</a></li>
+</ul>
+</li>
+<li><a href="#15-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E7%B1%BB%E5%88%AB">1.5 计算机网络的类别</a><ul>
+<li><a href="#%E6%8C%89%E7%85%A7%E7%BD%91%E7%BB%9C%E7%9A%84%E4%BD%9C%E7%94%A8%E8%8C%83%E5%9B%B4%E5%88%86%E7%B1%BB">按照网络的作用范围分类</a></li>
+</ul>
+</li>
+<li><a href="#16-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%80%A7%E8%83%BD">1.6 计算机网络的性能</a><ul>
+<li><a href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87">性能指标</a><ul>
+<li><a href="#%E9%80%9F%E7%8E%87">速率</a></li>
+<li><a href="#%E5%B8%A6%E5%AE%BD">带宽</a></li>
+<li><a href="#%E5%90%9E%E5%90%90%E9%87%8F">吞吐量</a></li>
+<li><a href="#%E6%97%B6%E5%BB%B6">时延</a></li>
+<li><a href="#%E6%97%B6%E5%BB%B6%E5%B8%A6%E5%AE%BD%E7%A7%AF">时延带宽积</a></li>
+<li><a href="#%E5%BE%80%E8%BF%94%E6%97%B6%E9%97%B4">往返时间</a></li>
+<li><a href="#%E5%88%A9%E7%94%A8%E7%8E%87">利用率</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#17-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84">1.7 计算机网络体系结构</a><ul>
+<li><a href="#%E5%8D%8F%E8%AE%AE">协议</a><ul>
+<li><a href="#%E4%BA%94%E5%B1%82%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84">五层协议的体系结构</a></li>
+<li><a href="#%E4%BC%A0%E8%BE%93%E5%B1%82">传输层</a></li>
+<li><a href="#%E8%BF%90%E8%BE%93%E5%B1%82">运输层</a></li>
+<li><a href="#%E7%BD%91%E7%BB%9C%E5%B1%82">网络层</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82">数据链路层</a></li>
+<li><a href="#%E7%89%A9%E7%90%86%E5%B1%82">物理层</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E4%B9%A0%E9%A2%98">习题</a></li>
+</ul>
+</li>
+<li><a href="#2-%E7%89%A9%E7%90%86%E5%B1%82">2 物理层</a><ul>
+<li><a href="#21-%E7%89%A9%E7%90%86%E5%B1%82%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">2.1 物理层的基本概念</a></li>
+<li><a href="#22-%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86">2.2 数据通信的基础知识</a><ul>
+<li><a href="#%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A8%A1%E5%9E%8B">数据通信系统的模型</a></li>
+<li><a href="#%E6%9C%89%E5%85%B3%E4%BF%A1%E9%81%93%E7%9A%84%E5%87%A0%E4%B8%AA%E6%A6%82%E5%BF%B5">有关信道的几个概念</a><ul>
+<li><a href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F">常用的编码方式</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E6%96%B9%E6%B3%95">基本的带通调制方法</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BF%A1%E9%81%93%E7%9A%84%E6%9E%81%E9%99%90%E5%AE%B9%E9%87%8F">信道的极限容量</a><ul>
+<li><a href="#%E4%BF%A1%E9%81%93%E8%83%BD%E9%80%9A%E8%BF%87%E7%9A%84%E9%A2%91%E7%8E%87%E8%8C%83%E5%9B%B4">信道能通过的频率范围</a></li>
+<li><a href="#%E4%BF%A1%E5%99%AA%E6%AF%94">信噪比</a></li>
+<li><a href="#%E9%A6%99%E5%86%9C%E5%85%AC%E5%BC%8F">香农公式</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#23-%E7%89%A9%E7%90%86%E5%B1%82%E4%B8%8B%E9%9D%A2%E7%9A%84%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93">2.3 物理层下面的传输媒体</a><ul>
+<li><a href="#%E5%BC%95%E5%AF%BC%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93">引导型传输媒体</a></li>
+<li><a href="#%E9%9D%9E%E5%BC%95%E5%AF%BC%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93">非引导型传输媒体</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BF%A1%E9%81%93%E5%A4%8D%E7%94%A8%E6%8A%80%E6%9C%AF">信道复用技术</a></li>
+<li><a href="#25-%E6%95%B0%E5%AD%97%E4%BC%A0%E8%BE%93%E7%B3%BB%E7%BB%9F">2.5 数字传输系统</a></li>
+<li><a href="#26-%E5%AE%BD%E5%B8%A6%E6%8E%A5%E5%85%A5%E6%8A%80%E6%9C%AF">2.6 宽带接入技术</a><ul>
+<li><a href="#adsl%E6%8A%80%E6%9C%AF">ADSL技术</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B9%A0%E9%A2%98-1">习题</a></li>
+</ul>
+</li>
+<li><a href="#3-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82">3 数据链路层</a><ul>
+<li><a href="#%E7%82%B9%E5%AF%B9%E7%82%B9%E4%BF%A1%E9%81%93%E7%9A%84%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82">点对点信道的数据链路层</a><ul>
+<li><a href="#%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%92%8C%E5%B8%A7">数据链路和帧</a></li>
+<li><a href="#%E4%B8%89%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98">三个基本问题</a></li>
+</ul>
+</li>
+<li><a href="#%E7%82%B9%E5%AF%B9%E7%82%B9%E5%8D%8F%E8%AE%AEppp">点对点协议PPP</a><ul>
+<li><a href="#ppp%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%89%B9%E7%82%B9">PPP协议的特点</a></li>
+<li><a href="#ppp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%B8%A7%E6%A0%BC%E5%BC%8F">PPP协议的帧格式</a></li>
+<li><a href="#ppp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%B7%A5%E4%BD%9C%E7%8A%B6%E6%80%81">PPP协议的工作状态</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B9%A0%E9%A2%98-2">习题</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h1><h2 id="1-3-互联网的组成"><a href="#1-3-互联网的组成" class="headerlink" title="1.3 互联网的组成"></a>1.3 互联网的组成</h2><h3 id="交换方式"><a href="#交换方式" class="headerlink" title="交换方式"></a>交换方式</h3><ol>
+<li>电路交换：整个报文的比特流连续地从源点直达终点，好像在一个管道中传送。</li>
+<li>报文交换：整个报文传送到相邻结点，全部储存下来后查找转发表，转发到下一个结点。</li>
+<li>分组交换：单个分组（整个报文的一部分）传送到相邻结点，储存下来后查找转发表，转发到下一个结点。</li>
+</ol>
+<h2 id="1-5-计算机网络的类别"><a href="#1-5-计算机网络的类别" class="headerlink" title="1.5 计算机网络的类别"></a>1.5 计算机网络的类别</h2><h3 id="按照网络的作用范围分类"><a href="#按照网络的作用范围分类" class="headerlink" title="按照网络的作用范围分类"></a>按照网络的作用范围分类</h3><ol>
+<li>广域网 (Wide Area Network, WAN)，远程网，长距离，高速链路，较大通信容量。</li>
+<li>城域网 (Metropolitan Area Network, MAN)，多个局域网，一个城市，常用以太网技术。</li>
+<li>局域网 (Local Area Network, LAN)，微型计算机或工作站通过高速通信线路相连。</li>
+<li>个人区域网 (Personal Area Networl, PAN)，个人使用的电子设备。</li>
+</ol>
+<h2 id="1-6-计算机网络的性能"><a href="#1-6-计算机网络的性能" class="headerlink" title="1.6 计算机网络的性能"></a>1.6 计算机网络的性能</h2><h3 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h3><h4 id="速率"><a href="#速率" class="headerlink" title="速率"></a>速率</h4><ul>
+<li>1Mbps = $10^6$ bits / second</li>
+<li>1MB = $2^{20}$ Bytes</li>
+</ul>
+<h4 id="带宽"><a href="#带宽" class="headerlink" title="带宽"></a>带宽</h4><ul>
+<li>某个信号具有的频带宽度（300Hz &lt;-&gt; 3.4 kHz ==&gt; 3.1kHz），频域</li>
+<li>某通道传输数据的能力，时域</li>
+</ul>
+<h4 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h4><ul>
+<li>单位时间内通过某个网络（或信道、接口）的实际数据量</li>
+</ul>
+<h4 id="时延"><a href="#时延" class="headerlink" title="时延"></a>时延</h4><ol>
+<li>发送时延（传输时延）（transmission delay）：发送数据帧所需的时间，与发送器（网络适配器）有关。$发送时间 = \frac{数据长度}{发送速率}$</li>
+<li>传播时延（propagation delay）：电磁波传播花费的时间，与线路有关</li>
+<li>处理时延：收到分组后的计算耗时</li>
+<li>排队时延：输入队列、输出队列耗时</li>
+</ol>
+<h4 id="时延带宽积"><a href="#时延带宽积" class="headerlink" title="时延带宽积"></a>时延带宽积</h4><p>传播时延 * 带宽。表示线路的“容积”</p>
+<h4 id="往返时间"><a href="#往返时间" class="headerlink" title="往返时间"></a>往返时间</h4><p>（Round-Trip Time, RTT）最后一帧的传播延迟+ack的传播延迟（假设忽略发送时延）</p>
+<p>$有效数据率 = \frac{数据长度}{发送时间+\text{RTT}}$</p>
+<h4 id="利用率"><a href="#利用率" class="headerlink" title="利用率"></a>利用率</h4><ul>
+<li>信道利用率：信道有数据通过的时间的比率</li>
+<li>网络利用率：全网络的信道利用率的加权平均值</li>
+</ul>
+<p>设$D_0$为网络空闲时（利用率0%）的时延，$D$表示当前网络时延，当前利用率$U$，则$D = \frac{D_0}{1-U}$。</p>
+<h2 id="1-7-计算机网络体系结构"><a href="#1-7-计算机网络体系结构" class="headerlink" title="1.7 计算机网络体系结构"></a>1.7 计算机网络体系结构</h2><ul>
+<li>系统网络体系结构 SNA（System Network Architecture）。IBM开发。</li>
+<li><strong>开放系统互连基本参考模型 OSI/RM</strong>（Open Systems Interconnection Reference Model）ISO制定。</li>
+</ul>
+<h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><ul>
+<li><p>定义：为进行网络中的数据交换而建立的规则、标准或约定</p>
+</li>
+<li><p>三要素：语法，语义，同步</p>
+</li>
+</ul>
+<h4 id="五层协议的体系结构"><a href="#五层协议的体系结构" class="headerlink" title="五层协议的体系结构"></a>五层协议的体系结构</h4><p><img src="./%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png"></p>
+<p>无论哪一层传送的数据单元，都笼统地用“<strong>分组</strong>”或“<strong>协议数据单元PDU（Protocol Data Unit）</strong>”来表示</p>
+<h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p><strong>application layer</strong></p>
+<p>负责应用进程间交互。  协议定义进程间通信和交互的规则。</p>
+<p>如：域名系统DNS；HTTP协议；SMTP协议；</p>
+<p>数据单元称为<strong>报文（message）</strong>。</p>
+<h4 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h4><p><strong>transport layer</strong></p>
+<p>负责为进程间通信提供<strong>通用的</strong>数据传输服务。</p>
+<p>一个主机，多个进程 =&gt; 传输层有复用和分用的功能</p>
+<p>主要协议：  </p>
+<ul>
+<li>传输控制协议 TCP（Transmission Control Protocol）：面向连接的、可靠的数据传输服务。数据传输的单位是<strong>报文段（segment）</strong></li>
+<li>用户数据报协议 UDP（User Datagram protocol）：无连接的、尽最大努力的数据传输服务（不保证数据传输的可靠性）。数据传输的单位是<strong>用户数据报</strong></li>
+</ul>
+<h4 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h4><p><strong>network layer</strong></p>
+<p>也叫网际层、IP层。</p>
+<p>负责为分组交换网上的不同主机提供通信服务。 发送数据时，将运输层的报文段或用户数据报封装成<strong>分组</strong>或<strong>包</strong>进行传送。</p>
+<p>在TCP/IP中，网络层使用IP协议，所以分组也叫<strong>IP数据报</strong>，简称数据报。</p>
+<p>网络层要选择合适的路由。</p>
+<h4 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h4><p><strong>data link layer</strong></p>
+<p>将网络层的包<strong>组装成帧（framing）</strong>，在两个相邻结点之间传送<strong>帧（frame）</strong>。每一帧包括数据和<strong>控制信息</strong>（如同步信息、地址信息、差错控制等）。</p>
+<p>控制信息指出了数据在哪、校验或纠错信息。如果发现差错，可以<strong>丢弃</strong>这一帧。</p>
+<h4 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h4><p><strong>physical layer</strong></p>
+<p>数据单位是<strong>比特</strong>。负责关注电压和电缆的引脚。</p>
+<p>电缆、无线信道等物理媒体不是物理层关注的。如何解释0和1的意义也不是物理层负责的。</p>
+<hr>
+<p>同层次之间可以屏蔽下层的工作，看作把协议数据单元直接传送给“<strong>对等层（peer layers）</strong>”。</p>
+<p>每一层在协议的控制下为上一层提供<strong>服务</strong>。要实现本层协议，需要依赖下一层提供的服务。</p>
+<p>每一层协议只能看见下一层的服务。 下面的协议对上面的实体是透明的。</p>
+<p>OSI把层与层之间交换的数据的单位称为*<em>服务数据单元SDU（Service Data Unit）</em></p>
+<p>计算机网络的协议必须把<strong>所有</strong>不利的条件都事先估计到，而不能假定一切都是正常的和理想的。</p>
+<h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><ol>
+<li>OSI的三个核心概念是服务、接口、协议。</li>
+<li>原数据1000字节，七层体系结构，每层20字节的头。则头占用了$140/1140 = 12%$的带宽。</li>
+<li>最早实现分组交换（<strong>packet switched</strong>）的网络是<strong>ARPAnet</strong>。</li>
+<li>网络层控制了子网的操作、决定分组的路由。</li>
+<li>应用层有一系列用户常用的协议。</li>
+<li>表示层（<strong>presentation</strong>）关心数据的语法和语义。</li>
+<li>数据链路层将原始传输设备转换为一个已检错的线路。</li>
+<li>能将信息发往部分机器的广播形式叫多播（<strong>multicasting</strong>）。</li>
+<li>协议是实体如何进行交流的约定。</li>
+<li>各种协议的实现细节不属于网络体系结构的内容。</li>
+<li>一个计算机网络可以看作一些自主计算机系统的连接。</li>
+<li>发送速率是10Mbps，考虑同轴线缆的传播速度是光速的$\frac{2}{3}$，则1bit的长度是20米。</li>
+<li>OSI的失败在于技术、耗时、实现、政策。</li>
+<li>数据包在向上层传递时，头部将会被删除。</li>
+<li>卫星组网，回应请求的延迟按4倍的距离算。</li>
+<li>储存转发传输（<strong>Store-and-forward transmission</strong>）意味着路由器要储存整个包的内容。</li>
+<li>数据转换和压缩是由表示层完成的。</li>
+<li>接口定义了低层向高层提供的原始操作和服务。</li>
+</ol>
+<h1 id="2-物理层"><a href="#2-物理层" class="headerlink" title="2 物理层"></a>2 物理层</h1><h2 id="2-1-物理层的基本概念"><a href="#2-1-物理层的基本概念" class="headerlink" title="2.1 物理层的基本概念"></a>2.1 物理层的基本概念</h2><p>物理层的主要任务是确定与传输媒体接口相关的一些特性，即：  </p>
+<ol>
+<li>机械特性</li>
+<li>电气特性</li>
+<li>功能特性</li>
+<li>过程特性</li>
+</ol>
+<h2 id="2-2-数据通信的基础知识"><a href="#2-2-数据通信的基础知识" class="headerlink" title="2.2 数据通信的基础知识"></a>2.2 数据通信的基础知识</h2><h3 id="数据通信系统的模型"><a href="#数据通信系统的模型" class="headerlink" title="数据通信系统的模型"></a>数据通信系统的模型</h3><p>三大部分：  </p>
+<ol>
+<li>源系统（发送端、发送方）</li>
+<li>传输系统（传输网络）</li>
+<li>目的系统（接收端、接收方）</li>
+</ol>
+<p>源系统、目的系统可细分为：</p>
+<ol>
+<li>源点（<strong>source</strong>）</li>
+<li>发送器（数字比特流-&gt;模拟信号）</li>
+<li>接收器（模拟信号-&gt;数字比特流）</li>
+<li>终点（destination）</li>
+</ol>
+<h3 id="有关信道的几个概念"><a href="#有关信道的几个概念" class="headerlink" title="有关信道的几个概念"></a>有关信道的几个概念</h3><p>从通信的双方信息交互来看，三种基本方式：  </p>
+<ol>
+<li>单向通信（单工通信）</li>
+<li>双向交替通信（半双工通信）</li>
+<li>双向同时通信（全双工通信）</li>
+</ol>
+<p>“单工”有时也表示双向交替通信。</p>
+<p>来自信源的信号称为<strong>基带信号</strong>（基本频带信号）。信道不能传输低频分量或直流分量，故需要对基带信号进行<strong>调制（modulation）</strong>。</p>
+<p>调制的分类：</p>
+<ol>
+<li><strong>基带调制</strong>（<strong>编码</strong>）：对波形变换，变换后仍是基带信号，仍是数字信号。</li>
+<li><strong>带通调制</strong>：使用<strong>载波（carrier）</strong>进行调制，把基带信号的频率范围搬移到较高的频段，并转换为模拟信号。载波调制后的信号成为<strong>带通信号</strong>（仅在一段频率范围内能通过信号）。</li>
+</ol>
+<h4 id="常用的编码方式"><a href="#常用的编码方式" class="headerlink" title="常用的编码方式"></a>常用的编码方式</h4><p><img src="./%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%B8%B8%E7%94%A8%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F.png" alt="数字信号常用的编码方式"></p>
+<ol>
+<li><strong>不归零制</strong>：电平代表01</li>
+<li><strong>归零制</strong>：脉冲代表01；位开始边界总是中间电平。</li>
+<li><strong>曼彻斯特编码</strong>：位周期中心跳变代表01.</li>
+<li><strong>差分曼彻斯特编码</strong>：位中心总是跳变；位开始边界跳变为0，不跳变为1。</li>
+</ol>
+<p>自同步：从信号波形本身提取信号时钟频率。</p>
+<h4 id="基本的带通调制方法"><a href="#基本的带通调制方法" class="headerlink" title="基本的带通调制方法"></a>基本的带通调制方法</h4><p><img src="./%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E6%96%B9%E6%B3%95.png" alt="基本的带通调制方法"></p>
+<ol>
+<li><strong>调幅（AM）</strong>：振幅随数字信号变化。</li>
+<li><strong>调频（FM）</strong>：频率随数字信号变化。</li>
+<li><strong>调相（PM）</strong>：初相位随数字信号变化。</li>
+</ol>
+<p>为了更高的信息传输速率，必须采用多元制的振幅相位混合调制方法。例如<strong>正交振幅调制QAM（Quadrature Amplitude Modulation）</strong>。</p>
+<h3 id="信道的极限容量"><a href="#信道的极限容量" class="headerlink" title="信道的极限容量"></a>信道的极限容量</h3><p>限制码元在信道上的传输速率的因素有两个：  </p>
+<ol>
+<li>信道能通过的频率范围</li>
+<li>信噪比</li>
+</ol>
+<h4 id="信道能通过的频率范围"><a href="#信道能通过的频率范围" class="headerlink" title="信道能通过的频率范围"></a>信道能通过的频率范围</h4><p><strong>码间串扰</strong>：接收端收到的信号波形失去了码元之间的清晰界限。</p>
+<p><strong>奈氏准则</strong>：算出理想条件下、避免码间串扰，码元的传输速率的上限值。超过此上限，接收端对码元的识别成为不可能。</p>
+<p>信道的频带越宽，能通过的信号高频分量越多，就可用更高速率传送码元而不出现码间串扰。</p>
+<h4 id="信噪比"><a href="#信噪比" class="headerlink" title="信噪比"></a>信噪比</h4><p>信噪比就是信号的平均功率和噪声的平均功率之比，记为$S/N$。</p>
+<p>$$<br>\text{信噪比(dB)} = 10 \log_{10}(S/N) \text{(dB)}<br>$$</p>
+<h4 id="香农公式"><a href="#香农公式" class="headerlink" title="香农公式"></a>香农公式</h4><p><strong>信道的极限信息传输速率</strong>$C$：</p>
+<p>$$<br>C = W \log_2(1 + S/N) \text{(bit/s)}<br>$$</p>
+<p>$W$是信道的带宽(Hz)，S是信道内所传信号的平均功率，N是信道内高斯噪声功率。</p>
+<p>只要信息传输速率低于信道的极限信息传输速率，就一定存在某种办法来实现无差错的传输。</p>
+<p>要提高信息的传输速率，还可用编码的方法让每一个码元携带更多比特的信息量。</p>
+<h2 id="2-3-物理层下面的传输媒体"><a href="#2-3-物理层下面的传输媒体" class="headerlink" title="2.3 物理层下面的传输媒体"></a>2.3 物理层下面的传输媒体</h2><p><strong>传输媒体</strong>（传输介质，传输媒介）是发送器和接收器之间的物理通路。可分为两大类：<strong>引导型（guided）</strong>，<strong>非引导型</strong>。</p>
+<p>引导型沿着固体媒体传播；非引导型指向自由空间，无线传输。</p>
+<h3 id="引导型传输媒体"><a href="#引导型传输媒体" class="headerlink" title="引导型传输媒体"></a>引导型传输媒体</h3><ol>
+<li><strong>双绞线（twisted pairs）</strong>：最常用，便宜，性能不错。距离太长时需要放大器（模拟传输）或中继器（数字传输），加粗导线。<strong>屏蔽双绞线（STP，Shielded Twisted Pair）</strong>；<strong>无屏蔽双绞线（UTP，Unshielded Twisted Pair）</strong>。</li>
+<li><strong>同轴电缆（coaxial cable）</strong></li>
+<li><strong>光缆（fiber cable）</strong></li>
+</ol>
+<h3 id="非引导型传输媒体"><a href="#非引导型传输媒体" class="headerlink" title="非引导型传输媒体"></a>非引导型传输媒体</h3><p>短波（高频）通信：靠电离层的反射；多径效应，质量较差，低速传输。</p>
+<p> 微波通信：  </p>
+<ol>
+<li>地面微波接力通信</li>
+<li>卫星通信</li>
+</ol>
+<h2 id="信道复用技术"><a href="#信道复用技术" class="headerlink" title="信道复用技术"></a>信道复用技术</h2><ol>
+<li><strong>频分复用（FDM, Frequency Division Multiplexing）</strong>：用户始终占用不同频带</li>
+<li><strong>时分复用（TDM）</strong>：更有利于数字信号的传输。利用率不高，若用户太多则时隙太短。</li>
+<li><strong>统计时分复用（STDM, Statistic）</strong>：保存用户信息头，有额外花销。</li>
+<li><strong>波分复用（WDM, Wavelength Division Multiplexing）</strong>：光的频分复用。光载波频率很高，因此常用波长。</li>
+<li><strong>密集波分复用（DWDN, Dense）</strong>：一根光纤上复用几十或更多路。</li>
+<li><strong>码分复用（CDM, Code），码分多址CDMA（Code Division Multple Access）</strong>：频谱类似于白噪声，不易被发现；抗干扰能力强。</li>
+</ol>
+<h2 id="2-5-数字传输系统"><a href="#2-5-数字传输系统" class="headerlink" title="2.5 数字传输系统"></a>2.5 数字传输系统</h2><h2 id="2-6-宽带接入技术"><a href="#2-6-宽带接入技术" class="headerlink" title="2.6 宽带接入技术"></a>2.6 宽带接入技术</h2><h3 id="ADSL技术"><a href="#ADSL技术" class="headerlink" title="ADSL技术"></a>ADSL技术</h3><p><strong>非对称数字用户线ADSL（Asymmetric Digital Subscriber Line）</strong>技术是用数字技术对线有的模拟电话用户线进行改造，使其承载宽带数字业务。</p>
+<p>ADSL传输距离取决于数据率和用户线的线径。实际最高数据传输速率还与用户线上的信噪比密切相关。</p>
+<p><strong>离散多音调 DMT（Discrete Multi-Tone）</strong>调制技术：频分复用（24kHz - 1.1MHz）划分为许多子信道。相当于许多的调制解调器并行地传送数据。</p>
+<p>ADSL自适应地调整可用频率以避开干扰，可见不能保证固定的数据率</p>
+<h2 id="习题-1"><a href="#习题-1" class="headerlink" title="习题"></a>习题</h2><ol>
+<li>ICMP属于网络层</li>
+<li>SDLC, PPP, HDLC属于数据链路层</li>
+<li>红外线在光纤中衰减。现有波段是0.85，1.30，1.55（微米，e-6）</li>
+<li>电路交换不使用储存转发传输技术。</li>
+<li>10base5，一种以太网标准，该标准用于使用粗同轴电缆（Thick coaxialcable）、速度为10Mbps的基带局域网络，基于曼彻斯特编码。在总线型网络中，最远传输距离为500米。</li>
+<li>波特率（baud rate）为1000的信道，若其电平级数为16（2^4），则数据率（data rate）可达4Kbps。</li>
+<li>影响数据传输率的因素有信噪比、频率带宽、调制效率（Modulation rate）。不受传播速率影响。</li>
+<li>频分复用时，最左右两侧可不设置保护频段。</li>
+<li><img src="./%E7%94%B5%E8%AF%9D%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%84%E6%88%90.png" alt="电话系统结构"></li>
+<li>光纤具有较好的抗干扰性</li>
+<li>二元信号，3KHz信道，信噪比S/N 31，最大传输数据率为6Kbps。（当做无噪声信道计算）</li>
+<li>E1载波，2.048Mbps速率的PCM载波，同步时分复用，30个话音信道（64K）和两个控制信道（16K）。  开始和中间各有8位分别做同步和信令；30路8位数据；组成一帧，256位，每一帧125us时间（每秒8000帧）。 开销占比2/32 = 6.25%， 有效数据率1.92Mbps。</li>
+<li>T1载波，24个信道（每个8bit），外加1bit帧同步数据，共193bit每帧。每个8bit中有1bit是控制数据。对一路语音通道，数据比特率是7b/125us=56kb/s。总的比特率193b/125us=1.544Mb/s。开销占比(1*24+1)/193 = 13%。</li>
+<li><img src="./%E4%BF%A1%E9%81%93%E6%9C%80%E5%A4%A7%E4%BC%A0%E8%BE%93%E9%80%9F%E7%8E%87.png" alt="信道最大传输速率"></li>
+<li>物理层关心在一个通信信道上传输纯比特。</li>
+</ol>
+<h1 id="3-数据链路层"><a href="#3-数据链路层" class="headerlink" title="3 数据链路层"></a>3 数据链路层</h1><p>主要信道类型：  </p>
+<ol>
+<li>点对点信道</li>
+<li>广播信道</li>
+</ol>
+<h2 id="点对点信道的数据链路层"><a href="#点对点信道的数据链路层" class="headerlink" title="点对点信道的数据链路层"></a>点对点信道的数据链路层</h2><h3 id="数据链路和帧"><a href="#数据链路和帧" class="headerlink" title="数据链路和帧"></a>数据链路和帧</h3><p>数据链路 = 物理链路 + 通信协议</p>
+<p>常用<strong>网络适配器</strong>实现这些硬件和软件，适配器也含有物理层的功能。</p>
+<p>网络层交下来的数据构成<strong>帧</strong>——数据链路层的协议数据单元。 帧上交到网络层组成IP数据包（数据包、分组、包）。</p>
+<p>点对点信道在数据链路层通信时的主要步骤：  </p>
+<ol>
+<li>网络层（IP数据报）-&gt;数据链路层</li>
+<li>数据链路层添加首部尾部，成帧</li>
+<li>帧发送到另一结点</li>
+<li>接受者的数据链路层检错（有错则丢弃帧），提取IP数据报-&gt;网络层</li>
+</ol>
+<h3 id="三个基本问题"><a href="#三个基本问题" class="headerlink" title="三个基本问题"></a>三个基本问题</h3><ol>
+<li>封装成帧</li>
+<li>透明传输</li>
+<li>差错检测</li>
+</ol>
+<p>封装成帧：</p>
+<p>链路层协议规定了<strong>最大传输单元（MTU, Maximum Transfer Unit）</strong>，表示帧能容纳的最大数据（不计首部和尾部）。</p>
+<p>如果数据是ASCII编码的文本文件，帧头标记是**SOH(Start Of Header, 0x01)<strong>，帧尾标记是</strong>EOT(End Of Transmission，0x04)**。</p>
+<p>透明传输：</p>
+<p>若文本无需处理（不会出现SOH和EOT），则传输是<strong>透明传输</strong>。</p>
+<p>若文本无法透明传输，可以用<strong>字节填充（byte stuffing）</strong>或<strong>字符填充（character stuffing）</strong>。在特殊字符前插入<strong>转义字符</strong>“<strong>ESC（0x1B）</strong>”。例如文本含&quot;0x1B&quot;，就传输 &quot;0x1B 0x1B&quot;。</p>
+<p>数据链路层还原IP数据报时需要去除转义信息。</p>
+<p>差错检测：</p>
+<p><strong>误码率（BER, Bit Error Rate）</strong>指单位时间内错误比特的比率。</p>
+<p><strong>循环冗余检验（CRC, Cyclic Redundancy）</strong></p>
+<p>假设传送数据$M$，<em>事先约定</em>除数$P\text（n+1位二进制）$，做异或取模$R\text{(n位二进制)} =  2^nM \mod P$。</p>
+<p>$R$作为<strong>帧检验序列（FCS, Frame Check Sequence）</strong>，也放在数据末尾。</p>
+<p>接收端直接做异或取模，若无差错，余数为0。</p>
+<p>用多项式表示，除数$P=1100=X^3 + X^2 + 1$。</p>
+<p>现在可以近似认为“凡是接收端数据链路层接收的帧均无差错”。但尚未考虑<strong>帧丢失、重复、失序</strong>等问题，即非<strong>可靠传输</strong>。</p>
+<p>OSI要求可靠传输，因此有CRC，<strong>帧编号、确认</strong>和<strong>重传机制</strong>。但现在的数据链路层不使用确认和重传，而将差错交给上层协议（如运输层TCP）来处理。</p>
+<h2 id="点对点协议PPP"><a href="#点对点协议PPP" class="headerlink" title="点对点协议PPP"></a>点对点协议PPP</h2><p>PPP协议是用户和ISP通信时使用的数据链路层协议。</p>
+<h3 id="PPP协议的特点"><a href="#PPP协议的特点" class="headerlink" title="PPP协议的特点"></a>PPP协议的特点</h3><ol>
+<li>简单。将繁杂任务丢给TCP/IP。不纠错，无序号，无流量控制。仅做CRC检验。</li>
+<li>封装成帧。使用帧定界符。</li>
+<li>透明性。规避文本出现的帧定界符。</li>
+<li>支持多种网络层协议，在同一物理链路上。</li>
+<li>支持多种链路。</li>
+<li>差错检测。立即丢弃错误帧。</li>
+<li>检测连接状态。及时发现链路故障或恢复。</li>
+<li>最大传送单元MTU的标准默认值。</li>
+<li>网络层地址协商。使通信的两个网络层知道或配置彼此的网络层地址。</li>
+<li>数据压缩协商。</li>
+</ol>
+<p>PPP不需要的功能：  </p>
+<ol>
+<li>纠错</li>
+<li>流量控制</li>
+<li>序号（PPP不是可靠传输协议）</li>
+<li>多点线路</li>
+<li>半双工或单工链路（PPP仅支持全双工链路）</li>
+</ol>
+<p>PPP协议的组成：  </p>
+<ol>
+<li>IP数据包封装到串行链路的方法。PPP既支持异步链路（无奇偶校验的8比特数据），也支持面向比特的同步链路。</li>
+<li><strong>链路控制协议LCP（Link Control Protocol）</strong>。建立、配置和测试数据链路连接。</li>
+<li><strong>网络控制协议NCP（Network Control Protocol）</strong>。用来支持不同的网络层协议。</li>
+</ol>
+<h3 id="PPP协议的帧格式"><a href="#PPP协议的帧格式" class="headerlink" title="PPP协议的帧格式"></a>PPP协议的帧格式</h3><p><img src="./PPP%E5%B8%A7%E7%9A%84%E6%A0%BC%E5%BC%8F.png" alt="PPP协议的帧格式"></p>
+<p>当“协议”为0x0021就是IP数据包，<br>为0xC021就是LCP数据，<br>为0x8021就是网络层的控制数据。</p>
+<p>字节填充：</p>
+<p>异步：  </p>
+<ol>
+<li>0x7E -&gt; (0x7D, 0x5E)</li>
+<li>0x7D -&gt; (0x7D, 0x5D)</li>
+<li>ASCII控制字符（小于0x20） -&gt; (0x7D 0x??)</li>
+</ol>
+<p>零比特填充： 用于SONET/SDH链路，同步传输<br>信息字段中5个连续的1后插入一个0。有效避开了0x7E。</p>
+<h3 id="PPP协议的工作状态"><a href="#PPP协议的工作状态" class="headerlink" title="PPP协议的工作状态"></a>PPP协议的工作状态</h3><p><img src="./PPP%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%8A%B6%E6%80%81%E5%9B%BE.png" alt="PPP协议的状态图"></p>
+<h2 id="习题-2"><a href="#习题-2" class="headerlink" title="习题"></a>习题</h2><ol>
+<li>selective repeat protocol 最大接受窗口为$2^M-1$</li>
+<li>Go-Back-N 最大接收窗口是$2^{M-1}$（默认接收窗口大小 = 发送窗口大小）</li>
+<li>CRC异或取模。别忘了先左移n位</li>
+<li>纠错需要距离为2d+1比特的编码</li>
+<li>检测需要距离为d+1比特的编码</li>
+<li>数据链路层的功能：为网络层提供明确的服务接口；调节数据流，以帮助慢速接收者不被淹没。</li>
+<li>处理传输错误</li>
+<li>PPP提供了NCP，LCP和帧的封装方法</li>
+<li>？？？PPP提供了协商网络层选项的方法（而不是SLIP, BOOTP, HDLC）</li>
+<li>PPP, HDLC, SDLC(同步) 属于数据链路层。ICMP属于网络层。</li>
+<li>PPP帧包括flags，address，control，protocol，payload，checksum。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/09/19/CG-with-OpenGL/" rel="prev" title="CG with OpenGL">
+                  <i class="fa fa-chevron-left"></i> CG with OpenGL
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/10/11/java/" rel="next" title="Java语法笔记">
+                  Java语法笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fas fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'none'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.bootcdn.net/ajax/libs/mathjax/3.1.0/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '00a098064772784393ca',
+      clientSecret: '578fbe40ff6dcd550b4df318fc9143bda83b0bac',
+      repo        : 'Gitment-for-Codesire-Deng-s-Blog',
+      owner       : 'Codesire-Deng',
+      admin       : ['Codesire-Deng'],
+      id          : '577d3564ce152caa9c83f36db854bbd4',
+      proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        language: '',
+      distractionFreeMode: false
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

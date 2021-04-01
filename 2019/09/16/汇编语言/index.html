@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}};
+  </script>
+<meta name="description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  1#pragma comment(linker, &quot;&#x2F;section:test,RWE&quot;)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="汇编语言">
+<meta property="og:url" content="https://codesire-deng.github.io/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  1#pragma comment(linker, &quot;&#x2F;section:test,RWE&quot;)">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-09-16T10:39:11.000Z">
+<meta property="article:modified_time" content="2020-09-18T17:03:17.189Z">
+<meta property="article:author" content="等疾风">
+<meta property="article:tag" content="杂项">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>汇编语言 | 等疾风</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">等疾风</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">临江仙<br/>琼窗梦醒留残日，当年得恨何长！<br/>碧阑干外映垂杨。<br/>暂时相见，如梦懒思量。</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">前置知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C%E8%AF%AD%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">C语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows-exe%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">Windows exe结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quickview%EF%BC%9A%E6%9B%B4%E6%94%B9EXE%E6%95%B0%E6%8D%AE"><span class="nav-number">2.1.</span> <span class="nav-text">Quickview：更改EXE数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OD%EF%BC%9A%E5%8D%95%E6%AD%A5%E8%B7%9F%E8%B8%AAEXE"><span class="nav-number">2.2.</span> <span class="nav-text">OD：单步跟踪EXE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IDA%EF%BC%9A%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90EXE"><span class="nav-number">2.3.</span> <span class="nav-text">IDA：静态分析EXE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E5%AF%B9%E5%8A%A0%E5%A3%B3"><span class="nav-number">3.1.</span> <span class="nav-text">面对加壳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E5%AF%B9%E5%BA%8F%E5%88%97%E5%8F%B7"><span class="nav-number">3.2.</span> <span class="nav-text">面对序列号</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E8%A7%84%E5%88%99"><span class="nav-number">4.</span> <span class="nav-text">汇编规则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B%E5%8E%86%E5%8F%B2"><span class="nav-number">5.</span> <span class="nav-text">逆向工程历史</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#debug"><span class="nav-number">5.1.</span> <span class="nav-text">debug</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86%E8%BD%AF%E4%BB%B6"><span class="nav-number">5.2.</span> <span class="nav-text">加密软件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A9%BB%E7%95%99%E5%86%85%E5%AD%98%E7%A8%8B%E5%BA%8F"><span class="nav-number">6.</span> <span class="nav-text">驻留内存程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%8A%80%E6%9C%AF"><span class="nav-number">6.1.</span> <span class="nav-text">需要技术</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gamebuster"><span class="nav-number">7.</span> <span class="nav-text">gamebuster</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dosboxdeb"><span class="nav-number">7.1.</span> <span class="nav-text">dosboxdeb</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E6%AD%A5%E4%B8%AD%E6%96%AD"><span class="nav-number">7.2.</span> <span class="nav-text">单步中断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%90%E7%A7%8D%E7%97%85%E6%AF%92"><span class="nav-number">7.3.</span> <span class="nav-text">某种病毒</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXE%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F"><span class="nav-number">7.4.</span> <span class="nav-text">EXE文件格式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F"><span class="nav-number">8.</span> <span class="nav-text">保护模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5gdt%E8%A1%A8"><span class="nav-number">8.1.</span> <span class="nav-text">查gdt表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#idt%E4%B8%AD%E6%96%AD%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8"><span class="nav-number">8.2.</span> <span class="nav-text">idt中断描述符表</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          汇编语言
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-09-16 18:39:11" itemprop="dateCreated datePublished" datetime="2019-09-16T18:39:11+08:00">2019-09-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-19 01:03:17" itemprop="dateModified" datetime="2020-09-19T01:03:17+08:00">2020-09-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>不会汇编，强行刚软保，<del>瑟瑟发抖</del>稳得一匹</p>
+<p><em>本文的编撰仅面向作者本人</em></p>
+<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="C语法"><a href="#C语法" class="headerlink" title="C语法"></a>C语法</h2><ol>
+<li>指针作差得到区间元素个数。<strong>指针的类型参与计算！</strong></li>
+<li>要动态改变函数体，需要在编译期赋予权限。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(linker, <span class="meta-string">&quot;/section:test,RWE&quot;</span>)</span></span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+
+<ol>
+<li><code>__asm int 3</code>加入汇编断点（OD）。要在OD中启用StrongOD，禁用跳过int3；并设置测试选项</li>
+<li></li>
+<li></li>
+</ol>
+<h2 id="Windows-exe结构"><a href="#Windows-exe结构" class="headerlink" title="Windows exe结构"></a>Windows exe结构</h2><ol>
+<li>401000H这个内存地址对应的文件地址是1000H</li>
+</ol>
+<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><h2 id="Quickview：更改EXE数据"><a href="#Quickview：更改EXE数据" class="headerlink" title="Quickview：更改EXE数据"></a>Quickview：更改EXE数据</h2><ol>
+<li>按<code>F5</code>可以按地址定位</li>
+<li>提供三种模式：16进制格式，汇编格式，纯文本格式；按<code>F2</code>切换到32位模式</li>
+<li>按<code>Alt+F9</code>保存</li>
+<li>按<code>ins</code>选择块（开始和结束各按一次），选择后按<code>shift</code>底部出现块工具</li>
+<li></li>
+</ol>
+<h2 id="OD：单步跟踪EXE"><a href="#OD：单步跟踪EXE" class="headerlink" title="OD：单步跟踪EXE"></a>OD：单步跟踪EXE</h2><ol>
+<li>可以用来追踪去壳代码</li>
+<li>可以dump数据块到文件</li>
+<li>可以设置硬件断点，当某储存位置发生更改时中断</li>
+<li><code>Alt+B</code>管理断点，<code>空格</code>切换</li>
+<li></li>
+</ol>
+<h2 id="IDA：静态分析EXE"><a href="#IDA：静态分析EXE" class="headerlink" title="IDA：静态分析EXE"></a>IDA：静态分析EXE</h2><ol>
+<li>按<code>G</code>定位</li>
+<li>可通过加壳反抗静态分析。</li>
+</ol>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="面对加壳"><a href="#面对加壳" class="headerlink" title="面对加壳"></a>面对加壳</h2><ol>
+<li>用OD动态追踪，尝试还原被加壳代码（等待去壳），再用QV还原EXE（用块复制的办法加快速度）</li>
+</ol>
+<h2 id="面对序列号"><a href="#面对序列号" class="headerlink" title="面对序列号"></a>面对序列号</h2><ol>
+<li><p>观察到现象：弹框并消失。可行办法：跟踪CreateWindow/ShowWindow/DestoryWindow（推荐）</p>
+</li>
+<li><p>用OD动态追踪，尝试中断DestoryWindow，观察堆栈顶端找到出栈后的程序运行位置（或直接跑retn)</p>
+</li>
+<li><p>对不当场判断的场合（没有明显现象） 怀疑有文件/注册表读写 <code>FileMon + RegMon = ProcMon</code></p>
+<p> RegCreateKey()<br> RegQueryValue()<br> RegSetValue()</p>
+<p> CreateFile<br> CreateFileEx<br> ReadFile<br> WriteFile</p>
+</li>
+<li><p>软件断点：当前断点指令的首字节改为<code>0xCC</code>（对应的汇编指令为int 3）。 可能被程序自检。</p>
+</li>
+<li><p>硬件断点：选中某条指令-&gt;断点-&gt;硬件执行。  检查已设置的断点：调试-&gt;硬件断点... 原理：CPU调试寄存器保存了断点地址和断点条件，每个周期都会检查条件。触发条件有<code>execute</code>，<code>read</code>, <code>write</code>。  要设置读/写断点，选中变量的首字节-&gt;右键-&gt;断点-&gt;硬件写入-&gt;DWORD（对应的类型）。要设置DWORD断点对变量首字节有要求。读/写完成后到达断点。<br>可以用<code>printf(&quot;%p&quot;,...)</code>知道要跟踪的变量的地址。</p>
+</li>
+<li><p>利用读/写硬件断点，当操作序列号时就能断住。<code>Ctrl+B</code>搜索已输入的序列号找到内存地址。跳跃几次看到<code>rep movs</code>（字符串拷贝），此时取消断点，回到用户代码，跳出几次，看到getText</p>
+</li>
+<li><p>如果进入系统代码，则应跳出到用户代码<code>Alt+F9</code>，再按<code>Ctrl+F9</code>跳出一些函数。</p>
+</li>
+<li><p><code>CallWindowProcA</code>的作用是由系统内核来回调用户事先写的消息处理函数</p>
+</li>
+</ol>
+<h1 id="汇编规则"><a href="#汇编规则" class="headerlink" title="汇编规则"></a>汇编规则</h1><ol>
+<li>cdq edx:eax, idiv, edx = edx:eax %n</li>
+</ol>
+<h1 id="逆向工程历史"><a href="#逆向工程历史" class="headerlink" title="逆向工程历史"></a>逆向工程历史</h1><ol>
+<li>微软开发<code>debug</code>，<code>codeview</code>, 宝蓝开发<code>TurboDebug</code>;</li>
+</ol>
+<h2 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h2><ol>
+<li><code>debug</code> 编程：a(assemble) 地址+汇编语言，偏移地址固定从100开始   (OD中改指令相当于a，若下一条语句实效，会有安全措施，改90NULL)。</li>
+<li>u(unassemble) 反汇编，指定开始地址和末地址（l+长度亦可)，反汇编对应地址内的机器语言。</li>
+<li>r(register) 查看寄存器 SF+PL-NG UP上DN下.  r + 寄存器名字, 修改内存</li>
+<li>p (optional 地址) 单步前进，目标地址是执行完毕的</li>
+<li>g (optional =首地址 (optional) 末地址) (从csip)跳跃直到int 3(末地址是未执行的);</li>
+<li>d(dump) 查看内存 可以指定(d cs:100 120 || d cs:100 l20)</li>
+<li>e(edit) 修改内存 地址 + &quot;string&quot; || hex</li>
+<li>t(track in)</li>
+</ol>
+<h2 id="加密软件"><a href="#加密软件" class="headerlink" title="加密软件"></a>加密软件</h2><ol>
+<li><code>lock89</code>, <code>lockup</code>, 作者：杨道沅, 硬盘指纹加密技术</li>
+<li><code>lock93</code>, <code>lock93NT</code>, 周辉</li>
+<li><code>BitLock</code>, 雷军</li>
+</ol>
+<h1 id="驻留内存程序"><a href="#驻留内存程序" class="headerlink" title="驻留内存程序"></a>驻留内存程序</h1><h2 id="需要技术"><a href="#需要技术" class="headerlink" title="需要技术"></a>需要技术</h2><ol>
+<li>驻留内存</li>
+<li>中断</li>
+</ol>
+<p><code>es:[bx]</code> 0:32是一个中断向量的地址</p>
+<p>0:0 ~ 0:3FF 是中断向量表，每个中断向量占用4字节。 例如<code>int 00h</code>的中断向量储存在0:0 ~ 0:3之间; <code>int 01h</code>的中断向量储存在0:4 ~ 0:7之间。</p>
+<p>当cpu执行<code>int 00h</code>时：<br>pushf 保护当前标志位（flag）的状态<br>push cs 当前短地址<br>push 下条指令的偏移地址<br>cli<br>jmp 8756h:3412h</p>
+<p>// cli disable interrupt    (clear interrupt)<br>// sti enable.              (set interrupt)</p>
+<p>8756h:3412h 是中断服务程序的入口地址<br>    ……<br>    iret; 中断返回</p>
+<p>当cpu执行<code>iret</code>时：<br>pop ip;<br>pop cs;<br>popf;       从而实现恢复现场。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">; 调换中断向量表</span><br><span class="line">cli</span><br><span class="line">mov word ptr es:[bx], offset int_8h</span><br><span class="line">mov es:[bx+2], cs</span><br><span class="line">sti</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jmp dword ptr cs:[old_8h] ; 中断链接   old_8h定义在code段内是必要的</span><br><span class="line">; iret 导致旧程序不再执行</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">int_8h:    ; 中断服务</span><br><span class="line">;;;;;;</span><br><span class="line">push ds</span><br><span class="line">push ax</span><br><span class="line">mov ax, data</span><br><span class="line">mov ds, ax</span><br><span class="line">;;;;;;</span><br><span class="line"></span><br><span class="line">inc [count]</span><br><span class="line">cmp [count], 18</span><br><span class="line"></span><br><span class="line">inc cs:[count]  ; count db 0 at the end  定义在code段内</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">push ... ; 记忆所有寄存器   ax bx cb dx si di ds</span><br><span class="line"></span><br><span class="line">push cs</span><br><span class="line">pop ds</span><br><span class="line">push cs</span><br><span class="line">pop es</span><br><span class="line">mov al,4</span><br><span class="line">out 70,al</span><br><span class="line">in al,71h &#x2F;&#x2F; hour</span><br><span class="line">call convert</span><br><span class="line">mov word ptr current_time[?], ax</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">jmp dword ptr cs:[old_8h]  ;返回旧程序</span><br></pre></td></tr></table></figure>
+
+
+<p>驻留</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">install:</span><br><span class="line">mov ah, 9</span><br><span class="line"></span><br><span class="line">; program segment prefix(PSP) 长度为100h，其中PSP:80h存放命令行参数，程序刚刚开始时 ds &#x3D; es &#x3D; psp，</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">in al, 60h</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="gamebuster"><a href="#gamebuster" class="headerlink" title="gamebuster"></a>gamebuster</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mount c:... d:\...</span><br><span class="line">gb</span><br><span class="line">pc</span><br><span class="line">[ctrl][ctrl]  分析&quot;&#x2F;十进制&quot; &quot;十六进制&quot;</span><br><span class="line">[alt + 1]</span><br><span class="line">[shift + 1] 锁</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="dosboxdeb"><a href="#dosboxdeb" class="headerlink" title="dosboxdeb"></a>dosboxdeb</h2><p>dos mcbs 获得当前程序的PSP （memory control block)<br>u 01dd:1785  // 查看反汇编</p>
+<h2 id="单步中断"><a href="#单步中断" class="headerlink" title="单步中断"></a>单步中断</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pushf</span><br><span class="line">pop ax</span><br><span class="line">or ax, 0100h</span><br><span class="line">push ax</span><br><span class="line">popf    ; 修改 TF &#x3D; 1</span><br><span class="line"></span><br><span class="line">nop;    ; 当TF&#x3D;&#x3D;1，执行一条指令后调用 int 1h</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="某种病毒"><a href="#某种病毒" class="headerlink" title="某种病毒"></a>某种病毒</h2><p>修改<code>int 21h</code>中断向量为<code>xxxx:yyyy</code>，原向量保存在内部变量<code>old_21h</code>中。新指令为<code>cmp ah 4Bh</code>，判断是否要执行程度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">je infect_exe</span><br><span class="line">jmp dword ptr cs:[old_21h]</span><br><span class="line"></span><br><span class="line">infect_exe:</span><br><span class="line">    mov ah, 3dh; AH&#x3D;&#x3D;3DH 表示打开文件</span><br><span class="line">    mov al, 2; 读写方式</span><br><span class="line">    pushf</span><br><span class="line">    call dword ptr cs:[old_2h]; call 隐含push段地址、偏移地址 ..?</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<p>原始的<code>int 21h</code>中断向量的段地址&lt;=70h</p>
+<p>假装调用一个无用的<code>int 21h</code>功能，如获取dos版本号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ah, 30h</span><br><span class="line">pushf</span><br><span class="line">置位TF ; 不能手动int 21h，因为系统将flag置零</span><br><span class="line">call dword ptr [current_21h]</span><br></pre></td></tr></table></figure>
+
+<h2 id="EXE文件格式"><a href="#EXE文件格式" class="headerlink" title="EXE文件格式"></a>EXE文件格式</h2><p>+00 4D, 5A; EXE标志“MZ”<br>+02 50, 01; 最后一个扇区的字节数为150h （例外：如果是00 00则最后一个扇区是满载）<br>+04 02, 00; EXE占用的扇区数量（200字节/一个扇区）<br>+06 02, 00; 重定位项数<br>+08 02, 00; 文件头的节长度=20h，所以字节长度=200h (20h x 10h)<br>+0A 00, 00; 至少内存   DOS是单任务的，所以内存限制没有太大意义<br>+0C FF, FF; 至多内存<br>+0E 05, 00; SS与程序首段地址的距离 （程序首段地址在运行时确定, = psp+10h）<br>+10 00, 01; SP = 100h</p>
+<p>+12 E8, 20; EXE文件头的校验值<br>+14 28, 00; IP=0028h            ; 注意此处先IP后CS   CS:IP第一句指令<br>+16 02, 00; CS与程序首段地址的距离<br>+18 1E, 00; 重定位表的偏移地址</p>
+<p>; 下面是重定位表。每个重定位项4个字节。每两个字节为一个信息。<br>+1E 01, 00; 重定位的偏移地址=0001h<br>+20 02, 00; Δ=0002h,<br>; 首段地址+Δ=重定位的段地址<br>;<br>+22 0D, 00; 重定位的偏移地址=000Dh<br>+24 02, 00; Δ=0002h,<br>; 首段地址+Δ=重定位的段地址</p>
+<p>DOS运行程序时，文件头不载入内存，所以内存头可认为是文件头长度</p>
+<p>200h+2:1 = 0:200h + 0:21 = 0:211</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mov ah, 2</span><br><span class="line">mov dl, &#39;A&#39;</span><br><span class="line">int 21h</span><br><span class="line">mov ah, 1</span><br><span class="line">int 21h</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mov ax, ds</span><br><span class="line">add ax, 10</span><br><span class="line">add ax, 2</span><br><span class="line">push ax</span><br><span class="line">mov ax, 28h</span><br><span class="line">push ax</span><br><span class="line">retf ; pop ip, pop cs</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">code segment</span><br><span class="line">assume cd:code</span><br><span class="line">shell:</span><br><span class="line">    call next</span><br><span class="line">next:</span><br><span class="line">    pop ax ; ax &#x3D; ip &#x3D; next的地址</span><br><span class="line">    sub ax, (offset next - offset shell)</span><br><span class="line">    mov bx, ax</span><br><span class="line">    </span><br><span class="line">    mov cs:[old_ds+bx], ds</span><br><span class="line">    mov cs:[old_es+bx], es</span><br><span class="line">    mov bp, ds ; psp</span><br><span class="line">    add bp, 10h; 首段段地址</span><br><span class="line">    mov cx, [reloc_count+bx]</span><br><span class="line">    push cs</span><br><span class="line">    pop ds</span><br><span class="line">    mov si, offset reloc_table</span><br><span class="line">    add si, bx</span><br><span class="line">    </span><br><span class="line">reloc_next_item:</span><br><span class="line">    mov ax, [si] ;lodsw ; ax &#x3D; ds:[si] ; offset</span><br><span class="line">    mov dx, [si+2]                      ; delta segment</span><br><span class="line">    add dx, bp</span><br><span class="line">    mov es, dx</span><br><span class="line">    </span><br><span class="line">    add es:[di], bp</span><br><span class="line">    add si, 4</span><br><span class="line">    dec cx</span><br><span class="line">    jnz reloc_next_item</span><br><span class="line">    </span><br><span class="line">    mov ax, [csip+bx]</span><br><span class="line">    mov dx, [csip+bx+2]</span><br><span class="line">    add dx, bp</span><br><span class="line">    push dx</span><br><span class="line">    push ax</span><br><span class="line">    mov ds, cs:[bx+old_ds]</span><br><span class="line">    mov es, cs:[bx+old_es]</span><br><span class="line">    retf</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">old_ds dw 0</span><br><span class="line">old_es dw 0</span><br><span class="line">csip dw 0, 0</span><br><span class="line">reloc_count dw 0</span><br><span class="line">reloc_table db label byte ; 定义为db但不赋初值</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">code ends</span><br><span class="line">end shell</span><br></pre></td></tr></table></figure>
+
+<p>注意加密堆栈后引发的解密对新数据的影响的问题。</p>
+<p>保存ss和sp，之后修改它为一段预留空间</p>
+<h1 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h1><p><em>32位系统下</em><br>|            |  保护模式  |      实模式       |<br>| :--------: | :--------: | :---------------: |<br>| 最大段长度 |     4G     |        64K        |<br>|  越界访问  | 运行时错误 |       允许        |<br>|  物理寻址  |  查gdt表   | 基址*10h+10h+偏移 |</p>
+<h2 id="查gdt表"><a href="#查gdt表" class="headerlink" title="查gdt表"></a>查gdt表</h2><p>设<code>ds=10h</code>，现通过查gdt表获得其物理地址。gdt表储存描述符，每个占8字节。表的首地址存在于<code>gdtr</code>寄存器。</p>
+<p>gdt+10h xx xx xx xx xx xx xx xx</p>
+<h2 id="idt中断描述符表"><a href="#idt中断描述符表" class="headerlink" title="idt中断描述符表"></a>idt中断描述符表</h2><p>首地址存在于<code>idtr</code>中。每项有8字节。基址2字节，偏移4字节，剩余2字节记录权限。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">lgdt fword ptr gdt ; 把gdt表的首地址和长度载入到gdtr寄存器</span><br><span class="line"></span><br><span class="line">cli</span><br><span class="line">smsw ax</span><br><span class="line">and ax, 1Fh</span><br><span class="line">or al, 1</span><br><span class="line">lmsw ax; enable PE bit of MSW or CR0</span><br><span class="line">db 0EAh ; JMP FAR PTR</span><br><span class="line">dw 00h</span><br><span class="line">dw pseg_</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag"><i class="fa fa-tag"></i> 杂项</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/08/28/%E5%9C%A8ACM%E4%B8%AD%E4%BD%BF%E7%94%A8C/" rel="prev" title="在ACM中使用C++">
+                  <i class="fa fa-chevron-left"></i> 在ACM中使用C++
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/01/Suffix-Automaton/" rel="next" title="后缀自动机 Suffix Automaton">
+                  后缀自动机 Suffix Automaton <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fas fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '00a098064772784393ca',
+      clientSecret: '578fbe40ff6dcd550b4df318fc9143bda83b0bac',
+      repo        : 'Gitment-for-Codesire-Deng-s-Blog',
+      owner       : 'Codesire-Deng',
+      admin       : ['Codesire-Deng'],
+      id          : 'a5c2c2106213a0c361058d8f140d0bae',
+      proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        language: '',
+      distractionFreeMode: false
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

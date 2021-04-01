@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}};
+  </script>
+<meta name="description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后缀自动机 Suffix Automaton">
+<meta property="og:url" content="https://codesire-deng.github.io/2019/10/01/Suffix-Automaton/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codesire-deng.github.io/2019/10/01/Suffix-Automaton/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2019/10/01/Suffix-Automaton/%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png">
+<meta property="article:published_time" content="2019-10-01T15:03:46.000Z">
+<meta property="article:modified_time" content="2020-09-18T17:03:17.232Z">
+<meta property="article:author" content="等疾风">
+<meta property="article:tag" content="字符串">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codesire-deng.github.io/2019/10/01/Suffix-Automaton/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2019/10/01/Suffix-Automaton/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>后缀自动机 Suffix Automaton | 等疾风</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">等疾风</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">临江仙<br/>琼窗梦醒留残日，当年得恨何长！<br/>碧阑干外映垂杨。<br/>暂时相见，如梦懒思量。</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">前置知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E4%BA%94%E4%B8%AA%E9%83%A8%E5%88%86"><span class="nav-number">1.1.</span> <span class="nav-text">自动机的五个部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE"><span class="nav-number">1.2.</span> <span class="nav-text">设</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SAM%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%80%A7%E5%88%86%E6%9E%90"><span class="nav-number">2.1.</span> <span class="nav-text">SAM的可行性分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%92%E7%BA%B3%E6%B3%95%E6%9E%84%E9%80%A0SAM"><span class="nav-number">2.2.</span> <span class="nav-text">归纳法构造SAM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SAM%E7%9A%84%E6%9B%B4%E5%A4%9A%E6%80%A7%E8%B4%A8"><span class="nav-number">2.2.1.</span> <span class="nav-text">SAM的更多性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%BD%8D%E5%AD%97%E7%AC%A6%E6%9B%B4%E6%96%B0%E8%87%AA%E5%8A%A8%E6%9C%BA"><span class="nav-number">2.2.2.</span> <span class="nav-text">添加一位字符更新自动机</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%87%E5%87%86%E4%BB%A3%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">标准代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F%E8%AF%AD"><span class="nav-number">4.</span> <span class="nav-text">结束语</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2019/10/01/Suffix-Automaton/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          后缀自动机 Suffix Automaton
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-10-01 23:03:46" itemprop="dateCreated datePublished" datetime="2019-10-01T23:03:46+08:00">2019-10-01</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-09-19 01:03:17" itemprop="dateModified" datetime="2020-09-19T01:03:17+08:00">2020-09-19</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="自动机的五个部分"><a href="#自动机的五个部分" class="headerlink" title="自动机的五个部分"></a>自动机的五个部分</h2><ol>
+<li><strong>alpha</strong> 字符集</li>
+<li><strong>state</strong> 状态集合。另让$null$表示不存在的状态或转移</li>
+<li><strong>init</strong> 初始状态</li>
+<li><strong>end</strong> 结束状态集合</li>
+<li><strong>trans</strong> 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。</li>
+</ol>
+<span id="more"></span>
+
+<h2 id="设"><a href="#设" class="headerlink" title="设"></a>设</h2><ol>
+<li>自动机能识别的所有字符串集合 **Reg(A)**，其中的字符串$x$满足$trans(init, x)\in end$</li>
+<li>从状态$s$开始能识别的字符串 <strong>Reg(s)</strong></li>
+<li>后缀自动机<strong>SAM</strong>，一个能识别母串$S$的所有后缀的自动机。$SAM(x)=true$当且仅当$x$是$S$的后缀。</li>
+<li>$trans(init, str)$即从初始状态读入$str$后到达的状态<strong>ST(str)</strong> <em>（ST是state的缩写)</em></li>
+<li>母串$S$的所有后缀的集合<strong>Suf</strong>，从$a$位置开始的后缀<strong>Suffix(a)</strong></li>
+<li>母串$S$的所有连续子串的集合<strong>Fac</strong>，位置为$[l,r)$的子串<strong>S[l,r)</strong></li>
+</ol>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><h2 id="SAM的可行性分析"><a href="#SAM的可行性分析" class="headerlink" title="SAM的可行性分析"></a>SAM的可行性分析</h2><ol>
+<li><p>对于字符串$s$，若$s\in Fac$，则$ST(s)$应存在，这是因为可以在$s$后面加上一些字符使其变成$S$的后缀。<em>反之$s\notin Fac$，则应有$ST(s)=null$以节省空间</em></p>
+</li>
+<li><p>考虑$ST(a)$能识别哪些字符串，即$Reg(ST(a))$。若$x\in Reg(ST(a))$，则$ax\in Suf$，故$ax$是后缀，$x$也是后缀。$Reg(ST(a))$是每次$a$出现后接下来的后缀。设<strong>Right(a)</strong> 为a每次出现的开区间末位置，则$Reg(ST(a))$完全由$Right(a)$决定。</p>
+</li>
+<li><p>对于状态$s$（不是单个字符串），我们关心$Reg(s)$。如果对于$a,b\in Fac$有$Right(a)=Right(b)$，那么可令$ST(a)= ST(b)$。所以一个状态$s$由所有$Right$集合是<strong>Right(s)</strong> 的字符串组成。</p>
+</li>
+<li><p>考虑状态$s$包括的字符串长度，易证若$s$包含长度为$l$,$r$的字符串，那么一定包含长度为$m(l \leq m \leq r)$的字符串。所以这些字符串长度一定可以组成一个区间，设为 <strong>[Min(s), Max(s)]</strong></p>
+</li>
+<li><p>状态数是线性的。<br/>　　状态由$Right$集合决定，考虑两个状态$a,b$的$Right$集合$R_a,R_b$。假设$R_a,R_b$有交集，设$r \in R_a \cap R_b$。由于一个子串只能属于一个状态，所以$a$，$b$所表示的子串不会有交集，即由$r$往前不能有长度相同的子串，故$[Min(a), Max(a)]$和$[Min(b), Max(b)]$没有交集，不妨设$Max(a) &lt; Min(b)$，由于$a$，$b$包含的所有串都可以视为$r$往前的子串，故$a$的所有串都是$b$的任意串的后缀。因$b$的任意串都能找到后缀属于$a$，两者$Right$集合又不相等，故$R_b \subset R_a$。那么任意两个状态的$Right$集合要么不相交，要么一个是另一个的真子集。<br/>　　疾风将以状态为节点，以$Right$包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br/>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，$SAM$的结点个数最多为$2n$。<br><br/><img src="./%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png" alt="分裂树举例"></p>
+</li>
+<li><p>更严谨的分裂树定义：令满足$Right(s) \subset Right(fa)$的最小$|Right(fa)|$的$fa$为状态$s$的父亲。<br/>　　直观地看，一定是$fa$中最长的字符串向前扩展一位导致了$Right$集合分裂，所以**Max(fa)+1=Min(s)**。</p>
+</li>
+<li><p>自动机的边数是线性的。<br/>　　直观地看，自动机是一个DAG（否则可以无限地在自动机上走，即识别无限长的字符串，显然这是不可能的），而能从$init$走到某个$end$点的肯定是字符串的某一个后缀。字符串只有$n$个后缀，意味着从$init$到$end$只能有$n$种路径；另一方面，节点数只有$O(n)$，所以猜测边数也是$O(n)$的。<br/>　　标出自动机任意一个生成树，则对于一条非树边$(a\rightarrow b)$，存在若干路径${init \rightarrowtail a \rightarrow b \rightarrowtail e(e\in end)}$对应着一个后缀。对每一个后缀，对应在自动机上走到的第一条非树边。如此每个后缀最多对应一个非树边，而非树边至少被一个后缀对应，所以后缀数量$\geq$非树边数量。所以边数是$O(n)$的。</p>
+</li>
+</ol>
+<h2 id="归纳法构造SAM"><a href="#归纳法构造SAM" class="headerlink" title="归纳法构造SAM"></a>归纳法构造SAM</h2><h3 id="SAM的更多性质"><a href="#SAM的更多性质" class="headerlink" title="SAM的更多性质"></a>SAM的更多性质</h3><p><em>这一部分是SAM构造算法的重要依据。<br/>请确认上文所有加粗内容都已理解。</em></p>
+<ol>
+<li><p>后缀自动机是一个有向无环图<br>$$<br>SAM = {分裂树的点，自动机的有向边}<br>$$ </p>
+</li>
+<li><p>SAM的构造算法是在线的，即从左到右逐个添加字符。根据数学归纳法，<strong>下文假设已有字符串$T$的后缀自动机</strong>。</p>
+</li>
+<li><p>考虑一个状态$s$，它的$Right(s)={r_1, r_2, \cdots, r_n}$，假如有状态转移$trans(s,c) = t$（即状态$s$后添加一个字符$c$得到状态$t$），由于向右扩展了一位字符，$Right(s)$中只有$T[r_i]=c$的满足要求。所以$Right(t)={r_i+1 | T[r_i]=c}$。<br/>　　如果$trans(s,c)$存在，那么$trans(Pa(s), c)$必定存在，其中$Pa(s)$表示分裂树上状态$s$的父亲。并且$Right(trans(s,c)) \subseteq Right(trans(Pa(s),c))$。<br/>　　另一个显然的结论是$Max(s)&lt;Max(t)$。</p>
+</li>
+<li><p>后缀自动机没有显式地储存$Right$集合。因此可以认为修改$Right$的时间复杂度为$O(0)$。</p>
+</li>
+<li><p>初始状态时母串$T$为空字符串，自动机只有一个节点$root$。</p>
+</li>
+</ol>
+<h3 id="添加一位字符更新自动机"><a href="#添加一位字符更新自动机" class="headerlink" title="添加一位字符更新自动机"></a>添加一位字符更新自动机</h3><p>&emsp;&emsp;令当前字符串为$T$，长度为$L$；末尾添加一个字符$x$，要将$SAM(T)$更新为$SAM(Tx)$。<br><br/>　　那么新增的子串是$Tx$的所有后缀，可看作$T$的所有后缀后添加了$x$。令$SAM(T)$中表示$T$的后缀的节点为${v_1, v_2, \cdots, v_k=root}$。因为后缀在字符串的末尾出现，所以$L\in Right(v_i)$，可知$v_i$在分裂树上恰好构成一条从叶子到$root$的链，不妨设${v_1, v_2, \cdots, v_k=root}$已经按从叶子到祖先排序。<br><br/>　　添加字符$x$后，首先新建状态$np$表示$ST(Tx)$，这是一个已确定的状态（因为没有出边），可知$Right(np)={L+1}$。<br><br/>　　回头考虑旧自动机的$v_i$，设$Right(v_i)={r_1, r_2, \cdots, r_n=L}$。如果能在后面添加字符$x$（注意现在仍是字符串$T$的自动机），即$nv=trans(v_i, x)$存在，我们已经知道$Right(nv)={r_i+1|T[r_i]=x}$；反之如果$v_i$没有$x$的出边，意味着没有$r_i$满足$T[r_i]=x$。由于分裂树上父亲的$Right$扩大，如果$trans(v_i,x)$存在，那么$trans(v_{i+1}, x)$也存在。<br><br/>　　对于所有$trans(v,x)=null$的$v$，而只有$Tx[r_n=L]=x$满足转移条件，于是添加一条边$trans(v,x)=np$。<br><br/>　　令$v_p$是$v_1, v_2, \cdots, v_k$中第一个有$x$出边（即$trans(v_p, x)$存在）的状态。令$q=trans(v_p, x)$，注意，现在仍是旧的自动机。我们能不能直接在$Right(q)$中直接插入$L+1$呢？答案是不能。这是因为有可能$Max(q) &gt; Max(v_p)+1$，隐含意思是$q$在”$v_p$末尾添加$x$”的基础上，由于$Right$集合的缩减，纳入了左端更多字符；如果强行在$Right(q)$中插入$L+1$，会导致$Max(q)$减小而丢失了原来的状态，破坏了自动机的正确性。</p>
+<p><img src="./%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png" alt="强行插入的反例"><br><br/>　　如图所示，$v_p$含有的最长字符串是红色5个“A”，但$trans(v_p,x)=q$含有的最长字符串是蓝色7位字符串，如果在$Right(q)$中强行插入$L+1$即变为绿色部分，会使$Max(q)$从7减少到6从而丢失信息。<br><br/>　　如果足够幸运，$Max(q) = Max(v_p)+1$，就没有上面的问题，我们可以在$Right(q)$中插入$L+1$，然后只要令$Pa(np)=q$即可完成自动机更新。<em>注：理论上$Right(trans(v_p\dots v_k,x))$都要插入$L+1$，但这些状态的出边都没有发生改变，而后缀自动机实际上不记录$Right$，所以更新完成。</em><br><br/>　　如果没那么幸运，从图上可知，原状态$q$在插入末尾字符$x$后应转换两个状态，设蓝色对应的状态为$q&#39;$（沿用$q$)，绿色状态为$nq$（新建节点）。显然<br>$$<br>trans(q&#39;, *) = trans(q, *), \<br>Pa(q&#39;)=nq，\<br>Right(nq)=Right(q&#39;)\cup {L+1}，\<br>Max(nq) = Max(v_p)+1<br>$$<br>显然$Right(nq)$是真包含${L+1}$的最小集合，所以<br>$$ Pa(np)=nq $$<br>&emsp;&emsp;截至目前我们新添了$np$，将$q$转化为$q&#39;,nq$，其中$np,q&#39;$都正确处理了出边和分裂树父亲。<br>那么$nq$的分裂树父亲又是谁呢？结合上图易证<br>$$ Pa(nq)=Pa(q) $$</p>
+<p>$nq$的出边是哪一些？由于新添的最后一个字符不能带来更多的状态转移（最后一个字符后面再没有字符了），所以<br>$$ trans(nq, *) = trans(q, *) $$<br><br/>　　最后，我们还要考虑原自动机中指向$q$的状态，和新自动机中应当指向$q&#39;$和$nq$的状态。在$v_p,\cdots,v_k$中，由于$Right$的扩大，$Right(trans(v_i,x))$也逐渐扩大（不缩小），所以只有一段连续的$v_p,\cdots,v_e(e\le k)$是指向$q$的，由于要配合在$Right$集合中插入$L+1$，这些出边要修改为<br>$$ trans(v_i,x) = nq $$<br>其余指向$q$的状态必然由于左端有过多字符而无法指向$nq$，于是改为指向$q&#39;$，等效于不做任何修改。<br><br/>　　最后的最后，对于$v_{e+1},\cdots,v_k$，对于$nv=trans(v_i, x)$，必然可以粗暴地令$Right(nv)$插入$L+1$，所以转移关系可以保持不变，等效于不做任何修改。</p>
+<h1 id="标准代码"><a href="#标准代码" class="headerlink" title="标准代码"></a>标准代码</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXW = <span class="number">26</span>, MAXN = <span class="number">1e5</span>+<span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">State</span> &#123;</span></span><br><span class="line">	State* go[MAXW];</span><br><span class="line">	State* pa;</span><br><span class="line">	<span class="keyword">int</span> mx;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">State</span>(<span class="keyword">int</span> MX):<span class="built_in">pa</span>(<span class="number">0</span>), <span class="built_in">mx</span>(MX) &#123;</span><br><span class="line">		<span class="built_in">memset</span>(go, <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="number">0</span>));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">State</span>(<span class="keyword">const</span> State* o) &#123;</span><br><span class="line">		pa = o-&gt;pa;</span><br><span class="line">		<span class="built_in">memcpy</span>(go, o-&gt;go, <span class="built_in"><span class="keyword">sizeof</span></span>(o-&gt;go));</span><br><span class="line">		mx = o-&gt;mx;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;*last, *root;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">extend</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">	State* p = last;</span><br><span class="line">	State* np = <span class="keyword">new</span> <span class="built_in">State</span>(p-&gt;mx+<span class="number">1</span>);</span><br><span class="line">	last = np;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span> (p &amp;&amp; p-&gt;go[x]==<span class="number">0</span>)</span><br><span class="line">		p-&gt;go[x] = np, p = p-&gt;pa;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (p == <span class="number">0</span>) <span class="keyword">return</span> np-&gt;pa = root, <span class="built_in"><span class="keyword">void</span></span>();</span><br><span class="line"></span><br><span class="line">	State* q = p-&gt;go[x];</span><br><span class="line">	<span class="keyword">if</span> (p-&gt;mx+<span class="number">1</span> == q-&gt;mx)</span><br><span class="line">		<span class="keyword">return</span> np-&gt;pa = q, <span class="built_in"><span class="keyword">void</span></span>();</span><br><span class="line"></span><br><span class="line">	State* nq = <span class="keyword">new</span> <span class="built_in">State</span>(q);</span><br><span class="line">	nq-&gt;mx = p-&gt;mx+<span class="number">1</span>;</span><br><span class="line">	q-&gt;pa = np-&gt;pa = nq;</span><br><span class="line">	<span class="keyword">while</span> (p &amp;&amp; p-&gt;go[x]==q)</span><br><span class="line">		p-&gt;go[x] = nq, p = p-&gt;pa;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> st[MAXN];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>, st);</span><br><span class="line"></span><br><span class="line">	last = root = <span class="keyword">new</span> <span class="built_in">State</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; st[i]!=<span class="string">&#x27;\0&#x27;</span>; ++i)</span><br><span class="line">		<span class="built_in">extend</span>(st[i]);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>&emsp;&emsp;SAM思路真的异常精妙，环环相扣，巧夺天工。不幸的是优美的结论是以复杂而庞大的论证为代价的。<br><br/>　　被奉为圣经的<code>2012年noi冬令营陈立杰讲稿(SAM后缀自动机)</code>在描述构造过程的时候没有解释可以省略的操作为什么被省略，导致思路有很大残缺和跳跃。即使是本文也用了不少“显然”字眼，但比较原文已有较大改进。另外，原讲稿没有交代构造算法为什么是$O(n)$的。<del>疾风理解这ppt花了整整三天</del>如果本文对你有帮助，不妨赏疾风一支冰阔乐喝（馋.jpg）<br><br/>　　有人说SAM完全可以当做黑盒来用，我认为不然。黑盒SAM的唯一功能是判定子串是否存在，局限性很大。而SAM的实战应用代码相对裸构造有很大增改，例如要结合dfs序，平衡树，动态树等等技巧，且都是建立在完全理解后缀自动机的基础上，难度依然很大。这部分日后再填补。</p>
+<p><em>转载请注明原作者和网址</em></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"><i class="fa fa-tag"></i> 字符串</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" rel="prev" title="汇编语言">
+                  <i class="fa fa-chevron-left"></i> 汇编语言
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/10/11/SAM%E5%AE%9E%E6%88%98/" rel="next" title="SAM实战剖析">
+                  SAM实战剖析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fas fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'none'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.bootcdn.net/ajax/libs/mathjax/3.1.0/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '00a098064772784393ca',
+      clientSecret: '578fbe40ff6dcd550b4df318fc9143bda83b0bac',
+      repo        : 'Gitment-for-Codesire-Deng-s-Blog',
+      owner       : 'Codesire-Deng',
+      admin       : ['Codesire-Deng'],
+      id          : 'bb8e75c65f07449f5eeab9abcf85f22f',
+      proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        language: '',
+      distractionFreeMode: false
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

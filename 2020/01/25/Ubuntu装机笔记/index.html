@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}};
+  </script>
+<meta name="description" content="前言很久之前就在Windows笔记本上装了ubuntu 18.04 LTS，因为是双系统，需要手动给硬盘分区，而当时ubuntu的系统分区贼多，埋下了某一个分区过小的伏笔。最近某Filesystem塞满了（500MB），才发现很多双系统安装教程没有卸载教程！ 于是探索的旅程又开始了。我们将卸载现有的Ubuntu系统，调整硬盘分区，然后重装ubuntu，并安装最棒的软件和驱动。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu双系统双显卡装机">
+<meta property="og:url" content="https://codesire-deng.github.io/2020/01/25/Ubuntu%E8%A3%85%E6%9C%BA%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="前言很久之前就在Windows笔记本上装了ubuntu 18.04 LTS，因为是双系统，需要手动给硬盘分区，而当时ubuntu的系统分区贼多，埋下了某一个分区过小的伏笔。最近某Filesystem塞满了（500MB），才发现很多双系统安装教程没有卸载教程！ 于是探索的旅程又开始了。我们将卸载现有的Ubuntu系统，调整硬盘分区，然后重装ubuntu，并安装最棒的软件和驱动。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-01-25T13:28:00.000Z">
+<meta property="article:modified_time" content="2021-04-01T02:45:36.272Z">
+<meta property="article:author" content="等疾风">
+<meta property="article:tag" content="减少脱发指南">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2020/01/25/Ubuntu%E8%A3%85%E6%9C%BA%E7%AC%94%E8%AE%B0/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>Ubuntu双系统双显卡装机 | 等疾风</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">等疾风</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">临江仙<br/>琼窗梦醒留残日，当年得恨何长！<br/>碧阑干外映垂杨。<br/>暂时相见，如梦懒思量。</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B8%E8%BD%BD%E5%8E%9F%E6%9C%89ubuntu"><span class="nav-number">2.</span> <span class="nav-text">卸载原有ubuntu</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85ubuntu-18-04-3-LTS"><span class="nav-number">3.</span> <span class="nav-text">安装ubuntu 18.04.3 LTS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%99%BB%E9%99%86ubuntu"><span class="nav-number">4.</span> <span class="nav-text">登陆ubuntu</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A6%E6%91%B8%E6%9D%BF%E5%8F%B3%E9%94%AE%E5%A4%B1%E7%81%B5"><span class="nav-number">5.</span> <span class="nav-text">触摸板右键失灵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VIM"><span class="nav-number">6.</span> <span class="nav-text">VIM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chrome"><span class="nav-number">7.</span> <span class="nav-text">Chrome</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VSCode"><span class="nav-number">8.</span> <span class="nav-text">VSCode</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A3%9E%E6%9C%BA"><span class="nav-number">9.</span> <span class="nav-text">飞机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BE%8E%E5%8C%96"><span class="nav-number">10.</span> <span class="nav-text">美化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">11.</span> <span class="nav-text">结语</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2020/01/25/Ubuntu%E8%A3%85%E6%9C%BA%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ubuntu双系统双显卡装机
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-01-25 21:28:00" itemprop="dateCreated datePublished" datetime="2020-01-25T21:28:00+08:00">2020-01-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-04-01 10:45:36" itemprop="dateModified" datetime="2021-04-01T10:45:36+08:00">2021-04-01</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>很久之前就在Windows笔记本上装了ubuntu 18.04 LTS，因为是双系统，需要手动给硬盘分区，而当时ubuntu的系统分区贼多，埋下了某一个分区过小的伏笔。最近某Filesystem塞满了（500MB），才发现很多双系统安装教程没有卸载教程！</p>
+<p>于是探索的旅程又开始了。<strong>我们将卸载现有的Ubuntu系统，调整硬盘分区，然后重装ubuntu，并安装最棒的软件和驱动</strong>。</p>
+<span id="more"></span>
+
+<h1 id="卸载原有ubuntu"><a href="#卸载原有ubuntu" class="headerlink" title="卸载原有ubuntu"></a>卸载原有ubuntu</h1><p>原有的系统是手动分区的，导致一个硬盘上分区数较多。</p>
+<ol>
+<li>启动Windows系统，使用分区助手将ubuntu占用的分区合并，并格式化成ext4系统。（格式化似乎不是必要步骤）</li>
+<li>准备好ubuntu装机u盘。应该都会吧！用UltraISO。</li>
+<li>调整BIOS设置。设置为u盘启动，关闭secure boot，华硕的主板还要关闭fast boot。</li>
+</ol>
+<h1 id="安装ubuntu-18-04-3-LTS"><a href="#安装ubuntu-18-04-3-LTS" class="headerlink" title="安装ubuntu 18.04.3 LTS"></a>安装ubuntu 18.04.3 LTS</h1><ol>
+<li>u盘启动，选择试用ubuntu。</li>
+<li>开始安装，接好wifi。在询问是否与windows共存的时候点自定义。在分区表中将刚刚在分区助手中合并的分区删除，归还的空间分配到windows的C盘上。然后后退，选择与windows共存。</li>
+<li>这时界面让你分割windows的C盘，供ubuntu使用。我分割了32GB，建议贪多，原因玄学。</li>
+<li>一路安装，没什么大问题。</li>
+</ol>
+<h1 id="登陆ubuntu"><a href="#登陆ubuntu" class="headerlink" title="登陆ubuntu"></a>登陆ubuntu</h1><p>因为是双显卡（Intel集显 + Geforce MX150），这可能会导致开机登陆困难，原因是默认的独显驱动有问题，导致机器卡死。</p>
+<ol>
+<li><p>在grub引导时，对ubuntu按&quot;e&quot;，倒数第二行找到<code>quiet splash *</code>，修改为<code>quiet splash acpi_osi=linux nomodeset *</code>，按&quot;F10&quot;引导。这么做是为了禁用所有显卡驱动。</p>
+</li>
+<li><p>开机后分辨率是800*600的，操作不便时按&quot;Alt+F7&quot;移动窗口。</p>
+</li>
+<li><p>安装vim。(喜欢gedit的不安装也完全可以)</p>
+</li>
+<li><p>按照以下代码禁用Nvidia开源显卡驱动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/modprobe.d/blacklist.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件内加入以下黑名单</span></span><br><span class="line">blacklist vga16fb</span><br><span class="line">blacklist nouveau</span><br><span class="line">blacklist rivafb</span><br><span class="line">blacklist rivatv</span><br><span class="line">blacklist nvidiafb</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存退出，然后更新boot配置</span></span><br><span class="line">sudo update-initramfs -u</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure></li>
+<li><p>现在可以正常开机了。接下来安装Nvidia官方闭源驱动（可跳过）。打开ubuntu自带软件Software &amp; Updates，在Additional Drivers里勾选闭源驱动，版本号选大一点，Apply Changes，等一段时间下载安装即可。</p>
+</li>
+<li><p>重启电脑，Enjoy！可以根据喜好调整NVIDIA X Server Settings的内容。<br>PS：不要自行下载英伟达官网的驱动！亲测无效！相信我！</p>
+</li>
+<li><p>调整grub引导，自己看着办吧，当然不是必须的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/default/grub</span><br><span class="line">sudo update-grub</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="触摸板右键失灵"><a href="#触摸板右键失灵" class="headerlink" title="触摸板右键失灵"></a>触摸板右键失灵</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gsettings <span class="built_in">set</span> org.gnome.desktop.peripherals.touchpad click-method areas</span><br></pre></td></tr></table></figure>
+
+<h1 id="VIM"><a href="#VIM" class="headerlink" title="VIM"></a>VIM</h1><p>ubuntu默认源已经很久没更新Vim，所以加上源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:jonathonf/vim </span><br></pre></td></tr></table></figure>
+
+<p>再给出竞赛用~/.vimrc岂不美哉！赶紧背下来！</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">number</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">cindent</span></span><br><span class="line"><span class="keyword">set</span> autoread</span><br><span class="line"><span class="keyword">set</span> tabstop=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> softtabstop=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">nnoremap</span> <span class="symbol">&lt;F9&gt;</span> :<span class="keyword">call</span> CompileCPP()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line">func! CompileCPP()</span><br><span class="line">    exec <span class="string">&quot;w&quot;</span></span><br><span class="line">    <span class="keyword">if</span> &amp;<span class="keyword">filetype</span> == <span class="string">&#x27;cpp&#x27;</span></span><br><span class="line">        exec <span class="string">&quot;g++ -Wall -DDEBUG % -o %&lt;&quot;</span></span><br><span class="line">    <span class="keyword">endif</span></span><br><span class="line">endfunc</span><br><span class="line"></span><br><span class="line"><span class="keyword">nnoremap</span> <span class="symbol">&lt;F10&gt;</span> :<span class="keyword">call</span> Run()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line">func! Run()</span><br><span class="line">    exec <span class="string">&quot;!./%&lt;&quot;</span></span><br><span class="line">endfunc</span><br></pre></td></tr></table></figure>
+
+<p>如果控制台&quot;F10&quot;被占用，就在preferences里取消掉。</p>
+<h1 id="Chrome"><a href="#Chrome" class="headerlink" title="Chrome"></a>Chrome</h1><p>没什么好说的，只想说：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dpkg --get-selections | grep firefox</span><br><span class="line">sudo apt purge firefox firefox-locale-en firefox-locale-zh-hans</span><br><span class="line">sudo apt autoremove</span><br><span class="line"><span class="comment"># 司马笑</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="VSCode"><a href="#VSCode" class="headerlink" title="VSCode"></a>VSCode</h1><p>借助Settings Sync插件可以很快配置Code，但是各种task还需要自行备份。</p>
+<h1 id="飞机"><a href="#飞机" class="headerlink" title="飞机"></a>飞机</h1><p>第一次在~/.local下安装软件，需要注销重登陆才能正常使用。<br>某些算法需要额外的库，比如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install libsodium-dev</span><br></pre></td></tr></table></figure>
+<p>搞定之后在Settings-&gt;...-&gt;Socks Host作调整即可。</p>
+<h1 id="美化"><a href="#美化" class="headerlink" title="美化"></a>美化</h1><p>调整控制台的配色和透明度，换壁纸等等，不多说了。</p>
+<p>ubuntu很鸡贼，用日本字来糊弄我，字体很不好看，统统干掉。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将SC挪到最前面，解决“门”等字显示不正常的问题。</span></span><br><span class="line">sudo vim /etc/fonts/conf.d/64-language-selector-prefer.conf</span><br></pre></td></tr></table></figure>
+
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>其他杂七杂八的东西就自行解决吧，祝看官ubuntu旅程愉快！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%87%8F%E5%B0%91%E8%84%B1%E5%8F%91%E6%8C%87%E5%8D%97/" rel="tag"><i class="fa fa-tag"></i> 减少脱发指南</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/10/18/%E7%94%9F%E5%91%BD%E7%A7%91%E5%AD%A6%E8%AE%A8%E8%AE%BA%E8%AF%BE/" rel="prev" title="生命科学课程资料">
+                  <i class="fa fa-chevron-left"></i> 生命科学课程资料
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/02/01/Makefile/" rel="next" title="跟我一起写Makefile">
+                  跟我一起写Makefile <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fas fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '00a098064772784393ca',
+      clientSecret: '578fbe40ff6dcd550b4df318fc9143bda83b0bac',
+      repo        : 'Gitment-for-Codesire-Deng-s-Blog',
+      owner       : 'Codesire-Deng',
+      admin       : ['Codesire-Deng'],
+      id          : 'af5b19bbd4dfc695fb7b88c730535180',
+      proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        language: '',
+      distractionFreeMode: false
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
