@@ -14,7 +14,7 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
@@ -319,7 +319,15 @@
 <li>凡是new生成的东西都在堆内存中, 只有array作为一个引用存在于栈内存中</li>
 <li>与C++不同, 已有数组名(引用)可以赋值给另一个已有数组名(引用), 允许变动.</li>
 </ul>
-<h2 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>(value) &#123;  <span class="comment">//value范围在int内,且不为boolean</span></span><br><span class="line"><span class="keyword">case</span> value1:</span><br><span class="line">    <span class="keyword">do</span> sth;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">default</span>:        <span class="comment">//default可以放在前面,程序保证入口挑选正确且唯一.</span></span><br><span class="line">    <span class="keyword">do</span> sth;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<h2 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">switch</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">//value范围在int内,且不为boolean</span>
+<span class="token keyword">case</span> value1<span class="token operator">:</span>
+    <span class="token keyword">do</span> sth<span class="token punctuation">;</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token keyword">default</span><span class="token operator">:</span>        <span class="token comment">//default可以放在前面,程序保证入口挑选正确且唯一.</span>
+    <span class="token keyword">do</span> sth<span class="token punctuation">;</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="构造代码块"><a href="#构造代码块" class="headerlink" title="构造代码块"></a>构造代码块</h2><ul>
 <li>类中用<code>&#123;&#125;</code>包裹的代码块，将在每次构造函数调用时执行</li>
@@ -454,7 +462,8 @@
 <li>成员内部类<ul>
 <li>在类中以成员形式定义的另一个类, 称为成员内部类.</li>
 <li>内部类是外部类的成员, 依赖于外部对象的存在,因此不能含有静态方法或静态变量(常量除外).</li>
-<li>其他类中声明示例  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">OuterClass p1 = <span class="keyword">new</span> OuterClass();</span><br><span class="line">OuterClass.InnerClass p2 = p1.<span class="function">new <span class="title">InnerClass</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>其他类中声明示例  <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">OuterClass</span> p1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">OuterClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">OuterClass<span class="token punctuation">.</span>InnerClass</span> p2 <span class="token operator">=</span> p1<span class="token punctuation">.</span><span class="token keyword">new</span> <span class="token class-name">InnerClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 <li>因为是成员之一, 可以访问任何外部类成员, 存在引用<code>OuterClass.this</code></li>
 </ul>
 </li>

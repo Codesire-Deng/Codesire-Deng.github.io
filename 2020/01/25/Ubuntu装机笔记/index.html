@@ -14,7 +14,7 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
@@ -329,33 +329,67 @@
 <li><p>安装vim。(喜欢gedit的不安装也完全可以)</p>
 </li>
 <li><p>按照以下代码禁用Nvidia开源显卡驱动</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/modprobe.d/blacklist.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件内加入以下黑名单</span></span><br><span class="line">blacklist vga16fb</span><br><span class="line">blacklist nouveau</span><br><span class="line">blacklist rivafb</span><br><span class="line">blacklist rivatv</span><br><span class="line">blacklist nvidiafb</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存退出，然后更新boot配置</span></span><br><span class="line">sudo update-initramfs -u</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure></li>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/modprobe.d/blacklist.conf
+
+<span class="token comment"># 文件内加入以下黑名单</span>
+blacklist vga16fb
+blacklist nouveau
+blacklist rivafb
+blacklist rivatv
+blacklist nvidiafb
+
+<span class="token comment"># 保存退出，然后更新boot配置</span>
+<span class="token function">sudo</span> update-initramfs -u
+<span class="token function">sudo</span> <span class="token function">reboot</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 <li><p>现在可以正常开机了。接下来安装Nvidia官方闭源驱动（可跳过）。打开ubuntu自带软件Software &amp; Updates，在Additional Drivers里勾选闭源驱动，版本号选大一点，Apply Changes，等一段时间下载安装即可。</p>
 </li>
 <li><p>重启电脑，Enjoy！可以根据喜好调整NVIDIA X Server Settings的内容。<br>PS：不要自行下载英伟达官网的驱动！亲测无效！相信我！</p>
 </li>
 <li><p>调整grub引导，自己看着办吧，当然不是必须的。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/default/grub</span><br><span class="line">sudo update-grub</span><br></pre></td></tr></table></figure></li>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/default/grub
+<span class="token function">sudo</span> <span class="token function">update-grub</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 </ol>
-<h1 id="触摸板右键失灵"><a href="#触摸板右键失灵" class="headerlink" title="触摸板右键失灵"></a>触摸板右键失灵</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gsettings <span class="built_in">set</span> org.gnome.desktop.peripherals.touchpad click-method areas</span><br></pre></td></tr></table></figure>
+<h1 id="触摸板右键失灵"><a href="#触摸板右键失灵" class="headerlink" title="触摸板右键失灵"></a>触摸板右键失灵</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gsettings <span class="token builtin class-name">set</span> org.gnome.desktop.peripherals.touchpad click-method areas<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h1 id="VIM"><a href="#VIM" class="headerlink" title="VIM"></a>VIM</h1><p>ubuntu默认源已经很久没更新Vim，所以加上源</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:jonathonf/vim </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> add-apt-repository ppa:jonathonf/vim <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>再给出竞赛用~/.vimrc岂不美哉！赶紧背下来！</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">number</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">cindent</span></span><br><span class="line"><span class="keyword">set</span> autoread</span><br><span class="line"><span class="keyword">set</span> tabstop=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> softtabstop=<span class="number">4</span></span><br><span class="line"><span class="keyword">set</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">nnoremap</span> <span class="symbol">&lt;F9&gt;</span> :<span class="keyword">call</span> CompileCPP()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line">func! CompileCPP()</span><br><span class="line">    exec <span class="string">&quot;w&quot;</span></span><br><span class="line">    <span class="keyword">if</span> &amp;<span class="keyword">filetype</span> == <span class="string">&#x27;cpp&#x27;</span></span><br><span class="line">        exec <span class="string">&quot;g++ -Wall -DDEBUG % -o %&lt;&quot;</span></span><br><span class="line">    <span class="keyword">endif</span></span><br><span class="line">endfunc</span><br><span class="line"></span><br><span class="line"><span class="keyword">nnoremap</span> <span class="symbol">&lt;F10&gt;</span> :<span class="keyword">call</span> Run()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line">func! Run()</span><br><span class="line">    exec <span class="string">&quot;!./%&lt;&quot;</span></span><br><span class="line">endfunc</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-vim" data-language="vim"><code class="language-vim"><span class="token keyword">set</span> <span class="token keyword">number</span>
+<span class="token keyword">set</span> <span class="token builtin">cindent</span>
+<span class="token keyword">set</span> <span class="token builtin">autoread</span>
+<span class="token keyword">set</span> <span class="token builtin">tabstop</span><span class="token operator">=</span><span class="token number">4</span>
+<span class="token keyword">set</span> <span class="token builtin">softtabstop</span><span class="token operator">=</span><span class="token number">4</span>
+<span class="token keyword">set</span> <span class="token builtin">shiftwidth</span><span class="token operator">=</span><span class="token number">4</span>
+
+nnoremap <span class="token operator">&lt;</span>F9<span class="token operator">></span> <span class="token punctuation">:</span><span class="token keyword">call</span> <span class="token function">CompileCPP</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;</span>CR<span class="token operator">></span>
+func<span class="token operator">!</span> <span class="token function">CompileCPP</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    exec <span class="token string">"w"</span>
+    <span class="token keyword">if</span> &amp;<span class="token keyword">filetype</span> <span class="token operator">==</span> <span class="token string">'cpp'</span>
+        exec <span class="token string">"g++ -Wall -DDEBUG % -o %&lt;"</span>
+    <span class="token keyword">endif</span>
+endfunc
+
+nnoremap <span class="token operator">&lt;</span>F10<span class="token operator">></span> <span class="token punctuation">:</span><span class="token keyword">call</span> <span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;</span>CR<span class="token operator">></span>
+func<span class="token operator">!</span> <span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    exec <span class="token string">"!./%&lt;"</span>
+endfunc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>如果控制台&quot;F10&quot;被占用，就在preferences里取消掉。</p>
 <h1 id="Chrome"><a href="#Chrome" class="headerlink" title="Chrome"></a>Chrome</h1><p>没什么好说的，只想说：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dpkg --get-selections | grep firefox</span><br><span class="line">sudo apt purge firefox firefox-locale-en firefox-locale-zh-hans</span><br><span class="line">sudo apt autoremove</span><br><span class="line"><span class="comment"># 司马笑</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">dpkg --get-selections <span class="token operator">|</span> <span class="token function">grep</span> firefox
+<span class="token function">sudo</span> <span class="token function">apt</span> purge firefox firefox-locale-en firefox-locale-zh-hans
+<span class="token function">sudo</span> <span class="token function">apt</span> autoremove
+<span class="token comment"># 司马笑</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h1 id="VSCode"><a href="#VSCode" class="headerlink" title="VSCode"></a>VSCode</h1><p>借助Settings Sync插件可以很快配置Code，但是各种task还需要自行备份。</p>
 <h1 id="飞机"><a href="#飞机" class="headerlink" title="飞机"></a>飞机</h1><p>第一次在~/.local下安装软件，需要注销重登陆才能正常使用。<br>某些算法需要额外的库，比如</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install libsodium-dev</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libsodium-dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>搞定之后在Settings-&gt;...-&gt;Socks Host作调整即可。</p>
 <h1 id="美化"><a href="#美化" class="headerlink" title="美化"></a>美化</h1><p>调整控制台的配色和透明度，换壁纸等等，不多说了。</p>
 <p>ubuntu很鸡贼，用日本字来糊弄我，字体很不好看，统统干掉。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将SC挪到最前面，解决“门”等字显示不正常的问题。</span></span><br><span class="line">sudo vim /etc/fonts/conf.d/64-language-selector-prefer.conf</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 将SC挪到最前面，解决“门”等字显示不正常的问题。</span>
+<span class="token function">sudo</span> <span class="token function">vim</span> /etc/fonts/conf.d/64-language-selector-prefer.conf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>其他杂七杂八的东西就自行解决吧，祝看官ubuntu旅程愉快！</p>
 

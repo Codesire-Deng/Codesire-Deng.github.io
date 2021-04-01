@@ -14,7 +14,7 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
@@ -364,7 +364,18 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="更新Hexo"><a href="#更新Hexo" class="headerlink" title="更新Hexo"></a>更新Hexo</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cnpm install -g cnpm                 <span class="comment"># 升级 npm</span></span><br><span class="line">cnpm cache clean -f                 <span class="comment"># 清除 npm 缓存</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新 package.json 中的 hexo 及个插件版本</span></span><br><span class="line">cnpm install -g npm-check           <span class="comment"># 检查之前安装的插件，都有哪些是可以升级的 </span></span><br><span class="line">cnpm install -g npm-upgrade         <span class="comment"># 升级系统中的插件</span></span><br><span class="line">npm-check</span><br><span class="line">npm-upgrade</span><br><span class="line"></span><br><span class="line">cnpm update</span><br><span class="line"></span><br><span class="line">hexo -v</span><br></pre></td></tr></table></figure>
+          <h3 id="更新Hexo"><a href="#更新Hexo" class="headerlink" title="更新Hexo"></a>更新Hexo</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm <span class="token function">install</span> -g cnpm                 <span class="token comment"># 升级 npm</span>
+cnpm cache clean -f                 <span class="token comment"># 清除 npm 缓存</span>
+
+<span class="token comment"># 更新 package.json 中的 hexo 及个插件版本</span>
+cnpm <span class="token function">install</span> -g npm-check           <span class="token comment"># 检查之前安装的插件，都有哪些是可以升级的 </span>
+cnpm <span class="token function">install</span> -g npm-upgrade         <span class="token comment"># 升级系统中的插件</span>
+npm-check
+npm-upgrade
+
+cnpm update
+
+hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="更新NexT"><a href="#更新NexT" class="headerlink" title="更新NexT"></a>更新NexT</h3><ol>
 <li>重命名原有的主题文件（夹）</li>
@@ -657,7 +668,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-10-11 13:13:41" itemprop="dateModified" datetime="2020-10-11T13:13:41+08:00">2020-10-11</time>
+        <time title="修改时间：2021-04-02 00:47:53" itemprop="dateModified" datetime="2021-04-02T00:47:53+08:00">2021-04-02</time>
       </span>
 
   
@@ -670,7 +681,9 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="OpenGL"><a href="#OpenGL" class="headerlink" title="OpenGL"></a>OpenGL</h1><p>OpenGL系统由独立于设备的函数集（核心库）、实用库（GLU）和实用工具包（GLUT）三部分组成。</p>
+          <p>更新：现在都用核心模式了，推荐<a target="_blank" rel="noopener" href="https://learnopengl-cn.github.io/">LearnOpenGL</a>，不推荐往下看啦。</p>
+<hr>
+<h1 id="OpenGL"><a href="#OpenGL" class="headerlink" title="OpenGL"></a>OpenGL</h1><p>OpenGL系统由独立于设备的函数集（核心库）、实用库（GLU）和实用工具包（GLUT）三部分组成。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/09/19/CG-with-OpenGL/#more" rel="contents">

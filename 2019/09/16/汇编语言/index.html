@@ -14,7 +14,7 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}};
   </script>
-<meta name="description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  1#pragma comment(linker, &quot;&#x2F;section:test,RWE&quot;)">
+<meta name="description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  #pragma comment(linker, &quot;&#x2F;section:test,RWE&quot;)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汇编语言">
 <meta property="og:url" content="https://codesire-deng.github.io/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/index.html">
 <meta property="og:site_name" content="等疾风">
-<meta property="og:description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  1#pragma comment(linker, &quot;&#x2F;section:test,RWE&quot;)">
+<meta property="og:description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  #pragma comment(linker, &quot;&#x2F;section:test,RWE&quot;)">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-09-16T10:39:11.000Z">
 <meta property="article:modified_time" content="2020-09-18T17:03:17.189Z">
@@ -310,7 +310,7 @@
 <li>指针作差得到区间元素个数。<strong>指针的类型参与计算！</strong></li>
 <li>要动态改变函数体，需要在编译期赋予权限。</li>
 </ol>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> comment(linker, <span class="meta-string">&quot;/section:test,RWE&quot;</span>)</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression"><span class="token function">comment</span><span class="token punctuation">(</span>linker<span class="token punctuation">,</span> </span><span class="token string">"/section:test,RWE"</span><span class="token expression"><span class="token punctuation">)</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <span id="more"></span>
 
 <ol>
@@ -393,37 +393,167 @@
 <p>// cli disable interrupt    (clear interrupt)<br>// sti enable.              (set interrupt)</p>
 <p>8756h:3412h 是中断服务程序的入口地址<br>    ……<br>    iret; 中断返回</p>
 <p>当cpu执行<code>iret</code>时：<br>pop ip;<br>pop cs;<br>popf;       从而实现恢复现场。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">; 调换中断向量表</span><br><span class="line">cli</span><br><span class="line">mov word ptr es:[bx], offset int_8h</span><br><span class="line">mov es:[bx+2], cs</span><br><span class="line">sti</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">; 调换中断向量表
+cli
+mov word ptr es:[bx], offset int_8h
+mov es:[bx+2], cs
+sti<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jmp dword ptr cs:[old_8h] ; 中断链接   old_8h定义在code段内是必要的</span><br><span class="line">; iret 导致旧程序不再执行</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">jmp dword ptr cs:[old_8h] ; 中断链接   old_8h定义在code段内是必要的
+; iret 导致旧程序不再执行<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">int_8h:    ; 中断服务</span><br><span class="line">;;;;;;</span><br><span class="line">push ds</span><br><span class="line">push ax</span><br><span class="line">mov ax, data</span><br><span class="line">mov ds, ax</span><br><span class="line">;;;;;;</span><br><span class="line"></span><br><span class="line">inc [count]</span><br><span class="line">cmp [count], 18</span><br><span class="line"></span><br><span class="line">inc cs:[count]  ; count db 0 at the end  定义在code段内</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">push ... ; 记忆所有寄存器   ax bx cb dx si di ds</span><br><span class="line"></span><br><span class="line">push cs</span><br><span class="line">pop ds</span><br><span class="line">push cs</span><br><span class="line">pop es</span><br><span class="line">mov al,4</span><br><span class="line">out 70,al</span><br><span class="line">in al,71h &#x2F;&#x2F; hour</span><br><span class="line">call convert</span><br><span class="line">mov word ptr current_time[?], ax</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">jmp dword ptr cs:[old_8h]  ;返回旧程序</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">int_8h:    ; 中断服务
+;;;;;;
+push ds
+push ax
+mov ax, data
+mov ds, ax
+;;;;;;
+
+inc [count]
+cmp [count], 18
+
+inc cs:[count]  ; count db 0 at the end  定义在code段内
+
+
+push ... ; 记忆所有寄存器   ax bx cb dx si di ds
+
+push cs
+pop ds
+push cs
+pop es
+mov al,4
+out 70,al
+in al,71h &#x2F;&#x2F; hour
+call convert
+mov word ptr current_time[?], ax
+...
+
+
+
+jmp dword ptr cs:[old_8h]  ;返回旧程序<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <p>驻留</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">install:</span><br><span class="line">mov ah, 9</span><br><span class="line"></span><br><span class="line">; program segment prefix(PSP) 长度为100h，其中PSP:80h存放命令行参数，程序刚刚开始时 ds &#x3D; es &#x3D; psp，</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">in al, 60h</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">install:
+mov ah, 9
+
+; program segment prefix(PSP) 长度为100h，其中PSP:80h存放命令行参数，程序刚刚开始时 ds &#x3D; es &#x3D; psp，
+
+...
 
 
-<h1 id="gamebuster"><a href="#gamebuster" class="headerlink" title="gamebuster"></a>gamebuster</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mount c:... d:\...</span><br><span class="line">gb</span><br><span class="line">pc</span><br><span class="line">[ctrl][ctrl]  分析&quot;&#x2F;十进制&quot; &quot;十六进制&quot;</span><br><span class="line">[alt + 1]</span><br><span class="line">[shift + 1] 锁</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+in al, 60h<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<h1 id="gamebuster"><a href="#gamebuster" class="headerlink" title="gamebuster"></a>gamebuster</h1><pre class="line-numbers language-none"><code class="language-none">mount c:... d:\...
+gb
+pc
+[ctrl][ctrl]  分析&quot;&#x2F;十进制&quot; &quot;十六进制&quot;
+[alt + 1]
+[shift + 1] 锁
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="dosboxdeb"><a href="#dosboxdeb" class="headerlink" title="dosboxdeb"></a>dosboxdeb</h2><p>dos mcbs 获得当前程序的PSP （memory control block)<br>u 01dd:1785  // 查看反汇编</p>
-<h2 id="单步中断"><a href="#单步中断" class="headerlink" title="单步中断"></a>单步中断</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pushf</span><br><span class="line">pop ax</span><br><span class="line">or ax, 0100h</span><br><span class="line">push ax</span><br><span class="line">popf    ; 修改 TF &#x3D; 1</span><br><span class="line"></span><br><span class="line">nop;    ; 当TF&#x3D;&#x3D;1，执行一条指令后调用 int 1h</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="单步中断"><a href="#单步中断" class="headerlink" title="单步中断"></a>单步中断</h2><pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">pushf
+pop ax
+or ax, 0100h
+push ax
+popf    ; 修改 TF &#x3D; 1
+
+nop;    ; 当TF&#x3D;&#x3D;1，执行一条指令后调用 int 1h
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="某种病毒"><a href="#某种病毒" class="headerlink" title="某种病毒"></a>某种病毒</h2><p>修改<code>int 21h</code>中断向量为<code>xxxx:yyyy</code>，原向量保存在内部变量<code>old_21h</code>中。新指令为<code>cmp ah 4Bh</code>，判断是否要执行程度。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">je infect_exe</span><br><span class="line">jmp dword ptr cs:[old_21h]</span><br><span class="line"></span><br><span class="line">infect_exe:</span><br><span class="line">    mov ah, 3dh; AH&#x3D;&#x3D;3DH 表示打开文件</span><br><span class="line">    mov al, 2; 读写方式</span><br><span class="line">    pushf</span><br><span class="line">    call dword ptr cs:[old_2h]; call 隐含push段地址、偏移地址 ..?</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">je infect_exe
+jmp dword ptr cs:[old_21h]
+
+infect_exe:
+    mov ah, 3dh; AH&#x3D;&#x3D;3DH 表示打开文件
+    mov al, 2; 读写方式
+    pushf
+    call dword ptr cs:[old_2h]; call 隐含push段地址、偏移地址 ..?
+    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>原始的<code>int 21h</code>中断向量的段地址&lt;=70h</p>
 <p>假装调用一个无用的<code>int 21h</code>功能，如获取dos版本号</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mov ah, 30h</span><br><span class="line">pushf</span><br><span class="line">置位TF ; 不能手动int 21h，因为系统将flag置零</span><br><span class="line">call dword ptr [current_21h]</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">mov ah, 30h
+pushf
+置位TF ; 不能手动int 21h，因为系统将flag置零
+call dword ptr [current_21h]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="EXE文件格式"><a href="#EXE文件格式" class="headerlink" title="EXE文件格式"></a>EXE文件格式</h2><p>+00 4D, 5A; EXE标志“MZ”<br>+02 50, 01; 最后一个扇区的字节数为150h （例外：如果是00 00则最后一个扇区是满载）<br>+04 02, 00; EXE占用的扇区数量（200字节/一个扇区）<br>+06 02, 00; 重定位项数<br>+08 02, 00; 文件头的节长度=20h，所以字节长度=200h (20h x 10h)<br>+0A 00, 00; 至少内存   DOS是单任务的，所以内存限制没有太大意义<br>+0C FF, FF; 至多内存<br>+0E 05, 00; SS与程序首段地址的距离 （程序首段地址在运行时确定, = psp+10h）<br>+10 00, 01; SP = 100h</p>
 <p>+12 E8, 20; EXE文件头的校验值<br>+14 28, 00; IP=0028h            ; 注意此处先IP后CS   CS:IP第一句指令<br>+16 02, 00; CS与程序首段地址的距离<br>+18 1E, 00; 重定位表的偏移地址</p>
 <p>; 下面是重定位表。每个重定位项4个字节。每两个字节为一个信息。<br>+1E 01, 00; 重定位的偏移地址=0001h<br>+20 02, 00; Δ=0002h,<br>; 首段地址+Δ=重定位的段地址<br>;<br>+22 0D, 00; 重定位的偏移地址=000Dh<br>+24 02, 00; Δ=0002h,<br>; 首段地址+Δ=重定位的段地址</p>
 <p>DOS运行程序时，文件头不载入内存，所以内存头可认为是文件头长度</p>
 <p>200h+2:1 = 0:200h + 0:21 = 0:211</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mov ah, 2</span><br><span class="line">mov dl, &#39;A&#39;</span><br><span class="line">int 21h</span><br><span class="line">mov ah, 1</span><br><span class="line">int 21h</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mov ax, ds</span><br><span class="line">add ax, 10</span><br><span class="line">add ax, 2</span><br><span class="line">push ax</span><br><span class="line">mov ax, 28h</span><br><span class="line">push ax</span><br><span class="line">retf ; pop ip, pop cs</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">mov ah, 2
+mov dl, &#39;A&#39;
+int 21h
+mov ah, 1
+int 21h
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">code segment</span><br><span class="line">assume cd:code</span><br><span class="line">shell:</span><br><span class="line">    call next</span><br><span class="line">next:</span><br><span class="line">    pop ax ; ax &#x3D; ip &#x3D; next的地址</span><br><span class="line">    sub ax, (offset next - offset shell)</span><br><span class="line">    mov bx, ax</span><br><span class="line">    </span><br><span class="line">    mov cs:[old_ds+bx], ds</span><br><span class="line">    mov cs:[old_es+bx], es</span><br><span class="line">    mov bp, ds ; psp</span><br><span class="line">    add bp, 10h; 首段段地址</span><br><span class="line">    mov cx, [reloc_count+bx]</span><br><span class="line">    push cs</span><br><span class="line">    pop ds</span><br><span class="line">    mov si, offset reloc_table</span><br><span class="line">    add si, bx</span><br><span class="line">    </span><br><span class="line">reloc_next_item:</span><br><span class="line">    mov ax, [si] ;lodsw ; ax &#x3D; ds:[si] ; offset</span><br><span class="line">    mov dx, [si+2]                      ; delta segment</span><br><span class="line">    add dx, bp</span><br><span class="line">    mov es, dx</span><br><span class="line">    </span><br><span class="line">    add es:[di], bp</span><br><span class="line">    add si, 4</span><br><span class="line">    dec cx</span><br><span class="line">    jnz reloc_next_item</span><br><span class="line">    </span><br><span class="line">    mov ax, [csip+bx]</span><br><span class="line">    mov dx, [csip+bx+2]</span><br><span class="line">    add dx, bp</span><br><span class="line">    push dx</span><br><span class="line">    push ax</span><br><span class="line">    mov ds, cs:[bx+old_ds]</span><br><span class="line">    mov es, cs:[bx+old_es]</span><br><span class="line">    retf</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">old_ds dw 0</span><br><span class="line">old_es dw 0</span><br><span class="line">csip dw 0, 0</span><br><span class="line">reloc_count dw 0</span><br><span class="line">reloc_table db label byte ; 定义为db但不赋初值</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">code ends</span><br><span class="line">end shell</span><br></pre></td></tr></table></figure>
+
+mov ax, ds
+add ax, 10
+add ax, 2
+push ax
+mov ax, 28h
+push ax
+retf ; pop ip, pop cs<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">code segment
+assume cd:code
+shell:
+    call next
+next:
+    pop ax ; ax &#x3D; ip &#x3D; next的地址
+    sub ax, (offset next - offset shell)
+    mov bx, ax
+    
+    mov cs:[old_ds+bx], ds
+    mov cs:[old_es+bx], es
+    mov bp, ds ; psp
+    add bp, 10h; 首段段地址
+    mov cx, [reloc_count+bx]
+    push cs
+    pop ds
+    mov si, offset reloc_table
+    add si, bx
+    
+reloc_next_item:
+    mov ax, [si] ;lodsw ; ax &#x3D; ds:[si] ; offset
+    mov dx, [si+2]                      ; delta segment
+    add dx, bp
+    mov es, dx
+    
+    add es:[di], bp
+    add si, 4
+    dec cx
+    jnz reloc_next_item
+    
+    mov ax, [csip+bx]
+    mov dx, [csip+bx+2]
+    add dx, bp
+    push dx
+    push ax
+    mov ds, cs:[bx+old_ds]
+    mov es, cs:[bx+old_es]
+    retf
+    
+
+
+old_ds dw 0
+old_es dw 0
+csip dw 0, 0
+reloc_count dw 0
+reloc_table db label byte ; 定义为db但不赋初值
+
+
+code ends
+end shell<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>注意加密堆栈后引发的解密对新数据的影响的问题。</p>
 <p>保存ss和sp，之后修改它为一段预留空间</p>
@@ -431,7 +561,16 @@
 <h2 id="查gdt表"><a href="#查gdt表" class="headerlink" title="查gdt表"></a>查gdt表</h2><p>设<code>ds=10h</code>，现通过查gdt表获得其物理地址。gdt表储存描述符，每个占8字节。表的首地址存在于<code>gdtr</code>寄存器。</p>
 <p>gdt+10h xx xx xx xx xx xx xx xx</p>
 <h2 id="idt中断描述符表"><a href="#idt中断描述符表" class="headerlink" title="idt中断描述符表"></a>idt中断描述符表</h2><p>首地址存在于<code>idtr</code>中。每项有8字节。基址2字节，偏移4字节，剩余2字节记录权限。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">lgdt fword ptr gdt ; 把gdt表的首地址和长度载入到gdtr寄存器</span><br><span class="line"></span><br><span class="line">cli</span><br><span class="line">smsw ax</span><br><span class="line">and ax, 1Fh</span><br><span class="line">or al, 1</span><br><span class="line">lmsw ax; enable PE bit of MSW or CR0</span><br><span class="line">db 0EAh ; JMP FAR PTR</span><br><span class="line">dw 00h</span><br><span class="line">dw pseg_</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">lgdt fword ptr gdt ; 把gdt表的首地址和长度载入到gdtr寄存器
+
+cli
+smsw ax
+and ax, 1Fh
+or al, 1
+lmsw ax; enable PE bit of MSW or CR0
+db 0EAh ; JMP FAR PTR
+dw 00h
+dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
     </div>
 
     
