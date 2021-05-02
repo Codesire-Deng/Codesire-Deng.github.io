@@ -1,116 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C++ Multithreading</title>
-    <url>/2021/04/01/C-thread/</url>
-    <content><![CDATA[<p>不同语言/操作系统/硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。<br>C++ STL的线程库就是一个好例子。</p>
-<h2 id="Thread-线程"><a href="#Thread-线程" class="headerlink" title="Thread 线程"></a>Thread 线程</h2><p><a href="https://en.cppreference.com/w/cpp/thread">cppreference thread</a></p>
-<span id="more"></span>
-
-<p><code>#include &lt;thread&gt;</code></p>
-<p>起一个线程！</p>
-<ul>
-<li><p><code>thread</code> 类</p>
-<ul>
-<li>默认构造不代表任何线程</li>
-<li>构造函数完成后立即就绪</li>
-<li>若子线程抛出异常，则调用<code>std::terminate</code>中止进程</li>
-<li>使用<code>thread_local</code>关键字，令变量的生命周期和所属线程相同</li>
-<li><code>join()</code> 调用者等待，直到线程执行完毕</li>
-<li><code>detach()</code> 分离线程和线程对象，此时可以安全地销毁线程对象。</li>
-<li><code>joinable()</code> 是否可以使用<code>join()</code>。正在运行中、未分离的线程都是 joinable.</li>
-</ul>
-</li>
-<li><p><code>this_thread</code> 命名空间</p>
-<ul>
-<li><code>yield()</code> 建议当前线程进入就绪状态</li>
-<li><code>get_id()</code> 获取线程id。结果可用<code>&lt;&lt;</code>序列化</li>
-<li><code>sleep_for(duration)</code>/<code>sleep_until(time_point)</code> 当前线程阻塞一段时间</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p>提到多线程，几乎避不开互斥、同步等概念。</p>
-<h2 id="Mutex-互斥锁"><a href="#Mutex-互斥锁" class="headerlink" title="Mutex 互斥锁"></a>Mutex 互斥锁</h2><p><a href="https://en.cppreference.com/w/cpp/header/mutex">cppreference mutex</a></p>
-<p><code>#include &lt;mutex&gt;</code></p>
-<p>主要用于保护<strong>数据</strong>的操作原子性。</p>
-<p>若多个线程请求同一个锁，而此锁尚未被释放，则当锁释放时，其中一个线程获得锁（退出阻塞），其余线程维持阻塞。</p>
-<ul>
-<li><code>mutex</code> 类<ul>
-<li><code>lock()</code> 阻塞，直到获得锁</li>
-<li><code>unlock()</code></li>
-<li><code>try_lock()</code> 若无法获得锁，则返回 false 但不阻塞</li>
-<li>小心<code>mutex</code>的生命周期。销毁一个被其他线程持有的锁是后果无定义的。</li>
-<li>销毁线程前应当释放锁，否则后果无定义。</li>
-<li>不可拷贝，不可移动</li>
-<li>同一线程不可对同一<code>mutex</code>多次上锁，这样做的后果是无定义的。</li>
-</ul>
-</li>
-<li><code>recursive_mutex</code> 类<ul>
-<li>同一线程可以多次上锁。上锁和解锁应一一对应。</li>
-<li>例如<code>std::lock_guard&lt;std::recursive_mutex&gt; lk(m);</code></li>
-</ul>
-</li>
-<li><code>timed_mutex</code> 类<ul>
-<li><code>try_lock_for(timeout_duration)</code> 最多等待一段时间，无法获得锁则返回 false</li>
-<li><code>try_lock_until(timeout_time)</code> 最多等待至一个时间点，无法获得锁则返回 false</li>
-</ul>
-</li>
-<li><code>recursive_timed_mutex</code> 类<ul>
-<li>混合了两者的功能</li>
-</ul>
-</li>
-<li><code>void lock(Lockable1&amp; lock1, Lockable2&amp; lock2, LockableN&amp;... lockn)</code> 全局函数<ul>
-<li>安全地“同时”请求多个互斥锁</li>
-<li>保证不会引发死锁</li>
-</ul>
-</li>
-<li><code>lock_guard</code> 类<ul>
-<li>RAII 请求和释放一个锁</li>
-<li><code>lock_guard( mutex_type&amp; m, std::adopt_lock_t t );</code>假定已经获得了锁</li>
-</ul>
-</li>
-<li><code>scoped_lock</code> 类<ul>
-<li>RAII 同时请求和释放多个锁</li>
-<li>保证不会引发死锁</li>
-</ul>
-</li>
-<li><code>void call_once( std::once_flag&amp; flag, Callable&amp;&amp; f, Args&amp;&amp;... args );</code> 函数<ul>
-<li>全局仅执行函数<code>f(args)</code>一次</li>
-<li>若<code>flag</code>是复位，则允许执行<code>f(args)</code></li>
-<li>支持多线程并发</li>
-<li>若<code>f(args)</code>正常结束，则<code>flag</code>置位，防止第二次调用</li>
-<li>若<code>f(args)</code>抛出未处理的异常，则<code>flag</code>保持复位，允许第二次调用</li>
-<li>一个<code>flag</code>可以对应多个<code>f</code>，不保证哪个函数先执行。</li>
-</ul>
-</li>
-</ul>
-<h2 id="Condition-Variable-条件变量"><a href="#Condition-Variable-条件变量" class="headerlink" title="Condition Variable 条件变量"></a>Condition Variable 条件变量</h2><p><a href="https://en.cppreference.com/w/cpp/thread/condition_variable">cppreference condition_variable</a></p>
-<p>条件变量可以用来阻塞一个或多个线程，直到某个活动线程修改一个共享变量（即条件），并通知条件变量。</p>
-<ol>
-<li>为了保护上述共享变量，需要上互斥锁。</li>
-<li>对比互斥锁的优势是：定向唤醒，占用资源低，事件驱动。</li>
-<li>被唤醒的线程需要手动或自动地检查条件，若条件失败，则再次被阻塞，等待被唤醒。</li>
-</ol>
-<p><code>#include &lt;condition_variable&gt;</code></p>
-<ul>
-<li><code>condition_variable</code>类<ul>
-<li>只有默认构造函数</li>
-<li><code>void wait( std::unique_lock&lt;std::mutex&gt;&amp; lock );</code>成员函数。  原子性地释放锁，然后进入阻塞。</li>
-<li><code>void wait( std::unique_lock&lt;std::mutex&gt;&amp; lock, Predicate pred );</code>成员函数  被唤醒后，只要<code>pred</code>不满足，就会再次阻塞。</li>
-<li><code>notify_one()</code>/<code>notify_all()</code>成员函数，唤醒关联的阻塞线程。当前线程应当事先释放锁。</li>
-<li><code>void notify_all_at_thread_exit( std::condition_variable&amp; cond, std::unique_lock&lt;std::mutex&gt; lk );</code> 全局函数。 线程退出时（所有thread_local被销毁后），释放锁，然后唤醒全部。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="Future-未来"><a href="#Future-未来" class="headerlink" title="Future 未来"></a>Future 未来</h2><p>未来再写 [doge] [doge] [doge]。</p>
-]]></content>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CG with OpenGL</title>
     <url>/2020/09/19/CG-with-OpenGL/</url>
     <content><![CDATA[<p>更新：现在都用核心模式了，推荐<a href="https://learnopengl-cn.github.io/">LearnOpenGL</a>，不推荐往下看啦。</p>
@@ -215,16 +105,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>跟我一起写Makefile</title>
-    <url>/2020/02/01/Makefile/</url>
-    <content><![CDATA[<p>路过一篇写得很到位的Makefile介绍文章，转载一下：</p>
-<p><a href="https://seisman.github.io/how-to-write-makefile/overview.html">seisman.github.io/how-to-write-makefile</a></p>
-]]></content>
-      <tags>
-        <tag>杂项</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo &amp; NexT 更新方式</title>
     <url>/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h3 id="更新Hexo"><a href="#更新Hexo" class="headerlink" title="更新Hexo"></a>更新Hexo</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm <span class="token function">install</span> -g cnpm                 <span class="token comment"># 升级 npm</span>
@@ -249,6 +129,207 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 ]]></content>
       <tags>
         <tag>减少脱发指南</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Concurrency With C++</title>
+    <url>/2021/04/01/Concurrency-with-C/</url>
+    <content><![CDATA[<p>不同语言/操作系统/硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。<br>C++ STL的线程支持库就是一个好例子。在这之前，最好先复习一下基础知识。</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><ul>
+<li><strong>不变量(invariants)</strong> 是指对数据结构的断言<ul>
+<li>例：某种帐本，任意前缀和不为负数。</li>
+<li>例：链表某个节点的后继的前驱是自己。</li>
+<li>众所周知，不良的并发编程会破坏不变量！</li>
+<li>破坏不变量的根源是写操作。</li>
+</ul>
+</li>
+<li>在并发中的<strong>竞争条件(race condition)</strong> 是指，任何结果依赖于在两个或多个线程上操作执行的相对顺序。<ul>
+<li>有问题的竞争条件会破坏不变量，引发Bug。</li>
+<li>Debug模式下可能无法发现有问题的竞争条件。</li>
+<li>下文的竞争条件默认是有问题的。</li>
+<li>在类内部使用互斥锁<em>不能</em>完全消除竞争条件。<ul>
+<li>例：<code>return &amp;locked_data;</code> 泄露指针或引用，使得数据离开内部锁的保护！</li>
+<li>例：<code>template&lt;typename F&gt; ... F(&amp;locked_data);</code> 可能已经泄露了指针或引用！</li>
+<li>例：<code>if (!s.empty()) s.pop();</code> 很可能引发一次不安全的pop！</li>
+<li>例：<code>tmp = s.top(); s.pop(); return tmp;</code> 在return时发生构造函数异常，数据丢失！</li>
+<li>解决办法：<ol>
+<li>传入引用或指针来接收返回值。缺点：一些类不支持赋值。</li>
+<li>要求拷贝/移动构造函数不抛出异常。缺点：用户说我偏不。</li>
+<li>返回指向原返回值的指针，最好配合shared_ptr。缺点：性能损耗。</li>
+<li>1+2 或者 1+3。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>死锁</strong><ul>
+<li>四要素：互斥，持有并等待，非抢占，循环等待。</li>
+<li>解决办法：<ol>
+<li>保证上锁的顺序是唯一的。</li>
+<li>使用<code>std::lock()</code>。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>锁的粒度</strong>是指单个锁保护的数据量和保护时间。<ul>
+<li>挑选合适的数据量大小。</li>
+<li>在耗时的操作中尽可能地释放锁，例如I/O操作。</li>
+</ul>
+</li>
+<li><strong>懒汉模式</strong>特指单例模式中的延迟初始化。<ul>
+<li>裸懒汉模式显然是线程不安全的。</li>
+<li>双重检查加锁也充满了陷阱，因为最外层的检查可能是错误的（赋好了指针，但未彻底完成初始化）！</li>
+<li>理想的解决方法是保证标志位是最后初始化的，而不要将指针看作标志位。</li>
+<li>使用<code>std::call_once</code>！</li>
+<li>还可以利用C++的static局部变量实现懒汉模式。C++11标准保证这是线程安全的！</li>
+</ul>
+</li>
+<li><strong>读写锁</strong>是指共享锁。<ul>
+<li>用于很少更新的数据结构。</li>
+<li>C++11啥也没有。</li>
+<li>C++14新增<code>shared_timed_mutex</code>。</li>
+<li>C++17新增<code>shared_mutex</code>，性能更好，好耶！</li>
+<li>推荐将<code>shared_mutex</code>声明为<code>mutable</code>。</li>
+<li>当心读者太多，写者饿死！</li>
+</ul>
+</li>
+<li><strong>递归锁</strong>允许一个线程多次上锁，但必须进行相同次数的释放锁。<ul>
+<li>例：<code>A.a()</code>需要锁，<code>A.b()</code>也需要锁，而且<code>A.a()</code>需要调用<code>A.b()</code>。</li>
+<li>不建议这样用，因为<code>A.b()</code>可能要面对错误的数据。</li>
+<li>建议抽出<code>A.a()</code>和<code>A.b()</code>的公共部分，成为一个新的私有函数，且不上锁（因为已经上了锁）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="Thread-线程"><a href="#Thread-线程" class="headerlink" title="Thread 线程"></a>Thread 线程</h2><p><a href="https://en.cppreference.com/w/cpp/thread">cppreference thread</a></p>
+<span id="more"></span>
+
+<p><code>#include &lt;thread&gt;</code></p>
+<p>起一个线程！</p>
+<ul>
+<li><p><code>thread</code> 类</p>
+<ul>
+<li>默认构造不代表任何线程</li>
+<li>构造函数完成后立即就绪</li>
+<li>若子线程抛出异常，则调用<code>std::terminate</code>中止进程</li>
+<li>使用<code>thread_local</code>关键字，令变量的生命周期和所属线程相同</li>
+<li><code>join()</code> 调用者等待，直到线程执行完毕</li>
+<li><code>detach()</code> 分离线程和线程对象，此时可以安全地销毁线程对象。</li>
+<li><code>joinable()</code> 是否可以使用<code>join()</code>。正在运行中、未分离的线程都是 joinable.</li>
+</ul>
+</li>
+<li><p><code>this_thread</code> 命名空间</p>
+<ul>
+<li><code>yield()</code> 建议当前线程进入就绪状态</li>
+<li><code>get_id()</code> 获取线程id。结果可用<code>&lt;&lt;</code>序列化</li>
+<li><code>sleep_for(duration)</code>/<code>sleep_until(time_point)</code> 当前线程阻塞一段时间</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>提到多线程，几乎避不开互斥、同步等概念。</p>
+<h2 id="Mutex-互斥锁"><a href="#Mutex-互斥锁" class="headerlink" title="Mutex 互斥锁"></a>Mutex 互斥锁</h2><p><a href="https://en.cppreference.com/w/cpp/header/mutex">cppreference mutex</a></p>
+<p><code>#include &lt;mutex&gt;</code></p>
+<p>主要用于保护<strong>数据</strong>的操作原子性。</p>
+<p>若多个线程请求同一个锁，而此锁尚未被释放，则当锁释放时，其中一个线程获得锁（退出阻塞），其余线程维持阻塞。</p>
+<ul>
+<li><code>mutex</code> 类<ul>
+<li><code>lock()</code> 阻塞，直到获得锁</li>
+<li><code>unlock()</code></li>
+<li><code>try_lock()</code> 若无法获得锁，则返回 false 但不阻塞</li>
+<li>小心<code>mutex</code>的生命周期。销毁一个被其他线程持有的锁是后果无定义的。</li>
+<li>销毁线程前应当释放锁，否则后果无定义。</li>
+<li>不可拷贝，不可移动</li>
+<li>同一线程不可对同一<code>mutex</code>多次上锁，这样做的后果是无定义的。</li>
+</ul>
+</li>
+<li><code>recursive_mutex</code> 类<ul>
+<li>同一线程可以多次上锁。上锁和解锁应一一对应。</li>
+<li>例如<code>std::lock_guard&lt;std::recursive_mutex&gt; lk(m);</code></li>
+</ul>
+</li>
+<li><code>timed_mutex</code> 类<ul>
+<li><code>try_lock_for(timeout_duration)</code> 最多等待一段时间，无法获得锁则返回 false</li>
+<li><code>try_lock_until(timeout_time)</code> 最多等待至一个时间点，无法获得锁则返回 false</li>
+</ul>
+</li>
+<li><code>recursive_timed_mutex</code> 类<ul>
+<li>混合了两者的功能</li>
+</ul>
+</li>
+<li><code>void lock(Lockable1&amp; lock1, Lockable2&amp; lock2, LockableN&amp;... lockn)</code> 全局函数<ul>
+<li>安全地“同时”请求多个互斥锁</li>
+<li>保证不会引发死锁</li>
+</ul>
+</li>
+<li><code>lock_guard</code> 类<ul>
+<li>RAII 请求和释放一个锁</li>
+<li>必须拥有一个锁</li>
+<li><code>lock_guard( mutex_type&amp; m, std::adopt_lock_t t );</code>假定已经获得了锁</li>
+</ul>
+</li>
+<li><code>scoped_lock</code> 类<ul>
+<li>RAII 同时请求和释放多个锁</li>
+<li>保证不会引发死锁</li>
+</ul>
+</li>
+<li><code>unique_lock</code> 类<ul>
+<li>RAII 独占锁</li>
+<li>可以主动解锁。暂时或提前释放锁通常可提高时间性能。</li>
+<li>可以不拥有锁，但有空间和性能损耗。仅在需要延迟上锁或转移所有权才考虑使用。</li>
+<li>adopt_lock假定已经获得了锁，defer_lock假定延迟获得锁。</li>
+<li>若延迟上锁，随后可用<code>std::lock(unique_lock, ...)</code>上锁。</li>
+</ul>
+</li>
+<li><code>shared_lock</code> 类<ul>
+<li>RAII 共享锁</li>
+</ul>
+</li>
+<li><code>void call_once( std::once_flag&amp; flag, Callable&amp;&amp; f, Args&amp;&amp;... args );</code> 函数<ul>
+<li>全局仅执行函数<code>f(args)</code>一次</li>
+<li>若<code>flag</code>是复位，则允许执行<code>f(args)</code></li>
+<li>支持多线程并发</li>
+<li>若<code>f(args)</code>正常结束，则<code>flag</code>置位，防止第二次调用</li>
+<li>若<code>f(args)</code>抛出未处理的异常，则<code>flag</code>保持复位，允许第二次调用</li>
+<li>一个<code>flag</code>可以对应多个<code>f</code>，不保证哪个函数先执行。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Condition-Variable-条件变量"><a href="#Condition-Variable-条件变量" class="headerlink" title="Condition Variable 条件变量"></a>Condition Variable 条件变量</h2><p><a href="https://en.cppreference.com/w/cpp/thread/condition_variable">cppreference condition_variable</a></p>
+<p>条件变量可以用来阻塞一个或多个线程，直到某个活动线程修改一个共享变量（即条件），并通知条件变量。</p>
+<ol>
+<li>为了保护上述共享变量，需要上互斥锁。</li>
+<li>对比互斥锁的优势是：定向唤醒，占用资源低，事件驱动。</li>
+<li>被唤醒的线程需要手动或自动地检查条件，若条件失败，则再次被阻塞，等待被唤醒。</li>
+</ol>
+<p><code>#include &lt;condition_variable&gt;</code></p>
+<ul>
+<li><code>condition_variable</code>类<ul>
+<li>只有默认构造函数</li>
+<li><code>void wait( std::unique_lock&lt;std::mutex&gt;&amp; lock );</code>成员函数。  原子性地释放锁，然后进入阻塞。</li>
+<li><code>void wait( std::unique_lock&lt;std::mutex&gt;&amp; lock, Predicate pred );</code>成员函数  被唤醒后，只要<code>pred</code>不满足，就会再次阻塞。</li>
+<li><code>notify_one()</code>/<code>notify_all()</code>成员函数，唤醒关联的阻塞线程。当前线程应当事先释放锁。</li>
+<li><code>void notify_all_at_thread_exit( std::condition_variable&amp; cond, std::unique_lock&lt;std::mutex&gt; lk );</code> 全局函数。 线程退出时（所有thread_local被销毁后），释放锁，然后唤醒全部。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="Future-未来"><a href="#Future-未来" class="headerlink" title="Future 未来"></a>Future 未来</h2><p>未来再写 [doge] [doge] [doge]。</p>
+]]></content>
+      <tags>
+        <tag>并发编程</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>跟我一起写Makefile</title>
+    <url>/2020/02/01/Makefile/</url>
+    <content><![CDATA[<p>路过一篇写得很到位的Makefile介绍文章，转载一下：</p>
+<p><a href="https://seisman.github.io/how-to-write-makefile/overview.html">seisman.github.io/how-to-write-makefile</a></p>
+]]></content>
+      <tags>
+        <tag>杂项</tag>
       </tags>
   </entry>
   <entry>
@@ -566,7 +647,7 @@ State<span class="token operator">*</span> q<span class="token punctuation">[</s
 <span id="more"></span>
 
 <h2 id="设"><a href="#设" class="headerlink" title="设"></a>设</h2><ol>
-<li>自动机能识别的所有字符串集合 **Reg(A)**，其中的字符串$x$满足$trans(init, x)\in end$</li>
+<li>自动机能识别的所有字符串集合<strong>Reg(A)</strong> ，其中的字符串$x$满足$trans(init, x)\in end$</li>
 <li>从状态$s$开始能识别的字符串 <strong>Reg(s)</strong></li>
 <li>后缀自动机<strong>SAM</strong>，一个能识别母串$S$的所有后缀的自动机。$SAM(x)=true$当且仅当$x$是$S$的后缀。</li>
 <li>$trans(init, str)$即从初始状态读入$str$后到达的状态<strong>ST(str)</strong> <em>（ST是state的缩写)</em></li>
@@ -2417,36 +2498,6 @@ dw 00h
 dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       <tags>
         <tag>杂项</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>生命科学课程资料</title>
-    <url>/2019/10/18/%E7%94%9F%E5%91%BD%E7%A7%91%E5%AD%A6%E8%AE%A8%E8%AE%BA%E8%AF%BE/</url>
-    <content><![CDATA[<h1 id="讨论课资料"><a href="#讨论课资料" class="headerlink" title="讨论课资料"></a>讨论课资料</h1><h2 id="演示文稿"><a href="#演示文稿" class="headerlink" title="演示文稿"></a>演示文稿</h2><table>
-<thead>
-<tr>
-<th align="center">主题</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><a href="https://codesire-deng.github.io/bio_BSE/index.html">生物伦理与物种平等</a></td>
-</tr>
-<tr>
-<td align="center"><a href="https://codesire-deng.github.io/bio_Herb/index.html">校内常见植物辨识</a></td>
-</tr>
-<tr>
-<td align="center"><a href="https://codesire-deng.github.io/bioMetabolism/index.html#/">代谢与疾病</a></td>
-</tr>
-<tr>
-<td align="center"><a href="https://codesire-deng.github.io/bioDiet/index.html#/">饮食与健康</a></td>
-</tr>
-<tr>
-<td align="center"><a href="https://codesire-deng.github.io/bioNobelPrizeThinking/index.html#/">诺奖的思考</a></td>
-</tr>
-</tbody></table>
-]]></content>
-      <tags>
-        <tag>专业无关</tag>
       </tags>
   </entry>
   <entry>

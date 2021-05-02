@@ -23,21 +23,22 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}};
   </script>
-<meta name="description" content="不同语言&#x2F;操作系统&#x2F;硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。C++ STL的线程库就是一个好例子。 Thread 线程cppreference thread">
+<meta name="description" content="不同语言&#x2F;操作系统&#x2F;硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。C++ STL的线程支持库就是一个好例子。在这之前，最好先复习一下基础知识。 基础知识 不变量(invariants) 是指对数据结构的断言 例：某种帐本，任意前缀和不为负数。 例：链表某个节点的后继的前驱是自己。 众所周知，不良的并发编程会破坏不变量！ 破坏不变量的根源是写操作。   在并发中的竞争条件(rac">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++ Multithreading">
-<meta property="og:url" content="https://codesire-deng.github.io/2021/04/01/C-thread/index.html">
+<meta property="og:title" content="Concurrency With C++">
+<meta property="og:url" content="https://codesire-deng.github.io/2021/04/01/Concurrency-with-C/index.html">
 <meta property="og:site_name" content="等疾风">
-<meta property="og:description" content="不同语言&#x2F;操作系统&#x2F;硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。C++ STL的线程库就是一个好例子。 Thread 线程cppreference thread">
+<meta property="og:description" content="不同语言&#x2F;操作系统&#x2F;硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。C++ STL的线程支持库就是一个好例子。在这之前，最好先复习一下基础知识。 基础知识 不变量(invariants) 是指对数据结构的断言 例：某种帐本，任意前缀和不为负数。 例：链表某个节点的后继的前驱是自己。 众所周知，不良的并发编程会破坏不变量！ 破坏不变量的根源是写操作。   在并发中的竞争条件(rac">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-01T02:47:34.000Z">
-<meta property="article:modified_time" content="2021-04-01T12:36:40.322Z">
+<meta property="article:modified_time" content="2021-05-02T18:17:41.031Z">
 <meta property="article:author" content="等疾风">
+<meta property="article:tag" content="并发编程">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://codesire-deng.github.io/2021/04/01/C-thread/">
+<link rel="canonical" href="https://codesire-deng.github.io/2021/04/01/Concurrency-with-C/">
 
 
 <script class="page-configurations">
@@ -49,7 +50,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>C++ Multithreading | 等疾风</title>
+<title>Concurrency With C++ | 等疾风</title>
   
 
 
@@ -187,7 +188,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">Thread 线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mutex-%E4%BA%92%E6%96%A5%E9%94%81"><span class="nav-number">2.</span> <span class="nav-text">Mutex 互斥锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Condition-Variable-%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">Condition Variable 条件变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Future-%E6%9C%AA%E6%9D%A5"><span class="nav-number">4.</span> <span class="nav-text">Future 未来</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Thread-%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">Thread 线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mutex-%E4%BA%92%E6%96%A5%E9%94%81"><span class="nav-number">3.</span> <span class="nav-text">Mutex 互斥锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Condition-Variable-%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">Condition Variable 条件变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Future-%E6%9C%AA%E6%9D%A5"><span class="nav-number">5.</span> <span class="nav-text">Future 未来</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -203,7 +204,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -260,7 +261,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2021/04/01/C-thread/">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2021/04/01/Concurrency-with-C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
@@ -273,7 +274,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          C++ Multithreading
+          Concurrency With C++
         </h1>
 
         <div class="post-meta-container">
@@ -283,10 +284,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2021-04-01 10:47:34 / 修改时间：20:36:40" itemprop="dateCreated datePublished" datetime="2021-04-01T10:47:34+08:00">2021-04-01</time>
+      <time title="创建时间：2021-04-01 10:47:34" itemprop="dateCreated datePublished" datetime="2021-04-01T10:47:34+08:00">2021-04-01</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-05-03 02:17:41" itemprop="dateModified" datetime="2021-05-03T02:17:41+08:00">2021-05-03</time>
+      </span>
 
   
 </div>
@@ -298,7 +305,74 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>不同语言/操作系统/硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。<br>C++ STL的线程库就是一个好例子。</p>
+        <p>不同语言/操作系统/硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。<br>C++ STL的线程支持库就是一个好例子。在这之前，最好先复习一下基础知识。</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><ul>
+<li><strong>不变量(invariants)</strong> 是指对数据结构的断言<ul>
+<li>例：某种帐本，任意前缀和不为负数。</li>
+<li>例：链表某个节点的后继的前驱是自己。</li>
+<li>众所周知，不良的并发编程会破坏不变量！</li>
+<li>破坏不变量的根源是写操作。</li>
+</ul>
+</li>
+<li>在并发中的<strong>竞争条件(race condition)</strong> 是指，任何结果依赖于在两个或多个线程上操作执行的相对顺序。<ul>
+<li>有问题的竞争条件会破坏不变量，引发Bug。</li>
+<li>Debug模式下可能无法发现有问题的竞争条件。</li>
+<li>下文的竞争条件默认是有问题的。</li>
+<li>在类内部使用互斥锁<em>不能</em>完全消除竞争条件。<ul>
+<li>例：<code>return &amp;locked_data;</code> 泄露指针或引用，使得数据离开内部锁的保护！</li>
+<li>例：<code>template&lt;typename F&gt; ... F(&amp;locked_data);</code> 可能已经泄露了指针或引用！</li>
+<li>例：<code>if (!s.empty()) s.pop();</code> 很可能引发一次不安全的pop！</li>
+<li>例：<code>tmp = s.top(); s.pop(); return tmp;</code> 在return时发生构造函数异常，数据丢失！</li>
+<li>解决办法：<ol>
+<li>传入引用或指针来接收返回值。缺点：一些类不支持赋值。</li>
+<li>要求拷贝/移动构造函数不抛出异常。缺点：用户说我偏不。</li>
+<li>返回指向原返回值的指针，最好配合shared_ptr。缺点：性能损耗。</li>
+<li>1+2 或者 1+3。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>死锁</strong><ul>
+<li>四要素：互斥，持有并等待，非抢占，循环等待。</li>
+<li>解决办法：<ol>
+<li>保证上锁的顺序是唯一的。</li>
+<li>使用<code>std::lock()</code>。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>锁的粒度</strong>是指单个锁保护的数据量和保护时间。<ul>
+<li>挑选合适的数据量大小。</li>
+<li>在耗时的操作中尽可能地释放锁，例如I/O操作。</li>
+</ul>
+</li>
+<li><strong>懒汉模式</strong>特指单例模式中的延迟初始化。<ul>
+<li>裸懒汉模式显然是线程不安全的。</li>
+<li>双重检查加锁也充满了陷阱，因为最外层的检查可能是错误的（赋好了指针，但未彻底完成初始化）！</li>
+<li>理想的解决方法是保证标志位是最后初始化的，而不要将指针看作标志位。</li>
+<li>使用<code>std::call_once</code>！</li>
+<li>还可以利用C++的static局部变量实现懒汉模式。C++11标准保证这是线程安全的！</li>
+</ul>
+</li>
+<li><strong>读写锁</strong>是指共享锁。<ul>
+<li>用于很少更新的数据结构。</li>
+<li>C++11啥也没有。</li>
+<li>C++14新增<code>shared_timed_mutex</code>。</li>
+<li>C++17新增<code>shared_mutex</code>，性能更好，好耶！</li>
+<li>推荐将<code>shared_mutex</code>声明为<code>mutable</code>。</li>
+<li>当心读者太多，写者饿死！</li>
+</ul>
+</li>
+<li><strong>递归锁</strong>允许一个线程多次上锁，但必须进行相同次数的释放锁。<ul>
+<li>例：<code>A.a()</code>需要锁，<code>A.b()</code>也需要锁，而且<code>A.a()</code>需要调用<code>A.b()</code>。</li>
+<li>不建议这样用，因为<code>A.b()</code>可能要面对错误的数据。</li>
+<li>建议抽出<code>A.a()</code>和<code>A.b()</code>的公共部分，成为一个新的私有函数，且不上锁（因为已经上了锁）。</li>
+</ul>
+</li>
+</ul>
+<hr>
 <h2 id="Thread-线程"><a href="#Thread-线程" class="headerlink" title="Thread 线程"></a>Thread 线程</h2><p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/thread">cppreference thread</a></p>
 <span id="more"></span>
 
@@ -362,12 +436,25 @@
 </li>
 <li><code>lock_guard</code> 类<ul>
 <li>RAII 请求和释放一个锁</li>
+<li>必须拥有一个锁</li>
 <li><code>lock_guard( mutex_type&amp; m, std::adopt_lock_t t );</code>假定已经获得了锁</li>
 </ul>
 </li>
 <li><code>scoped_lock</code> 类<ul>
 <li>RAII 同时请求和释放多个锁</li>
 <li>保证不会引发死锁</li>
+</ul>
+</li>
+<li><code>unique_lock</code> 类<ul>
+<li>RAII 独占锁</li>
+<li>可以主动解锁。暂时或提前释放锁通常可提高时间性能。</li>
+<li>可以不拥有锁，但有空间和性能损耗。仅在需要延迟上锁或转移所有权才考虑使用。</li>
+<li>adopt_lock假定已经获得了锁，defer_lock假定延迟获得锁。</li>
+<li>若延迟上锁，随后可用<code>std::lock(unique_lock, ...)</code>上锁。</li>
+</ul>
+</li>
+<li><code>shared_lock</code> 类<ul>
+<li>RAII 共享锁</li>
 </ul>
 </li>
 <li><code>void call_once( std::once_flag&amp; flag, Callable&amp;&amp; f, Args&amp;&amp;... args );</code> 函数<ul>
@@ -423,6 +510,7 @@
 </div>
 
           <div class="post-tags">
+              <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 并发编程</a>
               <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
           </div>
 
@@ -519,7 +607,7 @@ NexT.utils.loadComments('.gitalk-container', () => {
       repo        : 'Gitment-for-Codesire-Deng-s-Blog',
       owner       : 'Codesire-Deng',
       admin       : ['Codesire-Deng'],
-      id          : '02659c694a5bebe3ebffe0773ad371e3',
+      id          : '52ae0c8a8a234ef2ba5b1e82eef332b2',
       proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
         language: '',
       distractionFreeMode: false
