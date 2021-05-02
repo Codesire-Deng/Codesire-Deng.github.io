@@ -165,7 +165,7 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 </li>
 <li><strong>死锁</strong><ul>
 <li>四要素：互斥，持有并等待，非抢占，循环等待。</li>
-<li>解决办法：<ol>
+<li>解决办法：破坏四要素中任意一个<ol>
 <li>保证上锁的顺序是唯一的。</li>
 <li>使用<code>std::lock()</code>。</li>
 </ol>
