@@ -3572,7 +3572,6 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <h1 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h1><ul>
 <li>应当将空指针写为<code>nullptr</code>. <code>delete</code>和<code>delete []</code> 都可以作用于空指针.</li>
 <li>const 指针 将受保护，非const 指针 不能复制其值（除非利用强制类型转换），不允许通过const 指针 修改所指向值。<br>为了防止欺骗const检查，不允许令const 二级指针指向非const 一级指针</li>
-<li>使用</li>
 </ul>
 <h1 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h1><ul>
 <li>声明：<code>typename (*pointer name)(parameter list...);</code></li>
