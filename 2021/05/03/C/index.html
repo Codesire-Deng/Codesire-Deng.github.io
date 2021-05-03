@@ -31,7 +31,7 @@
 <meta property="og:description" content="Since 2018&#x2F;6&#x2F;27">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-05-03T11:15:20.000Z">
-<meta property="article:modified_time" content="2021-05-03T13:33:19.205Z">
+<meta property="article:modified_time" content="2021-05-03T17:02:28.662Z">
 <meta property="article:author" content="等疾风">
 <meta property="article:tag" content="C++">
 <meta property="article:tag" content="语法">
@@ -188,7 +188,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#union-%E5%85%B1%E7%94%A8%E4%BD%93"><span class="nav-number">1.</span> <span class="nav-text">union 共用体</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enum-%E6%9E%9A%E4%B8%BE"><span class="nav-number">2.</span> <span class="nav-text">enum 枚举</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#char-%E5%AD%97%E7%AC%A6%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">char 字符型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#lt-cstring-gt-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">&lt;cstring&gt;常用函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vector%E4%B8%8Earray-%E6%A8%A1%E6%9D%BF%E7%B1%BB"><span class="nav-number">4.</span> <span class="nav-text">vector与array 模板类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%BB%E5%85%A5%E8%A1%8C"><span class="nav-number">5.</span> <span class="nav-text">读入行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fstream-%E6%96%87%E4%BB%B6%E6%B5%81%EF%BC%88%E4%BB%A5fin-fout%E4%B8%BA%E4%BE%8B%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">fstream 文件流（以fin, fout为例）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#switch-%E7%BB%93%E6%9E%84%E6%8E%A7%E5%88%B6"><span class="nav-number">7.</span> <span class="nav-text">switch 结构控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%82%E9%A1%B9"><span class="nav-number">8.</span> <span class="nav-text">杂项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%87%E9%92%88"><span class="nav-number">9.</span> <span class="nav-text">指针</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88"><span class="nav-number">10.</span> <span class="nav-text">函数指针</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="nav-number">11.</span> <span class="nav-text">参数传递</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%EF%BC%88%E5%87%BD%E6%95%B0%E5%A4%9A%E6%80%81%EF%BC%89"><span class="nav-number">12.</span> <span class="nav-text">函数重载（函数多态）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-number">13.</span> <span class="nav-text">引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%AD%E8%B7%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">14.</span> <span class="nav-text">短路运算符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#inline"><span class="nav-number">15.</span> <span class="nav-text">inline</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#decltype-expression"><span class="nav-number">16.</span> <span class="nav-text">decltype(expression)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF"><span class="nav-number">17.</span> <span class="nav-text">模板</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%90%8D"><span class="nav-number">18.</span> <span class="nav-text">::变量名</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%82%A8%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="nav-number">19.</span> <span class="nav-text">储存空间</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%82%A8%E5%AD%98%E8%AF%B4%E6%98%8E%E7%AC%A6"><span class="nav-number">20.</span> <span class="nav-text">储存说明符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E6%8C%87%E5%87%BA%E8%AF%AD%E8%A8%80%E9%93%BE%E6%8E%A5%E6%80%A7%E4%BB%A5%E5%B8%AE%E5%8A%A9%E9%93%BE%E6%8E%A5%E7%A8%8B%E5%BA%8F%E5%AF%BB%E6%89%BE%E5%8C%B9%E9%85%8D%E5%87%BD%E6%95%B0"><span class="nav-number">21.</span> <span class="nav-text">显式指出语言链接性以帮助链接程序寻找匹配函数:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cv-%E9%99%90%E5%AE%9A%E7%AC%A6"><span class="nav-number">22.</span> <span class="nav-text">cv-限定符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#new%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">23.</span> <span class="nav-text">new运算符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8D%E7%A7%B0%E7%A9%BA%E9%97%B4"><span class="nav-number">24.</span> <span class="nav-text">名称空间</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB"><span class="nav-number">25.</span> <span class="nav-text">类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lambda"><span class="nav-number">26.</span> <span class="nav-text">Lambda</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%BE%E4%BE%8B"><span class="nav-number">26.1.</span> <span class="nav-text">使用举例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%B3%E5%80%BC"><span class="nav-number">27.</span> <span class="nav-text">右值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8"><span class="nav-number">27.1.</span> <span class="nav-text">右值引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89"><span class="nav-number">27.2.</span> <span class="nav-text">移动语义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91"><span class="nav-number">27.3.</span> <span class="nav-text">完美转发</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#union-%E5%85%B1%E7%94%A8%E4%BD%93"><span class="nav-number">1.</span> <span class="nav-text">union 共用体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#enum-%E6%9E%9A%E4%B8%BE"><span class="nav-number">2.</span> <span class="nav-text">enum 枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#char-%E5%AD%97%E7%AC%A6%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">char 字符型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-cstring-gt-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">&lt;cstring&gt;常用函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vector%E4%B8%8Earray-%E6%A8%A1%E6%9D%BF%E7%B1%BB"><span class="nav-number">4.</span> <span class="nav-text">vector与array 模板类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BB%E5%85%A5%E8%A1%8C"><span class="nav-number">5.</span> <span class="nav-text">读入行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fstream-%E6%96%87%E4%BB%B6%E6%B5%81%EF%BC%88%E4%BB%A5fin-fout%E4%B8%BA%E4%BE%8B%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">fstream 文件流（以fin, fout为例）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switch-%E7%BB%93%E6%9E%84%E6%8E%A7%E5%88%B6"><span class="nav-number">7.</span> <span class="nav-text">switch 结构控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%82%E9%A1%B9"><span class="nav-number">8.</span> <span class="nav-text">杂项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88"><span class="nav-number">9.</span> <span class="nav-text">指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88"><span class="nav-number">10.</span> <span class="nav-text">函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="nav-number">11.</span> <span class="nav-text">参数传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%EF%BC%88%E5%87%BD%E6%95%B0%E5%A4%9A%E6%80%81%EF%BC%89"><span class="nav-number">12.</span> <span class="nav-text">函数重载（函数多态）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-number">13.</span> <span class="nav-text">引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%AD%E8%B7%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">14.</span> <span class="nav-text">短路运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inline"><span class="nav-number">15.</span> <span class="nav-text">inline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#decltype-expression"><span class="nav-number">16.</span> <span class="nav-text">decltype(expression)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF"><span class="nav-number">17.</span> <span class="nav-text">模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%90%8D"><span class="nav-number">18.</span> <span class="nav-text">::变量名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%82%A8%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="nav-number">19.</span> <span class="nav-text">储存空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%82%A8%E5%AD%98%E8%AF%B4%E6%98%8E%E7%AC%A6"><span class="nav-number">20.</span> <span class="nav-text">储存说明符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E6%8C%87%E5%87%BA%E8%AF%AD%E8%A8%80%E9%93%BE%E6%8E%A5%E6%80%A7%E4%BB%A5%E5%B8%AE%E5%8A%A9%E9%93%BE%E6%8E%A5%E7%A8%8B%E5%BA%8F%E5%AF%BB%E6%89%BE%E5%8C%B9%E9%85%8D%E5%87%BD%E6%95%B0"><span class="nav-number">21.</span> <span class="nav-text">显式指出语言链接性以帮助链接程序寻找匹配函数:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cv-%E9%99%90%E5%AE%9A%E7%AC%A6"><span class="nav-number">22.</span> <span class="nav-text">cv-限定符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">23.</span> <span class="nav-text">new运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8D%E7%A7%B0%E7%A9%BA%E9%97%B4"><span class="nav-number">24.</span> <span class="nav-text">名称空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB"><span class="nav-number">25.</span> <span class="nav-text">类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda"><span class="nav-number">26.</span> <span class="nav-text">Lambda</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%BE%E4%BE%8B"><span class="nav-number">26.1.</span> <span class="nav-text">使用举例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B3%E5%80%BC"><span class="nav-number">27.</span> <span class="nav-text">右值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8"><span class="nav-number">27.1.</span> <span class="nav-text">右值引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89"><span class="nav-number">27.2.</span> <span class="nav-text">移动语义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91"><span class="nav-number">27.3.</span> <span class="nav-text">完美转发</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8"><span class="nav-number">28.</span> <span class="nav-text">异常</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -284,10 +284,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2021-05-03 19:15:20 / 修改时间：21:33:19" itemprop="dateCreated datePublished" datetime="2021-05-03T19:15:20+08:00">2021-05-03</time>
+      <time title="创建时间：2021-05-03 19:15:20" itemprop="dateCreated datePublished" datetime="2021-05-03T19:15:20+08:00">2021-05-03</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-05-04 01:02:28" itemprop="dateModified" datetime="2021-05-04T01:02:28+08:00">2021-05-04</time>
+      </span>
 
   
 </div>
@@ -302,12 +308,12 @@
         <p>Since 2018/6/27</p>
 <span id="more"></span>
 
-<h1 id="union-共用体"><a href="#union-共用体" class="headerlink" title="union 共用体"></a>union 共用体</h1><ul>
+<h2 id="union-共用体"><a href="#union-共用体" class="headerlink" title="union 共用体"></a>union 共用体</h2><ul>
 <li>union可匿名，常在结构定义中。</li>
 <li>用于节省内存，尤其在嵌入式系统中。</li>
 <li>union的定义形式与struct相同。</li>
 </ul>
-<h1 id="enum-枚举"><a href="#enum-枚举" class="headerlink" title="enum 枚举"></a>enum 枚举</h1><ul>
+<h2 id="enum-枚举"><a href="#enum-枚举" class="headerlink" title="enum 枚举"></a>enum 枚举</h2><ul>
 <li>enum A {a,b,c};   首项默认为0，默认后项比前项大一。<br>A被看做一种类型，甚至可以省略；a,c,b被看做常量。<br>a,b,c可以自动提升为int, 但int不能自动转换为枚举类型，除非强制转换A（1）。<br>每个enum根据其常量的最大最小值确定其上下限。</li>
 <li>enum创建的常量是静态的, 可以用作静态类成员常量. 运行时所有对象不会包含枚举</li>
 <li><strong>更强的安全性--类作用域内枚举(C++11)</strong><ul>
@@ -321,7 +327,7 @@
 </li>
 <li>:type 放在枚举名后以指定底层, 否则将随实现而异.</li>
 </ul>
-<h1 id="char-字符型"><a href="#char-字符型" class="headerlink" title="char 字符型"></a>char 字符型</h1><ul>
+<h2 id="char-字符型"><a href="#char-字符型" class="headerlink" title="char 字符型"></a>char 字符型</h2><ul>
 <li>char类型被输入输出流区别对待。cout &lt;&lt; (int*) st &lt;&lt; endl;</li>
 <li>char类型数组的初始化被C++区别对待：<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">char</span> s1<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"abcd"</span><span class="token punctuation">;</span> 合法<span class="token punctuation">,</span><span class="token string">"abcd"</span>被转换为<span class="token punctuation">&#123;</span><span class="token string">'a'</span><span class="token punctuation">,</span><span class="token string">'b'</span><span class="token punctuation">,</span><span class="token string">'c'</span><span class="token punctuation">,</span><span class="token string">'d'</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> 可供修改
 <span class="token keyword">char</span> s2<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span> <span class="token operator">=</span> s1<span class="token punctuation">;</span> 错误，即使s1是<span class="token keyword">const</span>。
@@ -331,7 +337,7 @@
 <li>wchar_t可以表示系统使用的最大扩展字符集，输入输出用wcin,wcout</li>
 <li>raw r&quot;(a/b\c回车defg*)&quot;,   标识符  &quot;(   )&quot;  可变为 &quot;*@(  )*@&quot; 等等，保持平移对称</li>
 </ul>
-<h2 id="lt-cstring-gt-常用函数"><a href="#lt-cstring-gt-常用函数" class="headerlink" title="&lt;cstring&gt;常用函数"></a>&lt;cstring&gt;常用函数</h2><ul>
+<h3 id="lt-cstring-gt-常用函数"><a href="#lt-cstring-gt-常用函数" class="headerlink" title="&lt;cstring&gt;常用函数"></a>&lt;cstring&gt;常用函数</h3><ul>
 <li><code>char* strcpy(char* dest, const char* src)</code><ul>
 <li>以src覆盖dest, 直到遇到src的终止符.返回dest.</li>
 </ul>
@@ -361,19 +367,19 @@
 </ul>
 </li>
 </ul>
-<h1 id="vector与array-模板类"><a href="#vector与array-模板类" class="headerlink" title="vector与array 模板类"></a>vector与array 模板类</h1><ul>
+<h2 id="vector与array-模板类"><a href="#vector与array-模板类" class="headerlink" title="vector与array 模板类"></a>vector与array 模板类</h2><ul>
 <li><code>vector&lt;typename&gt; arr(n_elem);</code> 也可以不指定长度</li>
 <li><code>array&lt;typename, n_elem&gt; arr;</code> 定长数组。 等长数组可以直接复制。</li>
 <li>下标可越界，欲防止越界用 <code>arr.at(x)</code></li>
 </ul>
-<h1 id="读入行"><a href="#读入行" class="headerlink" title="读入行"></a>读入行</h1><ul>
+<h2 id="读入行"><a href="#读入行" class="headerlink" title="读入行"></a>读入行</h2><ul>
 <li><code>cin.getline(arr, arsize)</code> 空行不设置failbit</li>
 <li><code>cin.get(arr, arsize)</code> 行读取结束后不丢弃换行符（无法跨越）</li>
 <li><code>cin.get()</code> 读取一个任意字符，返回char值</li>
 <li><code>cin.get(char)</code>返回cin</li>
 <li><code>string</code>类读行 <code>getline(cin, str);</code></li>
 </ul>
-<h1 id="fstream-文件流（以fin-fout为例）"><a href="#fstream-文件流（以fin-fout为例）" class="headerlink" title="fstream 文件流（以fin, fout为例）"></a>fstream 文件流（以fin, fout为例）</h1><ul>
+<h2 id="fstream-文件流（以fin-fout为例）"><a href="#fstream-文件流（以fin-fout为例）" class="headerlink" title="fstream 文件流（以fin, fout为例）"></a>fstream 文件流（以fin, fout为例）</h2><ul>
 <li>打开文件： <code>.open(&quot;filename&quot;);</code></li>
 <li>关闭文件： <code>.close();</code></li>
 <li>检测最后一次读入遇到EOF： <code>fin.eof();</code></li>
@@ -382,7 +388,7 @@
 <li>检测最后一次读入完全正常： <code>fin.good();</code>  等价于 <code>(bool) fin &gt;&gt; value;</code></li>
 <li>清空错误标记，准许读入： <code>.clear();</code></li>
 </ul>
-<h1 id="switch-结构控制"><a href="#switch-结构控制" class="headerlink" title="switch 结构控制"></a>switch 结构控制</h1><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">switch</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span>
+<h2 id="switch-结构控制"><a href="#switch-结构控制" class="headerlink" title="switch 结构控制"></a>switch 结构控制</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">switch</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span>
 <span class="token punctuation">&#123;</span>
     <span class="token keyword">case</span> constValue1 <span class="token operator">:</span> statement1
             <span class="token keyword">break</span><span class="token punctuation">;</span><span class="token punctuation">(</span>optional<span class="token punctuation">)</span>
@@ -394,15 +400,15 @@
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
-<h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><ul>
+<h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><ul>
 <li><code>exit(EXIT_FAILURE);</code>   ： cstdlib, 同操作系统通信的参数值</li>
 <li><code>nullptr</code> : C++11 关键字, 空指针值.</li>
 </ul>
-<h1 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h1><ul>
+<h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><ul>
 <li>应当将空指针写为<code>nullptr</code>. <code>delete</code>和<code>delete []</code> 都可以作用于空指针.</li>
 <li>const 指针 将受保护，非const 指针 不能复制其值（除非利用强制类型转换），不允许通过const 指针 修改所指向值。<br>为了防止欺骗const检查，不允许令const 二级指针指向非const 一级指针</li>
 </ul>
-<h1 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h1><ul>
+<h2 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h2><ul>
 <li>声明：<code>typename (*pointer name)(parameter list...);</code></li>
 <li>获得某函数的地址：<code>pointer = function name;</code></li>
 <li>使用函数指针：<code>(*pointer)(parameter list...);</code>  或  <code>pointer(parameter list...);</code></li>
@@ -434,10 +440,10 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 </ul>
 </li>
 </ul>
-<h1 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h1><ul>
+<h2 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h2><ul>
 <li>参量（argument）是实参，参数（parameter）是形参。</li>
 </ul>
-<h1 id="函数重载（函数多态）"><a href="#函数重载（函数多态）" class="headerlink" title="函数重载（函数多态）"></a>函数重载（函数多态）</h1><ul>
+<h2 id="函数重载（函数多态）"><a href="#函数重载（函数多态）" class="headerlink" title="函数重载（函数多态）"></a>函数重载（函数多态）</h2><ul>
 <li>同名函数共存要求：函数特征标（函数参数列表）不同。</li>
 <li>当需要自动类型转换但选项不唯一时，编译不通过。</li>
 <li>不区分const和非const变量（包括指针）。</li>
@@ -445,7 +451,7 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 <li>区分指向const的引用和指向非const的引用。（编译器调用最匹配的版本）</li>
 <li>如果没有右值引用参数版本，右值参量将赋给const引用参量。</li>
 </ul>
-<h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><ul>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><ul>
 <li>左值引用<ul>
 <li>非const引用可以引自可修改的左值（防止修改const值和修改临时变量）</li>
 <li>const引用可以引自任何左值、右值（毕竟数值不会变）</li>
@@ -454,15 +460,15 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 </li>
 <li>指针也能被引用, 例如 int*&amp; x = ptr;</li>
 </ul>
-<h1 id="短路运算符"><a href="#短路运算符" class="headerlink" title="短路运算符"></a>短路运算符</h1><ul>
+<h2 id="短路运算符"><a href="#短路运算符" class="headerlink" title="短路运算符"></a>短路运算符</h2><ul>
 <li>||, &amp;&amp;具有短路作用,结果必然时短路,不计算右边的表达式</li>
 </ul>
-<h1 id="inline"><a href="#inline" class="headerlink" title="inline"></a>inline</h1><ul>
+<h2 id="inline"><a href="#inline" class="headerlink" title="inline"></a>inline</h2><ul>
 <li>在声明时用或在第一次调用前的定义用都行</li>
 <li>不能处理递归, 编译器有权拒绝采用.</li>
 <li>函数默认值必须放在原型声明中, 不能放在和声明分离的定义中.只能从右到左地提供默认值</li>
 </ul>
-<h1 id="decltype-expression"><a href="#decltype-expression" class="headerlink" title="decltype(expression)"></a>decltype(expression)</h1><ul>
+<h2 id="decltype-expression"><a href="#decltype-expression" class="headerlink" title="decltype(expression)"></a>decltype(expression)</h2><ul>
 <li><p><strong>decltype(expression)核对表</strong></p>
 <ol>
 <li>如果expression是一个不带括号的标识符, 则返回相同类型, 包括const,*等限定符</li>
@@ -480,7 +486,7 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 </ul>
 </li>
 </ul>
-<h1 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h1><ul>
+<h2 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h2><ul>
 <li><strong>创建模板</strong><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>    <span class="token comment">//也可以用class代替typename</span>
 <span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span>T<span class="token operator">&amp;</span><span class="token punctuation">,</span> T<span class="token operator">&amp;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
 </ul>
@@ -498,15 +504,15 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 </ul>
 </li>
 </ul>
-<h1 id="变量名"><a href="#变量名" class="headerlink" title="::变量名"></a>::变量名</h1><ul>
+<h2 id="变量名"><a href="#变量名" class="headerlink" title="::变量名"></a>::变量名</h2><ul>
 <li>表明采用全局变量而非局部变量</li>
 </ul>
-<h1 id="储存空间"><a href="#储存空间" class="headerlink" title="储存空间"></a>储存空间</h1><ol>
+<h2 id="储存空间"><a href="#储存空间" class="headerlink" title="储存空间"></a>储存空间</h2><ol>
 <li>静态储存: 保证初始化为0, 生命周期和程序相同.</li>
 <li>自动储存(栈内存): 不保证初始化;</li>
 <li>动态储存(堆内存): 不保证初始化;</li>
 </ol>
-<h1 id="储存说明符"><a href="#储存说明符" class="headerlink" title="储存说明符"></a>储存说明符</h1><ul>
+<h2 id="储存说明符"><a href="#储存说明符" class="headerlink" title="储存说明符"></a>储存说明符</h2><ul>
 <li>static用于变量   <em>编译阶段尽量初始化, 运行时直接分配空间,程序结束时销毁, 首次遇到时再保证初始化</em><ul>
 <li>静态外部链接性变量: 直接在非被包括区域定义, 在其他单元中可用extern引用声明(不允许再次初始化)(ODR单定义规则)</li>
 <li>静态内部链接性变量: 在非被包括区域加static, 限定在本单元内可以访问</li>
@@ -518,12 +524,12 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 <li>mutable 使得const对象中的属性能被修改,而不受const限制</li>
 <li>register C++11之前是寄存器变量,不能取地址;  之后是显式指明自动变量(无实际作用,避免旧代码非法)</li>
 </ul>
-<h1 id="显式指出语言链接性以帮助链接程序寻找匹配函数"><a href="#显式指出语言链接性以帮助链接程序寻找匹配函数" class="headerlink" title="显式指出语言链接性以帮助链接程序寻找匹配函数:"></a>显式指出语言链接性以帮助链接程序寻找匹配函数:</h1><pre><code>extern &quot;C&quot; void spiff(int);
+<h2 id="显式指出语言链接性以帮助链接程序寻找匹配函数"><a href="#显式指出语言链接性以帮助链接程序寻找匹配函数" class="headerlink" title="显式指出语言链接性以帮助链接程序寻找匹配函数:"></a>显式指出语言链接性以帮助链接程序寻找匹配函数:</h2><pre><code>extern &quot;C&quot; void spiff(int);
 </code></pre>
-<h1 id="cv-限定符"><a href="#cv-限定符" class="headerlink" title="cv-限定符"></a>cv-限定符</h1><pre><code>- const全局变量带有隐式static使得变量链接性为内部, 导致多文件同时include一个头文件时不会发生定义冲突 *可以使用extern覆盖隐式static使变量链接性为外部. 在其他单元中仍需用extern来引用它.*
+<h2 id="cv-限定符"><a href="#cv-限定符" class="headerlink" title="cv-限定符"></a>cv-限定符</h2><pre><code>- const全局变量带有隐式static使得变量链接性为内部, 导致多文件同时include一个头文件时不会发生定义冲突 *可以使用extern覆盖隐式static使变量链接性为外部. 在其他单元中仍需用extern来引用它.*
 - volatile 提示编译器该变量会在程序之外被修改, 不要进行寄存器缓存优化.
 </code></pre>
-<h1 id="new运算符"><a href="#new运算符" class="headerlink" title="new运算符"></a>new运算符</h1><ul>
+<h2 id="new运算符"><a href="#new运算符" class="headerlink" title="new运算符"></a>new运算符</h2><ul>
 <li>原函数:  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token operator">*</span> <span class="token keyword">operator</span> <span class="token keyword">new</span><span class="token punctuation">(</span>std<span class="token operator">::</span>size_t<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">void</span> <span class="token operator">*</span> <span class="token keyword">operator</span> <span class="token keyword">new</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">(</span>std<span class="token operator">::</span>size_T<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// new int[40] --> new(40*sizeof(int))</span>
 <span class="token keyword">void</span> <span class="token keyword">operator</span> <span class="token keyword">delete</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -540,7 +546,7 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 </li>
 <li>元素的创建与销毁应遵循FILO顺序</li>
 </ul>
-<h1 id="名称空间"><a href="#名称空间" class="headerlink" title="名称空间"></a>名称空间</h1><ul>
+<h2 id="名称空间"><a href="#名称空间" class="headerlink" title="名称空间"></a>名称空间</h2><ul>
 <li>声明区域: 可以声明变量的区域, 例如所在的文件, 代码块.</li>
 <li>潜在作用域: 从声明点开始到声明区域的结尾. 可能被局部变量隐藏,故称潜在.</li>
 <li>自定义名称空间:<code>namespace Somewhat &#123;...&#125;</code><ul>
@@ -571,7 +577,7 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 </ul>
 </li>
 </ul>
-<h1 id="类"><a href="#类" class="headerlink" title="类"></a>类</h1><ul>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><ul>
 <li>构造函数<ul>
 <li>调用示例:  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">Classname object<span class="token punctuation">;</span> <span class="token comment">// 调用空参数构造函数</span>
 Classname <span class="token function">object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 警告, 正在声明函数</span>
@@ -716,8 +722,8 @@ Class_name a <span class="token operator">=</span> <span class="token function">
 </ul>
 </li>
 </ul>
-<h1 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h1><p>Lambda是一种匿名函数，它在普通函数的基础上增加了一些功能。Lambda是通过函数对象实现的，具有在编译器内联的能力，因此性能可以比函数指针更好。</p>
-<h2 id="使用举例"><a href="#使用举例" class="headerlink" title="使用举例"></a>使用举例</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token keyword">int</span> q<span class="token punctuation">,</span> <span class="token keyword">int</span> p<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> q <span class="token operator">></span> p<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span> <span class="token comment">// 常见的比较函数</span>
+<h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><p>Lambda是一种匿名函数，它在普通函数的基础上增加了一些功能。Lambda是通过函数对象实现的，具有在编译器内联的能力，因此性能可以比函数指针更好。</p>
+<h3 id="使用举例"><a href="#使用举例" class="headerlink" title="使用举例"></a>使用举例</h3><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token keyword">int</span> q<span class="token punctuation">,</span> <span class="token keyword">int</span> p<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> q <span class="token operator">></span> p<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span> <span class="token comment">// 常见的比较函数</span>
 <span class="token punctuation">[</span>mask<span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> mask <span class="token operator">&amp;</span> x<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span> <span class="token comment">// 判断有无交集</span>
 <span class="token punctuation">[</span><span class="token operator">&amp;</span>flag<span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> flag<span class="token punctuation">[</span>x<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span> <span class="token comment">// 修改自动变量flag数组</span>
 <span class="token punctuation">[</span><span class="token operator">&amp;</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span><span class="token operator">-></span><span class="token keyword">int</span> <span class="token punctuation">&#123;</span>   <span class="token comment">// 按引用捕获当前作用域的全部自动变量。不是简单地return故要声明类型</span>
@@ -730,11 +736,11 @@ Class_name a <span class="token operator">=</span> <span class="token function">
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="右值"><a href="#右值" class="headerlink" title="右值"></a>右值</h1><p>rvalue,（非严格定义: ）匿名的临时值，常出现在等号的右方。最大特征是不可取地址，例如</p>
+<h2 id="右值"><a href="#右值" class="headerlink" title="右值"></a>右值</h2><p>rvalue,（非严格定义: ）匿名的临时值，常出现在等号的右方。最大特征是不可取地址，例如</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">int</span> a<span class="token punctuation">;</span>
 a <span class="token operator">=</span> <span class="token number">2</span> <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">;</span> <span class="token comment">// (2+3) 就是一个右值， &amp;(2+3)没有意义</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<h2 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h2><p>有时候运算过程中会生成一些体积大的临时对象，在完成表达式后这些临时对象会析构，例如</p>
+<h3 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h3><p>有时候运算过程中会生成一些体积大的临时对象，在完成表达式后这些临时对象会析构，例如</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">MyString</span> <span class="token punctuation">&#123;</span>
   <span class="token keyword">char</span><span class="token operator">*</span> data <span class="token operator">=</span> <span class="token keyword">nullptr</span><span class="token punctuation">;</span>
   <span class="token comment">//... 使用new和delete的模仿string类，具有拷贝构造函数</span>
@@ -768,8 +774,8 @@ vector<span class="token operator">&lt;</span>MyString<span class="token operato
 
 <p>如此一来，push_back将自动调用移动构造函数来创建对象，避免大量new内存。</p>
 <p>右值引用的存在，就是为了<strong>尽量榨干临时对象的价值</strong>。</p>
-<p>要利用右值引用，最重要的是合理地定义移动构造和移动赋值。</p>
-<h2 id="移动语义"><a href="#移动语义" class="headerlink" title="移动语义"></a>移动语义</h2><p>有时候一些左值就像右值一样即将消亡，弃之可惜，例如</p>
+<p>要利用右值引用，最重要的是<strong>合理地定义移动构造和移动赋值</strong>。</p>
+<h3 id="移动语义"><a href="#移动语义" class="headerlink" title="移动语义"></a>移动语义</h3><p>有时候一些左值就像右值一样即将消亡，弃之可惜，例如</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span><span class="token number">10</span><span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
   string <span class="token function">tmp</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 	tmp <span class="token operator">+=</span> <span class="token string">" rvalue?"</span><span class="token punctuation">;</span> <span class="token comment">// tmp经过一系列复杂的处理</span>
@@ -784,7 +790,7 @@ vector<span class="token operator">&lt;</span>MyString<span class="token operato
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>注意，move(tmp)后由于资源已经被偷走，tmp可能像野指针一样危险。被move后对象的行为由程序员负责。</p>
-<h2 id="完美转发"><a href="#完美转发" class="headerlink" title="完美转发"></a>完美转发</h2><p>完美转发是针对c++模板函数的概念。</p>
+<h3 id="完美转发"><a href="#完美转发" class="headerlink" title="完美转发"></a>完美转发</h3><p>完美转发是针对c++模板函数的概念。</p>
 <p>我们不得不先介绍c++引用折叠概念：</p>
 <table>
 <thead>
@@ -852,6 +858,23 @@ _NODISCARD <span class="token keyword">constexpr</span> remove_reference_t<span 
     <span class="token keyword">return</span> <span class="token keyword">static_cast</span><span class="token operator">&lt;</span>remove_reference_t<span class="token operator">&lt;</span>_Ty<span class="token operator">></span><span class="token operator">&amp;&amp;</span><span class="token operator">></span><span class="token punctuation">(</span>_Arg<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 注意这里不可能发生引用折叠</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><ul>
+<li>捕获异常时，从具体到抽象，最后到<code>...</code>。</li>
+<li>如果异常携带字符串信息，则可能引发<code>std::bad_alloc</code>，惊不惊喜！</li>
+<li>std定义的异常分类：<code>#include &lt;stdexcept&gt;</code>  <ol>
+<li><code>logic_error</code> 逻辑出错。</li>
+<li><code>invalid_argument</code> 无效参数。</li>
+<li><code>domain_error</code> 值域错误。（继承自<code>logic_error</code>）</li>
+<li><code>length_error</code> 试图超越最大体积。（继承自<code>logic_error</code>）</li>
+<li><code>out_of_range</code> 试图越界。（继承自<code>logic_error</code>）</li>
+<li><code>runtime_error</code> 仅在运行时可知的错误。</li>
+<li><code>range_error</code> 计算结果无法用目标类型表示。（继承自<code>runtime_error</code>）</li>
+<li><code>overflow_error</code> 算术上溢。（继承自<code>runtime_error</code>）</li>
+<li><code>underflow_error</code> 算术下溢。（继承自<code>runtime_error</code>）</li>
+<li><code>tx_exception</code> 可用于回滚或取消transaction的异常。（Transactional Memory Technical Specification, TM TS）</li>
+</ol>
+</li>
+</ul>
 
     </div>
 
