@@ -140,7 +140,7 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 <li>例：某种帐本，任意前缀和不为负数。</li>
 <li>例：链表某个节点的后继的前驱是自己。</li>
 <li>众所周知，不良的并发编程会破坏不变量！</li>
-<li>破坏不变量的根源是写操作。</li>
+<li>破坏不变量的根源是写操作。<span id="more"></span></li>
 </ul>
 </li>
 <li>在并发中的<strong>竞争条件(race condition)</strong> 是指，任何结果依赖于在两个或多个线程上操作执行的相对顺序。<ul>
@@ -203,8 +203,6 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 </ul>
 <hr>
 <h2 id="Thread-线程"><a href="#Thread-线程" class="headerlink" title="Thread 线程"></a>Thread 线程</h2><p><a href="https://en.cppreference.com/w/cpp/thread">cppreference thread</a></p>
-<span id="more"></span>
-
 <p><code>#include &lt;thread&gt;</code></p>
 <p>起一个线程！</p>
 <ul>
