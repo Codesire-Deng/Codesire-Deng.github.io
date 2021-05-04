@@ -336,7 +336,8 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 <p><code>async</code>可以轻量级地开启一个带返回值的线程，通常短期内你用不到返回值。一段时间后，你需要返回值了，才阻塞自己，直到返回值就绪。需要花费一段时间才能就绪的返回值就是<code>future</code>。</p>
 <p><code>async</code>也允许你推迟执行，这意味着没有新线程，而是同步地执行。</p>
 <ul>
-<li><code>async</code>函数<ul>
+<li><p><code>async</code>函数</p>
+<ul>
 <li>可接受<code>std::launch policy</code>为第一个参数，允许的值有：<ul>
 <li><code>std::launch::async</code> 开启新线程，异步执行。</li>
 <li><code>std::launch::deferred</code> 没有新线程，懒惰同步执行。</li>
@@ -344,6 +345,52 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 <li>C++标准允许实现采用不同的默认策略，甚至允许新增策略。</li>
 </ul>
 </li>
+<li><code>async</code>返回一个<code>future</code></li>
+</ul>
+</li>
+<li><p><code>future&lt;&gt;</code>类</p>
+<ul>
+<li>表示一个值，这个值可能正在计算中，可能就绪，也可能是抛出的异常。</li>
+<li><code>get()</code>成员函数。 保证返回就绪的值或者抛出异常。（若未就绪，则当前线程阻塞）。此函数只能调用一次，然后将<code>valid()</code>设置为false。</li>
+<li><code>valid()</code>成员函数。 检查下一次<code>get()</code>的合法性，即有没有共享状态。</li>
+<li><code>wait()</code>成员函数。 保证值就绪或者抛出异常。（若未就绪，则阻塞）</li>
+<li><code>wait_for</code>, <code>wait_until</code>成员函数。有限等待。</li>
+<li><code>share()</code>成员函数。移动自己，构造一个<code>shared_future&lt;&gt;</code>。</li>
+<li>可移动，不可复制。</li>
+</ul>
+</li>
+<li><p><code>shared_future&lt;&gt;</code>类</p>
+<ul>
+<li>与<code>future&lt;&gt;</code>类似，但可以<code>get()</code>多次。</li>
+<li>可移动也可以复制。</li>
+<li>正确的用法就是每个线程持有一份复制。</li>
+</ul>
+</li>
+<li><p><code>packaged_task&lt;Callable&gt;</code>类</p>
+<ul>
+<li>将future绑定到函数（或可调用对象），方便自定义调度。</li>
+<li>构造器仅接受函数（可以是lambda！），不绑定参数。只有在<code>operator ()</code>时才传入参数。</li>
+<li>packaged_task本身也是一个可调用对象！可以用它起一个新线程。<code>thread(move(task), args...)</code></li>
+<li>可移动，不可复制。</li>
+<li><code>get_future()</code> 获取绑定的future。</li>
+<li><code>operator(args...)</code> 立即在当前线程执行，然后future就绪，意味着唤醒等待此future的线程。</li>
+<li><code>make_ready_at_thread_exit(args...)</code> 立即在当前线程执行，但是future不就绪。当线程退出且所有thread_local对象销毁后，future才就绪。</li>
+<li><code>reset()</code> 重新构造自己。旧版的future作废。</li>
+</ul>
+</li>
+<li><p><code>promise&lt;&gt;</code>类</p>
+<ul>
+<li>比async提供更强的自由度，可以手动设置future！</li>
+<li>可移动，不可复制。</li>
+<li>一般先<code>get_future()</code>留下接口，然后move<code>promise</code>到别的线程，在别的线程<code>set_value</code>。</li>
+<li><code>set_value(value)</code> 设置关联的future的值，唤醒在等待的线程。</li>
+<li><code>set_value_at_thread_exit(value)</code> 类似<code>set_value</code>，但当前线程退出后，才唤醒在等待的线程。</li>
+<li><code>void set_exception( std::exception_ptr p )</code> 令future的<code>get()</code>抛出异常。<ul>
+<li>在try-catch块中，配合<code>std::current_exception()</code>使用</li>
+<li>不用try-catch，性能更高，配合<code>make_exception_ptr(E e)</code>用。</li>
+</ul>
+</li>
+<li><code>set_exception_at_thread_exit</code> 同理。</li>
 </ul>
 </li>
 </ul>
