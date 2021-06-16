@@ -2253,7 +2253,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
   <entry>
     <title>数位DP</title>
     <url>/2019/08/20/%E6%95%B0%E4%BD%8DDP/</url>
-    <content><![CDATA[<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数"><a href="#求-L-R-中满足-y-geq-x-且y-x-x-oplus-y-的数对-x-y-的个数" class="headerlink" title="求$[L,R]$中满足$y\geq x,且y%x=x\oplus y$的数对$(x,y)$的个数"></a>求$[L,R]$中满足$y\geq x,且y%x=x\oplus y$的数对$(x,y)$的个数</h2><span id="more"></span>
+    <content><![CDATA[<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="求-L-R-中满足-y-geq-x-且y-mod-x-x-oplus-y-的数对-x-y-的个数"><a href="#求-L-R-中满足-y-geq-x-且y-mod-x-x-oplus-y-的数对-x-y-的个数" class="headerlink" title="求$[L,R]$中满足$y\geq x,且y\mod x=x\oplus y$的数对$(x,y)$的个数"></a>求$[L,R]$中满足$y\geq x,且y\mod x=x\oplus y$的数对$(x,y)$的个数</h2><span id="more"></span>
 
 <h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><ol>
 <li>题目涉及位操作，对所有数以二进制看待。x和y的最高位应相同，这是因为$y%x&lt;x$，其二进制最高位有限制。</li>
