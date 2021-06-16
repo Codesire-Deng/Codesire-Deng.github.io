@@ -2256,8 +2256,8 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
     <content><![CDATA[<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="求-L-R-中满足-y-geq-x-且y-mod-x-x-oplus-y-的数对-x-y-的个数"><a href="#求-L-R-中满足-y-geq-x-且y-mod-x-x-oplus-y-的数对-x-y-的个数" class="headerlink" title="求$[L,R]$中满足$y\geq x,且y\mod x=x\oplus y$的数对$(x,y)$的个数"></a>求$[L,R]$中满足$y\geq x,且y\mod x=x\oplus y$的数对$(x,y)$的个数</h2><span id="more"></span>
 
 <h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><ol>
-<li>题目涉及位操作，对所有数以二进制看待。x和y的最高位应相同，这是因为$y%x&lt;x$，其二进制最高位有限制。</li>
-<li>两数最高位相同，则y不超过x的两倍。$y%x = y-x = y\oplus x$。</li>
+<li>题目涉及位操作，对所有数以二进制看待。x和y的最高位应相同，这是因为$y\mod x&lt;x$，其二进制最高位有限制。</li>
+<li>两数最高位相同，则y不超过x的两倍。$y\mod x = y-x = y\oplus x$。</li>
 <li>$y-x$不可能退位。由$y\geq x$找到两者不同的最高位（y一定是1，x一定是0），这一位异或和为1，若低位退位，则差为0，矛盾，故低位不能退位。由低位不能退位，分类讨论$1-0, 1-1, 0-0$三种情况，发现更低位也不能退位，由归纳法可知$y-x$不可能退位。</li>
 <li>综上，以bitset看待，$x\subseteq y$。</li>
 <li>考虑记忆化搜索。$x,y$都受到上下界限制，且$y\geq x$，故分别dp枚举$x,y$的合法取值。另外要记录状态保证$x,y$的最高位相同。</li>
