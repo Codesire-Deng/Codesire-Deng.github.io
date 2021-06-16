@@ -4124,9 +4124,12 @@ _NODISCARD <span class="token keyword">constexpr</span> remove_reference_t<span 
 </li>
 <li>输入树到自定义数据结构的映射<ul>
 <li>简称树链剖分.</li>
-<li>将输入树剪成若干条链, 作为高级数据结构的基础数据.<h2 id="剖分方法"><a href="#剖分方法" class="headerlink" title="剖分方法"></a>剖分方法</h2>在生成映射的过程中, 对于原树的每个节点, 有六个信息要处理.</li>
+<li>将输入树剪成若干条链, 作为高级数据结构的基础数据.</li>
 </ul>
 </li>
+</ol>
+<h2 id="剖分方法"><a href="#剖分方法" class="headerlink" title="剖分方法"></a>剖分方法</h2><p>在生成映射的过程中, 对于原树的每个节点, 有六个信息要处理.</p>
+<ol>
 <li>父亲节点 - 防止重复搜索</li>
 <li>节点深度 - 防止越过最近公共祖先</li>
 <li>子树大小 - 决定重儿子</li>
