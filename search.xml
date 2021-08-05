@@ -4609,14 +4609,14 @@ _NODISCARD <span class="token keyword">constexpr</span> remove_reference_t<span 
 <p>利用共享内存，可以消除一些无法兼顾读写合并的全局内存访问，例如数组归约，先将要读取的数据从全局内存拷贝至共享内存（然后<code>__syncthreads()</code>同步一下），可以带来细微的性能提升。</p>
 <p>对共享内存的访问越频繁，性能提升越明显。</p>
 <h3 id="动态共享内存"><a href="#动态共享内存" class="headerlink" title="动态共享内存"></a>动态共享内存</h3><p>共享内存大小可以在核函数的执行配置中指定：</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&lt;&lt;&lt;grid_size, block_size, sizeof(real) * block_size&gt;&gt;&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>grid_size<span class="token punctuation">,</span> block_size<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>real<span class="token punctuation">)</span> <span class="token operator">*</span> block_size<span class="token operator">>></span><span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>同时要修改共享内存变量的声明方式</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; before
-__shared__ real a[128];
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// before</span>
+__shared__ real a<span class="token punctuation">[</span><span class="token number">128</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 
-&#x2F;&#x2F; after
-extern __shared__ real a[];<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">// after</span>
+<span class="token keyword">extern</span> __shared__ real a<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>动态和静态的声明方式在性能上几乎没有差别。</p>
 <h3 id="避免共享内存的bank冲突"><a href="#避免共享内存的bank冲突" class="headerlink" title="避免共享内存的bank冲突"></a>避免共享内存的bank冲突</h3><p>共享内存在物理上被分为 32 个（恰好是线程束大小）个 bank，多个线程同时访问同一个 bank 会导致冲突；多个线程同时访问不同的 bank 能取得更高的性能。</p>
@@ -4633,26 +4633,26 @@ extern __shared__ real a[];<span aria-hidden="true" class="line-numbers-rows"><s
 <p>线程块原子性：在当前GPU的同一线程块中的任意线程上保持原子性。函数名有后缀<code>_block</code>，如<code>atomicAdd_block</code>。</p>
 <h3 id="原子函数速查"><a href="#原子函数速查" class="headerlink" title="原子函数速查"></a>原子函数速查</h3><p><strong>注意：所有的函数都返回旧值</strong></p>
 <p>支持的类型可参考书第 92 页。</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; T in &#123;int, unsigned int, unsigned long long int&#125;
-using UI &#x3D; unsigned int;
-T atomicAdd(T *address, T val); &#x2F;&#x2F; 加法，支持浮点
-T atomicSub(T *address, T val); &#x2F;&#x2F; 减法，支持浮点
-T atomicExch(T *address, T val); &#x2F;&#x2F; new &#x3D; val，支持float
-T atomicMin(T *address, T val); &#x2F;&#x2F; 最小值
-T atomicMax(T *address, T val); &#x2F;&#x2F; 最大值
-UI atomicInc(UI *address, UI val); &#x2F;&#x2F; new &#x3D; (old &gt;&#x3D; val) ? 0 : (old+1)
-UI atomicDec(UI *address, UI val); &#x2F;&#x2F; new &#x3D; ((old &#x3D;&#x3D; 0) || (old &gt; val)) ? val : (old-1)
-T atomicAnd(T *address, T val); &#x2F;&#x2F; 按位与
-T atomicOr(T *address, T val); &#x2F;&#x2F; 按位或
-T atomicXor(T *address, T val); &#x2F;&#x2F; 按位异或
-T atomicCAS(T *address, T compare, T val); &#x2F;&#x2F; new &#x3D; old &#x3D;&#x3D; compare ? val : old。支持unsigned short int<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// T in &#123;int, unsigned int, unsigned long long int&#125;</span>
+<span class="token keyword">using</span> UI <span class="token operator">=</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">;</span>
+T <span class="token function">atomicAdd</span><span class="token punctuation">(</span>T <span class="token operator">*</span>address<span class="token punctuation">,</span> T val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 加法，支持浮点</span>
+T <span class="token function">atomicSub</span><span class="token punctuation">(</span>T <span class="token operator">*</span>address<span class="token punctuation">,</span> T val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 减法，支持浮点</span>
+T <span class="token function">atomicExch</span><span class="token punctuation">(</span>T <span class="token operator">*</span>address<span class="token punctuation">,</span> T val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// new = val，支持float</span>
+T <span class="token function">atomicMin</span><span class="token punctuation">(</span>T <span class="token operator">*</span>address<span class="token punctuation">,</span> T val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 最小值</span>
+T <span class="token function">atomicMax</span><span class="token punctuation">(</span>T <span class="token operator">*</span>address<span class="token punctuation">,</span> T val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 最大值</span>
+UI <span class="token function">atomicInc</span><span class="token punctuation">(</span>UI <span class="token operator">*</span>address<span class="token punctuation">,</span> UI val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// new = (old >= val) ? 0 : (old+1)</span>
+UI <span class="token function">atomicDec</span><span class="token punctuation">(</span>UI <span class="token operator">*</span>address<span class="token punctuation">,</span> UI val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// new = ((old == 0) || (old > val)) ? val : (old-1)</span>
+T <span class="token function">atomicAnd</span><span class="token punctuation">(</span>T <span class="token operator">*</span>address<span class="token punctuation">,</span> T val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 按位与</span>
+T <span class="token function">atomicOr</span><span class="token punctuation">(</span>T <span class="token operator">*</span>address<span class="token punctuation">,</span> T val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 按位或</span>
+T <span class="token function">atomicXor</span><span class="token punctuation">(</span>T <span class="token operator">*</span>address<span class="token punctuation">,</span> T val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 按位异或</span>
+T <span class="token function">atomicCAS</span><span class="token punctuation">(</span>T <span class="token operator">*</span>address<span class="token punctuation">,</span> T compare<span class="token punctuation">,</span> T val<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// new = old == compare ? val : old。支持unsigned short int</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="线程束与协作组"><a href="#线程束与协作组" class="headerlink" title="线程束与协作组"></a>线程束与协作组</h2><h3 id="SIMT"><a href="#SIMT" class="headerlink" title="SIMT"></a>SIMT</h3><p>单指令-多线程（single instruction multiple thread, SIMT）：不同线程共享同一个 PC。SIMT 的通病是分支发散（branch divergence），所有的分支会产生串行的时间开销。</p>
 <p>在伏特架构之前，一个线程束共享一个 PC。不同线程束之间没有分支发散问题。</p>
 <p>从伏特架构开始，引入了独立线程调度（independent thread scheduling）机制。每个线程有自己的 PC，使得需要用户自己控制线程束内的同步。另一个代价是每个线程需要用两个寄存器来做 PC。如果旧代码出现线程束内不安全的问题，可以指定虚拟架构为低于伏特架构的计算能力。</p>
 <h3 id="线程束内的线程同步"><a href="#线程束内的线程同步" class="headerlink" title="线程束内的线程同步"></a>线程束内的线程同步</h3><p><code>__syncwarp()</code>比线程块同步函数<code>__syncthreads()</code>更加廉价。</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; 函数原型
-void __syncwarp(unsigned mask &#x3D; 0xffffffff);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// 函数原型</span>
+<span class="token keyword">void</span> <span class="token function">__syncwarp</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> mask <span class="token operator">=</span> <span class="token number">0xffffffff</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>其中掩码表示参与同步的线程，默认 32 个线程全部参与。</p>
 <p>在分治时，当问题规模缩小到一个线程束内，可以不使用<code>__syncthreads</code>而用<code>__syncwarp</code>。</p>
