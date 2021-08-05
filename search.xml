@@ -4582,7 +4582,7 @@ _NODISCARD <span class="token keyword">constexpr</span> remove_reference_t<span 
 <li>常量内存的缓存</li>
 <li>纹理和表面内存的缓存</li>
 <li>L1 缓存</li>
-<li>（常见4个）线程数调度器</li>
+<li>（常见4个）线程束调度器</li>
 <li>执行核心：INT32, FP32, FP64, 单精度浮点数超于函数的特殊函数单元(special function unit, SFUs), 混合精度的张量核心(tensor cores)</li>
 </ol>
 <h3 id="SM-的占有率"><a href="#SM-的占有率" class="headerlink" title="SM 的占有率"></a>SM 的占有率</h3><p>当并行规模较小，有些 SM 占有率为零，导致程序性能低下。当并行规模足够大时，也有可能得到非 100% 的占有率。</p>
@@ -4592,7 +4592,7 @@ _NODISCARD <span class="token keyword">constexpr</span> remove_reference_t<span 
 <li>一个 SM 最多拥有的线程个数$\ N_t = 1536$。</li>
 <li>线程块大小最大为$\ 1024$。</li>
 </ol>
-<p>当并行规模足够大（核函数备至的总线程数足够多），需要分几种情况讨论 SM 的理论占有率：</p>
+<p>当并行规模足够大（核函数配置的总线程数足够多），需要分几种情况讨论 SM 的理论占有率：</p>
 <ol>
 <li>寄存器核共享内存使用量很少。SM 的占有率完全由线程块大小决定。首先，由于线程束大小是 32，线程块大小最好是 32 的倍数。其次，线程块大小不能小于$\ N_t/N_b$​，才可能利用最大线程数量。因此，96 的线程块大小就能获得 100% 的占有率。类似的，128 的线程块大小在开普勒架构下能获得满占有率。（我选择 128）</li>
 <li>寄存器带来占有率瓶颈。一个 SM 最多有 65536（64K）个寄存器。如果令线程数最大化（1536），那么平均一个线程可用 42.7 个寄存器。当每个线程所用的寄存器个数大于 42 时，SM 的占有率将低于 50%。</li>
@@ -4670,7 +4670,7 @@ T <span class="token function">atomicCAS</span><span class="token punctuation">(
 <span class="token keyword">int</span> <span class="token function">__any_sync</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> mask<span class="token punctuation">,</span> <span class="token keyword">int</span> predicate<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment">// 若当前线程参与，则同步投票，一票通过，返回投票是否通过。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="线程束洗牌"><a href="#线程束洗牌" class="headerlink" title="线程束洗牌"></a>线程束洗牌</h4><p>定义“束内指标” <code>int land_id = threadIdx.x % w</code>。</p>
+<h4 id="线程束洗牌"><a href="#线程束洗牌" class="headerlink" title="线程束洗牌"></a>线程束洗牌</h4><p>定义“束内指标” <code>int lane_id = threadIdx.x % w</code>。</p>
 <p><code>w</code> 是逻辑线程束大小，只能取 2、4、8、16、32 中的一个。</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">T <span class="token function">__shfl_sync</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> mask<span class="token punctuation">,</span> T v<span class="token punctuation">,</span> <span class="token keyword">int</span> srcLane<span class="token punctuation">,</span> <span class="token keyword">int</span> w<span class="token operator">=</span>warpSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment">// 参与线程返回标号为 srcLane 的变量 v 的值。这是一种广播式数据交换。 </span>
