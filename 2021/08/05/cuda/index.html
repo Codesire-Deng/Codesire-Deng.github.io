@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}};
+  </script>
+<meta name="description" content="参考资料：  《CUDA 编程 基础与实践》樊哲勇 CUDA Toolkit Documentation  获得 GPU 加速的关键总结必要条件 数据传输比例较小 核函数的算术强度较高 核函数中定义的线程数目较多  提高性能的技巧 减少主机与设备之间的数据传输 提高核函数的算术强度 增大核函数的并行规模">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CUDA 学习笔记">
+<meta property="og:url" content="https://codesire-deng.github.io/2021/08/05/cuda/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="参考资料：  《CUDA 编程 基础与实践》樊哲勇 CUDA Toolkit Documentation  获得 GPU 加速的关键总结必要条件 数据传输比例较小 核函数的算术强度较高 核函数中定义的线程数目较多  提高性能的技巧 减少主机与设备之间的数据传输 提高核函数的算术强度 增大核函数的并行规模">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-05T15:50:25.000Z">
+<meta property="article:modified_time" content="2021-08-05T16:00:50.009Z">
+<meta property="article:author" content="等疾风">
+<meta property="article:tag" content="GPGPU">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2021/08/05/cuda/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>CUDA 学习笔记 | 等疾风</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">等疾风</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">临江仙<br/>琼窗梦醒留残日，当年得恨何长！<br/>碧阑干外映垂杨。<br/>暂时相见，如梦懒思量。</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fas fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fas fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97-GPU-%E5%8A%A0%E9%80%9F%E7%9A%84%E5%85%B3%E9%94%AE"><span class="nav-number">1.</span> <span class="nav-text">获得 GPU 加速的关键</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.1.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%85%E8%A6%81%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">必要条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E9%AB%98%E6%80%A7%E8%83%BD%E7%9A%84%E6%8A%80%E5%B7%A7"><span class="nav-number">1.1.2.</span> <span class="nav-text">提高性能的技巧</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SM-%E6%B5%81%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">SM 流多处理器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SM-%E7%9A%84%E6%9E%84%E6%88%90"><span class="nav-number">2.1.</span> <span class="nav-text">SM 的构成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SM-%E7%9A%84%E5%8D%A0%E6%9C%89%E7%8E%87"><span class="nav-number">2.2.</span> <span class="nav-text">SM 的占有率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6API%E6%9F%A5%E8%AF%A2%E8%AE%BE%E5%A4%87"><span class="nav-number">2.3.</span> <span class="nav-text">运行时API查询设备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E7%9A%84%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">全局内存的合理使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E5%B9%B6%E8%AE%BF%E9%97%AE"><span class="nav-number">3.1.</span> <span class="nav-text">合并访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E4%BC%98%E5%85%88%E4%BA%8E%E5%8F%AA%E8%AF%BB"><span class="nav-number">3.2.</span> <span class="nav-text">写优先于只读</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">共享内存的合理使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="nav-number">4.1.</span> <span class="nav-text">动态共享内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84bank%E5%86%B2%E7%AA%81"><span class="nav-number">4.2.</span> <span class="nav-text">避免共享内存的bank冲突</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90%E5%87%BD%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">原子函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">5.1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7%E7%B2%92%E5%BA%A6"><span class="nav-number">5.2.</span> <span class="nav-text">原子性粒度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90%E5%87%BD%E6%95%B0%E9%80%9F%E6%9F%A5"><span class="nav-number">5.3.</span> <span class="nav-text">原子函数速查</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%9D%9F%E4%B8%8E%E5%8D%8F%E4%BD%9C%E7%BB%84"><span class="nav-number">6.</span> <span class="nav-text">线程束与协作组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SIMT"><span class="nav-number">6.1.</span> <span class="nav-text">SIMT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%9D%9F%E5%86%85%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5"><span class="nav-number">6.2.</span> <span class="nav-text">线程束内的线程同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9D%9F%E5%86%85%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0"><span class="nav-number">6.3.</span> <span class="nav-text">更多线程束内的基本函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%80%9F%E6%9F%A5"><span class="nav-number">7.</span> <span class="nav-text">指令速查</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9"><span class="nav-number">7.1.</span> <span class="nav-text">编译器选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="nav-number">7.2.</span> <span class="nav-text">修饰符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMake%E6%A8%A1%E6%9D%BF"><span class="nav-number">8.</span> <span class="nav-text">CMake模板</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2021/08/05/cuda/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CUDA 学习笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-08-05 23:50:25" itemprop="dateCreated datePublished" datetime="2021-08-05T23:50:25+08:00">2021-08-05</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-08-06 00:00:50" itemprop="dateModified" datetime="2021-08-06T00:00:50+08:00">2021-08-06</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>参考资料：</p>
+<ul>
+<li>《CUDA 编程 基础与实践》樊哲勇</li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/index.html">CUDA Toolkit Documentation</a></li>
+</ul>
+<h2 id="获得-GPU-加速的关键"><a href="#获得-GPU-加速的关键" class="headerlink" title="获得 GPU 加速的关键"></a>获得 GPU 加速的关键</h2><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h4 id="必要条件"><a href="#必要条件" class="headerlink" title="必要条件"></a>必要条件</h4><ol>
+<li>数据传输比例较小</li>
+<li>核函数的算术强度较高</li>
+<li>核函数中定义的线程数目较多</li>
+</ol>
+<h4 id="提高性能的技巧"><a href="#提高性能的技巧" class="headerlink" title="提高性能的技巧"></a>提高性能的技巧</h4><ol>
+<li>减少主机与设备之间的数据传输</li>
+<li>提高核函数的算术强度</li>
+<li>增大核函数的并行规模</li>
+</ol>
+<span id="more"></span>
+
+<h2 id="SM-流多处理器"><a href="#SM-流多处理器" class="headerlink" title="SM 流多处理器"></a>SM 流多处理器</h2><p>官方有时简称 Multiprocessor</p>
+<h3 id="SM-的构成"><a href="#SM-的构成" class="headerlink" title="SM 的构成"></a>SM 的构成</h3><ol>
+<li>寄存器</li>
+<li>共享内存</li>
+<li>常量内存的缓存</li>
+<li>纹理和表面内存的缓存</li>
+<li>L1 缓存</li>
+<li>（常见4个）线程数调度器</li>
+<li>执行核心：INT32, FP32, FP64, 单精度浮点数超于函数的特殊函数单元(special function unit, SFUs), 混合精度的张量核心(tensor cores)</li>
+</ol>
+<h3 id="SM-的占有率"><a href="#SM-的占有率" class="headerlink" title="SM 的占有率"></a>SM 的占有率</h3><p>当并行规模较小，有些 SM 占有率为零，导致程序性能低下。当并行规模足够大时，也有可能得到非 100% 的占有率。</p>
+<p>考虑指标（查询官方文档 CUDA_Occupancy_Calculator.xls 的图灵架构）：</p>
+<ol>
+<li>一个 SM 最多拥有线程块个数$\ N_b = 16$。</li>
+<li>一个 SM 最多拥有的线程个数$\ N_t = 1536$。</li>
+<li>线程块大小最大为$\ 1024$。</li>
+</ol>
+<p>当并行规模足够大（核函数备至的总线程数足够多），需要分几种情况讨论 SM 的理论占有率：</p>
+<ol>
+<li>寄存器核共享内存使用量很少。SM 的占有率完全由线程块大小决定。首先，由于线程束大小是 32，线程块大小最好是 32 的倍数。其次，线程块大小不能小于$\ N_t/N_b$​，才可能利用最大线程数量。因此，96 的线程块大小就能获得 100% 的占有率。类似的，128 的线程块大小在开普勒架构下能获得满占有率。（我选择 128）</li>
+<li>寄存器带来占有率瓶颈。一个 SM 最多有 65536（64K）个寄存器。如果令线程数最大化（1536），那么平均一个线程可用 42.7 个寄存器。当每个线程所用的寄存器个数大于 42 时，SM 的占有率将低于 50%。</li>
+<li>有限的共享内存对占有率的约束。一个 SM 拥有 65536 字节共享内存。如果线程块大小为 128，且SM 是线程满载（1536），要令占有率为 100%，则网格大小为 12，一个线程块最多有 5461 字节的共享内存。</li>
+</ol>
+<h3 id="运行时API查询设备"><a href="#运行时API查询设备" class="headerlink" title="运行时API查询设备"></a>运行时API查询设备</h3><p>参考<code>deviceQuery.cpp</code></p>
+<h2 id="全局内存的合理使用"><a href="#全局内存的合理使用" class="headerlink" title="全局内存的合理使用"></a>全局内存的合理使用</h2><h3 id="合并访问"><a href="#合并访问" class="headerlink" title="合并访问"></a>合并访问</h3><p>全局内存具有最高的延迟，所以配置有缓存，每次 Cache Miss 默认读取 32 字节。由于缓存命中问题，需要提高内存访问的合并度，从而提高效率。简单起见，只考虑全局内存到 L2 缓存。可以定义合并度(degree of coalescing) 为<strong>一个线程束</strong>请求的字节数除以实际数据传输处理的字节数。合并度体现了显存带宽的利用率。</p>
+<p>CUDA 运行时 API 函数分配的内存的首地址至少是256字节的整数倍。</p>
+<p>只要确保每当线程束读取一次内存后，该内存对应的32字节范围都被当前线程束利用，则合并度就是100%。</p>
+<p>对于一个线程束访问同一个全局内存地址的 4 字节，属于广播式的非合并访问（因为只用了 4 字节而非 32 字节，合并度为 12.5%）。如果内存只读，那么适合采用常量内存。</p>
+<h3 id="写优先于只读"><a href="#写优先于只读" class="headerlink" title="写优先于只读"></a>写优先于只读</h3><p>有时候合并写入与合并读取无法兼顾，例如矩阵转置。此时应当优先保证写入是合并的。</p>
+<p>这是因为从帕斯卡架构开始，若编译器判定一个全局内存变量在整个核函数的范围内都<strong>只读</strong>，则会自动用函数<code>__ldg()</code>读取全局内存，附带缓存效果，缓解非合并访问的影响。但对于全局内存的写入，没有类似的优化手段。</p>
+<h2 id="共享内存的合理使用"><a href="#共享内存的合理使用" class="headerlink" title="共享内存的合理使用"></a>共享内存的合理使用</h2><p>在核函数内，使用<code>__shared__</code>修饰的变量（数组）将使用共享内存。同一线程块使用同一个共享内存副本，而不同线程块的共享内存是互相独立的，不可见的。</p>
+<p>利用共享内存，可以消除一些无法兼顾读写合并的全局内存访问，例如数组归约，先将要读取的数据从全局内存拷贝至共享内存（然后<code>__syncthreads()</code>同步一下），可以带来细微的性能提升。</p>
+<p>对共享内存的访问越频繁，性能提升越明显。</p>
+<h3 id="动态共享内存"><a href="#动态共享内存" class="headerlink" title="动态共享内存"></a>动态共享内存</h3><p>共享内存大小可以在核函数的执行配置中指定：</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&lt;&lt;&lt;grid_size, block_size, sizeof(real) * block_size&gt;&gt;&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>同时要修改共享内存变量的声明方式</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; before
+__shared__ real a[128];
+
+&#x2F;&#x2F; after
+extern __shared__ real a[];<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>动态和静态的声明方式在性能上几乎没有差别。</p>
+<h3 id="避免共享内存的bank冲突"><a href="#避免共享内存的bank冲突" class="headerlink" title="避免共享内存的bank冲突"></a>避免共享内存的bank冲突</h3><p>共享内存在物理上被分为 32 个（恰好是线程束大小）个 bank，多个线程同时访问同一个 bank 会导致冲突；多个线程同时访问不同的 bank 能取得更高的性能。</p>
+<p>除了开普勒架构（8 字节）外，每 4 个字节被划分到一个 bank。例如 <code>0000</code> 属于 bank0，<code>0004</code> 属于 bank1 …… <code>0128</code> 属于 bank0。可以看出，每个 bank 的相邻层的地址相差 128。</p>
+<p>一个线程束试图同时访问同一个 bank 中的 n 层数据将导致 n 次 内存事务(memory transaction)。亦称为 n 路 bank 冲突。n 很大的 bank 冲突是要尽量避免的。</p>
+<p>在矩阵转置中，写入共享内存时易产生 bank 冲突，可以通过修改数组大小解决。</p>
+<p>记得双精度浮点数占 8 字节。</p>
+<h2 id="原子函数"><a href="#原子函数" class="headerlink" title="原子函数"></a>原子函数</h2><p>例如在数组归约（加法）中，要令GPU完成求和，需要使用原子操作。</p>
+<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><p>原子函数在全局内存和共享内存上体现原子性。</p>
+<p>原子函数不依赖内存栅栏，不需要线程同步或顺序约束（参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#atomic-functions">官方文档</a>）。</p>
+<p>原子函数只能用于设备函数。</p>
+<h3 id="原子性粒度"><a href="#原子性粒度" class="headerlink" title="原子性粒度"></a>原子性粒度</h3><p>系统原子性：在任意CPU和GPU的任意线程上保持原子性。函数名有后缀<code>_system</code>，如<code>atomicAdd_system</code>。</p>
+<p>设备原子性：在当前GPU的任意线程上保持原子性。函数名无附加后缀。</p>
+<p>线程块原子性：在当前GPU的同一线程块中的任意线程上保持原子性。函数名有后缀<code>_block</code>，如<code>atomicAdd_block</code>。</p>
+<h3 id="原子函数速查"><a href="#原子函数速查" class="headerlink" title="原子函数速查"></a>原子函数速查</h3><p><strong>注意：所有的函数都返回旧值</strong></p>
+<p>支持的类型可参考书第 92 页。</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; T in &#123;int, unsigned int, unsigned long long int&#125;
+using UI &#x3D; unsigned int;
+T atomicAdd(T *address, T val); &#x2F;&#x2F; 加法，支持浮点
+T atomicSub(T *address, T val); &#x2F;&#x2F; 减法，支持浮点
+T atomicExch(T *address, T val); &#x2F;&#x2F; new &#x3D; val，支持float
+T atomicMin(T *address, T val); &#x2F;&#x2F; 最小值
+T atomicMax(T *address, T val); &#x2F;&#x2F; 最大值
+UI atomicInc(UI *address, UI val); &#x2F;&#x2F; new &#x3D; (old &gt;&#x3D; val) ? 0 : (old+1)
+UI atomicDec(UI *address, UI val); &#x2F;&#x2F; new &#x3D; ((old &#x3D;&#x3D; 0) || (old &gt; val)) ? val : (old-1)
+T atomicAnd(T *address, T val); &#x2F;&#x2F; 按位与
+T atomicOr(T *address, T val); &#x2F;&#x2F; 按位或
+T atomicXor(T *address, T val); &#x2F;&#x2F; 按位异或
+T atomicCAS(T *address, T compare, T val); &#x2F;&#x2F; new &#x3D; old &#x3D;&#x3D; compare ? val : old。支持unsigned short int<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="线程束与协作组"><a href="#线程束与协作组" class="headerlink" title="线程束与协作组"></a>线程束与协作组</h2><h3 id="SIMT"><a href="#SIMT" class="headerlink" title="SIMT"></a>SIMT</h3><p>单指令-多线程（single instruction multiple thread, SIMT）：不同线程共享同一个 PC。SIMT 的通病是分支发散（branch divergence），所有的分支会产生串行的时间开销。</p>
+<p>在伏特架构之前，一个线程束共享一个 PC。不同线程束之间没有分支发散问题。</p>
+<p>从伏特架构开始，引入了独立线程调度（independent thread scheduling）机制。每个线程有自己的 PC，使得需要用户自己控制线程束内的同步。另一个代价是每个线程需要用两个寄存器来做 PC。如果旧代码出现线程束内不安全的问题，可以指定虚拟架构为低于伏特架构的计算能力。</p>
+<h3 id="线程束内的线程同步"><a href="#线程束内的线程同步" class="headerlink" title="线程束内的线程同步"></a>线程束内的线程同步</h3><p><code>__syncwarp()</code>比线程块同步函数<code>__syncthreads()</code>更加廉价。</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; 函数原型
+void __syncwarp(unsigned mask &#x3D; 0xffffffff);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>其中掩码表示参与同步的线程，默认 32 个线程全部参与。</p>
+<p>在分治时，当问题规模缩小到一个线程束内，可以不使用<code>__syncthreads</code>而用<code>__syncwarp</code>。</p>
+<h3 id="更多线程束内的基本函数"><a href="#更多线程束内的基本函数" class="headerlink" title="更多线程束内的基本函数"></a>更多线程束内的基本函数</h3><p>线程束表决函数（warp vote functions）</p>
+<p>线程束匹配函数（warp match functions）<em>待续</em></p>
+<p>线程束洗牌函数（warp shuffle functions）</p>
+<p>线程束矩阵函数（warp matrix functions）<em>待续</em></p>
+<h2 id="指令速查"><a href="#指令速查" class="headerlink" title="指令速查"></a>指令速查</h2><h3 id="编译器选项"><a href="#编译器选项" class="headerlink" title="编译器选项"></a>编译器选项</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">--ptxas-options<span class="token operator">=</span>-v <span class="token comment"># 报道每个核函数的寄存器使用数量</span>
+--maxrregcount<span class="token operator">=</span> <span class="token comment"># 限制所有核函数的寄存器使用量</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="修饰符"><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">__global__ <span class="token comment"># 核函数修饰符</span>
+__device__ <span class="token comment"># 设备函数修饰符</span>
+__host__ <span class="token comment"># 主机函数修饰符，一般只与__device__同时出现</span>
+__noinline__ <span class="token comment"># 建议函数非内联</span>
+__forceinline__ <span class="token comment"># 建议函数内联</span>
+__launch_bounds__<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 修饰核函数，限制寄存器使用量</span>
+__shared__ <span class="token comment"># 修饰变量，使它成为共享内存</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="CMake模板"><a href="#CMake模板" class="headerlink" title="CMake模板"></a>CMake模板</h2><pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token comment"># 2021/08/02</span>
+<span class="token keyword">cmake_minimum_required</span><span class="token punctuation">(</span><span class="token property">VERSION</span> <span class="token number">3.20</span><span class="token punctuation">)</span>
+
+<span class="token keyword">project</span><span class="token punctuation">(</span>hello LANGUAGES CUDA <span class="token property">VERSION</span> <span class="token number">0.1</span><span class="token punctuation">)</span>
+
+<span class="token keyword">option</span><span class="token punctuation">(</span>USE_DOUBLE <span class="token string">"Use real as double, otherwise float"</span> <span class="token boolean">OFF</span><span class="token punctuation">)</span>
+
+<span class="token keyword">find_package</span><span class="token punctuation">(</span>CUDAToolkit REQUIRED<span class="token punctuation">)</span>
+
+<span class="token comment"># set(CMAKE_CUDA_COMPILER_ID NVIDIA)</span>
+
+<span class="token comment"># set(ENV&#123;PATH&#125; "C:/Program\ Files\ (x86)/Microsoft\ Visual\ Studio/2019/Community/VC/Tools/MSVC/14.29.30037/bin/Hostx64/x64:$ENV&#123;PATH&#125;")</span>
+
+<span class="token comment"># report registers used in each core function</span>
+<span class="token keyword">add_compile_options</span><span class="token punctuation">(</span>--ptxas-options=-v<span class="token punctuation">)</span>
+
+<span class="token keyword">include_directories</span><span class="token punctuation">(</span>./include<span class="token punctuation">)</span>
+
+<span class="token keyword">add_executable</span><span class="token punctuation">(</span>hello main.cu<span class="token punctuation">)</span>
+
+<span class="token comment"># compute capability, see https://developer.nvidia.com/zh-cn/cuda-gpus#compute</span>
+<span class="token keyword">set_property</span><span class="token punctuation">(</span>TARGET hello PROPERTY CUDA_ARCHITECTURES <span class="token number">86</span><span class="token punctuation">)</span>
+<span class="token comment"># set_property(TARGET hello PROPERTY CUDA_ARCHITECTURES 75)</span>
+
+<span class="token comment"># install(TARGETS hello DESTINATION .)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/GPGPU/" rel="tag"><i class="fa fa-tag"></i> GPGPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/03/C/" rel="prev" title="C++ 语法笔记">
+                  <i class="fa fa-chevron-left"></i> C++ 语法笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fas fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+  <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'none'
+      },
+      options: {
+        renderActions: {
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              const target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    const script = document.createElement('script');
+    script.src = '//cdn.bootcdn.net/ajax/libs/mathjax/3.1.0/es5/tex-mml-chtml.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.typesetClear();
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments('.gitalk-container', () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '00a098064772784393ca',
+      clientSecret: '578fbe40ff6dcd550b4df318fc9143bda83b0bac',
+      repo        : 'Gitment-for-Codesire-Deng-s-Blog',
+      owner       : 'Codesire-Deng',
+      admin       : ['Codesire-Deng'],
+      id          : 'c7cea0a899582faa81f3348037f31991',
+      proxy       : 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        language: '',
+      distractionFreeMode: false
+    });
+    gitalk.render(document.querySelector('.gitalk-container'));
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
