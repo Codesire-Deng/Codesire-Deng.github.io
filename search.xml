@@ -4714,6 +4714,124 @@ T <span class="token function">__shfl_xor_sync</span><span class="token punctuat
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
+<h3 id="协作组"><a href="#协作组" class="headerlink" title="协作组"></a>协作组</h3><p>协作组（cooperative groups）可以看作线程块和线程束同步机制的推广。范围涵盖线程块内部，线程块之间（网格级）及设备之间的同步与协作。</p>
+<p>引入头文件和命名空间</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cooperative_groups.h></span></span>
+<span class="token keyword">namespace</span> cg <span class="token operator">=</span> cooperative_groups<span class="token punctuation">;</span> <span class="token comment">// 仅供参考</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h4 id="线程块级别的协作组"><a href="#线程块级别的协作组" class="headerlink" title="线程块级别的协作组"></a>线程块级别的协作组</h4><p>基本类型<code>thread_group</code>。有如下成员：</p>
+<ol>
+<li><code>void sync()</code> 同步组内所有线程</li>
+<li><code>unsigned size()</code> 返回组内总的线程数目</li>
+<li><code>unsigned thread_rank()</code> 返回当前线程的组内标号</li>
+<li><code>bool is_valid()</code> 检查定义的组是否违反 CUDA 的任何限制</li>
+</ol>
+<p>导出类型<code>thread_block</code>，额外函数：</p>
+<ol>
+<li><code>dim3 group_index()</code> 返回当前线程的线程块指标，相当于 blockIdx</li>
+<li><code>dim3 thread_index()</code> 相当于 threadIdx</li>
+</ol>
+<p>于是可以抽象出当前线程块：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">thread_block g <span class="token operator">=</span> <span class="token function">this_thread_block</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+g<span class="token punctuation">.</span><span class="token function">sync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 等价于 __syncthreads()</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>可以将 <code>thread_block</code> 进行多次分割（但一组线程的数量只能是 2 的幂次）：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">thread_group g32 <span class="token operator">=</span> <span class="token function">tiled_partition</span><span class="token punctuation">(</span><span class="token function">this_thread_block</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 相当于线程束</span>
+thread_group g4 <span class="token operator">=</span> <span class="token function">tiled_partition</span><span class="token punctuation">(</span>g32<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 再次分割</span>
+<span class="token comment">// ---------- 模板化版本 ----------</span>
+thread_block_tile<span class="token operator">&lt;</span><span class="token number">32</span><span class="token operator">></span> g32 <span class="token operator">=</span> tiled_partition<span class="token operator">&lt;</span><span class="token number">32</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token function">this_thread_block</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这样的“线程块片”可以模仿线程束的一些行为，比如</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">unsigned</span> <span class="token function">__ballot_sync</span><span class="token punctuation">(</span><span class="token keyword">int</span> predicate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">__all_sync</span><span class="token punctuation">(</span><span class="token keyword">int</span> predicate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">__any_sync</span><span class="token punctuation">(</span><span class="token keyword">int</span> predicate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+T <span class="token function">__shfl_sync</span><span class="token punctuation">(</span>T v<span class="token punctuation">,</span> <span class="token keyword">int</span> srcLane<span class="token punctuation">)</span><span class="token punctuation">;</span>
+T <span class="token function">__shfl_up_sync</span><span class="token punctuation">(</span>T v<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> d<span class="token punctuation">)</span><span class="token punctuation">;</span>
+T <span class="token function">__shfl_down_sync</span><span class="token punctuation">(</span>T v<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> d<span class="token punctuation">)</span><span class="token punctuation">;</span>
+T <span class="token function">__shfl_xor_sync</span><span class="token punctuation">(</span>T v<span class="token punctuation">,</span> <span class="token keyword">int</span> laneMask<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 相对线程束的不同点：1. 不允许掩码，所有线程必须参与 2. 洗牌函数不再需要宽度参数，宽度由线程块片大小确定</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="再次优化数组归约"><a href="#再次优化数组归约" class="headerlink" title="再次优化数组归约"></a>再次优化数组归约</h3><p>这次我们采用的技巧有：</p>
+<ol>
+<li>使用静态全局内存</li>
+<li>调用两次核函数，舍弃原子加法函数（这会提高精确度）</li>
+<li>提高线程利用率（在规约之前进行小部分求和）</li>
+</ol>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;real.hpp></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;algorithm></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;widgets.hpp></span></span>
+
+<span class="token keyword">constexpr</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> FULL_MASK <span class="token operator">=</span> <span class="token number">0xffffffff</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> __global__ <span class="token function">reduce_cp</span><span class="token punctuation">(</span><span class="token keyword">const</span> real <span class="token operator">*</span>d_x<span class="token punctuation">,</span> real <span class="token operator">*</span>d_y<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">int</span> N<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> <span class="token keyword">int</span> tid <span class="token operator">=</span> threadIdx<span class="token punctuation">.</span>x<span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token keyword">int</span> bid <span class="token operator">=</span> blockIdx<span class="token punctuation">.</span>x<span class="token punctuation">;</span>
+    <span class="token keyword">extern</span> __shared__ real s_y<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    real y <span class="token operator">=</span> <span class="token number">0.0</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token keyword">int</span> stride <span class="token operator">=</span> blockDim<span class="token punctuation">.</span>x <span class="token operator">*</span> gridDim<span class="token punctuation">.</span>x<span class="token punctuation">;</span> <span class="token comment">// 以网格大小为跨度</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> n <span class="token operator">=</span> bid <span class="token operator">*</span> blockDim<span class="token punctuation">.</span>x <span class="token operator">+</span> tid<span class="token punctuation">;</span> n <span class="token operator">&lt;</span> N<span class="token punctuation">;</span> n <span class="token operator">+=</span> stride<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        y <span class="token operator">+=</span> d_x<span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// 确保一个网格能覆盖所有数据</span>
+    <span class="token punctuation">&#125;</span>
+    s_y<span class="token punctuation">[</span>tid<span class="token punctuation">]</span> <span class="token operator">=</span> y<span class="token punctuation">;</span>
+    <span class="token function">__syncthreads</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 线程块内，跨线程束折半归约</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> offset <span class="token operator">=</span> blockDim<span class="token punctuation">.</span>x <span class="token operator">>></span> <span class="token number">1</span><span class="token punctuation">;</span> offset <span class="token operator">>=</span> <span class="token number">32</span><span class="token punctuation">;</span> offset <span class="token operator">>>=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>tid <span class="token operator">&lt;</span> offset<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            s_y<span class="token punctuation">[</span>tid<span class="token punctuation">]</span> <span class="token operator">+=</span> s_y<span class="token punctuation">[</span>tid <span class="token operator">+</span> offset<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">__syncthreads</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    y <span class="token operator">=</span> s_y<span class="token punctuation">[</span>tid<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> offset <span class="token operator">=</span> <span class="token number">16</span><span class="token punctuation">;</span> offset <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> offset <span class="token operator">>>=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        y <span class="token operator">+=</span> <span class="token function">__shfl_down_sync</span><span class="token punctuation">(</span>FULL_MASK<span class="token punctuation">,</span> y<span class="token punctuation">,</span> offset<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>tid <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        d_y<span class="token punctuation">[</span>bid<span class="token punctuation">]</span> <span class="token operator">=</span> y<span class="token punctuation">;</span> <span class="token comment">// 返回线程块结果</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">constexpr</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">1e8</span><span class="token punctuation">;</span>
+<span class="token keyword">constexpr</span> <span class="token keyword">int</span> GRID_SIZE <span class="token operator">=</span> <span class="token number">10240</span><span class="token punctuation">;</span>
+<span class="token keyword">constexpr</span> <span class="token keyword">int</span> BLOCK_SIZE <span class="token operator">=</span> <span class="token number">128</span><span class="token punctuation">;</span>
+__device__ real d_input<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
+__device__ real d_output<span class="token punctuation">[</span>GRID_SIZE<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+real <span class="token function">reduce</span><span class="token punctuation">(</span><span class="token keyword">const</span> real <span class="token operator">*</span>d_x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    real <span class="token operator">*</span>d_y<span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaGetSymbolAddress</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>d_y<span class="token punctuation">,</span> d_output<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">constexpr</span> <span class="token keyword">int</span> shared_size <span class="token operator">=</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>real<span class="token punctuation">)</span> <span class="token operator">*</span> BLOCK_SIZE<span class="token punctuation">;</span>
+    reduce_cp<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>GRID_SIZE<span class="token punctuation">,</span> BLOCK_SIZE<span class="token punctuation">,</span> shared_size<span class="token operator">>></span><span class="token operator">></span><span class="token punctuation">(</span>d_x<span class="token punctuation">,</span> d_y<span class="token punctuation">,</span> N<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    reduce_cp<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1024</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>real<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">1024</span><span class="token operator">>></span><span class="token operator">></span><span class="token punctuation">(</span>d_y<span class="token punctuation">,</span> d_y<span class="token punctuation">,</span> GRID_SIZE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    real h_y<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaMemcpy</span><span class="token punctuation">(</span>h_y<span class="token punctuation">,</span> d_y<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>real<span class="token punctuation">)</span><span class="token punctuation">,</span> cudaMemcpyDeviceToHost<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// CHECK(cudaMemcpyFromSymbol(h_y, d_output, sizeof(real)));</span>
+
+    <span class="token keyword">return</span> h_y<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+    <span class="token keyword">static</span> real input<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span><span class="token function">fill_n</span><span class="token punctuation">(</span>input<span class="token punctuation">,</span> N<span class="token punctuation">,</span> <span class="token number">1.23f</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaMemcpyToSymbol</span><span class="token punctuation">(</span>d_input<span class="token punctuation">,</span> input<span class="token punctuation">,</span> N <span class="token operator">*</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>real<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    real <span class="token operator">*</span>d_x<span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaGetSymbolAddress</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>d_x<span class="token punctuation">,</span> d_input<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%f\n"</span><span class="token punctuation">,</span> <span class="token function">reduce</span><span class="token punctuation">(</span>d_x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 运行结果：</span>
+<span class="token comment">// 123000064.000000</span>
+<span class="token comment">// 对比 CPU 裸归约方法的加速比：67</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
 
 
@@ -4731,7 +4849,7 @@ __launch_bounds__<span class="token punctuation">(</span><span class="token punc
 __shared__ <span class="token comment"># 修饰变量，使它成为共享内存</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="CMake模板"><a href="#CMake模板" class="headerlink" title="CMake模板"></a>CMake模板</h2><pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token comment"># 2021/08/02</span>
+<h2 id="常用代码"><a href="#常用代码" class="headerlink" title="常用代码"></a>常用代码</h2><h3 id="CMake模板"><a href="#CMake模板" class="headerlink" title="CMake模板"></a>CMake模板</h3><pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token comment"># 2021/08/02</span>
 <span class="token keyword">cmake_minimum_required</span><span class="token punctuation">(</span><span class="token property">VERSION</span> <span class="token number">3.20</span><span class="token punctuation">)</span>
 
 <span class="token keyword">project</span><span class="token punctuation">(</span>hello LANGUAGES CUDA <span class="token property">VERSION</span> <span class="token number">0.1</span><span class="token punctuation">)</span>
@@ -4757,7 +4875,62 @@ __shared__ <span class="token comment"># 修饰变量，使它成为共享内存
 
 <span class="token comment"># install(TARGETS hello DESTINATION .)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-]]></content>
+<h3 id="报错、计时工具"><a href="#报错、计时工具" class="headerlink" title="报错、计时工具"></a>报错、计时工具</h3><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// widgets.hpp</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">once</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cstdio></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;chrono></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">CHECK</span><span class="token expression"><span class="token punctuation">(</span>callee<span class="token punctuation">)</span>                                            </span><span class="token punctuation">\</span>
+    <span class="token expression"><span class="token keyword">do</span> <span class="token punctuation">&#123;</span>                                                         </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token keyword">const</span> cudaError_t err <span class="token operator">=</span> callee<span class="token punctuation">;</span>                          </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token keyword">if</span> <span class="token punctuation">(</span>err <span class="token operator">==</span> cudaSuccess<span class="token punctuation">)</span> <span class="token keyword">break</span><span class="token punctuation">;</span>                           </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token function">printf</span><span class="token punctuation">(</span></span><span class="token string">"CUDA error at %s(%d)\n"</span><span class="token expression"><span class="token punctuation">,</span> <span class="token constant">__FILE__</span><span class="token punctuation">,</span> <span class="token constant">__LINE__</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token function">printf</span><span class="token punctuation">(</span></span><span class="token string">"    Function:   %s\n"</span><span class="token expression"><span class="token punctuation">,</span> __FUNCTION__<span class="token punctuation">)</span><span class="token punctuation">;</span>            </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token function">printf</span><span class="token punctuation">(</span></span><span class="token string">"    Error code: %d\n"</span><span class="token expression"><span class="token punctuation">,</span> err<span class="token punctuation">)</span><span class="token punctuation">;</span>                     </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token function">printf</span><span class="token punctuation">(</span></span><span class="token string">"    Error hint: %s\n"</span><span class="token expression"><span class="token punctuation">,</span> <span class="token function">cudaGetErrorString</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                                                 </span><span class="token punctuation">\</span>
+    <span class="token expression"><span class="token punctuation">&#125;</span> <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span></span></span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">F</span><span class="token operator">></span>
+<span class="token keyword">void</span> <span class="token function">cudaTiming</span><span class="token punctuation">(</span><span class="token keyword">const</span> F <span class="token operator">&amp;</span>func<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    cudaEvent_t start<span class="token punctuation">,</span> stop<span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaEventCreate</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaEventCreate</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>stop<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaEventRecord</span><span class="token punctuation">(</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">cudaEventQuery</span><span class="token punctuation">(</span>start<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaEventRecord</span><span class="token punctuation">(</span>stop<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaEventSynchronize</span><span class="token punctuation">(</span>stop<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">float</span> elapsed_time<span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaEventElapsedTime</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>elapsed_time<span class="token punctuation">,</span> start<span class="token punctuation">,</span> stop<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"CUDA Time = %g ms.\n"</span><span class="token punctuation">,</span> elapsed_time<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaEventDestroy</span><span class="token punctuation">(</span>start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">CHECK</span><span class="token punctuation">(</span><span class="token function">cudaEventDestroy</span><span class="token punctuation">(</span>stop<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">F</span><span class="token operator">></span>
+<span class="token keyword">void</span> <span class="token function">hostTiming</span><span class="token punctuation">(</span><span class="token keyword">const</span> F <span class="token operator">&amp;</span>func<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">auto</span> start <span class="token operator">=</span> std<span class="token operator">::</span>chrono<span class="token operator">::</span>steady_clock<span class="token operator">::</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">auto</span> end <span class="token operator">=</span> std<span class="token operator">::</span>chrono<span class="token operator">::</span>steady_clock<span class="token operator">::</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span>chrono<span class="token operator">::</span>duration<span class="token operator">&lt;</span><span class="token keyword">double</span><span class="token punctuation">,</span> std<span class="token operator">::</span>milli<span class="token operator">></span> duration <span class="token operator">=</span> end <span class="token operator">-</span> start<span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Host Time = %g ms.\n"</span><span class="token punctuation">,</span> duration<span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="精度控制模板"><a href="#精度控制模板" class="headerlink" title="精度控制模板"></a>精度控制模板</h3><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// real.hpp</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">once</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">USE_DOUBLE</span></span>
+<span class="token keyword">using</span> real <span class="token operator">=</span> <span class="token keyword">double</span><span class="token punctuation">;</span>
+<span class="token keyword">constexpr</span> real EPS <span class="token operator">=</span> <span class="token number">1e-15</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span></span>
+<span class="token keyword">using</span> real <span class="token operator">=</span> <span class="token keyword">float</span><span class="token punctuation">;</span>
+<span class="token keyword">constexpr</span> real EPS <span class="token operator">=</span> <span class="token number">1e-6f</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       <tags>
         <tag>GPGPU</tag>
       </tags>
