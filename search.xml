@@ -4832,11 +4832,50 @@ real <span class="token function">reduce</span><span class="token punctuation">(
 <span class="token comment">// 123000064.000000</span>
 <span class="token comment">// 对比 CPU 裸归约方法的加速比：67</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
-
-
-
+<h2 id="CUDA-流"><a href="#CUDA-流" class="headerlink" title="CUDA 流"></a>CUDA 流</h2><h3 id="核函数外部的并行"><a href="#核函数外部的并行" class="headerlink" title="核函数外部的并行"></a>核函数外部的并行</h3><p>主要有以下情形：</p>
+<ol>
+<li>核函数计算与数据传输之间的并行</li>
+<li>主机计算与数据传输之间的并行</li>
+<li>不同的数据传输之间的并行</li>
+<li>核函数计算与主机计算之间的并行</li>
+<li>不同核函数之间的并行</li>
+</ol>
+<p>若两个任务的运行时间相近，则尽量令他们并行。反之，则并行和串行的性能差距不大。</p>
+<p>使用 CUDA 流的主要目的是尽量取得核函数外部的并行能力。</p>
+<h3 id="使用-CUDA-流"><a href="#使用-CUDA-流" class="headerlink" title="使用 CUDA 流"></a>使用 CUDA 流</h3><p>CUDA 流的使用相对简单，只要记住一些规则就好。</p>
+<ol>
+<li><p>CUDA 程序有一个默认流。若 API 不需要指定流句柄，可推测它用于默认流。</p>
+</li>
+<li><p>创建、销毁 CUDA 流</p>
+ <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">cudaStream_t stream<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> <span class="token operator">&amp;</span>s <span class="token operator">:</span> stream<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">cudaStreamCreate</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建流，获得句柄</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// ...</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> <span class="token operator">&amp;</span>s <span class="token operator">:</span> stream<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">cudaStreamDestroy</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 销毁流，句柄不抹除</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>检测 CUDA 流是否空闲 </p>
+ <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">cudaError_t <span class="token function">cudaStreamSynchronize</span><span class="token punctuation">(</span>cudaStream_t stream<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 阻塞主机，直到 CUDA 流完成所有操作</span>
+cudaError_t <span class="token function">cudaStreamQuery</span><span class="token punctuation">(</span>cudaStream_t stream<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 返回 cudaSuccess（已完成）/ cudaErrorNotReady（未完成）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li><p><code>cudaMemcpy</code> 会阻塞主机。但是核函数的调用总是异步的。应该尽量早地调用核函数，随后再进行主机的计算任务。</p>
+</li>
+<li><p>在核函数配置中指派 CUDA 流：</p>
+ <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">my_kernel<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>N_grid<span class="token punctuation">,</span> N_block<span class="token punctuation">,</span> N_shared<span class="token punctuation">,</span> stream_id<span class="token operator">>></span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 四个模板参数必须齐全</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li><p>异步的数据传输需要：</p>
+<ol>
+<li>使用 <code>cudaMemcpyAsync</code> 函数。</li>
+<li>涉及的主机内存必须是不可分页的，否则 API 将会退化为同步版本。</li>
+</ol>
+<p> 异步传输的过程将由 GPU 的 DMA（direct memory access）接管。</p>
+</li>
+<li><p>可以用 CUDA 运行时 API 来申请不可分页的内存（non-pageable memory），又称固定内存（pinned memory）。不可分页意味着操作系统无权修改虚拟地址所对应的物理地址。</p>
+ <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">cudaError_t <span class="token function">cudaMallocHost</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>ptr<span class="token punctuation">,</span> size_t size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+cudaError_t <span class="token function">cudaHostAlloc</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>ptr<span class="token punctuation">,</span> size_t size<span class="token punctuation">,</span> size_t flags<span class="token punctuation">)</span><span class="token punctuation">;</span>
+cudaError_t <span class="token function">cudaFreeHost</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>ptr<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li><p>良好的 CUDA 流指派会从流水线重叠中获得并行加速。但是 CUDA 流是有启动开销，且硬件环境有限，过多的 CUDA 流会拉低性能。</p>
+</li>
+</ol>
 <h2 id="指令速查"><a href="#指令速查" class="headerlink" title="指令速查"></a>指令速查</h2><h3 id="编译器选项"><a href="#编译器选项" class="headerlink" title="编译器选项"></a>编译器选项</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">--ptxas-options<span class="token operator">=</span>-v <span class="token comment"># 报道每个核函数的寄存器使用数量</span>
 --maxrregcount<span class="token operator">=</span> <span class="token comment"># 限制所有核函数的寄存器使用量</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
