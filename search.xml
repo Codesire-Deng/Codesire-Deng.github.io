@@ -3933,13 +3933,13 @@ cudaError_t <span class="token function">cudaFreeHost</span><span class="token p
 --maxrregcount<span class="token operator">=</span> <span class="token comment"># 限制所有核函数的寄存器使用量</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <h3 id="修饰符"><a href="#修饰符" class="headerlink" title="修饰符"></a>修饰符</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">__global__ <span class="token comment"># 核函数修饰符</span>
-__device__ <span class="token comment"># 设备函数修饰符</span>
+__device__ <span class="token comment"># 设备函数、变量修饰符</span>
 __host__ <span class="token comment"># 主机函数修饰符，一般只与__device__同时出现</span>
 __noinline__ <span class="token comment"># 建议函数非内联</span>
 __forceinline__ <span class="token comment"># 建议函数内联</span>
 __launch_bounds__<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 修饰核函数，限制寄存器使用量</span>
-__shared__ <span class="token comment"># 修饰变量，使它成为共享内存</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+__shared__ <span class="token comment"># 修饰全局变量，使它成为共享内存</span>
+__managed__ <span class="token comment"># 修饰全局变量，使它成为统一内存，必须与__device__同时出现</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="常用代码"><a href="#常用代码" class="headerlink" title="常用代码"></a>常用代码</h2><h3 id="CMake模板"><a href="#CMake模板" class="headerlink" title="CMake模板"></a>CMake模板</h3><pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token comment"># 2021/08/02</span>
 <span class="token keyword">cmake_minimum_required</span><span class="token punctuation">(</span><span class="token property">VERSION</span> <span class="token number">3.20</span><span class="token punctuation">)</span>
