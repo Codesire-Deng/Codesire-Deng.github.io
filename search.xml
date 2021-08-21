@@ -4909,7 +4909,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 </ol>
 <p>封装成帧：</p>
 <p>链路层协议规定了<strong>最大传输单元（MTU, Maximum Transfer Unit）</strong>，表示帧能容纳的最大数据（不计首部和尾部）。</p>
-<p>如果数据是ASCII编码的文本文件，帧头标记是**SOH(Start Of Header, 0x01)<strong>，帧尾标记是</strong>EOT(End Of Transmission，0x04)**。</p>
+<p>如果数据是ASCII编码的文本文件，帧头标记是<strong>SOH(Start Of Header, 0x01)<strong>，帧尾标记是</strong>EOT(End Of Transmission，0x04)</strong> 。</p>
 <p>透明传输：</p>
 <p>若文本无需处理（不会出现SOH和EOT），则传输是<strong>透明传输</strong>。</p>
 <p>若文本无法透明传输，可以用<strong>字节填充（byte stuffing）</strong>或<strong>字符填充（character stuffing）</strong>。在特殊字符前插入<strong>转义字符</strong>“<strong>ESC（0x1B）</strong>”。例如文本含&quot;0x1B&quot;，就传输 &quot;0x1B 0x1B&quot;。</p>
@@ -4985,7 +4985,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <h2 id="Treap"><a href="#Treap" class="headerlink" title="Treap"></a>Treap</h2><ul>
 <li>每个结点有随机的优先级，使树满足优先级树（堆）的性质，其余是普通排序二叉树</li>
 <li>旋转：<ul>
-<li>**参数是子树根(引用子树根的儿子指针，否则要改一系列父子指针)**，旋转 即是 <strong>沉降</strong>，另一边的孩子上升，但该孩子可能丢失一个子树。</li>
+<li><strong>参数是子树根(引用子树根的儿子指针，否则要改一系列父子指针)</strong> ，旋转 即是 <strong>沉降</strong>，另一边的孩子上升，但该孩子可能丢失一个子树。</li>
 <li><strong>引用原子树根</strong>可方便修改父亲指向自己的指针。</li>
 <li>总是<strong>因为查找才会引发旋转</strong>，所以旋转参数总是引用。</li>
 <li>没有返回值，因为新子树根就是父亲的儿子指针。</li>
