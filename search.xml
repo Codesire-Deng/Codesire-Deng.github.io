@@ -1154,6 +1154,17 @@ endfunc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 
 Singleton<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 调用</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h3 id="伴生单例"><a href="#伴生单例" class="headerlink" title="伴生单例"></a>伴生单例</h3><p>包裹在 <code>companion object &#123;&#125;</code> 内部即可。性质类似静态成员。</p>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">class</span> Util <span class="token punctuation">&#123;</span>
+    <span class="token keyword">companion</span> <span class="token keyword">object</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// @JvmStatic</span>
+        <span class="token keyword">fun</span> <span class="token function">factory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> Util <span class="token punctuation">&#123;</span>
+    
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="真正的静态成员"><a href="#真正的静态成员" class="headerlink" title="真正的静态成员"></a>真正的静态成员</h4><p>在伴生单例内加入 <code>@JvmStatic</code> 注解，或者，顶层方法是静态成员方法。</p>
+<p>在 Java 中，将 kt 的文件名看作类名，即可调用 kotlin 顶层方法。</p>
 <h2 id="Lambda编程"><a href="#Lambda编程" class="headerlink" title="Lambda编程"></a>Lambda编程</h2><h3 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h3><p>列表</p>
 <pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">val</span> list <span class="token operator">=</span> ArrayList<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 可变</span>
 list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"Apple"</span><span class="token punctuation">)</span>
@@ -1227,6 +1238,26 @@ Thread <span class="token punctuation">&#123;</span>
 button<span class="token punctuation">.</span><span class="token function">setOnClickListener</span> <span class="token punctuation">&#123;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h3 id="常用标准函数"><a href="#常用标准函数" class="headerlink" title="常用标准函数"></a>常用标准函数</h3><ol>
+<li><code>let</code> 返回最后一行 <pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin">obj<span class="token operator">?</span><span class="token punctuation">.</span><span class="token function">let</span> <span class="token punctuation">&#123;</span>
+    it<span class="token punctuation">.</span><span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li><code>also</code> 返回本身 <pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin">obj<span class="token operator">?</span><span class="token punctuation">.</span><span class="token function">also</span> <span class="token punctuation">&#123;</span>
+    it<span class="token punctuation">.</span><span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li><code>with</code> 返回最后一行 <pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token function">with</span><span class="token punctuation">(</span><span class="token function">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span>
+    <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><code>run</code> 返回最后一行 <pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token function">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">run</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span>
+    <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><code>apply</code> 返回本身 <pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token function">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">apply</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li></li>
+</ol>
 <h2 id="空类型系统"><a href="#空类型系统" class="headerlink" title="空类型系统"></a>空类型系统</h2><p>Kotlin默认编译器形参不可为空。</p>
 <h3 id="可空类型"><a href="#可空类型" class="headerlink" title="可空类型"></a>可空类型</h3><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">doStudy</span><span class="token punctuation">(</span>a<span class="token operator">:</span> Study<span class="token operator">?</span><span class="token punctuation">,</span> b<span class="token operator">:</span> Study<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 加问号，表示可空</span>
     a<span class="token punctuation">.</span><span class="token function">readBooks</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 编译错误，未处理空</span>
