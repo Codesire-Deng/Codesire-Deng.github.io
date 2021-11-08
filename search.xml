@@ -2283,6 +2283,9 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 </blockquote>
 <p>[toc]</p>
 ]]></content>
+      <tags>
+        <tag>数学</tag>
+      </tags>
   </entry>
   <entry>
     <title>数位DP</title>
@@ -3658,6 +3661,9 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <p>$$<br>T(N) = \begin{cases}<br>O(N^{\log_b a})&amp; \text{if }a &gt; b^k \<br>O(N^k \log_{p+1} N)&amp; \text{if }a = b^k \<br>O(N^k \log_{p} N)&amp; \text{if }a &lt; b^k \<br>\end{cases}<br>$$</p>
 <h3 id="三角函数"><a href="#三角函数" class="headerlink" title="三角函数"></a>三角函数</h3><h4 id="sin-cos-tan知一求二"><a href="#sin-cos-tan知一求二" class="headerlink" title="sin,cos,tan知一求二"></a>sin,cos,tan知一求二</h4><p>试试$(\tan^2x)^{(-1)^k}+1 = ?$</p>
 ]]></content>
+      <tags>
+        <tag>数学</tag>
+      </tags>
   </entry>
   <entry>
     <title>C++ 语法笔记</title>
@@ -5384,5 +5390,18 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>PPP帧包括flags，address，control，protocol，payload，checksum。</li>
 </ol>
 ]]></content>
+      <tags>
+        <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络编程实战</title>
+    <url>/2021/11/08/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98/</url>
+    <content><![CDATA[<h2 id="开坑，强力更新中"><a href="#开坑，强力更新中" class="headerlink" title="开坑，强力更新中"></a>开坑，强力更新中</h2><span id="more"></span>]]></content>
+      <tags>
+        <tag>并发编程</tag>
+        <tag>C++</tag>
+        <tag>计算机网络</tag>
+      </tags>
   </entry>
 </search>
