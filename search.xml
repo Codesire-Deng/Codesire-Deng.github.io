@@ -5532,7 +5532,37 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 </ol>
 <h2 id="关于堆分配"><a href="#关于堆分配" class="headerlink" title="关于堆分配"></a>关于堆分配</h2><p>程序员可通过自定义 <code>operator new</code> 来控制 coroutine state 的分配。这部分暂时忽略不讲。</p>
 <h2 id="Promise类型推导"><a href="#Promise类型推导" class="headerlink" title="Promise类型推导"></a>Promise类型推导</h2><p>这部分暂时忽略不讲。</p>
-<h2 id="co-await"><a href="#co-await" class="headerlink" title="co_await"></a><code>co_await</code></h2><p>一元运算符</p>
+<h2 id="co-await"><a href="#co-await" class="headerlink" title="co_await"></a>co_await</h2><p>一元运算符 <code>co_await</code> 会暂停协程并将转移执行权。其操作数必须定义 <code>operator co_await</code>，或者能通过当前协程的 <code>Promise::await_transform</code> 转换成这种类型。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">co_await</span> expr<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>首先，<code>expr</code> 要被转换为 awaitable，规则如下：</p>
+<ol>
+<li>如果 <code>expr</code> 是由 initial suspend point，final suspend point 或者 yield expression 生成的，那么 awaitable 就是 <code>expr</code> 本身。</li>
+<li>否则，如果当前协程有定义 <code>Promise::await_transform</code>，那么 awaitable 就是 <code>promise.await_transform(expr)</code>。</li>
+<li>否则，awaitable 就是 <code>expr</code> 本身。</li>
+</ol>
+<p>然后生成一个 awaiter object，规则如下：</p>
+<ol>
+<li>根据重载解析的结果调用 <code>opeartor co_await(awaiter)</code> 或者 <code>awaitable.operator co_await()</code></li>
+<li>如果重载解析找不到函数，那么 awaiter 就是 awaitable 本身。</li>
+<li>如果重载解析有歧义，那么程序是 ill-formed。</li>
+</ol>
+<p>然后，调用 <code>awaiter.await_ready()</code>并判断，决定是否暂停协程：</p>
+<ul>
+<li>若 <code>false</code>，协程暂停，必要的信息存放于 coroutine state。然后调用 <code>awaiter.await_suspend(handle)</code>。在这个函数中，通过 <code>handle</code> 可以访问 coroutine state，也是这个函数有责任安排协程在某个 executor 上恢复（甚至立即就地恢复），或者干脆销毁协程：<ul>
+<li>若 <code>awaiter.await_suspend(handle)</code> 返回 void，执行权立即转移（给 caller/resumer）。</li>
+<li>否则若返回 bool，<ul>
+<li>若 <code>true</code> 则转移执行权（给 caller/resumer）。</li>
+<li>若 <code>false</code> 则恢复当前协程。</li>
+</ul>
+</li>
+<li>否则返回一个 coroutine handle（对应其他协程），调用这个 <code>other_handle.resume()</code>。注意链式调用可能最终恢复当前协程。</li>
+<li>当前协程恢复后，返回 <code>awaiter.await_resume()</code> 作为 <code>co_await expr</code> 的结果。</li>
+</ul>
+</li>
+<li>若 <code>true</code>，协程直接返回 <code>awaiter.await_resume()</code> 作为 <code>co_await expr</code> 的结果。</li>
+</ul>
+<p>注意在进入 <code>awaiter.await_suspend(handle)</code> 之前，当前协程已经完全暂停，此时当前 handle 可以在线程之间自由传递，并由其他调度者恢复。在这种情况下，协程可能已经被恢复，awaiter 随之已经被析构，所以 <code>await_suspend()</code> 不应再访问 <code>*this</code>。</p>
 ]]></content>
       <tags>
         <tag>语法</tag>
