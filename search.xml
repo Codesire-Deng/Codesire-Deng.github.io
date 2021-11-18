@@ -3650,7 +3650,7 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
     <title>网络编程实战</title>
     <url>/2021/11/08/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98/</url>
     <content><![CDATA[<h2 id="开坑，强力更新中"><a href="#开坑，强力更新中" class="headerlink" title="开坑，强力更新中"></a>开坑，强力更新中</h2><blockquote>
-<p>我咕了，原因：在学习网络并发的时候迷恋<code>线程池</code>，既然玩就玩大的，直接猛攻<code>C++ 20 协程线程池</code>，于是现在在苦学协程……</p>
+<p>我咕了，原因：在学习网络并发的时候迷恋<code>线程池</code>，既然玩就玩大的，直接猛攻<code>C++20 协程线程池</code>，于是现在在苦学协程……</p>
 </blockquote>
 <span id="more"></span>
 
@@ -3700,7 +3700,7 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
     <content><![CDATA[<p>本文始于 2018/6/27，用于汇聚关于 C++ 的实用知识和碰到的坑，温故而知新。</p>
 <blockquote>
 <p>2021/11/18 【新增】引用限定成员函数</p>
-<p>等待更新：</p>
+<p>下次更新：</p>
 <ol>
 <li><code>if constexpr</code> 在声明和具体化时期的不同表现</li>
 <li><code>coroutine</code>：性能神器</li>
@@ -5438,6 +5438,105 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 ]]></content>
       <tags>
         <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++20 Coroutine</title>
+    <url>/2021/11/18/C-20-Coroutine/</url>
+    <content><![CDATA[<blockquote>
+<p><strong>协程</strong>(coroutine)是能够暂停和恢复的函数。</p>
+</blockquote>
+<p>协程是<strong>线程阻塞造成性能下降</strong>的最佳解决方案，尤其是应用在静态线程池中。</p>
+<span id="more"></span>
+
+<small>
+
+<h2 id="吐槽"><a href="#吐槽" class="headerlink" title="吐槽"></a>吐槽</h2><p>GoLang 设计的 goroutine 简单好用，大名鼎鼎；虚拟机语言（例如 C#，Javascript，Java）的协程更是逆天改命，强势占领高性能并发的高地；机器队这边简直神速，而我们的人工队 C++ 在干什么呢，不会还没做完 STL network 吧，不会连 <code>format</code> 的编译器支持都没有吧，不会还没推广 <code>import &lt;module&gt;</code> 吧 🥵🥵🥵……</p>
+</small>
+
+<h2 id="C-的协程"><a href="#C-的协程" class="headerlink" title="C++的协程"></a>C++的协程</h2><p>C++的协程是：</p>
+<ol>
+<li>对称的。一个协程暂停后，可返回 caller 或恢复任意协程。</li>
+<li>语言级特性。编译器知道你在使用协程。然而不比库强到哪里去。</li>
+<li>无栈(Stackless) 的。没有独立运行时栈，无惧爆栈，调度成本低。</li>
+</ol>
+<p>一个协程在被命令「暂停」时，会保证将数据和当前运行位置保存在堆内存（以便恢复现场），然后转移运行权。</p>
+<p>协程允许程序员更美观地编写异步代码，也使懒惰求值的算法成为可能。</p>
+<p>当一个函数出现以下三种关键字之一，它就是协程：</p>
+<ol>
+<li><code>co_await</code> 暂停（直到被命令「恢复」）。</li>
+<li><code>co_yield</code> 暂停同时返回一个值。</li>
+<li><code>co_return</code> 结束整个协程并返回一个值。</li>
+</ol>
+<h2 id="协程的限制"><a href="#协程的限制" class="headerlink" title="协程的限制"></a>协程的限制</h2><ol>
+<li>不能使用变参模板</li>
+<li>不能使用 <code>return</code></li>
+<li>不能使用占位符返回类型 （<code>auto</code> 或者 Concept）</li>
+<li>不能是 constexpr 函数</li>
+<li>不能是构造函数或者析构函数</li>
+<li>不能是 <code>main</code> 函数</li>
+</ol>
+<h2 id="协程的运行过程"><a href="#协程的运行过程" class="headerlink" title="协程的运行过程"></a>协程的运行过程</h2><p>所有协程必须关联着几个对象：</p>
+<ol>
+<li><strong>promise object</strong>，在协程内部进行操作，协程向其写入结果或者异常。</li>
+<li><strong>coroutine handle</strong>，在协程外部进行操作，用于恢复协程或者销毁协程帧(frame)。</li>
+<li><strong>coroutine state</strong>，保存协程的信息，分配于堆内存上（除非被优化），对程序员不可见。具体保存着：<ol>
+<li>promise object</li>
+<li>所有协程参数（按值复制或移动）</li>
+<li>记录暂停点的状态机</li>
+<li>局部变量和临时变量</li>
+</ol>
+</li>
+</ol>
+<hr>
+<p>当协程「开始」时，它会：</p>
+<ol>
+<li>使用 <code>operater new</code> 来构造 coroutine state。</li>
+<li>将所有协程参数拷贝或移动到 coroutine state。<em>小心发生「垂悬引用」，尤其在协程恢复后。</em></li>
+<li>构造 promise object。优先调用接受所有协程参数的构造函数，否则调用默认构造函数。</li>
+<li>调用 <code>promise.get_return_object()</code>，其结果保存为本地变量。此结果在第一次暂停时会返回给 caller。包括这一步和以前的步骤，所有异常都会抛给 caller，而不是放入 promise object。</li>
+<li>调用 <code>promise.initial_suspend()</code>，紧接着 <code>co_await</code> 它。<em>常见的返回值是 <code>suspend_always</code> 用于懒汉协程，或者 <code>suspend_never</code> 用于饿汉协程</em></li>
+<li>当 <code>co_await promise.initial_suspend()</code> 恢复后，协程开始运行其函数体。</li>
+</ol>
+<hr>
+<p>当协程到达暂停点，它会：</p>
+<ol>
+<li>将 return object 返回给执行权所有者，类型应为协程的返回类型，允许发生隐式转换。</li>
+</ol>
+<hr>
+<p>当协程到达 <code>co_return [expr]</code> 语句，它会：</p>
+<ol>
+<li>调用 <code>promise.return_void()</code>，条件是：<ol>
+<li><code>co_return;</code></li>
+<li><code>co_return expr</code> 而 expr 的类型是 void</li>
+<li>函数体结束</li>
+</ol>
+</li>
+<li>或者调用 <code>promise.return_value(expr)</code>。</li>
+<li>析构所有自动变量。</li>
+<li>调用 <code>promise.final_suspend()</code>，紧接着 <code>co_await</code> 它。</li>
+</ol>
+<hr>
+<p>当协程因未捕获异常而结束，它会：</p>
+<ol>
+<li>捕获这个异常，并在 <code>catch</code> 块中调用 <code>promise.unhandled_exception()</code></li>
+<li>调用 <code>promise.final_suspend()</code>，紧接着 <code>co_await</code> 它。此时恢复另一个协程是 UB。</li>
+</ol>
+<hr>
+<p>当 coroutine state 被析构（要么遇到 <code>co_return</code>，要么未捕获异常，在要么被 handle 销毁）时，它会：</p>
+<ol>
+<li>析构 promise object。</li>
+<li>析构所有协程参数。</li>
+<li>使用 <code>operator delete</code> 来释放coroutine state。</li>
+<li>转移执行权。</li>
+</ol>
+<h2 id="关于堆分配"><a href="#关于堆分配" class="headerlink" title="关于堆分配"></a>关于堆分配</h2><p>程序员可通过自定义 <code>operator new</code> 来控制 coroutine state 的分配。这部分暂时忽略不讲。</p>
+<h2 id="Promise类型推导"><a href="#Promise类型推导" class="headerlink" title="Promise类型推导"></a>Promise类型推导</h2><p>这部分暂时忽略不讲。</p>
+<h2 id="co-await"><a href="#co-await" class="headerlink" title="co_await"></a><code>co_await</code></h2><p>一元运算符</p>
+]]></content>
+      <tags>
+        <tag>语法</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
 </search>

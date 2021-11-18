@@ -20,28 +20,29 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":true},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":true,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="更新Hexocnpm install -g cnpm                 # 升级 npm cnpm cache clean -f                 # 清除 npm 缓存  # 更新 package.json 中的 hexo 及个插件版本 cnpm install -g npm-check           # 检查之前安装的插件，都有哪些是可以升级的  cnpm i">
+<meta name="description" content="协程(coroutine)是能够暂停和恢复的函数。  协程是线程阻塞造成性能下降的最佳解决方案，尤其是应用在静态线程池中。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo &amp; NexT 更新方式">
-<meta property="og:url" content="https://codesire-deng.github.io/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:title" content="C++20 Coroutine">
+<meta property="og:url" content="https://codesire-deng.github.io/2021/11/18/C-20-Coroutine/index.html">
 <meta property="og:site_name" content="等疾风">
-<meta property="og:description" content="更新Hexocnpm install -g cnpm                 # 升级 npm cnpm cache clean -f                 # 清除 npm 缓存  # 更新 package.json 中的 hexo 及个插件版本 cnpm install -g npm-check           # 检查之前安装的插件，都有哪些是可以升级的  cnpm i">
+<meta property="og:description" content="协程(coroutine)是能够暂停和恢复的函数。  协程是线程阻塞造成性能下降的最佳解决方案，尤其是应用在静态线程池中。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-04-01T02:36:50.000Z">
-<meta property="article:modified_time" content="2021-04-01T02:43:59.440Z">
+<meta property="article:published_time" content="2021-11-18T12:48:05.000Z">
+<meta property="article:modified_time" content="2021-11-18T14:52:29.868Z">
 <meta property="article:author" content="等疾风">
-<meta property="article:tag" content="减少脱发指南">
+<meta property="article:tag" content="语法">
+<meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://codesire-deng.github.io/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/">
+<link rel="canonical" href="https://codesire-deng.github.io/2021/11/18/C-20-Coroutine/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://codesire-deng.github.io/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/","path":"2021/04/01/Hexo-NexT-更新方式/","title":"Hexo & NexT 更新方式"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://codesire-deng.github.io/2021/11/18/C-20-Coroutine/","path":"2021/11/18/C-20-Coroutine/","title":"C++20 Coroutine"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Hexo & NexT 更新方式 | 等疾风</title>
+<title>C++20 Coroutine | 等疾风</title>
   
 
 
@@ -147,7 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0Hexo"><span class="nav-number">1.</span> <span class="nav-text">更新Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0NexT"><span class="nav-number">2.</span> <span class="nav-text">更新NexT</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%90%E6%A7%BD"><span class="nav-number">1.</span> <span class="nav-text">吐槽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E7%9A%84%E5%8D%8F%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">C++的协程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E7%A8%8B%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">3.</span> <span class="nav-text">协程的限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E7%A8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">协程的运行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%A0%86%E5%88%86%E9%85%8D"><span class="nav-number">5.</span> <span class="nav-text">关于堆分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Promise%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC"><span class="nav-number">6.</span> <span class="nav-text">Promise类型推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#co-await"><span class="nav-number">7.</span> <span class="nav-text">co_await</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -223,7 +224,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2021/11/18/C-20-Coroutine/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
@@ -236,7 +237,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hexo & NexT 更新方式
+          C++20 Coroutine
         </h1>
 
         <div class="post-meta-container">
@@ -248,7 +249,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2021-04-01 10:36:50 / 修改时间：10:43:59" itemprop="dateCreated datePublished" datetime="2021-04-01T10:36:50+08:00">2021-04-01</time>
+      <time title="创建时间：2021-11-18 20:48:05 / 修改时间：22:52:29" itemprop="dateCreated datePublished" datetime="2021-11-18T20:48:05+08:00">2021-11-18</time>
     </span>
 
   
@@ -261,8 +262,8 @@
       <span class="post-meta-item-text">Changyan：</span>
     
     
-      <a title="changyan" href="/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2021/04/01/Hexo-NexT-更新方式/" itemprop="commentCount"></span>
+      <a title="changyan" href="/2021/11/18/C-20-Coroutine/#SOHUCS" itemprop="discussionUrl">
+        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2021/11/18/C-20-Coroutine/" itemprop="commentCount"></span>
       </a>
     
   </span>
@@ -277,25 +278,96 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h3 id="更新Hexo"><a href="#更新Hexo" class="headerlink" title="更新Hexo"></a>更新Hexo</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm <span class="token function">install</span> -g cnpm                 <span class="token comment"># 升级 npm</span>
-cnpm cache clean -f                 <span class="token comment"># 清除 npm 缓存</span>
+        <blockquote>
+<p><strong>协程</strong>(coroutine)是能够暂停和恢复的函数。</p>
+</blockquote>
+<p>协程是<strong>线程阻塞造成性能下降</strong>的最佳解决方案，尤其是应用在静态线程池中。</p>
+<span id="more"></span>
 
-<span class="token comment"># 更新 package.json 中的 hexo 及个插件版本</span>
-cnpm <span class="token function">install</span> -g npm-check           <span class="token comment"># 检查之前安装的插件，都有哪些是可以升级的 </span>
-cnpm <span class="token function">install</span> -g npm-upgrade         <span class="token comment"># 升级系统中的插件</span>
-npm-check
-npm-upgrade
+<small>
 
-cnpm update
+<h2 id="吐槽"><a href="#吐槽" class="headerlink" title="吐槽"></a>吐槽</h2><p>GoLang 设计的 goroutine 简单好用，大名鼎鼎；虚拟机语言（例如 C#，Javascript，Java）的协程更是逆天改命，强势占领高性能并发的高地；机器队这边简直神速，而我们的人工队 C++ 在干什么呢，不会还没做完 STL network 吧，不会连 <code>format</code> 的编译器支持都没有吧，不会还没推广 <code>import &lt;module&gt;</code> 吧 🥵🥵🥵……</p>
+</small>
 
-hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="更新NexT"><a href="#更新NexT" class="headerlink" title="更新NexT"></a>更新NexT</h3><ol>
-<li>重命名原有的主题文件（夹）</li>
-<li><code>npm install hexo-theme-next@latest</code></li>
-<li>diff配合肉眼更新配置</li>
-<li>参考<a target="_blank" rel="noopener" href="https://theme-next.js.org/docs/getting-started/upgrade.html">官方文档</a></li>
+<h2 id="C-的协程"><a href="#C-的协程" class="headerlink" title="C++的协程"></a>C++的协程</h2><p>C++的协程是：</p>
+<ol>
+<li>对称的。一个协程暂停后，可返回 caller 或恢复任意协程。</li>
+<li>语言级特性。编译器知道你在使用协程。然而不比库强到哪里去。</li>
+<li>无栈(Stackless) 的。没有独立运行时栈，无惧爆栈，调度成本低。</li>
 </ol>
+<p>一个协程在被命令「暂停」时，会保证将数据和当前运行位置保存在堆内存（以便恢复现场），然后转移运行权。</p>
+<p>协程允许程序员更美观地编写异步代码，也使懒惰求值的算法成为可能。</p>
+<p>当一个函数出现以下三种关键字之一，它就是协程：</p>
+<ol>
+<li><code>co_await</code> 暂停（直到被命令「恢复」）。</li>
+<li><code>co_yield</code> 暂停同时返回一个值。</li>
+<li><code>co_return</code> 结束整个协程并返回一个值。</li>
+</ol>
+<h2 id="协程的限制"><a href="#协程的限制" class="headerlink" title="协程的限制"></a>协程的限制</h2><ol>
+<li>不能使用变参模板</li>
+<li>不能使用 <code>return</code></li>
+<li>不能使用占位符返回类型 （<code>auto</code> 或者 Concept）</li>
+<li>不能是 constexpr 函数</li>
+<li>不能是构造函数或者析构函数</li>
+<li>不能是 <code>main</code> 函数</li>
+</ol>
+<h2 id="协程的运行过程"><a href="#协程的运行过程" class="headerlink" title="协程的运行过程"></a>协程的运行过程</h2><p>所有协程必须关联着几个对象：</p>
+<ol>
+<li><strong>promise object</strong>，在协程内部进行操作，协程向其写入结果或者异常。</li>
+<li><strong>coroutine handle</strong>，在协程外部进行操作，用于恢复协程或者销毁协程帧(frame)。</li>
+<li><strong>coroutine state</strong>，保存协程的信息，分配于堆内存上（除非被优化），对程序员不可见。具体保存着：<ol>
+<li>promise object</li>
+<li>所有协程参数（按值复制或移动）</li>
+<li>记录暂停点的状态机</li>
+<li>局部变量和临时变量</li>
+</ol>
+</li>
+</ol>
+<hr>
+<p>当协程「开始」时，它会：</p>
+<ol>
+<li>使用 <code>operater new</code> 来构造 coroutine state。</li>
+<li>将所有协程参数拷贝或移动到 coroutine state。<em>小心发生「垂悬引用」，尤其在协程恢复后。</em></li>
+<li>构造 promise object。优先调用接受所有协程参数的构造函数，否则调用默认构造函数。</li>
+<li>调用 <code>promise.get_return_object()</code>，其结果保存为本地变量。此结果在第一次暂停时会返回给 caller。包括这一步和以前的步骤，所有异常都会抛给 caller，而不是放入 promise object。</li>
+<li>调用 <code>promise.initial_suspend()</code>，紧接着 <code>co_await</code> 它。<em>常见的返回值是 <code>suspend_always</code> 用于懒汉协程，或者 <code>suspend_never</code> 用于饿汉协程</em></li>
+<li>当 <code>co_await promise.initial_suspend()</code> 恢复后，协程开始运行其函数体。</li>
+</ol>
+<hr>
+<p>当协程到达暂停点，它会：</p>
+<ol>
+<li>将 return object 返回给执行权所有者，类型应为协程的返回类型，允许发生隐式转换。</li>
+</ol>
+<hr>
+<p>当协程到达 <code>co_return [expr]</code> 语句，它会：</p>
+<ol>
+<li>调用 <code>promise.return_void()</code>，条件是：<ol>
+<li><code>co_return;</code></li>
+<li><code>co_return expr</code> 而 expr 的类型是 void</li>
+<li>函数体结束</li>
+</ol>
+</li>
+<li>或者调用 <code>promise.return_value(expr)</code>。</li>
+<li>析构所有自动变量。</li>
+<li>调用 <code>promise.final_suspend()</code>，紧接着 <code>co_await</code> 它。</li>
+</ol>
+<hr>
+<p>当协程因未捕获异常而结束，它会：</p>
+<ol>
+<li>捕获这个异常，并在 <code>catch</code> 块中调用 <code>promise.unhandled_exception()</code></li>
+<li>调用 <code>promise.final_suspend()</code>，紧接着 <code>co_await</code> 它。此时恢复另一个协程是 UB。</li>
+</ol>
+<hr>
+<p>当 coroutine state 被析构（要么遇到 <code>co_return</code>，要么未捕获异常，在要么被 handle 销毁）时，它会：</p>
+<ol>
+<li>析构 promise object。</li>
+<li>析构所有协程参数。</li>
+<li>使用 <code>operator delete</code> 来释放coroutine state。</li>
+<li>转移执行权。</li>
+</ol>
+<h2 id="关于堆分配"><a href="#关于堆分配" class="headerlink" title="关于堆分配"></a>关于堆分配</h2><p>程序员可通过自定义 <code>operator new</code> 来控制 coroutine state 的分配。这部分暂时忽略不讲。</p>
+<h2 id="Promise类型推导"><a href="#Promise类型推导" class="headerlink" title="Promise类型推导"></a>Promise类型推导</h2><p>这部分暂时忽略不讲。</p>
+<h2 id="co-await"><a href="#co-await" class="headerlink" title="co_await"></a><code>co_await</code></h2><p>一元运算符</p>
 
     </div>
 
@@ -319,21 +391,19 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E5%87%8F%E5%B0%91%E8%84%B1%E5%8F%91%E6%8C%87%E5%8D%97/" rel="tag"><i class="fa fa-tag"></i> 减少脱发指南</a>
+              <a href="/tags/%E8%AF%AD%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 语法</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/10/11/SAM%E5%AE%9E%E6%88%98/" rel="prev" title="SAM实战剖析">
-                  <i class="fa fa-chevron-left"></i> SAM实战剖析
+                <a href="/2021/11/08/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98/" rel="prev" title="网络编程实战">
+                  <i class="fa fa-chevron-left"></i> 网络编程实战
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/04/01/Concurrency-with-C/" rel="next" title="Concurrency With C++">
-                  Concurrency With C++ <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
