@@ -5563,6 +5563,12 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>若 <code>true</code>，协程直接返回 <code>awaiter.await_resume()</code> 作为 <code>co_await expr</code> 的结果。</li>
 </ul>
 <p>注意在进入 <code>awaiter.await_suspend(handle)</code> 之前，当前协程已经完全暂停，此时当前 handle 可以在线程之间自由传递，并由其他调度者恢复。在这种情况下，协程可能已经被恢复，awaiter 随之已经被析构，所以 <code>await_suspend()</code> 不应再访问 <code>*this</code>。</p>
+<h2 id="co-yield"><a href="#co-yield" class="headerlink" title="co_yield"></a>co_yield</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">co_yield</span> expr
+<span class="token keyword">co_yield</span> braced<span class="token operator">-</span>init<span class="token operator">-</span>list		<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>等价于</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">co_await</span> promise<span class="token punctuation">.</span><span class="token function">yield_value</span><span class="token punctuation">(</span>expr<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 ]]></content>
       <tags>
         <tag>语法</tag>
