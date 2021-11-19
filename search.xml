@@ -3659,12 +3659,49 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <li><a href="https://www.bilibili.com/video/BV1TA411q75p">陈硕-网络编程实战(TCP/UDP/Socket)</a></li>
 <li>原来的 <a href="http://boolan.com/course/10093">Boolan 博览课</a>已经 404</li>
 </ul>
-<h4 id="在-Server-中处理-SIGPIPE-信号"><a href="#在-Server-中处理-SIGPIPE-信号" class="headerlink" title="在 Server 中处理 SIGPIPE 信号"></a>在 Server 中处理 SIGPIPE 信号</h4><ul>
+<h2 id="如何保证可靠的-TCP-连接"><a href="#如何保证可靠的-TCP-连接" class="headerlink" title="如何保证可靠的 TCP 连接"></a>如何保证可靠的 TCP 连接</h2><h3 id="发送比接收更难"><a href="#发送比接收更难" class="headerlink" title="发送比接收更难"></a>发送比接收更难</h3><ul>
+<li>按难度排序：<ol>
+<li>服务器建立 TCP &lt; 客户端建立 TCP &lt; 销毁 TCP</li>
+<li>接收 TCP 数据 &lt; 发送 TCP 数据 （尤其在非阻塞 IO 中）</li>
+</ol>
+</li>
+<li>常见错误：<code>send()</code>+<code>close()</code> 导致丢数据<ul>
+<li>如果接收缓冲区里有数据，<code>close()</code> 会导致 RST 段（而不是 FIN 段）强行断连，不论发送缓冲区是否为空，导致对方丢数据。</li>
+<li><code>SO_LINGER</code> 不能解决这个问题。</li>
+<li>正确发送端做法：<code>send()</code>+<code>shutdown_write()</code>+<code>read_until_eof()</code>+<code>close()</code></li>
+<li>正确接收端做法：<code>read() -&gt; 0</code> + nothing to send + <code>close()</code></li>
+<li>再考虑服务器防御：<code>shutdown_write()</code> 后设置超时，无论如何都关闭连接。</li>
+<li>更好的做法是在协议中包含数据长度，使 App 能够判断数据是否完整。</li>
+<li>还有一点漏洞：sender 无法保证 receiver 已经正确处理数据，例如 receiver 崩溃时，sender 也会读到 eof。</li>
+</ul>
+</li>
+</ul>
+<h3 id="启用-SO-REUSEADDR"><a href="#启用-SO-REUSEADDR" class="headerlink" title="启用 SO_REUSEADDR"></a>启用 SO_REUSEADDR</h3><ul>
+<li>允许重复监听同一个端口<ul>
+<li>以便 server 崩溃之后可以立即重启</li>
+<li>以便多进程 server 监听同一个端口</li>
+</ul>
+</li>
+</ul>
+<h3 id="在-Server-中处理-SIGPIPE-信号"><a href="#在-Server-中处理-SIGPIPE-信号" class="headerlink" title="在 Server 中处理 SIGPIPE 信号"></a>在 Server 中处理 SIGPIPE 信号</h3><ul>
 <li>在 Linux I/O 中，若输出管道已经关闭，则 writer 会收到 SIGPIPE 信号。默认的反应行为是中止进程。</li>
 <li>默认行为在多数场景下十分好用，可以提前结束工作流，减少 CPU 浪费。  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gunzip -c huge.log.gz <span class="token operator">|</span> <span class="token function">grep</span> ERROR <span class="token operator">|</span> <span class="token function">head</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 然而在网络编程中，若 Client 已经关闭，则 Server 同样会收到 SIGPIPE 信号。</li>
 <li>Server 应当小心处理 SIGPIPE 信号，以防 Client 出错或者恶意响应。</li>
 <li>若直接忽略 SIGPIPE 信号，则应当检查<code>printf()</code>的返回值，在出错时<code>exit()</code>。</li>
+</ul>
+<h3 id="Nagle-算法-TCP-NODELAY"><a href="#Nagle-算法-TCP-NODELAY" class="headerlink" title="Nagle 算法, TCP_NODELAY"></a>Nagle 算法, TCP_NODELAY</h3><ul>
+<li>影响「请求-响应」型协议。</li>
+<li>如果有报文段未收到 ack，<code>write()</code> 就不会发送数据，避免应用层太拉发太多小数据。</li>
+<li>对于「写-写-读」模式，第二次写会被延迟一个 RTT(Round-Trip Time, 往返延迟)。<ul>
+<li>解决办法：应用层缓冲，改成「写-读」模式</li>
+<li>然而难以解决并发请求问题</li>
+</ul>
+</li>
+<li>应当考虑关闭 Nagle 算法<ul>
+<li>Go 语言就是这么干的</li>
+</ul>
+</li>
 </ul>
 ]]></content>
       <tags>
@@ -5543,7 +5580,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 </ol>
 <p>然后生成一个 awaiter object，规则如下：</p>
 <ol>
-<li>根据重载解析的结果调用 <code>opeartor co_await(awaiter)</code> 或者 <code>awaitable.operator co_await()</code></li>
+<li>根据重载解析的结果调用 <code>opeartor co_await(awaitable)</code> 或者 <code>awaitable.operator co_await()</code></li>
 <li>如果重载解析找不到函数，那么 awaiter 就是 awaitable 本身。</li>
 <li>如果重载解析有歧义，那么程序是 ill-formed。</li>
 </ol>
