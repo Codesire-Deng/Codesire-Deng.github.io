@@ -3650,7 +3650,7 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
     <title>网络编程实战</title>
     <url>/2021/11/08/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98/</url>
     <content><![CDATA[<h2 id="开坑，强力更新中"><a href="#开坑，强力更新中" class="headerlink" title="开坑，强力更新中"></a>开坑，强力更新中</h2><blockquote>
-<p>我咕了，原因：在学习网络并发的时候迷恋<code>线程池</code>，既然玩就玩大的，直接猛攻<code>C++20 协程线程池</code>，于是现在在苦学协程……</p>
+<p>暂时咕了，原因：在学习网络并发的时候迷恋<code>线程池</code>，既然玩就玩大的，直接猛攻<code>C++20 协程线程池</code>，于是现在在苦学协程……</p>
 </blockquote>
 <span id="more"></span>
 
@@ -3702,6 +3702,12 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <li>Go 语言就是这么干的</li>
 </ul>
 </li>
+</ul>
+<h2 id="起线程还是-IO-复用"><a href="#起线程还是-IO-复用" class="headerlink" title="起线程还是 IO 复用"></a>起线程还是 IO 复用</h2><p>服务器应该选用「thread-per-connect」还是「IO-multiplexing」模式？</p>
+<p>开销的根源在于切换。起线程会有切换开销，IO 复用也有系统调用的开销。</p>
+<ul>
+<li>若客户端不超过硬件并发数，就（几乎）没有线程切换开销。</li>
+<li>若客户端很多，则 IO 复用的系统调用开销小于线程切换开销。</li>
 </ul>
 ]]></content>
       <tags>
