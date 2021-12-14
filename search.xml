@@ -3742,11 +3742,10 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
     <url>/2021/05/03/C/</url>
     <content><![CDATA[<p>本文始于 2018/6/27，用于汇聚关于 C++ 的实用知识和碰到的坑，温故而知新。</p>
 <blockquote>
-<p>2021/11/18 【新增】引用限定成员函数</p>
+<p>2021/12/15 【新增】constexpr if</p>
 <p>下次更新：</p>
 <ol>
-<li><code>if constexpr</code> 在声明和具体化时期的不同表现</li>
-<li><code>coroutine</code>：性能神器</li>
+<li>CRTP 原理，目的和应用</li>
 </ol>
 </blockquote>
 <span id="more"></span>
@@ -4327,6 +4326,19 @@ _NODISCARD <span class="token keyword">constexpr</span> remove_reference_t<span 
 </ol>
 </li>
 </ul>
+<h2 id="constexpr-if"><a href="#constexpr-if" class="headerlink" title="constexpr if"></a>constexpr if</h2><p>使用 <code>if constexpr</code>，将在编译期计算分支选择</p>
+<p>常常配合 <code>&lt;type_traits&gt;</code> 或变参模板使用。</p>
+<ol>
+<li>条件必须能在编译期计算，并转换为 <code>bool</code>。</li>
+<li>被抛弃的分支：<ol>
+<li>不参与函数返回值类型推导</li>
+<li>可以使用有声明但没有定义的变量（不属于 ORD-use）</li>
+</ol>
+</li>
+<li>在一个<a href="https://en.cppreference.com/w/cpp/language/templates#Templated_entity">模板实体</a>中，被抛弃的分支不引起后续的实例化。常用于 <code>if constexpr (sizeof...(rs) &gt; 0) &#123; f(rs...) &#125;</code></li>
+<li>在一个非模板实体中，被抛弃的分支依然参与语义分析（例如你不能使用一个未声明的变量）。所以 <code>if constexpr</code> 不能替代 <code>#if</code></li>
+<li>任何时候，被抛弃的分支都不允许 ill-formed（例如 <code>static_assert(false,&quot;&quot;)</code>）。你可能需要 Concept。</li>
+</ol>
 ]]></content>
       <tags>
         <tag>语法</tag>
