@@ -3649,16 +3649,13 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
   <entry>
     <title>网络编程实战</title>
     <url>/2021/11/08/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98/</url>
-    <content><![CDATA[<h2 id="开坑，强力更新中"><a href="#开坑，强力更新中" class="headerlink" title="开坑，强力更新中"></a>开坑，强力更新中</h2><blockquote>
-<p>暂时咕了，原因：在学习网络并发的时候迷恋<code>线程池</code>，既然玩就玩大的，直接猛攻<code>C++20 协程线程池</code>，于是现在在苦学协程……</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+    <content><![CDATA[<h2 id="前方施工中"><a href="#前方施工中" class="headerlink" title="前方施工中"></a>前方施工中</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><a href="http://chenshuo.com/practical-network-programming/">chenshuo.com/pnp</a></li>
 <li><a href="https://www.bilibili.com/video/BV1TA411q75p">陈硕-网络编程实战(TCP/UDP/Socket)</a></li>
 <li>原来的 <a href="http://boolan.com/course/10093">Boolan 博览课</a>已经 404</li>
 </ul>
+<span id="more"></span>
+
 <h2 id="如何保证可靠的-TCP-连接"><a href="#如何保证可靠的-TCP-连接" class="headerlink" title="如何保证可靠的 TCP 连接"></a>如何保证可靠的 TCP 连接</h2><h3 id="发送比接收更难"><a href="#发送比接收更难" class="headerlink" title="发送比接收更难"></a>发送比接收更难</h3><ul>
 <li>按难度排序：<ol>
 <li>服务器建立 TCP &lt; 客户端建立 TCP &lt; 销毁 TCP</li>
@@ -5627,6 +5624,19 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 ]]></content>
       <tags>
         <tag>语法</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ smart pointer</title>
+    <url>/2021/12/15/C-smart-pointer/</url>
+    <content><![CDATA[<h2 id="前方施工中"><a href="#前方施工中" class="headerlink" title="前方施工中"></a>前方施工中</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://en.cppreference.com/w/cpp/memory">cppreference</a></li>
+<li><a href="https://www.youtube.com/watch?v=JfmTagWcqoE">CppCon 2016: Herb Sutter “Leak-Freedom in C++... By Default.”</a></li>
+<li><a href="http://senlinzhan.github.io/2015/04/24/%E6%B7%B1%E5%85%A5shared-ptr/">Senlin《谈谈 shared_ptr 的那些坑》</a></li>
+</ol>
+]]></content>
+      <tags>
         <tag>C++</tag>
       </tags>
   </entry>
