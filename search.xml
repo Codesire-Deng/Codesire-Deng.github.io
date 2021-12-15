@@ -5630,12 +5630,143 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
   <entry>
     <title>C++ smart pointer</title>
     <url>/2021/12/15/C-smart-pointer/</url>
-    <content><![CDATA[<h2 id="前方施工中"><a href="#前方施工中" class="headerlink" title="前方施工中"></a>前方施工中</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+    <content><![CDATA[<h2 id="前方施工中"><a href="#前方施工中" class="headerlink" title="前方施工中"></a>前方施工中</h2><p>本文意在阐述 C++ 智能指针的实现原理，应用场景和潜在的坑。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
 <li><a href="https://en.cppreference.com/w/cpp/memory">cppreference</a></li>
 <li><a href="https://www.youtube.com/watch?v=JfmTagWcqoE">CppCon 2016: Herb Sutter “Leak-Freedom in C++... By Default.”</a></li>
 <li><a href="http://senlinzhan.github.io/2015/04/24/%E6%B7%B1%E5%85%A5shared-ptr/">Senlin《谈谈 shared_ptr 的那些坑》</a></li>
 </ol>
-]]></content>
+<h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><p>基于引用计数的智能指针。在构造和析构时修改引用计数。当引用计数为 0 时，析构资源。</p>
+<p><code>引用计数</code> <code>原子计数</code> <code>线程安全</code> <code>共享所有权</code></p>
+<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><ol>
+<li>一个 <code>shared_ptr</code> 持有两个裸指针，分别指向资源和「控制块」 (control block)</li>
+<li>控制块主要用于实现引用计数。具体的内容有：<ol>
+<li>指向所管理资源的指针，或者是资源本身</li>
+<li>deleter（已擦除类型）</li>
+<li>allocator（已擦除类型）</li>
+<li><code>shared_ptr</code> 共享引用计数器</li>
+<li><code>weak_ptr</code> 弱引用计数器 （主流实现中 <code>shared_ptr</code> 亦计入弱引用计数）</li>
+</ol>
+</li>
+<li>若使用 <code>make_shared</code> 或 <code>allocate_shared</code> 来构造指针，则资源和控制块一同参与内存申请。<em>这是潜在坑点。</em></li>
+<li>若弱引用计数器不清零，则控制块占用的内存不会被回收。因此若控制块很大（直接存放了资源），则空间性能可能变差。</li>
+</ol>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// 别名构造函数（aliasing constructor）</span>
+<span class="token keyword">template</span><span class="token operator">&lt;</span> <span class="token keyword">class</span> <span class="token class-name">Y</span> <span class="token operator">></span>
+<span class="token function">shared_ptr</span><span class="token punctuation">(</span> <span class="token keyword">const</span> shared_ptr<span class="token operator">&lt;</span>Y<span class="token operator">></span><span class="token operator">&amp;</span> r<span class="token punctuation">,</span> element_type<span class="token operator">*</span> ptr <span class="token punctuation">)</span> <span class="token keyword">noexcept</span><span class="token punctuation">;</span>
+<span class="token comment">/*
+新智能指针共享与 r 的控制块，但是 this->get() 总是返回 ptr，这可以与 r.get() 不相同！
+
+场景：ptr 是 *r 的数据成员，若 r 存活，则 ptr 必定存活。
+*/</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<h3 id="潜在坑点"><a href="#潜在坑点" class="headerlink" title="潜在坑点"></a>潜在坑点</h3><ol>
+<li>环形引用导致内存泄漏：使用一个 <code>weak_ptr</code> 来打破环形引用。</li>
+<li>不支持 <code>shared_ptr&lt;T[]&gt;</code>：使用 <code>vector</code> 或 <code>array</code> 作容器。</li>
+<li>容许基类析构函数不是虚函数（似乎是因为构造是泛型的）：小心。</li>
+<li>退化成链状的数据结构在析构时<strong>栈溢出</strong>：反思数据结构的退化，以及是否滥用了 <code>shared_ptr</code>。</li>
+<li>重复使用一个裸指针构造两个 <code>shared_ptr</code>，导致双重释放：<ol>
+<li>裸指针用完就扔。</li>
+<li>不要使用 <code>this</code> 来构造智能指针，而是使用 <code>shared_from_this</code>。<em>这是潜在坑点。</em></li>
+</ol>
+</li>
+<li>若没有任何 <code>shared_ptr</code> 持有对象，此时调用 <code>shared_from_this</code> 就会出问题：<ol>
+<li>C++17 之前，这是 UB。</li>
+<li>C++17 以后，程序抛出 <code>std::bad_weak_ptr</code> 异常。</li>
+<li>最佳实践是禁止访问构造函数，而提供工厂函数返回智能指针。</li>
+</ol>
+</li>
+<li>将 <code>shared_ptr</code> 复制给未知的函数，可能导致环形引用。<ul>
+<li>好比不要在上锁后执行为未知用户代码</li>
+<li>GC 语言同样有回调地狱导致内存泄漏的问题</li>
+</ul>
+</li>
+</ol>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// enable_shared_from_this 最佳实践</span>
+<span class="token keyword">struct</span> <span class="token class-name">Best</span> <span class="token operator">:</span> <span class="token base-clause">std<span class="token operator">::</span><span class="token class-name">enable_shared_from_this</span><span class="token operator">&lt;</span><span class="token class-name">Best</span><span class="token operator">></span> <span class="token comment">// 公有继承</span></span>
+<span class="token punctuation">&#123;</span>
+    std<span class="token operator">::</span>shared_ptr<span class="token operator">&lt;</span>Best<span class="token operator">></span> <span class="token function">getptr</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token function">shared_from_this</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token comment">// 工厂函数返回智能指针</span>
+    <span class="token comment">// nodiscard 防止暴毙</span>
+    <span class="token punctuation">[</span><span class="token punctuation">[</span>nodiscard<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token keyword">static</span> std<span class="token operator">::</span>shared_ptr<span class="token operator">&lt;</span>Best<span class="token operator">></span> <span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 不能使用 make_shared 因为构造函数是私有的，不能转发</span>
+        <span class="token keyword">return</span> std<span class="token operator">::</span>shared_ptr<span class="token operator">&lt;</span>Best<span class="token operator">></span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token function">Best</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token keyword">private</span><span class="token operator">:</span>
+    <span class="token function">Best</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="应用场景-条件"><a href="#应用场景-条件" class="headerlink" title="应用场景/条件"></a>应用场景/条件</h3><ol>
+<li>多线程/异步协作，难以确定资源生命周期。</li>
+<li>主从关系明确，不存在环形引用：树、链表、DAG</li>
+<li>可以在构造函数参数中提供自定义析构器：<code>[](Y* rc) &#123; delect rc; &#125;</code>。</li>
+<li>原本使用 <code>unique_ptr</code> 的数据结构，需要对外提供强引用，则可以改用 <code>shared_ptr</code>。</li>
+</ol>
+<h2 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h2><p>独占所有权的智能指针。当持有资源且退出作用域时，会析构资源。所有权只能移动或引用，不能拷贝。</p>
+<h3 id="潜在坑点-1"><a href="#潜在坑点-1" class="headerlink" title="潜在坑点"></a>潜在坑点</h3><ol>
+<li>退化成链的数据结构在析构时<strong>栈溢出</strong>：反思数据结构；重写数据结构的析构函数。</li>
+</ol>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><ol>
+<li>提供动态对象的 RAII，保证发生异常时对象仍被析构。</li>
+<li>表示对堆对象的独占关系。适合用作类的数据成员，例如表示树的儿子。<ul>
+<li>父亲指针永远只用裸指针，因为儿子存活时父亲一定存活</li>
+<li>单/双向链表是树的特例，也适用 <code>unique_ptr</code> + 裸指针。</li>
+</ul>
+</li>
+<li>在接口中明确表达「传递所有权」的语义。</li>
+<li>作为具有移动语义的单个容器使用。</li>
+<li>管理运行时确定长度的定长数组（<code>unique_ptr&lt;T[]&gt;</code> 正确使用 <code>new []</code> <code>delete []</code>）</li>
+<li>用于 Pimpl 编译隔离</li>
+</ol>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// Pimpl 抽象</span>
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">using</span> Pimpl <span class="token operator">=</span> <span class="token keyword">const</span> unique_ptr<span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">MyClass</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">class</span> <span class="token class-name">Impl</span><span class="token punctuation">;</span> <span class="token comment">// 定义于 *.cpp</span>
+    Pimpl<span class="token operator">&lt;</span>Impl<span class="token operator">></span> pimpl<span class="token punctuation">;</span>
+    <span class="token comment">/*...*/</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 运行时定长数组</span>
+<span class="token keyword">class</span> <span class="token class-name">MyClass</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> unique_ptr<span class="token operator">&lt;</span>Data<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span> array<span class="token punctuation">;</span>
+    size_t arr_size<span class="token punctuation">;</span>
+
+    <span class="token function">MyClass</span><span class="token punctuation">(</span>size_t size<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token function">arr_size</span><span class="token punctuation">(</span>make_unique<span class="token operator">&lt;</span>Data<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token comment">/*...*/</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h2><p>从 <code>shared_ptr</code> 构造而来，但不参与引用计数。</p>
+<h3 id="应用场景-1"><a href="#应用场景-1" class="headerlink" title="应用场景"></a>应用场景</h3><ol>
+<li>打破 <code>shared_ptr</code> 的循环引用。常用于环形链表、回调函数。</li>
+<li>作为「可空资源的观察者」。根据资源是否为空表现不同的行为。</li>
+</ol>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// weak_ptr 做回调</span>
+<span class="token keyword">void</span> <span class="token function">bad</span><span class="token punctuation">(</span><span class="token keyword">const</span> shared_ptr<span class="token operator">&lt;</span>X<span class="token operator">></span><span class="token operator">&amp;</span> x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    obj<span class="token punctuation">.</span><span class="token function">on_draw</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">=</span><span class="token punctuation">]</span><span class="token punctuation">&#123;</span> x<span class="token operator">-></span><span class="token function">extra_work</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// x 已经泄露</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">good</span><span class="token punctuation">(</span><span class="token keyword">const</span> shared_ptr<span class="token operator">&lt;</span>X<span class="token operator">></span><span class="token operator">&amp;</span> x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    obj<span class="token punctuation">.</span><span class="token function">on_draw</span><span class="token punctuation">(</span><span class="token punctuation">[</span>w<span class="token operator">=</span>weak_ptr<span class="token operator">&lt;</span>X<span class="token operator">></span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> x <span class="token operator">=</span> w<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> x<span class="token operator">-></span><span class="token function">extra_work</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// x 有机会析构</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token comment">// weak_ptr 做 cache</span>
+shared_ptr<span class="token operator">&lt;</span>Payload<span class="token operator">></span> <span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">static</span> map<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token punctuation">,</span> weak_ptr<span class="token operator">&lt;</span>Payload<span class="token operator">>></span> cache<span class="token punctuation">;</span>
+    <span class="token keyword">static</span> mutex mut_cache<span class="token punctuation">;</span>
+    lock_guard<span class="token operator">&lt;</span>mutex<span class="token operator">></span> <span class="token function">hold</span><span class="token punctuation">(</span>mut_cache<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">auto</span> sp <span class="token operator">=</span> cache<span class="token punctuation">[</span>id<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>sp<span class="token punctuation">)</span> cache<span class="token punctuation">[</span>id<span class="token punctuation">]</span> <span class="token operator">=</span> sp <span class="token operator">=</span> make_shared<span class="token operator">&lt;</span>Payload<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> sp<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       <tags>
         <tag>C++</tag>
       </tags>
