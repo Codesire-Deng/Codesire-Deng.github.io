@@ -5630,7 +5630,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
   <entry>
     <title>C++ smart pointer</title>
     <url>/2021/12/15/C-smart-pointer/</url>
-    <content><![CDATA[<h2 id="前方施工中"><a href="#前方施工中" class="headerlink" title="前方施工中"></a>前方施工中</h2><p>本文意在阐述 C++ 智能指针的实现原理，应用场景和潜在的坑。</p>
+    <content><![CDATA[<p>本文意在阐述 C++ 智能指针的实现原理，应用场景和潜在的坑。</p>
 <span id="more"></span>
 
 <h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><p>基于引用计数的智能指针。在构造和析构时修改引用计数。当引用计数为 0 时，析构资源。</p>
@@ -5738,6 +5738,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h2><p>从 <code>shared_ptr</code> 构造而来，但不参与引用计数。</p>
+<h3 id="潜在坑点-2"><a href="#潜在坑点-2" class="headerlink" title="潜在坑点"></a>潜在坑点</h3><p>良好的设计使得 <code>weak_ptr</code> 坑点较少，只需记得弱引用的存在会使得控制块无法释放即可。</p>
 <h3 id="应用场景-1"><a href="#应用场景-1" class="headerlink" title="应用场景"></a>应用场景</h3><ol>
 <li>打破 <code>shared_ptr</code> 的循环引用。常用于环形链表、回调函数。</li>
 <li>作为「可空资源的观察者」。根据资源是否为空表现不同的行为。</li>
