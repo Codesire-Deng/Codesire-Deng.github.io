@@ -5628,7 +5628,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
       </tags>
   </entry>
   <entry>
-    <title>C++ smart pointer</title>
+    <title>C++ Smart Pointer</title>
     <url>/2021/12/15/C-smart-pointer/</url>
     <content><![CDATA[<p>本文意在阐述 C++ 智能指针的实现原理，应用场景和潜在的坑。</p>
 <span id="more"></span>
