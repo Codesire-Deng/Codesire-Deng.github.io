@@ -5631,13 +5631,10 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
     <title>C++ smart pointer</title>
     <url>/2021/12/15/C-smart-pointer/</url>
     <content><![CDATA[<h2 id="前方施工中"><a href="#前方施工中" class="headerlink" title="前方施工中"></a>前方施工中</h2><p>本文意在阐述 C++ 智能指针的实现原理，应用场景和潜在的坑。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
-<li><a href="https://en.cppreference.com/w/cpp/memory">cppreference</a></li>
-<li><a href="https://www.youtube.com/watch?v=JfmTagWcqoE">CppCon 2016: Herb Sutter “Leak-Freedom in C++... By Default.”</a></li>
-<li><a href="http://senlinzhan.github.io/2015/04/24/%E6%B7%B1%E5%85%A5shared-ptr/">Senlin《谈谈 shared_ptr 的那些坑》</a></li>
-</ol>
+<span id="more"></span>
+
 <h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><p>基于引用计数的智能指针。在构造和析构时修改引用计数。当引用计数为 0 时，析构资源。</p>
-<p><code>引用计数</code> <code>原子计数</code> <code>线程安全</code> <code>共享所有权</code></p>
+<p>引用计数器是线程安全的。</p>
 <h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><ol>
 <li>一个 <code>shared_ptr</code> 持有两个裸指针，分别指向资源和「控制块」 (control block)</li>
 <li>控制块主要用于实现引用计数。具体的内容有：<ol>
@@ -5766,7 +5763,16 @@ shared_ptr<span class="token operator">&lt;</span>Payload<span class="token oper
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>sp<span class="token punctuation">)</span> cache<span class="token punctuation">[</span>id<span class="token punctuation">]</span> <span class="token operator">=</span> sp <span class="token operator">=</span> make_shared<span class="token operator">&lt;</span>Payload<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> sp<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://en.cppreference.com/w/cpp/memory">cppreference</a></li>
+<li><a href="https://www.youtube.com/watch?v=JfmTagWcqoE">CppCon 2016: Herb Sutter “Leak-Freedom in C++... By Default.”</a></li>
+<li><a href="http://senlinzhan.github.io/2015/04/24/%E6%B7%B1%E5%85%A5shared-ptr/">Senlin《谈谈 shared_ptr 的那些坑》</a></li>
+</ol>
+]]></content>
       <tags>
         <tag>C++</tag>
       </tags>
