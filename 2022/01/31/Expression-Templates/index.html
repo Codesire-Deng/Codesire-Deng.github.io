@@ -28,12 +28,12 @@
 <meta property="og:site_name" content="等疾风">
 <meta property="og:description" content="Preface在研究 CRTP 时发现了一种经典应用——表达式模板。今天学一学，顺便水一篇博客。🐶 Motivation and example表达式模板是一种模板元编程，它在编译期展开向量的一系列复合运算，从而将辅助空间从 $O(n)$ 降到 $O(1)$。相比于朴素算法，表达式模板属于惰性求值，求值时间点是赋值运算。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://codesire-deng.github.io/crtpEt.svg">
+<meta property="og:image" content="https://codesire-deng.github.io/2022/01/31/Expression-Templates/crtpEt.svg">
 <meta property="article:published_time" content="2022-01-31T07:58:13.000Z">
 <meta property="article:modified_time" content="2022-02-02T13:02:40.768Z">
 <meta property="article:author" content="等疾风">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://codesire-deng.github.io/crtpEt.svg">
+<meta name="twitter:image" content="https://codesire-deng.github.io/2022/01/31/Expression-Templates/crtpEt.svg">
 
 
 <link rel="canonical" href="https://codesire-deng.github.io/2022/01/31/Expression-Templates/">
@@ -450,7 +450,7 @@
 
 <h1 id="Peak-of-Evolution"><a href="#Peak-of-Evolution" class="headerlink" title="Peak of Evolution"></a>Peak of Evolution</h1><p>这次依然是原创代码，改进了一些地方：</p>
 <h2 id="Class-Diagram"><a href="#Class-Diagram" class="headerlink" title="Class Diagram"></a>Class Diagram</h2><p>多层次的 CRTP 用起来容易头晕，应该事先设计好类的关系：</p>
-<p><img src="/./crtpEt.svg" alt="CRTP relationship"></p>
+<p><img src="/2022/01/31/Expression-Templates/crtpEt.svg" alt="CRTP relationship"></p>
 <p>橙色和红色的类才是 CRTP 的模板实参。白色的类主要用作接口，类似于抽象类。</p>
 <h2 id="ET-interface"><a href="#ET-interface" class="headerlink" title="ET interface"></a>ET interface</h2><ul>
 <li>用户类只要继承 <code>VectorExpresstion</code> 接口，同时定义合适的 <code>operator[]</code> 和 <code>operator=</code> 即可实现模板表达式。</li>

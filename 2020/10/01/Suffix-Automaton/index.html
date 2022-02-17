@@ -28,15 +28,15 @@
 <meta property="og:site_name" content="等疾风">
 <meta property="og:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://codesire-deng.github.io/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png">
-<meta property="og:image" content="https://codesire-deng.github.io/%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2020/10/01/Suffix-Automaton/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2020/10/01/Suffix-Automaton/%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png">
 <meta property="article:published_time" content="2020-10-01T15:03:46.000Z">
 <meta property="article:modified_time" content="2021-06-15T15:47:43.929Z">
 <meta property="article:author" content="等疾风">
 <meta property="article:tag" content="字符串">
 <meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://codesire-deng.github.io/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png">
+<meta name="twitter:image" content="https://codesire-deng.github.io/2020/10/01/Suffix-Automaton/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png">
 
 
 <link rel="canonical" href="https://codesire-deng.github.io/2020/10/01/Suffix-Automaton/">
@@ -315,7 +315,7 @@
 </li>
 <li><p>考虑状态$s$包括的字符串长度，易证若$s$包含长度为$l$,$r$的字符串，那么一定包含长度为$m(l \leq m \leq r)$的字符串。所以这些字符串长度一定可以组成一个区间，设为 <strong>[Min(s), Max(s)]</strong></p>
 </li>
-<li><p>状态数是线性的。<br/>　　状态由$Right$集合决定，考虑两个状态$a,b$的$Right$集合$R_a,R_b$。假设$R_a,R_b$有交集，设$r \in R_a \cap R_b$。由于一个子串只能属于一个状态，所以$a$，$b$所表示的子串不会有交集，即由$r$往前不能有长度相同的子串，故$[Min(a), Max(a)]$和$[Min(b), Max(b)]$没有交集，不妨设$Max(a) &lt; Min(b)$，由于$a$，$b$包含的所有串都可以视为$r$往前的子串，故$a$的所有串都是$b$的任意串的后缀。因$b$的任意串都能找到后缀属于$a$，两者$Right$集合又不相等，故$R_b \subset R_a$。那么任意两个状态的$Right$集合要么不相交，要么一个是另一个的真子集。<br/>　　疾风将以状态为节点，以$Right$包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br/>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，$SAM$的结点个数最多为$2n$。<br><br/><img src="/./%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png" alt="分裂树举例"></p>
+<li><p>状态数是线性的。<br/>　　状态由$Right$集合决定，考虑两个状态$a,b$的$Right$集合$R_a,R_b$。假设$R_a,R_b$有交集，设$r \in R_a \cap R_b$。由于一个子串只能属于一个状态，所以$a$，$b$所表示的子串不会有交集，即由$r$往前不能有长度相同的子串，故$[Min(a), Max(a)]$和$[Min(b), Max(b)]$没有交集，不妨设$Max(a) &lt; Min(b)$，由于$a$，$b$包含的所有串都可以视为$r$往前的子串，故$a$的所有串都是$b$的任意串的后缀。因$b$的任意串都能找到后缀属于$a$，两者$Right$集合又不相等，故$R_b \subset R_a$。那么任意两个状态的$Right$集合要么不相交，要么一个是另一个的真子集。<br/>　　疾风将以状态为节点，以$Right$包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br/>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，$SAM$的结点个数最多为$2n$。<br><br/><img src="/2020/10/01/Suffix-Automaton/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png" alt="分裂树举例"></p>
 </li>
 <li><p>更严谨的分裂树定义：令满足$Right(s) \subset Right(fa)$的最小$|Right(fa)|$的$fa$为状态$s$的父亲。<br/>　　直观地看，一定是$fa$中最长的字符串向前扩展一位导致了$Right$集合分裂，所以**Max(fa)+1&#x3D;Min(s)**。</p>
 </li>
@@ -336,7 +336,7 @@
 </li>
 </ol>
 <h3 id="添加一位字符更新自动机"><a href="#添加一位字符更新自动机" class="headerlink" title="添加一位字符更新自动机"></a>添加一位字符更新自动机</h3><p>&amp;emsp;&amp;emsp;令当前字符串为$T$，长度为$L$；末尾添加一个字符$x$，要将$SAM(T)$更新为$SAM(Tx)$。<br><br/>　　那么新增的子串是$Tx$的所有后缀，可看作$T$的所有后缀后添加了$x$。令$SAM(T)$中表示$T$的后缀的节点为${v_1, v_2, \cdots, v_k&#x3D;root}$。因为后缀在字符串的末尾出现，所以$L\in Right(v_i)$，可知$v_i$在分裂树上恰好构成一条从叶子到$root$的链，不妨设${v_1, v_2, \cdots, v_k&#x3D;root}$已经按从叶子到祖先排序。<br><br/>　　添加字符$x$后，首先新建状态$np$表示$ST(Tx)$，这是一个已确定的状态（因为没有出边），可知$Right(np)&#x3D;{L+1}$。<br><br/>　　回头考虑旧自动机的$v_i$，设$Right(v_i)&#x3D;{r_1, r_2, \cdots, r_n&#x3D;L}$。如果能在后面添加字符$x$（注意现在仍是字符串$T$的自动机），即$nv&#x3D;trans(v_i, x)$存在，我们已经知道$Right(nv)&#x3D;{r_i+1|T[r_i]&#x3D;x}$；反之如果$v_i$没有$x$的出边，意味着没有$r_i$满足$T[r_i]&#x3D;x$。由于分裂树上父亲的$Right$扩大，如果$trans(v_i,x)$存在，那么$trans(v_{i+1}, x)$也存在。<br><br/>　　对于所有$trans(v,x)&#x3D;null$的$v$，而只有$Tx[r_n&#x3D;L]&#x3D;x$满足转移条件，于是添加一条边$trans(v,x)&#x3D;np$。<br><br/>　　令$v_p$是$v_1, v_2, \cdots, v_k$中第一个有$x$出边（即$trans(v_p, x)$存在）的状态。令$q&#x3D;trans(v_p, x)$，注意，现在仍是旧的自动机。我们能不能直接在$Right(q)$中直接插入$L+1$呢？答案是不能。这是因为有可能$Max(q) &gt; Max(v_p)+1$，隐含意思是$q$在”$v_p$末尾添加$x$”的基础上，由于$Right$集合的缩减，纳入了左端更多字符；如果强行在$Right(q)$中插入$L+1$，会导致$Max(q)$减小而丢失了原来的状态，破坏了自动机的正确性。</p>
-<p><img src="/./%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png" alt="强行插入的反例"><br><br/>　　如图所示，$v_p$含有的最长字符串是红色5个“A”，但$trans(v_p,x)&#x3D;q$含有的最长字符串是蓝色7位字符串，如果在$Right(q)$中强行插入$L+1$即变为绿色部分，会使$Max(q)$从7减少到6从而丢失信息。<br><br/>　　如果足够幸运，$Max(q) &#x3D; Max(v_p)+1$，就没有上面的问题，我们可以在$Right(q)$中插入$L+1$，然后只要令$Pa(np)&#x3D;q$即可完成自动机更新。<em>注：理论上$Right(trans(v_p\dots v_k,x))$都要插入$L+1$，但这些状态的出边都没有发生改变，而后缀自动机实际上不记录$Right$，所以更新完成。</em><br><br/>　　如果没那么幸运，从图上可知，原状态$q$在插入末尾字符$x$后应转换两个状态，设蓝色对应的状态为$q&#39;$（沿用$q$)，绿色状态为$nq$（新建节点）。显然<br>$$<br>trans(q&#39;, *) &#x3D; trans(q, *), \<br>Pa(q&#39;)&#x3D;nq，\<br>Right(nq)&#x3D;Right(q&#39;)\cup {L+1}，\<br>Max(nq) &#x3D; Max(v_p)+1<br>$$<br>显然$Right(nq)$是真包含${L+1}$的最小集合，所以<br>$$ Pa(np)&#x3D;nq $$<br>&amp;emsp;&amp;emsp;截至目前我们新添了$np$，将$q$转化为$q&#39;,nq$，其中$np,q&#39;$都正确处理了出边和分裂树父亲。<br>那么$nq$的分裂树父亲又是谁呢？结合上图易证<br>$$ Pa(nq)&#x3D;Pa(q) $$</p>
+<p><img src="/2020/10/01/Suffix-Automaton/%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png" alt="强行插入的反例"><br><br/>　　如图所示，$v_p$含有的最长字符串是红色5个“A”，但$trans(v_p,x)&#x3D;q$含有的最长字符串是蓝色7位字符串，如果在$Right(q)$中强行插入$L+1$即变为绿色部分，会使$Max(q)$从7减少到6从而丢失信息。<br><br/>　　如果足够幸运，$Max(q) &#x3D; Max(v_p)+1$，就没有上面的问题，我们可以在$Right(q)$中插入$L+1$，然后只要令$Pa(np)&#x3D;q$即可完成自动机更新。<em>注：理论上$Right(trans(v_p\dots v_k,x))$都要插入$L+1$，但这些状态的出边都没有发生改变，而后缀自动机实际上不记录$Right$，所以更新完成。</em><br><br/>　　如果没那么幸运，从图上可知，原状态$q$在插入末尾字符$x$后应转换两个状态，设蓝色对应的状态为$q&#39;$（沿用$q$)，绿色状态为$nq$（新建节点）。显然<br>$$<br>trans(q&#39;, *) &#x3D; trans(q, *), \<br>Pa(q&#39;)&#x3D;nq，\<br>Right(nq)&#x3D;Right(q&#39;)\cup {L+1}，\<br>Max(nq) &#x3D; Max(v_p)+1<br>$$<br>显然$Right(nq)$是真包含${L+1}$的最小集合，所以<br>$$ Pa(np)&#x3D;nq $$<br>&amp;emsp;&amp;emsp;截至目前我们新添了$np$，将$q$转化为$q&#39;,nq$，其中$np,q&#39;$都正确处理了出边和分裂树父亲。<br>那么$nq$的分裂树父亲又是谁呢？结合上图易证<br>$$ Pa(nq)&#x3D;Pa(q) $$</p>
 <p>$nq$的出边是哪一些？由于新添的最后一个字符不能带来更多的状态转移（最后一个字符后面再没有字符了），所以<br>$$ trans(nq, *) &#x3D; trans(q, *) $$<br><br/>　　最后，我们还要考虑原自动机中指向$q$的状态，和新自动机中应当指向$q&#39;$和$nq$的状态。在$v_p,\cdots,v_k$中，由于$Right$的扩大，$Right(trans(v_i,x))$也逐渐扩大（不缩小），所以只有一段连续的$v_p,\cdots,v_e(e\le k)$是指向$q$的，由于要配合在$Right$集合中插入$L+1$，这些出边要修改为<br>$$ trans(v_i,x) &#x3D; nq $$<br>其余指向$q$的状态必然由于左端有过多字符而无法指向$nq$，于是改为指向$q&#39;$，等效于不做任何修改。<br><br/>　　最后的最后，对于$v_{e+1},\cdots,v_k$，对于$nv&#x3D;trans(v_i, x)$，必然可以粗暴地令$Right(nv)$插入$L+1$，所以转移关系可以保持不变，等效于不做任何修改。</p>
 <h1 id="标准代码"><a href="#标准代码" class="headerlink" title="标准代码"></a>标准代码</h1><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cstring></span></span>

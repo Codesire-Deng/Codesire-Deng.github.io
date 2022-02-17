@@ -1211,7 +1211,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 
 <h1 id="Peak-of-Evolution"><a href="#Peak-of-Evolution" class="headerlink" title="Peak of Evolution"></a>Peak of Evolution</h1><p>这次依然是原创代码，改进了一些地方：</p>
 <h2 id="Class-Diagram"><a href="#Class-Diagram" class="headerlink" title="Class Diagram"></a>Class Diagram</h2><p>多层次的 CRTP 用起来容易头晕，应该事先设计好类的关系：</p>
-<p><img src="/./crtpEt.svg" alt="CRTP relationship"></p>
+<p><img src="/2022/01/31/Expression-Templates/crtpEt.svg" alt="CRTP relationship"></p>
 <p>橙色和红色的类才是 CRTP 的模板实参。白色的类主要用作接口，类似于抽象类。</p>
 <h2 id="ET-interface"><a href="#ET-interface" class="headerlink" title="ET interface"></a>ET interface</h2><ul>
 <li>用户类只要继承 <code>VectorExpresstion</code> 接口，同时定义合适的 <code>operator[]</code> 和 <code>operator=</code> 即可实现模板表达式。</li>
@@ -1613,7 +1613,7 @@ State<span class="token operator">*</span> b<span class="token punctuation">[</s
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算|Right|"></a>离线计算|Right|</h1><p>&amp;emsp;&amp;emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| &#x3D; 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br/><img src="/./abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"><br><br/>　　如上图所示，“1”在分裂的过程中消失了，不存在叶子节点中。<br><br/>　　为什么$Right$集合的元素无法往下分裂？这是因为它表示的子串无法向左端扩展，换句话说，它是前缀。注意到叶子节点也是前缀。综上所述，只要对前缀所在节点的$|Right|$预置为$1$（其他节点预置为$0$），然后自底向上更新分裂树即可得到所有$|Right|$</p>
+<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算|Right|"></a>离线计算|Right|</h1><p>&amp;emsp;&amp;emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| &#x3D; 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br/><img src="/2020/10/11/SAM%E5%AE%9E%E6%88%98/abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"><br><br/>　　如上图所示，“1”在分裂的过程中消失了，不存在叶子节点中。<br><br/>　　为什么$Right$集合的元素无法往下分裂？这是因为它表示的子串无法向左端扩展，换句话说，它是前缀。注意到叶子节点也是前缀。综上所述，只要对前缀所在节点的$|Right|$预置为$1$（其他节点预置为$0$），然后自底向上更新分裂树即可得到所有$|Right|$</p>
 <h2 id="分裂树上拓扑排序"><a href="#分裂树上拓扑排序" class="headerlink" title="分裂树上拓扑排序"></a>分裂树上拓扑排序</h2><p>&amp;emsp;&amp;emsp;上文引出了一个新问题，如何自底向上地访问分裂树？一种直观的办法是bfs收集SAM所有节点再做拓扑排序，这逻辑复杂而代码繁琐。一种更好的办法是，在构造SAM时采用内存池技术，之后对内存池按照$Max$降序排序即可。原因是<br>$$ Max(fa)+1&#x3D;Min(s) \Rightarrow Max(s) &gt; Max(fa)$$<br>有趣的是，分裂树的拓扑序也是自动机的拓扑序！原因是<br>$$ trans(s, *)&#x3D;t \Rightarrow Max(t) &gt; Max(s) $$<br>如果你忘记了，请复习<a href="/2020/10/01/Suffix-Automaton/" title="后缀自动机的更多性质">后缀自动机的更多性质</a>。</p>
 <div class="note primary"><h4 id="拓扑排序要点"><a href="#拓扑排序要点" class="headerlink" title="拓扑排序要点"></a>拓扑排序要点</h4><ol>
 <li>指针板构造采用内存池技术</li>
@@ -1819,7 +1819,7 @@ State<span class="token operator">*</span> q<span class="token punctuation">[</s
 </li>
 <li><p>考虑状态$s$包括的字符串长度，易证若$s$包含长度为$l$,$r$的字符串，那么一定包含长度为$m(l \leq m \leq r)$的字符串。所以这些字符串长度一定可以组成一个区间，设为 <strong>[Min(s), Max(s)]</strong></p>
 </li>
-<li><p>状态数是线性的。<br/>　　状态由$Right$集合决定，考虑两个状态$a,b$的$Right$集合$R_a,R_b$。假设$R_a,R_b$有交集，设$r \in R_a \cap R_b$。由于一个子串只能属于一个状态，所以$a$，$b$所表示的子串不会有交集，即由$r$往前不能有长度相同的子串，故$[Min(a), Max(a)]$和$[Min(b), Max(b)]$没有交集，不妨设$Max(a) &lt; Min(b)$，由于$a$，$b$包含的所有串都可以视为$r$往前的子串，故$a$的所有串都是$b$的任意串的后缀。因$b$的任意串都能找到后缀属于$a$，两者$Right$集合又不相等，故$R_b \subset R_a$。那么任意两个状态的$Right$集合要么不相交，要么一个是另一个的真子集。<br/>　　疾风将以状态为节点，以$Right$包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br/>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，$SAM$的结点个数最多为$2n$。<br><br/><img src="/./%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png" alt="分裂树举例"></p>
+<li><p>状态数是线性的。<br/>　　状态由$Right$集合决定，考虑两个状态$a,b$的$Right$集合$R_a,R_b$。假设$R_a,R_b$有交集，设$r \in R_a \cap R_b$。由于一个子串只能属于一个状态，所以$a$，$b$所表示的子串不会有交集，即由$r$往前不能有长度相同的子串，故$[Min(a), Max(a)]$和$[Min(b), Max(b)]$没有交集，不妨设$Max(a) &lt; Min(b)$，由于$a$，$b$包含的所有串都可以视为$r$往前的子串，故$a$的所有串都是$b$的任意串的后缀。因$b$的任意串都能找到后缀属于$a$，两者$Right$集合又不相等，故$R_b \subset R_a$。那么任意两个状态的$Right$集合要么不相交，要么一个是另一个的真子集。<br/>　　疾风将以状态为节点，以$Right$包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br/>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，$SAM$的结点个数最多为$2n$。<br><br/><img src="/2020/10/01/Suffix-Automaton/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png" alt="分裂树举例"></p>
 </li>
 <li><p>更严谨的分裂树定义：令满足$Right(s) \subset Right(fa)$的最小$|Right(fa)|$的$fa$为状态$s$的父亲。<br/>　　直观地看，一定是$fa$中最长的字符串向前扩展一位导致了$Right$集合分裂，所以**Max(fa)+1&#x3D;Min(s)**。</p>
 </li>
@@ -1840,7 +1840,7 @@ State<span class="token operator">*</span> q<span class="token punctuation">[</s
 </li>
 </ol>
 <h3 id="添加一位字符更新自动机"><a href="#添加一位字符更新自动机" class="headerlink" title="添加一位字符更新自动机"></a>添加一位字符更新自动机</h3><p>&amp;emsp;&amp;emsp;令当前字符串为$T$，长度为$L$；末尾添加一个字符$x$，要将$SAM(T)$更新为$SAM(Tx)$。<br><br/>　　那么新增的子串是$Tx$的所有后缀，可看作$T$的所有后缀后添加了$x$。令$SAM(T)$中表示$T$的后缀的节点为${v_1, v_2, \cdots, v_k&#x3D;root}$。因为后缀在字符串的末尾出现，所以$L\in Right(v_i)$，可知$v_i$在分裂树上恰好构成一条从叶子到$root$的链，不妨设${v_1, v_2, \cdots, v_k&#x3D;root}$已经按从叶子到祖先排序。<br><br/>　　添加字符$x$后，首先新建状态$np$表示$ST(Tx)$，这是一个已确定的状态（因为没有出边），可知$Right(np)&#x3D;{L+1}$。<br><br/>　　回头考虑旧自动机的$v_i$，设$Right(v_i)&#x3D;{r_1, r_2, \cdots, r_n&#x3D;L}$。如果能在后面添加字符$x$（注意现在仍是字符串$T$的自动机），即$nv&#x3D;trans(v_i, x)$存在，我们已经知道$Right(nv)&#x3D;{r_i+1|T[r_i]&#x3D;x}$；反之如果$v_i$没有$x$的出边，意味着没有$r_i$满足$T[r_i]&#x3D;x$。由于分裂树上父亲的$Right$扩大，如果$trans(v_i,x)$存在，那么$trans(v_{i+1}, x)$也存在。<br><br/>　　对于所有$trans(v,x)&#x3D;null$的$v$，而只有$Tx[r_n&#x3D;L]&#x3D;x$满足转移条件，于是添加一条边$trans(v,x)&#x3D;np$。<br><br/>　　令$v_p$是$v_1, v_2, \cdots, v_k$中第一个有$x$出边（即$trans(v_p, x)$存在）的状态。令$q&#x3D;trans(v_p, x)$，注意，现在仍是旧的自动机。我们能不能直接在$Right(q)$中直接插入$L+1$呢？答案是不能。这是因为有可能$Max(q) &gt; Max(v_p)+1$，隐含意思是$q$在”$v_p$末尾添加$x$”的基础上，由于$Right$集合的缩减，纳入了左端更多字符；如果强行在$Right(q)$中插入$L+1$，会导致$Max(q)$减小而丢失了原来的状态，破坏了自动机的正确性。</p>
-<p><img src="/./%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png" alt="强行插入的反例"><br><br/>　　如图所示，$v_p$含有的最长字符串是红色5个“A”，但$trans(v_p,x)&#x3D;q$含有的最长字符串是蓝色7位字符串，如果在$Right(q)$中强行插入$L+1$即变为绿色部分，会使$Max(q)$从7减少到6从而丢失信息。<br><br/>　　如果足够幸运，$Max(q) &#x3D; Max(v_p)+1$，就没有上面的问题，我们可以在$Right(q)$中插入$L+1$，然后只要令$Pa(np)&#x3D;q$即可完成自动机更新。<em>注：理论上$Right(trans(v_p\dots v_k,x))$都要插入$L+1$，但这些状态的出边都没有发生改变，而后缀自动机实际上不记录$Right$，所以更新完成。</em><br><br/>　　如果没那么幸运，从图上可知，原状态$q$在插入末尾字符$x$后应转换两个状态，设蓝色对应的状态为$q&#39;$（沿用$q$)，绿色状态为$nq$（新建节点）。显然<br>$$<br>trans(q&#39;, *) &#x3D; trans(q, *), \<br>Pa(q&#39;)&#x3D;nq，\<br>Right(nq)&#x3D;Right(q&#39;)\cup {L+1}，\<br>Max(nq) &#x3D; Max(v_p)+1<br>$$<br>显然$Right(nq)$是真包含${L+1}$的最小集合，所以<br>$$ Pa(np)&#x3D;nq $$<br>&amp;emsp;&amp;emsp;截至目前我们新添了$np$，将$q$转化为$q&#39;,nq$，其中$np,q&#39;$都正确处理了出边和分裂树父亲。<br>那么$nq$的分裂树父亲又是谁呢？结合上图易证<br>$$ Pa(nq)&#x3D;Pa(q) $$</p>
+<p><img src="/2020/10/01/Suffix-Automaton/%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png" alt="强行插入的反例"><br><br/>　　如图所示，$v_p$含有的最长字符串是红色5个“A”，但$trans(v_p,x)&#x3D;q$含有的最长字符串是蓝色7位字符串，如果在$Right(q)$中强行插入$L+1$即变为绿色部分，会使$Max(q)$从7减少到6从而丢失信息。<br><br/>　　如果足够幸运，$Max(q) &#x3D; Max(v_p)+1$，就没有上面的问题，我们可以在$Right(q)$中插入$L+1$，然后只要令$Pa(np)&#x3D;q$即可完成自动机更新。<em>注：理论上$Right(trans(v_p\dots v_k,x))$都要插入$L+1$，但这些状态的出边都没有发生改变，而后缀自动机实际上不记录$Right$，所以更新完成。</em><br><br/>　　如果没那么幸运，从图上可知，原状态$q$在插入末尾字符$x$后应转换两个状态，设蓝色对应的状态为$q&#39;$（沿用$q$)，绿色状态为$nq$（新建节点）。显然<br>$$<br>trans(q&#39;, *) &#x3D; trans(q, *), \<br>Pa(q&#39;)&#x3D;nq，\<br>Right(nq)&#x3D;Right(q&#39;)\cup {L+1}，\<br>Max(nq) &#x3D; Max(v_p)+1<br>$$<br>显然$Right(nq)$是真包含${L+1}$的最小集合，所以<br>$$ Pa(np)&#x3D;nq $$<br>&amp;emsp;&amp;emsp;截至目前我们新添了$np$，将$q$转化为$q&#39;,nq$，其中$np,q&#39;$都正确处理了出边和分裂树父亲。<br>那么$nq$的分裂树父亲又是谁呢？结合上图易证<br>$$ Pa(nq)&#x3D;Pa(q) $$</p>
 <p>$nq$的出边是哪一些？由于新添的最后一个字符不能带来更多的状态转移（最后一个字符后面再没有字符了），所以<br>$$ trans(nq, *) &#x3D; trans(q, *) $$<br><br/>　　最后，我们还要考虑原自动机中指向$q$的状态，和新自动机中应当指向$q&#39;$和$nq$的状态。在$v_p,\cdots,v_k$中，由于$Right$的扩大，$Right(trans(v_i,x))$也逐渐扩大（不缩小），所以只有一段连续的$v_p,\cdots,v_e(e\le k)$是指向$q$的，由于要配合在$Right$集合中插入$L+1$，这些出边要修改为<br>$$ trans(v_i,x) &#x3D; nq $$<br>其余指向$q$的状态必然由于左端有过多字符而无法指向$nq$，于是改为指向$q&#39;$，等效于不做任何修改。<br><br/>　　最后的最后，对于$v_{e+1},\cdots,v_k$，对于$nv&#x3D;trans(v_i, x)$，必然可以粗暴地令$Right(nv)$插入$L+1$，所以转移关系可以保持不变，等效于不做任何修改。</p>
 <h1 id="标准代码"><a href="#标准代码" class="headerlink" title="标准代码"></a>标准代码</h1><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cstring></span></span>
@@ -1999,6 +1999,118 @@ endfunc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 
 <h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>其他杂七杂八的东西就自行解决吧，祝看官ubuntu旅程愉快！</p>
 ]]></content>
+      <tags>
+        <tag>减少脱发指南</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>.vimrc</title>
+    <url>/2019/08/25/vimrc/</url>
+    <content><![CDATA[<h2 id="vimrc-amp-Font"><a href="#vimrc-amp-Font" class="headerlink" title=".vimrc &amp; Font"></a>.vimrc &amp; Font</h2><p><a href="vimrc/null.vimrc">.vimrc</a></p>
+<p><a href="vimrc/FiraCode-Retina.ttf">Fira Code Retina</a></p>
+<span id="more"></span>
+
+
+<h2 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h2><p>For 8+ version.</p>
+<pre class="line-numbers language-vim" data-language="vim"><code class="language-vim"><span class="token comment">" All system-wide defaults are set in $VIMRUNTIME/debian.vim and sourced by</span>
+<span class="token comment">" the call to :runtime you can find below.  If you wish to change any of those</span>
+<span class="token comment">" settings, you should do it in this file (/etc/vim/vimrc), since debian.vim</span>
+<span class="token comment">" will be overwritten everytime an upgrade of the vim packages is performed.</span>
+<span class="token comment">" It is recommended to make changes after sourcing debian.vim since it alters</span>
+<span class="token comment">" the value of the </span><span class="token string">'compatible'</span> option<span class="token operator">.</span>
+
+<span class="token comment">" This line should not be removed as it ensures that various options are</span>
+<span class="token comment">" properly set to work with the Vim-related packages available in Debian.</span>
+<span class="token keyword">runtime</span><span class="token operator">!</span> debian<span class="token operator">.</span><span class="token keyword">vim</span>
+
+<span class="token comment">" Vim will load $VIMRUNTIME/defaults.vim if the user does not have a vimrc.</span>
+<span class="token comment">" This happens after /etc/vim/vimrc(.local) are loaded, so it will override</span>
+<span class="token comment">" any settings in these files.</span>
+<span class="token comment">" If you don't want that to happen, uncomment the below line to prevent</span>
+<span class="token comment">" defaults.vim from being loaded.</span>
+<span class="token comment">" let g:skip_defaults_vim = 1</span>
+
+<span class="token comment">" Uncomment the next line to make Vim more Vi-compatible</span>
+<span class="token comment">" NOTE: debian.vim sets </span><span class="token string">'nocompatible'</span><span class="token operator">.</span>  Setting <span class="token string">'compatible'</span> <span class="token keyword">changes</span> numerous
+<span class="token comment">" options, so any other options should be set AFTER setting </span><span class="token string">'compatible'</span><span class="token operator">.</span>
+<span class="token comment">"set compatible</span>
+
+<span class="token comment">" Vim5 and later versions support syntax highlighting. Uncommenting the next</span>
+<span class="token comment">" line enables syntax highlighting by default.</span>
+<span class="token keyword">if</span> <span class="token function">has</span><span class="token punctuation">(</span><span class="token string">"syntax"</span><span class="token punctuation">)</span>
+  <span class="token builtin">syntax</span> <span class="token keyword">on</span>
+<span class="token keyword">endif</span>
+
+<span class="token comment">" If using a dark background within the editing area and syntax highlighting</span>
+<span class="token comment">" turn on this option as well</span>
+<span class="token keyword">set</span> <span class="token builtin">background</span><span class="token operator">=</span>dark
+
+<span class="token comment">" Uncomment the following to have Vim jump to the last position when</span>
+<span class="token comment">" reopening a file</span>
+<span class="token string">"if has("</span><span class="token builtin">autocmd</span><span class="token comment">")</span>
+<span class="token string">"  au BufReadPost * if line("</span><span class="token string">'\"") > 1 &amp;&amp; line("'</span>\<span class="token string">""</span><span class="token punctuation">)</span> <span class="token operator">&lt;=</span> <span class="token function">line</span><span class="token punctuation">(</span><span class="token string">"$"</span><span class="token punctuation">)</span> | exe <span class="token string">"normal! g'\""</span> | <span class="token keyword">endif</span>
+<span class="token comment">"endif</span>
+
+<span class="token comment">" Uncomment the following to have Vim load indentation rules and plugins</span>
+<span class="token comment">" according to the detected filetype.</span>
+<span class="token string">"if has("</span><span class="token builtin">autocmd</span><span class="token comment">")</span>
+<span class="token comment">"  filetype plugin indent on</span>
+<span class="token comment">"endif</span>
+
+<span class="token comment">" The following are commented out as they cause vim to behave a lot</span>
+<span class="token comment">" differently from regular Vi. They are highly recommended though.</span>
+<span class="token keyword">set</span> <span class="token builtin">showcmd</span>		<span class="token comment">" Show (partial) command in status line.</span>
+<span class="token keyword">set</span> <span class="token builtin">showmatch</span>		<span class="token comment">" Show matching brackets.</span>
+<span class="token keyword">set</span> <span class="token builtin">ignorecase</span>		<span class="token comment">" Do case insensitive matching</span>
+<span class="token keyword">set</span> <span class="token builtin">smartcase</span>		<span class="token comment">" Do smart case matching</span>
+<span class="token string">"set incsearch		"</span> Incremental search
+<span class="token keyword">set</span> <span class="token builtin">autowrite</span>		<span class="token comment">" Automatically save before commands like :next and :make</span>
+<span class="token keyword">set</span> <span class="token builtin">hidden</span>		<span class="token comment">" Hide buffers when they are abandoned</span>
+<span class="token keyword">set</span> <span class="token builtin">mouse</span><span class="token operator">=</span>a		<span class="token comment">" Enable mouse usage (all modes)</span>
+
+<span class="token keyword">set</span> <span class="token builtin">cindent</span>
+<span class="token keyword">set</span> <span class="token keyword">number</span>
+<span class="token keyword">set</span> <span class="token builtin">tabstop</span><span class="token operator">=</span><span class="token number">4</span>
+<span class="token keyword">set</span> <span class="token builtin">softtabstop</span><span class="token operator">=</span><span class="token number">4</span>
+<span class="token keyword">set</span> <span class="token builtin">shiftwidth</span><span class="token operator">=</span><span class="token number">4</span>
+<span class="token keyword">set</span> <span class="token builtin">autoread</span>
+
+<span class="token comment">" Source a global configuration file if available</span>
+<span class="token keyword">if</span> <span class="token function">filereadable</span><span class="token punctuation">(</span><span class="token string">"/etc/vim/vimrc.local"</span><span class="token punctuation">)</span>
+  <span class="token keyword">source</span> <span class="token operator">/</span>etc<span class="token operator">/</span><span class="token keyword">vim</span><span class="token operator">/</span>vimrc<span class="token operator">.</span>local
+<span class="token keyword">endif</span>
+
+nnoremap <span class="token operator">&lt;</span>F9<span class="token operator">></span> <span class="token punctuation">:</span><span class="token keyword">call</span> <span class="token function">CompileCPP</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;</span>CR<span class="token operator">></span>
+func<span class="token operator">!</span> <span class="token function">CompileCPP</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	exec <span class="token string">"w"</span>
+	<span class="token keyword">if</span> &amp;<span class="token keyword">filetype</span> <span class="token operator">==</span> <span class="token string">'cpp'</span>
+		exec <span class="token string">'!g++ -Wall -DDEBUG % -o %&lt;'</span>
+	<span class="token keyword">endif</span>
+endfunc
+
+nnoremap <span class="token operator">&lt;</span>F10<span class="token operator">></span> <span class="token punctuation">:</span><span class="token keyword">call</span> <span class="token function">RunOUT</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;</span>CR<span class="token operator">></span>
+func<span class="token operator">!</span> <span class="token function">RunOUT</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	exec <span class="token string">'!./%&lt;'</span>
+endfunc
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="ps-bashrc"><a href="#ps-bashrc" class="headerlink" title="ps. bashrc"></a>ps. bashrc</h2><pre class="line-numbers language-cs" data-language="cs"><code class="language-cs">TEXT::
+terminal size : 90 * 34
+
+custom font Fira Code Retina 14
+Cell spaceing 1.00 1.00
+
+Cursor : Block, Default
+
+COLORS::
+Custom::
+	Default: #D3D7CF, #020F20
+	Bold: disabled
+	Cursor: #FFFFFF, #0350C9
+	Hightlight: disabled
+	palette: (Tango), blue: #4A7DBE #7EA9D6
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       <tags>
         <tag>减少脱发指南</tag>
       </tags>
@@ -2368,118 +2480,6 @@ button<span class="token punctuation">.</span><span class="token function">setOn
       <tags>
         <tag>语法</tag>
         <tag>Kotlin</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>.vimrc</title>
-    <url>/2019/08/25/vimrc/</url>
-    <content><![CDATA[<h2 id="vimrc-amp-Font"><a href="#vimrc-amp-Font" class="headerlink" title=".vimrc &amp; Font"></a>.vimrc &amp; Font</h2><p><a href="vimrc/null.vimrc">.vimrc</a></p>
-<p><a href="vimrc/FiraCode-Retina.ttf">Fira Code Retina</a></p>
-<span id="more"></span>
-
-
-<h2 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h2><p>For 8+ version.</p>
-<pre class="line-numbers language-vim" data-language="vim"><code class="language-vim"><span class="token comment">" All system-wide defaults are set in $VIMRUNTIME/debian.vim and sourced by</span>
-<span class="token comment">" the call to :runtime you can find below.  If you wish to change any of those</span>
-<span class="token comment">" settings, you should do it in this file (/etc/vim/vimrc), since debian.vim</span>
-<span class="token comment">" will be overwritten everytime an upgrade of the vim packages is performed.</span>
-<span class="token comment">" It is recommended to make changes after sourcing debian.vim since it alters</span>
-<span class="token comment">" the value of the </span><span class="token string">'compatible'</span> option<span class="token operator">.</span>
-
-<span class="token comment">" This line should not be removed as it ensures that various options are</span>
-<span class="token comment">" properly set to work with the Vim-related packages available in Debian.</span>
-<span class="token keyword">runtime</span><span class="token operator">!</span> debian<span class="token operator">.</span><span class="token keyword">vim</span>
-
-<span class="token comment">" Vim will load $VIMRUNTIME/defaults.vim if the user does not have a vimrc.</span>
-<span class="token comment">" This happens after /etc/vim/vimrc(.local) are loaded, so it will override</span>
-<span class="token comment">" any settings in these files.</span>
-<span class="token comment">" If you don't want that to happen, uncomment the below line to prevent</span>
-<span class="token comment">" defaults.vim from being loaded.</span>
-<span class="token comment">" let g:skip_defaults_vim = 1</span>
-
-<span class="token comment">" Uncomment the next line to make Vim more Vi-compatible</span>
-<span class="token comment">" NOTE: debian.vim sets </span><span class="token string">'nocompatible'</span><span class="token operator">.</span>  Setting <span class="token string">'compatible'</span> <span class="token keyword">changes</span> numerous
-<span class="token comment">" options, so any other options should be set AFTER setting </span><span class="token string">'compatible'</span><span class="token operator">.</span>
-<span class="token comment">"set compatible</span>
-
-<span class="token comment">" Vim5 and later versions support syntax highlighting. Uncommenting the next</span>
-<span class="token comment">" line enables syntax highlighting by default.</span>
-<span class="token keyword">if</span> <span class="token function">has</span><span class="token punctuation">(</span><span class="token string">"syntax"</span><span class="token punctuation">)</span>
-  <span class="token builtin">syntax</span> <span class="token keyword">on</span>
-<span class="token keyword">endif</span>
-
-<span class="token comment">" If using a dark background within the editing area and syntax highlighting</span>
-<span class="token comment">" turn on this option as well</span>
-<span class="token keyword">set</span> <span class="token builtin">background</span><span class="token operator">=</span>dark
-
-<span class="token comment">" Uncomment the following to have Vim jump to the last position when</span>
-<span class="token comment">" reopening a file</span>
-<span class="token string">"if has("</span><span class="token builtin">autocmd</span><span class="token comment">")</span>
-<span class="token string">"  au BufReadPost * if line("</span><span class="token string">'\"") > 1 &amp;&amp; line("'</span>\<span class="token string">""</span><span class="token punctuation">)</span> <span class="token operator">&lt;=</span> <span class="token function">line</span><span class="token punctuation">(</span><span class="token string">"$"</span><span class="token punctuation">)</span> | exe <span class="token string">"normal! g'\""</span> | <span class="token keyword">endif</span>
-<span class="token comment">"endif</span>
-
-<span class="token comment">" Uncomment the following to have Vim load indentation rules and plugins</span>
-<span class="token comment">" according to the detected filetype.</span>
-<span class="token string">"if has("</span><span class="token builtin">autocmd</span><span class="token comment">")</span>
-<span class="token comment">"  filetype plugin indent on</span>
-<span class="token comment">"endif</span>
-
-<span class="token comment">" The following are commented out as they cause vim to behave a lot</span>
-<span class="token comment">" differently from regular Vi. They are highly recommended though.</span>
-<span class="token keyword">set</span> <span class="token builtin">showcmd</span>		<span class="token comment">" Show (partial) command in status line.</span>
-<span class="token keyword">set</span> <span class="token builtin">showmatch</span>		<span class="token comment">" Show matching brackets.</span>
-<span class="token keyword">set</span> <span class="token builtin">ignorecase</span>		<span class="token comment">" Do case insensitive matching</span>
-<span class="token keyword">set</span> <span class="token builtin">smartcase</span>		<span class="token comment">" Do smart case matching</span>
-<span class="token string">"set incsearch		"</span> Incremental search
-<span class="token keyword">set</span> <span class="token builtin">autowrite</span>		<span class="token comment">" Automatically save before commands like :next and :make</span>
-<span class="token keyword">set</span> <span class="token builtin">hidden</span>		<span class="token comment">" Hide buffers when they are abandoned</span>
-<span class="token keyword">set</span> <span class="token builtin">mouse</span><span class="token operator">=</span>a		<span class="token comment">" Enable mouse usage (all modes)</span>
-
-<span class="token keyword">set</span> <span class="token builtin">cindent</span>
-<span class="token keyword">set</span> <span class="token keyword">number</span>
-<span class="token keyword">set</span> <span class="token builtin">tabstop</span><span class="token operator">=</span><span class="token number">4</span>
-<span class="token keyword">set</span> <span class="token builtin">softtabstop</span><span class="token operator">=</span><span class="token number">4</span>
-<span class="token keyword">set</span> <span class="token builtin">shiftwidth</span><span class="token operator">=</span><span class="token number">4</span>
-<span class="token keyword">set</span> <span class="token builtin">autoread</span>
-
-<span class="token comment">" Source a global configuration file if available</span>
-<span class="token keyword">if</span> <span class="token function">filereadable</span><span class="token punctuation">(</span><span class="token string">"/etc/vim/vimrc.local"</span><span class="token punctuation">)</span>
-  <span class="token keyword">source</span> <span class="token operator">/</span>etc<span class="token operator">/</span><span class="token keyword">vim</span><span class="token operator">/</span>vimrc<span class="token operator">.</span>local
-<span class="token keyword">endif</span>
-
-nnoremap <span class="token operator">&lt;</span>F9<span class="token operator">></span> <span class="token punctuation">:</span><span class="token keyword">call</span> <span class="token function">CompileCPP</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;</span>CR<span class="token operator">></span>
-func<span class="token operator">!</span> <span class="token function">CompileCPP</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-	exec <span class="token string">"w"</span>
-	<span class="token keyword">if</span> &amp;<span class="token keyword">filetype</span> <span class="token operator">==</span> <span class="token string">'cpp'</span>
-		exec <span class="token string">'!g++ -Wall -DDEBUG % -o %&lt;'</span>
-	<span class="token keyword">endif</span>
-endfunc
-
-nnoremap <span class="token operator">&lt;</span>F10<span class="token operator">></span> <span class="token punctuation">:</span><span class="token keyword">call</span> <span class="token function">RunOUT</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;</span>CR<span class="token operator">></span>
-func<span class="token operator">!</span> <span class="token function">RunOUT</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-	exec <span class="token string">'!./%&lt;'</span>
-endfunc
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="ps-bashrc"><a href="#ps-bashrc" class="headerlink" title="ps. bashrc"></a>ps. bashrc</h2><pre class="line-numbers language-cs" data-language="cs"><code class="language-cs">TEXT::
-terminal size : 90 * 34
-
-custom font Fira Code Retina 14
-Cell spaceing 1.00 1.00
-
-Cursor : Block, Default
-
-COLORS::
-Custom::
-	Default: #D3D7CF, #020F20
-	Bold: disabled
-	Cursor: #FFFFFF, #0350C9
-	Hightlight: disabled
-	palette: (Tango), blue: #4A7DBE #7EA9D6
-
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
-      <tags>
-        <tag>减少脱发指南</tag>
       </tags>
   </entry>
   <entry>
@@ -3807,7 +3807,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <span id="more"></span>
 
 <p>树链剖分最重要的地方在于分解树的规则， 下面是一种通用的分解方法：对于每个结点，如果它有儿子，那么取其子树最重（子树结点最多）的儿子为“重儿子”， 重儿子与其父亲的连边称为“重边”。相对的，其余的儿子成为“轻儿子”，轻儿子与父亲的连边称为轻边 。连续的重边构成“重链”，在同一条重链上的点 在线段树中 按重链的顺序相邻。显然，非叶子结点都有重儿子， 它们必定能映射到唯一的重链上。对于多个同父亲的叶子结点，随便取一个作为重儿子就可以了。可以想象， 轻边连接着不相交的重链，树上的每个结点都能唯一的映射到线段的某一个点上。</p>
-<p><img src="/./%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86%E4%BE%8B%E5%AD%90.png" alt="树链剖分例子"></p>
+<p><img src="/2016/04/24/%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86/%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86%E4%BE%8B%E5%AD%90.png" alt="树链剖分例子"></p>
 <p>这样一来，一些数据结构就能够推广到树上。比如能求区间最值、区间求和的线段树，在映射做好后，就能套用在树上。<br>假如我们要求树上两点(u,v)之间的路径的权值和。例如上图求(11, 14)间路径权值和，分别从11和14往上跳，跳到重链的顶端，（为了不超过两点的最近公共祖先， 要选择更深的重链头跳），11跳到2，用线段树求出(2,11)的和（利用重链在映射线段上连续的特点），暴力加一下轻边(1,2)，此时两方面同时跳到重链头1，用线段树求出(1,14)的和，得到答案。</p>
 <h1 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h1><h2 id="主要数据"><a href="#主要数据" class="headerlink" title="主要数据"></a>主要数据</h2><ol>
 <li>树<ul>
@@ -6453,7 +6453,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li><p>三要素：语法，语义，同步</p>
 </li>
 </ul>
-<h4 id="五层协议的体系结构"><a href="#五层协议的体系结构" class="headerlink" title="五层协议的体系结构"></a>五层协议的体系结构</h4><p><img src="/./%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png"></p>
+<h4 id="五层协议的体系结构"><a href="#五层协议的体系结构" class="headerlink" title="五层协议的体系结构"></a>五层协议的体系结构</h4><p><img src="/2019/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png"></p>
 <p>无论哪一层传送的数据单元，都笼统地用“<strong>分组</strong>”或“<strong>协议数据单元PDU（Protocol Data Unit）</strong>”来表示</p>
 <h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p><strong>application layer</strong></p>
 <p>负责应用进程间交互。  协议定义进程间通信和交互的规则。</p>
@@ -6537,7 +6537,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li><strong>基带调制</strong>（<strong>编码</strong>）：对波形变换，变换后仍是基带信号，仍是数字信号。</li>
 <li><strong>带通调制</strong>：使用<strong>载波（carrier）</strong>进行调制，把基带信号的频率范围搬移到较高的频段，并转换为模拟信号。载波调制后的信号成为<strong>带通信号</strong>（仅在一段频率范围内能通过信号）。</li>
 </ol>
-<h4 id="常用的编码方式"><a href="#常用的编码方式" class="headerlink" title="常用的编码方式"></a>常用的编码方式</h4><p><img src="/./%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%B8%B8%E7%94%A8%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F.png" alt="数字信号常用的编码方式"></p>
+<h4 id="常用的编码方式"><a href="#常用的编码方式" class="headerlink" title="常用的编码方式"></a>常用的编码方式</h4><p><img src="/2019/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%B8%B8%E7%94%A8%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F.png" alt="数字信号常用的编码方式"></p>
 <ol>
 <li><strong>不归零制</strong>：电平代表01</li>
 <li><strong>归零制</strong>：脉冲代表01；位开始边界总是中间电平。</li>
@@ -6545,7 +6545,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li><strong>差分曼彻斯特编码</strong>：位中心总是跳变；位开始边界跳变为0，不跳变为1。</li>
 </ol>
 <p>自同步：从信号波形本身提取信号时钟频率。</p>
-<h4 id="基本的带通调制方法"><a href="#基本的带通调制方法" class="headerlink" title="基本的带通调制方法"></a>基本的带通调制方法</h4><p><img src="/./%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E6%96%B9%E6%B3%95.png" alt="基本的带通调制方法"></p>
+<h4 id="基本的带通调制方法"><a href="#基本的带通调制方法" class="headerlink" title="基本的带通调制方法"></a>基本的带通调制方法</h4><p><img src="/2019/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E6%96%B9%E6%B3%95.png" alt="基本的带通调制方法"></p>
 <ol>
 <li><strong>调幅（AM）</strong>：振幅随数字信号变化。</li>
 </ol>
@@ -6600,12 +6600,12 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>波特率（baud rate）为1000的信道，若其电平级数为16（2^4），则数据率（data rate）可达4Kbps。</li>
 <li>影响数据传输率的因素有信噪比、频率带宽、调制效率（Modulation rate）。不受传播速率影响。</li>
 <li>频分复用时，最左右两侧可不设置保护频段。</li>
-<li><img src="/./%E7%94%B5%E8%AF%9D%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%84%E6%88%90.png" alt="电话系统结构"></li>
+<li><img src="/2019/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%94%B5%E8%AF%9D%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%84%E6%88%90.png" alt="电话系统结构"></li>
 <li>光纤具有较好的抗干扰性</li>
 <li>二元信号，3KHz信道，信噪比S&#x2F;N 31，最大传输数据率为6Kbps。（当做无噪声信道计算）</li>
 <li>E1载波，2.048Mbps速率的PCM载波，同步时分复用，30个话音信道（64K）和两个控制信道（16K）。  开始和中间各有8位分别做同步和信令；30路8位数据；组成一帧，256位，每一帧125us时间（每秒8000帧）。 开销占比2&#x2F;32 &#x3D; 6.25%， 有效数据率1.92Mbps。</li>
 <li>T1载波，24个信道（每个8bit），外加1bit帧同步数据，共193bit每帧。每个8bit中有1bit是控制数据。对一路语音通道，数据比特率是7b&#x2F;125us&#x3D;56kb&#x2F;s。总的比特率193b&#x2F;125us&#x3D;1.544Mb&#x2F;s。开销占比(1*24+1)&#x2F;193 &#x3D; 13%。</li>
-<li><img src="/./%E4%BF%A1%E9%81%93%E6%9C%80%E5%A4%A7%E4%BC%A0%E8%BE%93%E9%80%9F%E7%8E%87.png" alt="信道最大传输速率"></li>
+<li><img src="/2019/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E4%BF%A1%E9%81%93%E6%9C%80%E5%A4%A7%E4%BC%A0%E8%BE%93%E9%80%9F%E7%8E%87.png" alt="信道最大传输速率"></li>
 <li>物理层关心在一个通信信道上传输纯比特。</li>
 </ol>
 <h1 id="3-数据链路层"><a href="#3-数据链路层" class="headerlink" title="3 数据链路层"></a>3 数据链路层</h1><p>主要信道类型：  </p>
@@ -6671,7 +6671,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li><strong>链路控制协议LCP（Link Control Protocol）</strong>。建立、配置和测试数据链路连接。</li>
 <li><strong>网络控制协议NCP（Network Control Protocol）</strong>。用来支持不同的网络层协议。</li>
 </ol>
-<h3 id="PPP协议的帧格式"><a href="#PPP协议的帧格式" class="headerlink" title="PPP协议的帧格式"></a>PPP协议的帧格式</h3><p><img src="/./PPP%E5%B8%A7%E7%9A%84%E6%A0%BC%E5%BC%8F.png" alt="PPP协议的帧格式"></p>
+<h3 id="PPP协议的帧格式"><a href="#PPP协议的帧格式" class="headerlink" title="PPP协议的帧格式"></a>PPP协议的帧格式</h3><p><img src="/2019/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/PPP%E5%B8%A7%E7%9A%84%E6%A0%BC%E5%BC%8F.png" alt="PPP协议的帧格式"></p>
 <p>当“协议”为0x0021就是IP数据包，<br>为0xC021就是LCP数据，<br>为0x8021就是网络层的控制数据。</p>
 <p>字节填充：</p>
 <p>异步：  </p>
@@ -6681,7 +6681,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>ASCII控制字符（小于0x20） -&gt; (0x7D 0x??)</li>
 </ol>
 <p>零比特填充： 用于SONET&#x2F;SDH链路，同步传输<br>信息字段中5个连续的1后插入一个0。有效避开了0x7E。</p>
-<h3 id="PPP协议的工作状态"><a href="#PPP协议的工作状态" class="headerlink" title="PPP协议的工作状态"></a>PPP协议的工作状态</h3><p><img src="/./PPP%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%8A%B6%E6%80%81%E5%9B%BE.png" alt="PPP协议的状态图"></p>
+<h3 id="PPP协议的工作状态"><a href="#PPP协议的工作状态" class="headerlink" title="PPP协议的工作状态"></a>PPP协议的工作状态</h3><p><img src="/2019/10/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/PPP%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%8A%B6%E6%80%81%E5%9B%BE.png" alt="PPP协议的状态图"></p>
 <h2 id="习题-2"><a href="#习题-2" class="headerlink" title="习题"></a>习题</h2><ol>
 <li>selective repeat protocol 最大接受窗口为$2^M-1$</li>
 <li>Go-Back-N 最大接收窗口是$2^{M-1}$（默认接收窗口大小 &#x3D; 发送窗口大小）</li>
