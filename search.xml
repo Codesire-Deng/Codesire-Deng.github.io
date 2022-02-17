@@ -1045,6 +1045,33 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
       </tags>
   </entry>
   <entry>
+    <title>Hexo &amp; NexT 更新方式</title>
+    <url>/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h3 id="更新Hexo"><a href="#更新Hexo" class="headerlink" title="更新Hexo"></a>更新Hexo</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm <span class="token function">install</span> -g cnpm                 <span class="token comment"># 升级 npm</span>
+cnpm cache clean -f                 <span class="token comment"># 清除 npm 缓存</span>
+
+<span class="token comment"># 更新 package.json 中的 hexo 及个插件版本</span>
+cnpm <span class="token function">install</span> -g npm-check           <span class="token comment"># 检查之前安装的插件，都有哪些是可以升级的 </span>
+cnpm <span class="token function">install</span> -g npm-upgrade         <span class="token comment"># 升级系统中的插件</span>
+npm-check
+npm-upgrade
+
+cnpm update
+
+hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="更新NexT"><a href="#更新NexT" class="headerlink" title="更新NexT"></a>更新NexT</h3><ol>
+<li>重命名原有的主题文件（夹）</li>
+<li><code>npm install hexo-theme-next@latest</code></li>
+<li>diff配合肉眼更新配置</li>
+<li>参考<a href="https://theme-next.js.org/docs/getting-started/upgrade.html">官方文档</a></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>减少脱发指南</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Expression Templates</title>
     <url>/2022/01/31/Expression-Templates/</url>
     <content><![CDATA[<h1 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h1><p>在研究 CRTP 时发现了一种经典应用——表达式模板。今天学一学，顺便水一篇博客。🐶</p>
@@ -1411,33 +1438,6 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 <li><a href="https://en.cppreference.com/w/cpp/language/using_declaration">Using-declaration - cppreference.com</a></li>
 </ul>
 ]]></content>
-  </entry>
-  <entry>
-    <title>Hexo &amp; NexT 更新方式</title>
-    <url>/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h3 id="更新Hexo"><a href="#更新Hexo" class="headerlink" title="更新Hexo"></a>更新Hexo</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm <span class="token function">install</span> -g cnpm                 <span class="token comment"># 升级 npm</span>
-cnpm cache clean -f                 <span class="token comment"># 清除 npm 缓存</span>
-
-<span class="token comment"># 更新 package.json 中的 hexo 及个插件版本</span>
-cnpm <span class="token function">install</span> -g npm-check           <span class="token comment"># 检查之前安装的插件，都有哪些是可以升级的 </span>
-cnpm <span class="token function">install</span> -g npm-upgrade         <span class="token comment"># 升级系统中的插件</span>
-npm-check
-npm-upgrade
-
-cnpm update
-
-hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="更新NexT"><a href="#更新NexT" class="headerlink" title="更新NexT"></a>更新NexT</h3><ol>
-<li>重命名原有的主题文件（夹）</li>
-<li><code>npm install hexo-theme-next@latest</code></li>
-<li>diff配合肉眼更新配置</li>
-<li>参考<a href="https://theme-next.js.org/docs/getting-started/upgrade.html">官方文档</a></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>减少脱发指南</tag>
-      </tags>
   </entry>
   <entry>
     <title>跟我一起写Makefile</title>
