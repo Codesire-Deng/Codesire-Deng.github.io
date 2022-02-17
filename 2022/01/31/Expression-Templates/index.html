@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Preface在研究 CRTP 时发现了一种经典应用——表达式模板。今天学一学，顺便水一篇博客。🐶 Motivation and example表达式模板是一种模板元编程，它在编译期展开向量的一系列复合运算，从而将辅助空间从 $O(n)$ 降到 $O(1)$。相比于朴素算法，表达式模板属于惰性求值，求值时间点是赋值运算。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Expression Templates">
+<meta property="og:url" content="https://codesire-deng.github.io/2022/01/31/Expression-Templates/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="Preface在研究 CRTP 时发现了一种经典应用——表达式模板。今天学一学，顺便水一篇博客。🐶 Motivation and example表达式模板是一种模板元编程，它在编译期展开向量的一系列复合运算，从而将辅助空间从 $O(n)$ 降到 $O(1)$。相比于朴素算法，表达式模板属于惰性求值，求值时间点是赋值运算。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://codesire-deng.github.io/2022/01/31/Expression-Templates/crtpEt.svg">
+<meta property="article:published_time" content="2022-01-31T07:58:13.000Z">
+<meta property="article:modified_time" content="2022-02-02T13:02:40.768Z">
+<meta property="article:author" content="等疾风">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codesire-deng.github.io/2022/01/31/Expression-Templates/crtpEt.svg">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2022/01/31/Expression-Templates/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://codesire-deng.github.io/2022/01/31/Expression-Templates/","path":"2022/01/31/Expression-Templates/","title":"Expression Templates"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Expression Templates | 等疾风</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">等疾风</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation-and-example"><span class="nav-number">2.</span> <span class="nav-text">Motivation and example</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#My-first-attempt"><span class="nav-number">3.</span> <span class="nav-text">My first attempt</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Draft-1"><span class="nav-number">3.1.</span> <span class="nav-text">Draft 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-39-s-wrong"><span class="nav-number">3.2.</span> <span class="nav-text">What&#39;s wrong</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-second-attempt"><span class="nav-number">4.</span> <span class="nav-text">The second attempt</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Inheriting-constructors"><span class="nav-number">4.1.</span> <span class="nav-text">Inheriting constructors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Template-Inner-Class"><span class="nav-number">4.2.</span> <span class="nav-text">Template Inner Class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Who-needs-operator"><span class="nav-number">4.3.</span> <span class="nav-text">Who needs operator+()?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ambiguity-of-operator"><span class="nav-number">4.4.</span> <span class="nav-text">Ambiguity of operator&#x3D;()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Draft-2"><span class="nav-number">4.5.</span> <span class="nav-text">Draft 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Direction-of-improvement"><span class="nav-number">4.6.</span> <span class="nav-text">Direction of improvement</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Peak-of-Evolution"><span class="nav-number">5.</span> <span class="nav-text">Peak of Evolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-Diagram"><span class="nav-number">5.1.</span> <span class="nav-text">Class Diagram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ET-interface"><span class="nav-number">5.2.</span> <span class="nav-text">ET interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">5.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion-and-Prospect"><span class="nav-number">6.</span> <span class="nav-text">Conclusion and Prospect</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+          </div>
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2022/01/31/Expression-Templates/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Expression Templates
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-01-31 15:58:13" itemprop="dateCreated datePublished" datetime="2022-01-31T15:58:13+08:00">2022-01-31</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2022-02-02 21:02:40" itemprop="dateModified" datetime="2022-02-02T21:02:40+08:00">2022-02-02</time>
+      </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Changyan：</span>
+    
+    
+      <a title="changyan" href="/2022/01/31/Expression-Templates/#SOHUCS" itemprop="discussionUrl">
+        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2022/01/31/Expression-Templates/" itemprop="commentCount"></span>
+      </a>
+    
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h1><p>在研究 CRTP 时发现了一种经典应用——表达式模板。今天学一学，顺便水一篇博客。🐶</p>
+<h1 id="Motivation-and-example"><a href="#Motivation-and-example" class="headerlink" title="Motivation and example"></a>Motivation and example</h1><p>表达式模板是一种模板元编程，它在编译期展开向量的一系列复合运算，从而将辅助空间从 $O(n)$ 降到 $O(1)$。相比于朴素算法，表达式模板属于惰性求值，求值时间点是赋值运算。</p>
+<span id="more"></span>
+
+<p>举个例子，有这样一个 vector 运算：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">tot <span class="token operator">=</span> <span class="token punctuation">(</span>a <span class="token operator">+</span> b<span class="token punctuation">)</span> <span class="token operator">*</span> c<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>朴素算法的语义是：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token punctuation">&#123;</span>
+    <span class="token keyword">auto</span> tmp0 <span class="token operator">=</span> a <span class="token operator">+</span> b<span class="token punctuation">;</span> <span class="token comment">// allocating O(n) space</span>
+    <span class="token keyword">auto</span> tmp1 <span class="token operator">=</span> tmp0 <span class="token operator">*</span> c<span class="token punctuation">;</span>
+    tot <span class="token operator">=</span> tmp1<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>即使你知道「引用限定成员函数」，使你可以抹掉 <code>tmp1</code> 的空间分配，但是 <code>tmp0</code> 的辅助空间总是逃不掉。</p>
+<p>能帮助你的只有表达式模板，它可以表达出这样的语义：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">for</span> <span class="token punctuation">(</span>size_t i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> n<span class="token operator">=</span>a<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span>n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    tot<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span>a<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> b<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">*</span> c<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>如此一来需要的辅助空间就是寄存器级别的！去掉了函数调用也更方便编译器做进一步的优化。</p>
+<h1 id="My-first-attempt"><a href="#My-first-attempt" class="headerlink" title="My first attempt"></a>My first attempt</h1><details class="note primary"><summary><p>我的首次尝试</p>
+</summary>
+<p>忍住不看教程，我先试着实现出来，看看差距有多大。🤔</p>
+<p>我的想法：</p>
+<ol>
+<li>利用类型系统，将懒惰信息记录在模板参数中</li>
+<li>定义惰性二元运算符，它的操作数可以是 vector 或者惰性二元运算符。</li>
+<li>魔改 <code>vector</code>，在赋值运算符中触发求值；重载加减乘除运算。</li>
+</ol>
+<h2 id="Draft-1"><a href="#Draft-1" class="headerlink" title="Draft 1"></a>Draft 1</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;vector></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;functional></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cassert></span></span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">BinaryOperator</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">LHS</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">RHS</span><span class="token operator">></span>
+<span class="token keyword">struct</span> <span class="token class-name">DeferredOperator</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> LHS <span class="token operator">&amp;</span>lhs<span class="token punctuation">;</span>
+    <span class="token keyword">const</span> RHS <span class="token operator">&amp;</span>rhs<span class="token punctuation">;</span>
+    <span class="token keyword">constexpr</span> <span class="token function">DeferredOperator</span><span class="token punctuation">(</span>
+        BinaryOperator<span class="token punctuation">,</span> <span class="token keyword">const</span> LHS <span class="token operator">&amp;</span>lhs<span class="token punctuation">,</span> <span class="token keyword">const</span> RHS <span class="token operator">&amp;</span>rhs<span class="token punctuation">)</span> <span class="token keyword">noexcept</span>
+        <span class="token operator">:</span> <span class="token function">lhs</span><span class="token punctuation">(</span>lhs<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">rhs</span><span class="token punctuation">(</span>rhs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token keyword">constexpr</span> <span class="token keyword">auto</span> <span class="token keyword">operator</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>size_t pos<span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> BinaryOperator<span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">(</span>lhs<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">,</span> rhs<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">constexpr</span> size_t <span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> lhs<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token punctuation">,</span> <span class="token keyword">class</span> <span class="token class-name">Container</span> <span class="token operator">=</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span>T<span class="token operator">>></span>
+<span class="token keyword">struct</span> <span class="token class-name">Vec</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token class-name">Container</span></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">Op</span><span class="token operator">></span>
+    Vec <span class="token operator">&amp;</span><span class="token keyword">operator</span><span class="token operator">=</span><span class="token punctuation">(</span>Op <span class="token operator">&amp;&amp;</span>op<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> size_t n <span class="token operator">=</span> op<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token operator">-></span><span class="token function">resize</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>size_t i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token keyword">this</span><span class="token operator">-></span><span class="token keyword">operator</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">=</span> op<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    Vec<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> vec<span class="token punctuation">;</span>
+    std<span class="token operator">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">b</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">c</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    vec <span class="token operator">=</span> <span class="token function">DeferredOperator</span><span class="token punctuation">(</span>
+        std<span class="token operator">::</span>multiplies<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token function">DeferredOperator</span><span class="token punctuation">(</span>std<span class="token operator">::</span>plus<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">,</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> x <span class="token operator">:</span> vec<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> x <span class="token operator">&lt;&lt;</span> <span class="token string">' '</span><span class="token punctuation">;</span>
+        <span class="token function">assert</span><span class="token punctuation">(</span>x <span class="token operator">==</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="What-39-s-wrong"><a href="#What-39-s-wrong" class="headerlink" title="What&#39;s wrong"></a>What&#39;s wrong</h2><p>这段程序是正确的！😁但也有一些犯蠢的地方：</p>
+<ol>
+<li>没有重载运算符，用起来太丑；</li>
+<li>显式模板参数太多，比如 <code>int</code> 出现太多次。理想中应该只在 <code>Vec</code> 定义时表明<code>T = int</code>，后面的通通自动推导；</li>
+<li>魔改的 <code>Vec</code> 类没有沿用 <code>std::vector</code> 的非默认构造函数；</li>
+<li>当调用 <code>vec = vec</code> 时会错误地调用惰性求值版本；</li>
+<li>没有显式 CRTP，证明不够熟练；</li>
+<li>在计算前调用 <code>vector::resize()</code> 真的好吗？有点违反零开销抽象的感觉。</li>
+</ol>
+
+</details>
+
+<h1 id="The-second-attempt"><a href="#The-second-attempt" class="headerlink" title="The second attempt"></a>The second attempt</h1><details class="note primary"><summary><p>查文档再改进</p>
+</summary>
+<p>针对上一章节列出的缺点，我查阅文档做了一些改进：</p>
+<h2 id="Inheriting-constructors"><a href="#Inheriting-constructors" class="headerlink" title="Inheriting constructors"></a>Inheriting constructors</h2><p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/using_declaration">cppreference</a></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token punctuation">,</span> <span class="token keyword">class</span> <span class="token class-name">Container</span> <span class="token operator">=</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span>T<span class="token operator">>></span>
+<span class="token keyword">struct</span> <span class="token class-name">Vec</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token class-name">Container</span></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">using</span> Container<span class="token operator">::</span>Container<span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这样就能使用 <code>std::vector</code> 的构造接口了，我们的 C++ 真的太好用啦！</p>
+<h2 id="Template-Inner-Class"><a href="#Template-Inner-Class" class="headerlink" title="Template Inner Class"></a>Template Inner Class</h2><p>我们可以将 <code>DeferredOperator</code> 类定义在 <code>Vec</code> 内部，这样就不用到处传递基础数据类型啦！</p>
+<h2 id="Who-needs-operator"><a href="#Who-needs-operator" class="headerlink" title="Who needs operator+()?"></a>Who needs operator+()?</h2><ol>
+<li><code>Vec</code> 类需要实现 <code>operator+()</code>，并由这个函数返回一个 <code>DeferredOperator</code></li>
+<li><code>DeferredOperator</code> 类需要实现 <code>operator+()</code>，这个函数同样返回一个 <code>DeferredOperator</code></li>
+</ol>
+<h2 id="Ambiguity-of-operator"><a href="#Ambiguity-of-operator" class="headerlink" title="Ambiguity of operator=()"></a>Ambiguity of operator=()</h2><p>为了区分 <code>Vec = Vec</code> 和 <code>Vec = DeferredOperator</code>，我们需要更精细地定义参数。</p>
+<h2 id="Draft-2"><a href="#Draft-2" class="headerlink" title="Draft 2"></a>Draft 2</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;vector></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;functional></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cassert></span></span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token punctuation">,</span> <span class="token keyword">class</span> <span class="token class-name">Container</span> <span class="token operator">=</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span>T<span class="token operator">>></span>
+<span class="token keyword">struct</span> <span class="token class-name">Vec</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token class-name">Container</span></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">using</span> Container<span class="token operator">::</span>Container<span class="token punctuation">;</span>
+
+    <span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">BinaryOperator</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">LHS</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">RHS</span><span class="token operator">></span>
+    <span class="token keyword">struct</span> <span class="token class-name">DeferredOperator</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> LHS <span class="token operator">&amp;</span>lhs<span class="token punctuation">;</span>
+        <span class="token keyword">const</span> RHS <span class="token operator">&amp;</span>rhs<span class="token punctuation">;</span>
+        <span class="token keyword">constexpr</span> <span class="token function">DeferredOperator</span><span class="token punctuation">(</span><span class="token keyword">const</span> LHS <span class="token operator">&amp;</span>lhs<span class="token punctuation">,</span> <span class="token keyword">const</span> RHS <span class="token operator">&amp;</span>rhs<span class="token punctuation">)</span> <span class="token keyword">noexcept</span>
+            <span class="token operator">:</span> <span class="token function">lhs</span><span class="token punctuation">(</span>lhs<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">rhs</span><span class="token punctuation">(</span>rhs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+        <span class="token keyword">constexpr</span> <span class="token keyword">auto</span> <span class="token keyword">operator</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>size_t pos<span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> BinaryOperator<span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">(</span>lhs<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">,</span> rhs<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">OuterRHS</span><span class="token operator">></span>
+        <span class="token keyword">constexpr</span> <span class="token keyword">auto</span> <span class="token keyword">operator</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token keyword">const</span> OuterRHS <span class="token operator">&amp;</span>outerRHS<span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> DeferredOperator<span class="token operator">&lt;</span>std<span class="token operator">::</span>plus<span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">,</span> DeferredOperator<span class="token punctuation">,</span> OuterRHS<span class="token operator">></span><span class="token punctuation">(</span>
+                <span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">,</span> outerRHS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">constexpr</span> size_t <span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> lhs<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">RHS</span><span class="token operator">></span>
+    <span class="token keyword">constexpr</span> <span class="token keyword">auto</span> <span class="token keyword">operator</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token keyword">const</span> RHS <span class="token operator">&amp;</span>rhs<span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> DeferredOperator<span class="token operator">&lt;</span>std<span class="token operator">::</span>plus<span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">,</span> Vec<span class="token punctuation">,</span> RHS<span class="token operator">></span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">,</span> rhs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">BinaryOperator</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">LHS</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">RHS</span><span class="token operator">></span>
+    Vec <span class="token operator">&amp;</span><span class="token keyword">operator</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token keyword">const</span> DeferredOperator<span class="token operator">&lt;</span>BinaryOperator<span class="token punctuation">,</span>LHS<span class="token punctuation">,</span>RHS<span class="token operator">></span> <span class="token operator">&amp;</span>op<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"tag\n"</span><span class="token punctuation">;</span>
+        <span class="token keyword">const</span> size_t n <span class="token operator">=</span> op<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token operator">-></span><span class="token function">resize</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>size_t i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token keyword">this</span><span class="token operator">-></span><span class="token keyword">operator</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">=</span> op<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    Vec<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> vec<span class="token punctuation">,</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">b</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">c</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    vec <span class="token operator">=</span> a<span class="token punctuation">;</span> <span class="token comment">// check bug</span>
+    vec <span class="token operator">=</span> a <span class="token operator">+</span> b <span class="token operator">+</span> c<span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> x <span class="token operator">:</span> vec<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> x <span class="token operator">&lt;&lt;</span> <span class="token string">' '</span><span class="token punctuation">;</span>
+        <span class="token function">assert</span><span class="token punctuation">(</span>x <span class="token operator">==</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Direction-of-improvement"><a href="#Direction-of-improvement" class="headerlink" title="Direction of improvement"></a>Direction of improvement</h2><p>WoW! 这段代码也是正确的！但还是写得有点臭：</p>
+<ol>
+<li>这里只写了重载加法。如果每种运算符都要写两个成员函数，那也太难看了。</li>
+<li>只对 <code>Vec</code> 类实现了惰性加法。万一再来一个 <code>Matrix</code> 类呢？惰性运算能不能接口化？</li>
+<li>CRTP 在哪？</li>
+</ol>
+
+</details>
+
+<h1 id="Peak-of-Evolution"><a href="#Peak-of-Evolution" class="headerlink" title="Peak of Evolution"></a>Peak of Evolution</h1><p>这次依然是原创代码，改进了一些地方：</p>
+<h2 id="Class-Diagram"><a href="#Class-Diagram" class="headerlink" title="Class Diagram"></a>Class Diagram</h2><p>多层次的 CRTP 用起来容易头晕，应该事先设计好类的关系：</p>
+<p><img src="./crtpEt.svg" alt="CRTP relationship"></p>
+<p>橙色和红色的类才是 CRTP 的模板实参。白色的类主要用作接口，类似于抽象类。</p>
+<h2 id="ET-interface"><a href="#ET-interface" class="headerlink" title="ET interface"></a>ET interface</h2><ul>
+<li>用户类只要继承 <code>VectorExpresstion</code> 接口，同时定义合适的 <code>operator[]</code> 和 <code>operator=</code> 即可实现模板表达式。</li>
+<li>用户可以在 <code>operator=</code> 中做性能优化，例如手工循环展开、SIMD 等等，非常灵活。</li>
+<li>用户还可以自定义运算符，但我暂时想不到有什么不啰嗦的实现方法（除了宏）。</li>
+</ul>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// necessary header for Expression Template library</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;type_traits></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;functional></span></span>
+
+<span class="token comment">// header for user-define things</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;vector></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cassert></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cmath></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;algorithm></span></span>
+
+<span class="token comment">// helper class for CRTP. For more info, please see my previous blog</span>
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token class-name">T</span><span class="token punctuation">,</span> <span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span><span class="token operator">></span> <span class="token keyword">class</span> <span class="token class-name">Interface</span><span class="token operator">></span>
+<span class="token keyword">struct</span> <span class="token class-name">CRTP</span> <span class="token punctuation">&#123;</span>
+    T <span class="token operator">&amp;</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token keyword">static_cast</span><span class="token operator">&lt;</span>T <span class="token operator">&amp;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">const</span> T <span class="token operator">&amp;</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token keyword">static_cast</span><span class="token operator">&lt;</span><span class="token keyword">const</span> T <span class="token operator">&amp;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">private</span><span class="token operator">:</span>
+    <span class="token function">CRTP</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
+    <span class="token keyword">friend</span> Interface<span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">// my Expression Template library implementation</span>
+<span class="token keyword">namespace</span> ET <span class="token punctuation">&#123;</span>
+
+<span class="token comment">// base class for lazy evaluation</span>
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">struct</span> <span class="token class-name">Expression</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token class-name">CRTP</span><span class="token operator">&lt;</span><span class="token class-name">T</span><span class="token punctuation">,</span> <span class="token class-name">Expression</span><span class="token operator">></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// use a looong function name to avoid ambiguity</span>
+    <span class="token keyword">constexpr</span> <span class="token keyword">auto</span> <span class="token function">evaluate</span><span class="token punctuation">(</span>size_t i<span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token operator">-></span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">constexpr</span> <span class="token keyword">auto</span> <span class="token function">selfSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token operator">-></span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">// class to indicate a single value (instead of an vector)</span>
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">struct</span> <span class="token class-name">ArithmeticExpression</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token class-name">Expression</span><span class="token operator">&lt;</span><span class="token class-name">ArithmeticExpression</span><span class="token operator">&lt;</span><span class="token class-name">T</span><span class="token operator">>></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">ArithmeticExpression</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">delete</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">template</span><span class="token operator">&lt;</span>std<span class="token operator">::</span>enable_if_t<span class="token operator">&lt;</span>std<span class="token operator">::</span>is_arithmetic_v<span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">,</span> <span class="token keyword">bool</span><span class="token operator">></span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token operator">></span>
+    <span class="token keyword">constexpr</span> <span class="token function">ArithmeticExpression</span><span class="token punctuation">(</span><span class="token keyword">const</span> T value<span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token operator">:</span> <span class="token function">val</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">constexpr</span> T <span class="token keyword">operator</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>size_t<span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> val<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">constexpr</span> <span class="token keyword">void</span> <span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> <span class="token comment">// return void for easier metaprogramming</span>
+
+  <span class="token keyword">private</span><span class="token operator">:</span>
+    <span class="token keyword">const</span> T val<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">// class to indicate an vector (instead of a single arithmetic value)</span>
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">struct</span> <span class="token class-name">VectorExpression</span> <span class="token operator">:</span> <span class="token base-clause"><span class="token class-name">Expression</span><span class="token operator">&lt;</span><span class="token class-name">T</span><span class="token operator">></span></span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">BinaryOperator</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">LHS</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">RHS</span><span class="token operator">></span>
+<span class="token keyword">struct</span> <span class="token class-name">BinaryExpression</span>
+    <span class="token operator">:</span> <span class="token base-clause"><span class="token class-name">VectorExpression</span><span class="token operator">&lt;</span><span class="token class-name">BinaryExpression</span><span class="token operator">&lt;</span><span class="token class-name">BinaryOperator</span><span class="token punctuation">,</span> <span class="token class-name">LHS</span><span class="token punctuation">,</span> <span class="token class-name">RHS</span><span class="token operator">>></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">constexpr</span> <span class="token keyword">auto</span> <span class="token keyword">operator</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>size_t i<span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// evaluation happens when operator[] is called</span>
+        <span class="token keyword">return</span> BinaryOperator<span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">(</span>lhs<span class="token punctuation">.</span><span class="token function">evaluate</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">,</span> rhs<span class="token punctuation">.</span><span class="token function">evaluate</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">constexpr</span> size_t <span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// return the size of an *vector*</span>
+        <span class="token keyword">if</span> <span class="token keyword">constexpr</span> <span class="token punctuation">(</span><span class="token operator">!</span>std<span class="token operator">::</span>is_same_v<span class="token operator">&lt;</span><span class="token keyword">decltype</span><span class="token punctuation">(</span>lhs<span class="token punctuation">.</span><span class="token function">selfSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">void</span><span class="token operator">></span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> lhs<span class="token punctuation">.</span><span class="token function">selfSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            <span class="token keyword">return</span> rhs<span class="token punctuation">.</span><span class="token function">selfSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token function">BinaryExpression</span><span class="token punctuation">(</span><span class="token keyword">const</span> LHS <span class="token operator">&amp;</span>lhs<span class="token punctuation">,</span> <span class="token keyword">const</span> RHS <span class="token operator">&amp;</span>rhs<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token function">lhs</span><span class="token punctuation">(</span>lhs<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">rhs</span><span class="token punctuation">(</span>rhs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">private</span><span class="token operator">:</span>
+    <span class="token keyword">const</span> LHS <span class="token operator">&amp;</span>lhs<span class="token punctuation">;</span>
+    <span class="token keyword">const</span> RHS <span class="token operator">&amp;</span>rhs<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">LHS</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">RHS</span><span class="token operator">></span>
+<span class="token keyword">using</span> AddExpression <span class="token operator">=</span> BinaryExpression<span class="token operator">&lt;</span>std<span class="token operator">::</span>plus<span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">,</span> LHS<span class="token punctuation">,</span> RHS<span class="token operator">></span><span class="token punctuation">;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">LHS</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">RHS</span><span class="token operator">></span>
+<span class="token keyword">using</span> SubExpression <span class="token operator">=</span> BinaryExpression<span class="token operator">&lt;</span>std<span class="token operator">::</span>minus<span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">,</span> LHS<span class="token punctuation">,</span> RHS<span class="token operator">></span><span class="token punctuation">;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">LHS</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">RHS</span><span class="token operator">></span>
+<span class="token keyword">using</span> MulExpression <span class="token operator">=</span> BinaryExpression<span class="token operator">&lt;</span>std<span class="token operator">::</span>multiplies<span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">,</span> LHS<span class="token punctuation">,</span> RHS<span class="token operator">></span><span class="token punctuation">;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">LHS</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">RHS</span><span class="token operator">></span>
+<span class="token keyword">using</span> DivExpression <span class="token operator">=</span> BinaryExpression<span class="token operator">&lt;</span>std<span class="token operator">::</span>divides<span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">,</span> LHS<span class="token punctuation">,</span> RHS<span class="token operator">></span><span class="token punctuation">;</span>
+
+<span class="token punctuation">&#125;</span> <span class="token comment">// namespace ET</span>
+
+<span class="token comment">// ==============================</span>
+
+<span class="token comment">// overloaded operator to export:</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">using</span> ETNum <span class="token operator">=</span> ET<span class="token operator">::</span>ArithmeticExpression<span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">E1</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">E2</span><span class="token operator">></span>
+<span class="token keyword">constexpr</span> <span class="token keyword">auto</span>
+<span class="token keyword">operator</span><span class="token operator">+</span><span class="token punctuation">(</span><span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>E1<span class="token operator">></span> <span class="token operator">&amp;</span>lhs<span class="token punctuation">,</span> <span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>E2<span class="token operator">></span> <span class="token operator">&amp;</span>rhs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// notice Expression&lt;E1> -> E1</span>
+    <span class="token comment">// so "Expression" is removed</span>
+    <span class="token keyword">return</span> ET<span class="token operator">::</span>AddExpression<span class="token operator">&lt;</span>E1<span class="token punctuation">,</span> E2<span class="token operator">></span><span class="token punctuation">(</span>lhs<span class="token punctuation">.</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> rhs<span class="token punctuation">.</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">E1</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">E2</span><span class="token operator">></span>
+<span class="token keyword">constexpr</span> <span class="token keyword">auto</span>
+<span class="token keyword">operator</span><span class="token operator">-</span><span class="token punctuation">(</span><span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>E1<span class="token operator">></span> <span class="token operator">&amp;</span>lhs<span class="token punctuation">,</span> <span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>E2<span class="token operator">></span> <span class="token operator">&amp;</span>rhs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> ET<span class="token operator">::</span>SubExpression<span class="token operator">&lt;</span>E1<span class="token punctuation">,</span> E2<span class="token operator">></span><span class="token punctuation">(</span>lhs<span class="token punctuation">.</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> rhs<span class="token punctuation">.</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">E1</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">E2</span><span class="token operator">></span>
+<span class="token keyword">constexpr</span> <span class="token keyword">auto</span>
+<span class="token keyword">operator</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>E1<span class="token operator">></span> <span class="token operator">&amp;</span>lhs<span class="token punctuation">,</span> <span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>E2<span class="token operator">></span> <span class="token operator">&amp;</span>rhs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> ET<span class="token operator">::</span>MulExpression<span class="token operator">&lt;</span>E1<span class="token punctuation">,</span> E2<span class="token operator">></span><span class="token punctuation">(</span>lhs<span class="token punctuation">.</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> rhs<span class="token punctuation">.</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">E1</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">E2</span><span class="token operator">></span>
+<span class="token keyword">constexpr</span> <span class="token keyword">auto</span>
+<span class="token keyword">operator</span><span class="token operator">/</span><span class="token punctuation">(</span><span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>E1<span class="token operator">></span> <span class="token operator">&amp;</span>lhs<span class="token punctuation">,</span> <span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>E2<span class="token operator">></span> <span class="token operator">&amp;</span>rhs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> ET<span class="token operator">::</span>DivExpression<span class="token operator">&lt;</span>E1<span class="token punctuation">,</span> E2<span class="token operator">></span><span class="token punctuation">(</span>lhs<span class="token punctuation">.</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> rhs<span class="token punctuation">.</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// ==============================</span>
+
+<span class="token comment">// user-define operator</span>
+
+<span class="token comment">// I find it hard to convert a function into an operator() overloading.</span>
+<span class="token comment">// If you have a good idea, please tell me!</span>
+<span class="token keyword">struct</span> <span class="token class-name">POW</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">_Tp</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">_Up</span><span class="token operator">></span>
+    <span class="token keyword">auto</span> <span class="token keyword">operator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">(</span>_Tp <span class="token operator">&amp;&amp;</span>__t<span class="token punctuation">,</span> _Up <span class="token operator">&amp;&amp;</span>__u<span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token function">pow</span><span class="token punctuation">(</span>std<span class="token operator">::</span>forward<span class="token operator">&lt;</span>_Tp<span class="token operator">></span><span class="token punctuation">(</span>__t<span class="token punctuation">)</span><span class="token punctuation">,</span> std<span class="token operator">::</span>forward<span class="token operator">&lt;</span>_Up<span class="token operator">></span><span class="token punctuation">(</span>__u<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">E1</span><span class="token punctuation">,</span> <span class="token keyword">typename</span> <span class="token class-name">E2</span><span class="token operator">></span>
+<span class="token keyword">constexpr</span> <span class="token keyword">auto</span>
+<span class="token function">Pow</span><span class="token punctuation">(</span><span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>E1<span class="token operator">></span> <span class="token operator">&amp;</span>lhs<span class="token punctuation">,</span> <span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>E2<span class="token operator">></span> <span class="token operator">&amp;</span>rhs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> ET<span class="token operator">::</span>BinaryExpression<span class="token operator">&lt;</span>POW<span class="token punctuation">,</span> E1<span class="token punctuation">,</span> E2<span class="token operator">></span><span class="token punctuation">(</span>lhs<span class="token punctuation">.</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> rhs<span class="token punctuation">.</span><span class="token function">self</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// ==============================</span>
+
+<span class="token comment">// user-define vector</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token punctuation">,</span> <span class="token keyword">class</span> <span class="token class-name">Container</span> <span class="token operator">=</span> std<span class="token operator">::</span>vector<span class="token operator">&lt;</span>T<span class="token operator">>></span>
+<span class="token keyword">struct</span> <span class="token class-name">Vec</span>
+    <span class="token operator">:</span> <span class="token base-clause"><span class="token class-name">Container</span>
+    <span class="token punctuation">,</span> ET<span class="token operator">::</span><span class="token class-name">VectorExpression</span><span class="token operator">&lt;</span><span class="token class-name">Vec</span><span class="token operator">&lt;</span><span class="token class-name">T</span><span class="token punctuation">,</span> <span class="token class-name">Container</span><span class="token operator">>></span></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">using</span> Container<span class="token operator">::</span>Container<span class="token punctuation">;</span>
+
+    <span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">Exp</span><span class="token operator">></span>
+    Vec <span class="token operator">&amp;</span><span class="token keyword">operator</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token keyword">const</span> ET<span class="token operator">::</span>Expression<span class="token operator">&lt;</span>Exp<span class="token operator">></span> <span class="token operator">&amp;</span>exp<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> size_t n <span class="token operator">=</span> exp<span class="token punctuation">.</span><span class="token function">selfSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token operator">-></span><span class="token function">resize</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>size_t i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token keyword">this</span><span class="token operator">-></span><span class="token keyword">operator</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">=</span> exp<span class="token punctuation">.</span><span class="token function">evaluate</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token comment">// ==============================</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    Vec<span class="token operator">&lt;</span><span class="token keyword">double</span><span class="token operator">></span> ans<span class="token punctuation">,</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">b</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">c</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">d</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">e</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">0.4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    ans <span class="token operator">=</span> <span class="token function">Pow</span><span class="token punctuation">(</span><span class="token punctuation">(</span>a <span class="token operator">+</span> b<span class="token punctuation">)</span> <span class="token operator">*</span> c <span class="token operator">/</span> d <span class="token operator">+</span> ETNum<span class="token operator">&lt;</span><span class="token keyword">double</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> <span class="token operator">&amp;&amp;</span>x <span class="token operator">:</span> ans<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> x <span class="token operator">&lt;&lt;</span> <span class="token string">' '</span><span class="token punctuation">;</span>
+        <span class="token function">assert</span><span class="token punctuation">(</span>x <span class="token operator">==</span> <span class="token function">pow</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">8</span> <span class="token operator">/</span> <span class="token number">7.0</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0.4</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Conclusion-and-Prospect"><a href="#Conclusion-and-Prospect" class="headerlink" title="Conclusion and Prospect"></a>Conclusion and Prospect</h1><p>一个基本可用的表达式模板库诞生了。但是要记住：</p>
+<ol>
+<li>表达式模板离开了内联优化就是负优化。经过简单测试，gcc 至少要在 <code>-O1</code> 条件下才有内联成员函数的能力。</li>
+<li>使用表达式模板和其他优化手段并不冲突，可以在自定义 <code>operator=</code> 处做 SIMD，循环展开等等。</li>
+</ol>
+<p>我不得不承认这份代码对比基础库的水准还是差了很多，至少有以下方面可以改进：</p>
+<ul>
+<li>more type trait，描述表达式的可加性、可乘性、可被除和可除性等等。</li>
+<li>进一步简化用户自定义运算符的代码。</li>
+<li>实现一元运算符。</li>
+<li>在矢量和标量的混合运算中抹去显式构造标量。</li>
+</ul>
+<p>但模板元编程暂时不是我的主要学习方向，所以还是再等等吧~</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Expression_templates">Expression templates - Wikipedia</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Expression-template">More C++ Idioms/Expression-template - Wikibooks</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/using_declaration">Using-declaration - cppreference.com</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/01/28/C-%E5%A4%9A%E6%80%81/" rel="prev" title="C++ 多态">
+                  <i class="fa fa-chevron-left"></i> C++ 多态
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/02/06/One-Minute-to-C-defer/" rel="next" title="One Minute to C++ "defer"">
+                  One Minute to C++ "defer" <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="SOHUCS"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="changyan" type="application/json">{"enable":true,"appid":"cyvBLYQE0","appkey":"6ecdbd575aef7772afb4f698420cb1da"}</script>
+<script src="/js/third-party/comments/changyan.js"></script>
+
+</body>
+</html>
