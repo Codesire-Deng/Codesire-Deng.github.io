@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,11 +16,12 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="模方程基础性质模的等价关系自反性$$ a\equiv a \mod m $$对称性$$ a\equiv b \mod m\Leftrightarrow b\equiv a \mod m$$">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="模方程基础性质模的等价关系自反性$$ a\equiv a \mod m $$对称性$$ a\equiv b \mod m\Leftrightarrow b\equiv a \mod m$$">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初等数论">
 <meta property="og:url" content="https://codesire-deng.github.io/2019/08/02/%E5%88%9D%E7%AD%89%E6%95%B0%E8%AE%BA/index.html">
@@ -43,6 +44,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>初等数论 | 等疾风</title>
   
+
 
 
 
@@ -70,7 +72,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">等疾风</h1>
+      <p class="site-title">等疾风</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
@@ -152,8 +154,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="等疾风"
       src="/uploads/blogAvatar_s.jpg">
   <p class="site-author-name" itemprop="name">等疾风</p>
@@ -188,7 +189,6 @@
 
 
 
-          </div>
         </div>
       </div>
         <div class="back-to-top animated" role="button" aria-label="返回顶部">
@@ -246,15 +246,22 @@
 
       <time title="创建时间：2019-08-02 15:03:05" itemprop="dateCreated datePublished" datetime="2019-08-02T15:03:05+08:00">2019-08-02</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-09-19 01:03:17" itemprop="dateModified" datetime="2020-09-19T01:03:17+08:00">2020-09-19</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2020-09-19 01:03:17" itemprop="dateModified" datetime="2020-09-19T01:03:17+08:00">2020-09-19</time>
+    </span>
 
   
+    <span id="/2019/08/02/%E5%88%9D%E7%AD%89%E6%95%B0%E8%AE%BA/" class="post-meta-item leancloud_visitors" data-flag-title="初等数论" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -263,11 +270,9 @@
       </span>
       <span class="post-meta-item-text">Changyan：</span>
     
-    
-      <a title="changyan" href="/2019/08/02/%E5%88%9D%E7%AD%89%E6%95%B0%E8%AE%BA/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2019/08/02/初等数论/" itemprop="commentCount"></span>
-      </a>
-    
+    <a title="初等数论" href="/2019/08/02/%E5%88%9D%E7%AD%89%E6%95%B0%E8%AE%BA/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::eaa10e02da90f7ddbbd7e50f649bff7b" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
   </span>
   
   
@@ -285,10 +290,10 @@
 <p><strong>传递性</strong><br>$$<br>a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m<br>$$</p>
 <h3 id="等式的性质"><a href="#等式的性质" class="headerlink" title="等式的性质"></a>等式的性质</h3><p><strong>可加减性</strong><br>$$<br>模m意义下\<br>a\equiv b, c\equiv d \Rightarrow a+c\equiv b+d<br>$$<br><strong>可乘性</strong><br>$$<br>模m意义下\<br>a\equiv b, c\equiv d \Rightarrow ac\equiv bd<br>$$</p>
 <blockquote>
-<p>证明：设$a-b=km$, $c-d=lm$. 则$a=b+km$, $c=d+lm$, $ac=klm^2+(bl+ck)m+bd$, 显然$m|(ac-bd)$</p>
+<p>证明：设$a-b&#x3D;km$, $c-d&#x3D;lm$. 则$a&#x3D;b+km$, $c&#x3D;d+lm$, $ac&#x3D;klm^2+(bl+ck)m+bd$, 显然$m|(ac-bd)$</p>
 <p>推论：模$m$意义下,$a\equiv b \Rightarrow an\equiv bn$, $n$是自然数</p>
 </blockquote>
-<p><strong>消去律</strong>（乘法逆元的充要条件）<br>$$<br>模m意义下\<br>ac\equiv bc, gcd(c,m)=1 \Rightarrow a\equiv b<br>$$</p>
+<p><strong>消去律</strong>（乘法逆元的充要条件）<br>$$<br>模m意义下\<br>ac\equiv bc, gcd(c,m)&#x3D;1 \Rightarrow a\equiv b<br>$$</p>
 <blockquote>
 <p>证明：m|c(a-b), 因为c,m公因子为1，所以m|(a-b).</p>
 </blockquote>
@@ -302,13 +307,13 @@
 <blockquote>
 <p>证明：$c|(a-b)\Rightarrow cd|d(a-b)$。</p>
 </blockquote>
-<h2 id="高级定理"><a href="#高级定理" class="headerlink" title="高级定理"></a>高级定理</h2><h3 id="贝祖定理"><a href="#贝祖定理" class="headerlink" title="贝祖定理"></a>贝祖定理</h3><p>$$<br>gcd(a,b)是a,b的线性组合。即存在整数x,y,使得xa+yb=gcd(a,b).<br>$$</p>
+<h2 id="高级定理"><a href="#高级定理" class="headerlink" title="高级定理"></a>高级定理</h2><h3 id="贝祖定理"><a href="#贝祖定理" class="headerlink" title="贝祖定理"></a>贝祖定理</h3><p>$$<br>gcd(a,b)是a,b的线性组合。即存在整数x,y,使得xa+yb&#x3D;gcd(a,b).<br>$$</p>
 <blockquote>
 <p>证明：</p>
-<p>当$a=b$时结论显然成立。</p>
-<p>当$a\neq b$时，不妨设$a\neq0$，取$d$为$a,b$的所有线性组合中最小的正整数。作带余除法$a=qd+r$，则$0\leq r&lt;d$. 若$r\neq 0$,则$r=a-qd$是比d更小的线性组合，与假设矛盾,所以$r=0$,$d$是$a$的因子;同理可得$d$是$b$的因子,故$d$是$a,b$的公因子.取$c$为$a,b$的任意公因子,对$d=(xa+yb)$提取$c$得$d=c(xa&#39;+yb&#39;)$,可知$c$是$d$的因子,所以$|c|\leq d$,故$d=gcd(a,b)$.</p>
+<p>当$a&#x3D;b$时结论显然成立。</p>
+<p>当$a\neq b$时，不妨设$a\neq0$，取$d$为$a,b$的所有线性组合中最小的正整数。作带余除法$a&#x3D;qd+r$，则$0\leq r&lt;d$. 若$r\neq 0$,则$r&#x3D;a-qd$是比d更小的线性组合，与假设矛盾,所以$r&#x3D;0$,$d$是$a$的因子;同理可得$d$是$b$的因子,故$d$是$a,b$的公因子.取$c$为$a,b$的任意公因子,对$d&#x3D;(xa+yb)$提取$c$得$d&#x3D;c(xa&#39;+yb&#39;)$,可知$c$是$d$的因子,所以$|c|\leq d$,故$d&#x3D;gcd(a,b)$.</p>
 </blockquote>
-<h3 id="中国剩余定理"><a href="#中国剩余定理" class="headerlink" title="中国剩余定理"></a>中国剩余定理</h3><p>$$<br>有线性同余方程组\<br>x\equiv a_1 \mod m_1\<br>x\equiv a_2 \mod m_2\<br>\dotsm \<br>x\equiv a_3 \mod m_n \<br>其中m_i两两互质，则在模M=m_1m_2\dotsm m_n意义下解有且只有一个。\<br>构造方法如下：<br>设M_i为\frac{M}{m_i}，在模m_i意义下M_i的逆为t_i。则\<br>x=\sum_{i=1}^{n} a_it_iM_i<br>$$</p>
+<h3 id="中国剩余定理"><a href="#中国剩余定理" class="headerlink" title="中国剩余定理"></a>中国剩余定理</h3><p>$$<br>有线性同余方程组\<br>x\equiv a_1 \mod m_1\<br>x\equiv a_2 \mod m_2\<br>\dotsm \<br>x\equiv a_3 \mod m_n \<br>其中m_i两两互质，则在模M&#x3D;m_1m_2\dotsm m_n意义下解有且只有一个。\<br>构造方法如下：<br>设M_i为\frac{M}{m_i}，在模m_i意义下M_i的逆为t_i。则\<br>x&#x3D;\sum_{i&#x3D;1}^{n} a_it_iM_i<br>$$</p>
 <blockquote>
 <p>证明：</p>
 <p>构造解$x$的正确性。对于方程$i$,$\quad t_iM_i\equiv 1 \mod m_i, M_j\equiv 0 \mod m_i$。所以解满足每一条方程式。</p>
@@ -317,60 +322,60 @@
 <h1 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>m的化简剩余系（又称既约剩余系，缩系），<strong>本文记为$Z_m$</strong><br>$$<br>m的剩余系中与m互质的数构成的子集<br>$$</p>
 <p>欧拉函数$\phi(n)$<br>$$<br>m的化简剩余系的元素个数，即|Z_m|<br>$$</p>
 <h2 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h2><ol>
-<li><p>对于质数$p$，$\phi(p)=p-1$ </p>
+<li><p>对于质数$p$，$\phi(p)&#x3D;p-1$ </p>
 </li>
-<li><p>对于质数$p$，$\phi(p^k)=p^{k-1}(p-1)$</p>
+<li><p>对于质数$p$，$\phi(p^k)&#x3D;p^{k-1}(p-1)$</p>
 <blockquote>
-<p>证明：在$[1,p^k]$中，不与$p^k$互质的有${p,2p,3p,\dotsc,p^k}$共$\frac{p^k}{p}=p^{k-1}$个数，则互质的有$p^k-p^{k-1}=p^{k-1}(p-1)$个数。</p>
+<p>证明：在$[1,p^k]$中，不与$p^k$互质的有${p,2p,3p,\dotsc,p^k}$共$\frac{p^k}{p}&#x3D;p^{k-1}$个数，则互质的有$p^k-p^{k-1}&#x3D;p^{k-1}(p-1)$个数。</p>
 </blockquote>
 </li>
-<li><p><strong>欧拉函数是积性函数</strong>，即对于互质的两数$m_1,m_2$，有$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$</p>
+<li><p><strong>欧拉函数是积性函数</strong>，即对于互质的两数$m_1,m_2$，有$\phi(m_1m_2)&#x3D;\phi(m_1)\phi(m_2)$</p>
 </li>
 </ol>
 <blockquote>
-<p>证明：设$a\in Z_{m_1}, b\in Z_{m_2}$，则有同余方程组<br>$$ N \equiv a \mod m_1\<br>N \equiv b \mod m_2\ $$<br>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$互质。则N在模$m_1m_2$下有且仅有唯一解$N=am_2^{-1}m_2+bm_1^{-1}m_1$，显然$N$与$m_1,m_2$都互质，故与$m_1m_2$互质，$N\in Z_{m_1m_2}$。对任意的$N\in Z_{m_1m_2}$，其对应的$(a,b)$也是唯一的。综上，映射$Z_{m_1m_2}\rightarrow Z_{m_1}\times Z_{m_2}$是满射也是单射，则此映射是双射，故$|Z_{m_1m_2}|=|Z_{m_1}||Z_{m_2}|$，即$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$。</p>
+<p>证明：设$a\in Z_{m_1}, b\in Z_{m_2}$，则有同余方程组<br>$$ N \equiv a \mod m_1\<br>N \equiv b \mod m_2\ $$<br>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$互质。则N在模$m_1m_2$下有且仅有唯一解$N&#x3D;am_2^{-1}m_2+bm_1^{-1}m_1$，显然$N$与$m_1,m_2$都互质，故与$m_1m_2$互质，$N\in Z_{m_1m_2}$。对任意的$N\in Z_{m_1m_2}$，其对应的$(a,b)$也是唯一的。综上，映射$Z_{m_1m_2}\rightarrow Z_{m_1}\times Z_{m_2}$是满射也是单射，则此映射是双射，故$|Z_{m_1m_2}|&#x3D;|Z_{m_1}||Z_{m_2}|$，即$\phi(m_1m_2)&#x3D;\phi(m_1)\phi(m_2)$。</p>
 </blockquote>
 <ol start="4">
-<li>对于质数$p$，且$p|a$，则$\phi(ap)=\phi(a)p$</li>
+<li>对于质数$p$，且$p|a$，则$\phi(ap)&#x3D;\phi(a)p$</li>
 </ol>
 <blockquote>
-<p>证明：提取$a$的所有p因子得$ap=a&#39;p^xp=a&#39;p^{x+1}$，由积性函数得<br>$$ \begin{aligned}<br>  \phi(ap)=&amp;\phi(a&#39;)\phi(p^{x+1}) \<br>  =&amp;\phi(a&#39;)p^x(p-1)\<br>  =&amp;\phi(a&#39;)p^{x-1}(p-1)p\<br>  =&amp;\phi(a&#39;)\phi(p^x)p\<br>  =&amp;\phi(a&#39;p^x)p\<br>  =&amp;\phi(a)p<br>\end{aligned} $$</p>
+<p>证明：提取$a$的所有p因子得$ap&#x3D;a&#39;p^xp&#x3D;a&#39;p^{x+1}$，由积性函数得<br>$$ \begin{aligned}<br>  \phi(ap)&#x3D;&amp;\phi(a&#39;)\phi(p^{x+1}) \<br>  &#x3D;&amp;\phi(a&#39;)p^x(p-1)\<br>  &#x3D;&amp;\phi(a&#39;)p^{x-1}(p-1)p\<br>  &#x3D;&amp;\phi(a&#39;)\phi(p^x)p\<br>  &#x3D;&amp;\phi(a&#39;p^x)p\<br>  &#x3D;&amp;\phi(a)p<br>\end{aligned} $$</p>
 </blockquote>
 <ol start="5">
-<li>欧拉函数通项<br>$$<br>令{p_1,p_2,\dotsc,p_m}为n的所有质因子\<br>\phi(n)=n\prod_{i=1}^m(1-\frac{1}{p_i})<br>$$</li>
+<li>欧拉函数通项<br>$$<br>令{p_1,p_2,\dotsc,p_m}为n的所有质因子\<br>\phi(n)&#x3D;n\prod_{i&#x3D;1}^m(1-\frac{1}{p_i})<br>$$</li>
 </ol>
 <blockquote>
-<p>证明：<br>$$\begin{aligned}<br>  设n=&amp;\prod_{i=1}^mp_i^{x_i}\<br>  由积性&amp;函数得\<br>  \phi(n)=&amp;\prod_{i=1}^{m}\phi(p_i^{x_i})\<br>  =&amp;\prod_{i=1}^{m}p_i^{x_i}(1-\frac{1}{p_i})\<br>  =&amp;n\prod_{i=1}^m(1-\frac{1}{p_i})<br>  \end{aligned}<br>$$</p>
+<p>证明：<br>$$\begin{aligned}<br>  设n&#x3D;&amp;\prod_{i&#x3D;1}^mp_i^{x_i}\<br>  由积性&amp;函数得\<br>  \phi(n)&#x3D;&amp;\prod_{i&#x3D;1}^{m}\phi(p_i^{x_i})\<br>  &#x3D;&amp;\prod_{i&#x3D;1}^{m}p_i^{x_i}(1-\frac{1}{p_i})\<br>  &#x3D;&amp;n\prod_{i&#x3D;1}^m(1-\frac{1}{p_i})<br>  \end{aligned}<br>$$</p>
 </blockquote>
 <ol start="6">
 <li>$\phi(n)(n&gt;2)$是偶数</li>
 </ol>
 <blockquote>
-<p>证明：由欧几里得算法可知$\forall i \in [1,n]$且$i$与n互质，则$(n-i)$也与$n$互质。并且$i \neq (n-i)$，这是因为若相等，有$2i=n$，此时$i(i&gt;1)$不与$n$互质。所以与$n$互质的数成对出现，$\phi(n)(n&gt;2)$是偶数。</p>
+<p>证明：由欧几里得算法可知$\forall i \in [1,n]$且$i$与n互质，则$(n-i)$也与$n$互质。并且$i \neq (n-i)$，这是因为若相等，有$2i&#x3D;n$，此时$i(i&gt;1)$不与$n$互质。所以与$n$互质的数成对出现，$\phi(n)(n&gt;2)$是偶数。</p>
 </blockquote>
 <ol start="7">
-<li><strong>质因子的次数不超过欧拉函数值</strong><br>$$<br>设n=p^xs，其中gcd(p,s)=1，则x\leq \phi(n)<br>$$</li>
+<li><strong>质因子的次数不超过欧拉函数值</strong><br>$$<br>设n&#x3D;p^xs，其中gcd(p,s)&#x3D;1，则x\leq \phi(n)<br>$$</li>
 </ol>
 <blockquote>
-<p>证明：<br>$$<br>\begin{aligned}<br>\phi(n)=&amp;\phi(p^x)\phi(s) \<br>\geq&amp; \phi(p^x) = p^{x-1}(p-1)<br>\end{aligned}\<br>下面证明x\leq p^{x-1}(p-1)<br>$$<br>取$p=2$，验证得当$x=1,2,3$时不等式都成立。由归纳法可知$p=2$时不等式成立。取$p&gt;2$，等式左边不变，右边变大，不等式仍成立。</p>
+<p>证明：<br>$$<br>\begin{aligned}<br>\phi(n)&#x3D;&amp;\phi(p^x)\phi(s) \<br>\geq&amp; \phi(p^x) &#x3D; p^{x-1}(p-1)<br>\end{aligned}\<br>下面证明x\leq p^{x-1}(p-1)<br>$$<br>取$p&#x3D;2$，验证得当$x&#x3D;1,2,3$时不等式都成立。由归纳法可知$p&#x3D;2$时不等式成立。取$p&gt;2$，等式左边不变，右边变大，不等式仍成立。</p>
 </blockquote>
 <ol start="8">
-<li>$\sum\limits_{d|n}\phi(d) = n$</li>
+<li>$\sum\limits_{d|n}\phi(d) &#x3D; n$</li>
 </ol>
 <blockquote>
-<p>证明：$\forall k \in [1,n]$，对应有一个$d=gcd(k,n)$。所有可能的$d$取遍了$n$的所有因子。对$d|n$，考虑其对应的$k$，不妨设$k=k_1d,n=k_2d，且gcd(k_1,k_2)=1,那么k_1\leq k_2$。显然$k_2=\frac{n}{d}$是固定的，那么可能的$k_1$的取值有$\phi(k_2)=\phi(\frac{n}{d})$种。所以<br>$$<br>n=\sum\limits_{d|n}\phi(\frac{n}{d})=\sum\limits_{d|n}\phi(d)<br>$$</p>
+<p>证明：$\forall k \in [1,n]$，对应有一个$d&#x3D;gcd(k,n)$。所有可能的$d$取遍了$n$的所有因子。对$d|n$，考虑其对应的$k$，不妨设$k&#x3D;k_1d,n&#x3D;k_2d，且gcd(k_1,k_2)&#x3D;1,那么k_1\leq k_2$。显然$k_2&#x3D;\frac{n}{d}$是固定的，那么可能的$k_1$的取值有$\phi(k_2)&#x3D;\phi(\frac{n}{d})$种。所以<br>$$<br>n&#x3D;\sum\limits_{d|n}\phi(\frac{n}{d})&#x3D;\sum\limits_{d|n}\phi(d)<br>$$</p>
 </blockquote>
 <h2 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h2><h3 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h3><p>$$<br>对于互质的两个数a,n有\<br>a^{\phi(n)} \equiv 1 \mod n<br>$$</p>
 <blockquote>
-<p>证明：设$Z_n={x_1,x_2,\dotsc,x_{\phi(n)}}$，因$a,n互质$，则$ax_i \mod n \in Z_n$；而对$x_i\neq x_j$，由消去律有$ax_i\neq ax_j \mod n$。故模n意义下$Z_n={ax_1,ax_2,\dotsc,ax_{\phi(n)}}$。</p>
-<p>故<br>$$<br>\prod_{i=1}^{\phi(n)}x_i \equiv \prod_{i=1}^{\phi(n)}ax_i \mod n\<br>$$<br>由消去律得<br>$$<br>a^{\phi(n)} \equiv 1 \mod n<br>$$</p>
+<p>证明：设$Z_n&#x3D;{x_1,x_2,\dotsc,x_{\phi(n)}}$，因$a,n互质$，则$ax_i \mod n \in Z_n$；而对$x_i\neq x_j$，由消去律有$ax_i\neq ax_j \mod n$。故模n意义下$Z_n&#x3D;{ax_1,ax_2,\dotsc,ax_{\phi(n)}}$。</p>
+<p>故<br>$$<br>\prod_{i&#x3D;1}^{\phi(n)}x_i \equiv \prod_{i&#x3D;1}^{\phi(n)}ax_i \mod n\<br>$$<br>由消去律得<br>$$<br>a^{\phi(n)} \equiv 1 \mod n<br>$$</p>
 <p>推论：<strong>费马小定理</strong>。</p>
 </blockquote>
 <h3 id="扩展欧拉定理（欧拉降幂）"><a href="#扩展欧拉定理（欧拉降幂）" class="headerlink" title="扩展欧拉定理（欧拉降幂）"></a>扩展欧拉定理（欧拉降幂）</h3><p>$$<br>模m意义下\<br>a^c\equiv<br>\begin{cases}<br>    a^{c \mod \phi(m)}, \qquad &amp;a,m互质\<br>    a^c, \qquad &amp;a,m不互质，c&lt;\phi(m)\<br>    a^{c \mod \phi(m)+\phi(m)}, \qquad &amp;a,m不互质，c\geq \phi(m)<br>\end{cases}<br>$$</p>
 <blockquote>
 <p>证明：$当a,m互质时$，由欧拉定理知$a^{\phi(m)}\equiv 1 \mod m$，定理显然成立。</p>
 <p>$当a,m不互质，c&lt;\phi(m)时$，定理显然成立。</p>
-<p>$当 a,m不互质，c\geq \phi(m)时$，取$a$的任意质因子$p$，即$a=p^xs且gcd(p,s)=1$，由欧拉定理知<br>$$p^{\phi(s)}\equiv 1 \mod s$$<br>由积性函数知$\phi(s)|\phi(m)$，故<br>$$p^{\phi(m)}\equiv 1 \mod s$$<br>同余方程同乘$p^x$(<strong>换模的另一种途径</strong>)得<br>$$<br>p^{\phi(m)+x} \equiv p^x \mod m<br>$$<br>由<strong>欧拉函数的性质7</strong>知$x\leq \phi(m)$，已知$\phi(m)\leq c$，所以<br>$$<br>x \leq \phi(m) \leq c\<br>p^c\equiv p^{x+(c-x)}\equiv p^{\phi(m)+x+(c-x)}\equiv p^{\phi(m)+c} \mod m<br>$$<br>由$c(c\geq \phi(m))$的任意性和数学归纳法得<br>$$<br>p^c\equiv p^{c \mod \phi(m) + \phi(m)} \mod m \<br>$$<br>对$p$的幂$p^k$，易得<br>$$<br>(p^k)^c\equiv p^{kc}\equiv p^{kc \mod \phi(m)+\phi(m)}\<br>\equiv p^{kc\mod \phi(m)+k\phi(m)}\equiv (p^k)^{c \mod \phi(m)+\phi(m)} \mod m<br>$$<br>对$a=\prod\limits_{i=1}^np_i^{x_i}$，得<br>$$ \begin{aligned}<br>  a^c\equiv &amp; \prod\limits_{i=1}^n(p_i^{x_i})^c \<br>  \equiv &amp; \prod\limits_{i=1}^n(p_i^{x_i})^{c \mod \phi(m)+\phi(m)} \<br>  \equiv &amp; a^{c \mod \phi(m) + \phi(m)} \mod m<br>\end{aligned}<br>$$</p>
+<p>$当 a,m不互质，c\geq \phi(m)时$，取$a$的任意质因子$p$，即$a&#x3D;p^xs且gcd(p,s)&#x3D;1$，由欧拉定理知<br>$$p^{\phi(s)}\equiv 1 \mod s$$<br>由积性函数知$\phi(s)|\phi(m)$，故<br>$$p^{\phi(m)}\equiv 1 \mod s$$<br>同余方程同乘$p^x$(<strong>换模的另一种途径</strong>)得<br>$$<br>p^{\phi(m)+x} \equiv p^x \mod m<br>$$<br>由<strong>欧拉函数的性质7</strong>知$x\leq \phi(m)$，已知$\phi(m)\leq c$，所以<br>$$<br>x \leq \phi(m) \leq c\<br>p^c\equiv p^{x+(c-x)}\equiv p^{\phi(m)+x+(c-x)}\equiv p^{\phi(m)+c} \mod m<br>$$<br>由$c(c\geq \phi(m))$的任意性和数学归纳法得<br>$$<br>p^c\equiv p^{c \mod \phi(m) + \phi(m)} \mod m \<br>$$<br>对$p$的幂$p^k$，易得<br>$$<br>(p^k)^c\equiv p^{kc}\equiv p^{kc \mod \phi(m)+\phi(m)}\<br>\equiv p^{kc\mod \phi(m)+k\phi(m)}\equiv (p^k)^{c \mod \phi(m)+\phi(m)} \mod m<br>$$<br>对$a&#x3D;\prod\limits_{i&#x3D;1}^np_i^{x_i}$，得<br>$$ \begin{aligned}<br>  a^c\equiv &amp; \prod\limits_{i&#x3D;1}^n(p_i^{x_i})^c \<br>  \equiv &amp; \prod\limits_{i&#x3D;1}^n(p_i^{x_i})^{c \mod \phi(m)+\phi(m)} \<br>  \equiv &amp; a^{c \mod \phi(m) + \phi(m)} \mod m<br>\end{aligned}<br>$$</p>
 </blockquote>
 <hr>
 <h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="线性筛质数"><a href="#线性筛质数" class="headerlink" title="线性筛质数"></a>线性筛质数</h2><p>求$[1,n]$内的所有素数。</p>
@@ -392,7 +397,7 @@
 <h2 id="线性筛欧拉函数"><a href="#线性筛欧拉函数" class="headerlink" title="线性筛欧拉函数"></a>线性筛欧拉函数</h2><p>求$[1,n]$内所有欧拉函数值</p>
 <ol>
 <li>算法核心是<strong>积性函数</strong>和<strong>欧拉函数性质4</strong></li>
-<li>在线性筛的同时完成欧拉函数计算。当前判断完$i$是否质数，若是合数，则函数值在前面计算过了；若是质数，直接赋值$\phi(i)=i-1$。枚举已知质数$p_j$时，若$p_j$不是$i$的因子，由积性函数可知$\phi(i\cdot p_j)=\phi(i)\cdot \phi(p_j)=\phi(i)\cdot (p_j-1)$ ; 若$p_j$是$i$的因子，由<strong>性质4</strong>得$\phi(i\cdot p_j)=\phi(i)\cdot p_j$，然后break。<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void getPhi(int n) &#123;
+<li>在线性筛的同时完成欧拉函数计算。当前判断完$i$是否质数，若是合数，则函数值在前面计算过了；若是质数，直接赋值$\phi(i)&#x3D;i-1$。枚举已知质数$p_j$时，若$p_j$不是$i$的因子，由积性函数可知$\phi(i\cdot p_j)&#x3D;\phi(i)\cdot \phi(p_j)&#x3D;\phi(i)\cdot (p_j-1)$ ; 若$p_j$是$i$的因子，由<strong>性质4</strong>得$\phi(i\cdot p_j)&#x3D;\phi(i)\cdot p_j$，然后break。<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void getPhi(int n) &#123;
     &#x2F;&#x2F; memset(phi, 0, sizeof(phi));
     pcnt &#x3D; 0;
     phi[1] &#x3D; 1;
@@ -415,17 +420,17 @@
 <h2 id="欧几里得算法（辗转相除法）"><a href="#欧几里得算法（辗转相除法）" class="headerlink" title="欧几里得算法（辗转相除法）"></a><strong>欧几里得算法</strong>（辗转相除法）</h2><p>求$gcd(a,b)$。</p>
 <ol>
 <li>$gcd(a, 0)$的结果显然等于$a$。</li>
-<li>当$a，b$全不为零，则$gcd(a,b) = gcd(b, a \mod b )$使问题规模减小。<blockquote>
-<p>证明：令$c=a\mod b$,则$a=kb+c$.设$r$是$a,b$的公约数，则$r|a-kb$即$r|c$.设$r$是$b,c$的公约数,则$r|kb+c$即$r|a$.可见$a,b$的公约数和$b,a\mod b$的公约数完全相同，则最大公约数也必然相同。</p>
+<li>当$a，b$全不为零，则$gcd(a,b) &#x3D; gcd(b, a \mod b )$使问题规模减小。<blockquote>
+<p>证明：令$c&#x3D;a\mod b$,则$a&#x3D;kb+c$.设$r$是$a,b$的公约数，则$r|a-kb$即$r|c$.设$r$是$b,c$的公约数,则$r|kb+c$即$r|a$.可见$a,b$的公约数和$b,a\mod b$的公约数完全相同，则最大公约数也必然相同。</p>
 <p>应用：从$1$到$n(n&gt;2)$中与$n$互质的数成对出现，每一对和为$n$</p>
 </blockquote>
 </li>
 </ol>
-<h2 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a><strong>扩展欧几里得算法</strong></h2><p>求$ax+by=gcd(a,b)$的一组整数解$x,y$。</p>
+<h2 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a><strong>扩展欧几里得算法</strong></h2><p>求$ax+by&#x3D;gcd(a,b)$的一组整数解$x,y$。</p>
 <ol>
-<li>直接由<strong>贝祖定理</strong>可知整数解一定存在。（贝祖定理：存在整数$s，t$使得$sa+tb=gcd(a,b)$）</li>
-<li>由辗转相除法知$bx&#39;+(a%b)y&#39;=gcd(b,a%b)=gcd(a,b)$的解也存在。由整数除法得<br>$$\begin{aligned}<br> bx&#39;+(a%b)y&#39;=&amp;bx&#39;+(a-\frac{a}{b}b)y&#39;\<br> =&amp;b(x&#39;-\frac{a}{b}y&#39;)+ay&#39;=gcd(a,b)<br>\end{aligned}<br>$$</li>
-<li>递归进行求解，直到$b=0$，显然有解$1a+0b=gcd(a,b)$，令$x=1, y=0$，回溯，得解$x=y&#39;, y=x&#39;-\frac{a}{b}y&#39;$</li>
+<li>直接由<strong>贝祖定理</strong>可知整数解一定存在。（贝祖定理：存在整数$s，t$使得$sa+tb&#x3D;gcd(a,b)$）</li>
+<li>由辗转相除法知$bx&#39;+(a%b)y&#39;&#x3D;gcd(b,a%b)&#x3D;gcd(a,b)$的解也存在。由整数除法得<br>$$\begin{aligned}<br> bx&#39;+(a%b)y&#39;&#x3D;&amp;bx&#39;+(a-\frac{a}{b}b)y&#39;\<br> &#x3D;&amp;b(x&#39;-\frac{a}{b}y&#39;)+ay&#39;&#x3D;gcd(a,b)<br>\end{aligned}<br>$$</li>
+<li>递归进行求解，直到$b&#x3D;0$，显然有解$1a+0b&#x3D;gcd(a,b)$，令$x&#x3D;1, y&#x3D;0$，回溯，得解$x&#x3D;y&#39;, y&#x3D;x&#39;-\frac{a}{b}y&#39;$</li>
 <li>实际写代码时用引用，减少临时变量。<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void exgcd(int a, int b, int &amp;d, int &amp;x, int &amp;y) &#123;
     if (b &#x3D;&#x3D; 0) &#123;
         x &#x3D; 1; y &#x3D; 0;
@@ -436,19 +441,19 @@
     y -&#x3D; a &#x2F; b * x;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ol>
-<h2 id="类欧几里得算法"><a href="#类欧几里得算法" class="headerlink" title="类欧几里得算法"></a><strong>类欧几里得算法</strong></h2><p>求等差数列对每一项做整数除法的和，即<br>$$<br>lgcd(a, b, c, n) = \sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor<br>$$</p>
+<h2 id="类欧几里得算法"><a href="#类欧几里得算法" class="headerlink" title="类欧几里得算法"></a><strong>类欧几里得算法</strong></h2><p>求等差数列对每一项做整数除法的和，即<br>$$<br>lgcd(a, b, c, n) &#x3D; \sum_{i&#x3D;0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor<br>$$</p>
 <ol>
 <li><p>首先标准化$a,b$，使满足$a\geq 0, b\geq 0$，在答案中预先减去补上的$c$即可。</p>
 </li>
-<li><p>把$a,b$中含$c$的贡献拆出来，使问题规模变小。答案加上$n\lfloor \frac{b}{c}\rfloor + \frac{(n-1)n}{2}\lfloor \frac{a}{c}\rfloor$。即<br>$$<br>\sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor = \sum_{i=0}^{n-1}\lfloor \frac{(a%c)i+(b%c)}{c}\rfloor + n\lfloor \frac{b}{c}\rfloor + \frac{(n-1)n}{2}\lfloor \frac{a}{c}\rfloor<br>$$<br>现在可以令$a&#39;=a%c,\quad b&#39;=b%c$。</p>
+<li><p>把$a,b$中含$c$的贡献拆出来，使问题规模变小。答案加上$n\lfloor \frac{b}{c}\rfloor + \frac{(n-1)n}{2}\lfloor \frac{a}{c}\rfloor$。即<br>$$<br>\sum_{i&#x3D;0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor &#x3D; \sum_{i&#x3D;0}^{n-1}\lfloor \frac{(a%c)i+(b%c)}{c}\rfloor + n\lfloor \frac{b}{c}\rfloor + \frac{(n-1)n}{2}\lfloor \frac{a}{c}\rfloor<br>$$<br>现在可以令$a&#39;&#x3D;a%c,\quad b&#39;&#x3D;b%c$。</p>
 </li>
-<li><p>计算$\sum\limits_{i=0}^{n-1}\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor$，得到的商肯定介于$[0,\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor]$，设某次除法得到的商是$x$，可以认为$[1,x]$中每一个数对答案贡献了$1$，考虑每个数的总贡献，则<br>$$<br>\sum\limits_{i=0}^{n-1}\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor = \sum_{j=1}^{\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor} \sum_{i=0}^{n-1} [\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor \geq j]<br>$$</p>
+<li><p>计算$\sum\limits_{i&#x3D;0}^{n-1}\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor$，得到的商肯定介于$[0,\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor]$，设某次除法得到的商是$x$，可以认为$[1,x]$中每一个数对答案贡献了$1$，考虑每个数的总贡献，则<br>$$<br>\sum\limits_{i&#x3D;0}^{n-1}\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor &#x3D; \sum_{j&#x3D;1}^{\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor} \sum_{i&#x3D;0}^{n-1} [\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor \geq j]<br>$$</p>
 </li>
 <li><p>接下来变换不等式$\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor \geq j$。 取整符号不影响大于等于号的判断，可直接去掉；可直接通分；移项得$a&#39;i\geq jc-b&#39;$。整数除法的同除会影响大于等于号的判断，但不影响大于号，于是右边减一，两边同除$a&#39;$得$i&gt;\frac{jc-b&#39;-1}{a&#39;}$。</p>
 </li>
-<li><p>为了方便统计合法的$i$，也为了转化形式满足递归，利用补集统计数量。对于固定的$j$，<br>$$ \begin{aligned}<br> \sum\limits_{i=0}^{n-1} [i&gt;\frac{jc-b&#39;-1}{a&#39;}] =&amp; n-\sum\limits_{i=0}^{n-1} [i\leq\frac{jc-b&#39;-1}{a&#39;}] \<br> =&amp; n-(\lfloor\frac{jc-b&#39;-1}{a&#39;}\rfloor+1)<br>\end{aligned}<br>$$</p>
+<li><p>为了方便统计合法的$i$，也为了转化形式满足递归，利用补集统计数量。对于固定的$j$，<br>$$ \begin{aligned}<br> \sum\limits_{i&#x3D;0}^{n-1} [i&gt;\frac{jc-b&#39;-1}{a&#39;}] &#x3D;&amp; n-\sum\limits_{i&#x3D;0}^{n-1} [i\leq\frac{jc-b&#39;-1}{a&#39;}] \<br> &#x3D;&amp; n-(\lfloor\frac{jc-b&#39;-1}{a&#39;}\rfloor+1)<br>\end{aligned}<br>$$</p>
 </li>
-<li><p>套上前一层Sigma，得到递归形式（<strong>注意j变成从0开始</strong>）<br>$$<br>令m={\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor} \<br>\sum_{j=0}^{m-1}[n-(\lfloor\frac{(j+1)c-b&#39;-1}{a&#39;}\rfloor+1)] = (n-1)m-lgcd(c, c-b&#39;-1,a&#39;,m)<br>$$</p>
+<li><p>套上前一层Sigma，得到递归形式（<strong>注意j变成从0开始</strong>）<br>$$<br>令m&#x3D;{\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor} \<br>\sum_{j&#x3D;0}^{m-1}[n-(\lfloor\frac{(j+1)c-b&#39;-1}{a&#39;}\rfloor+1)] &#x3D; (n-1)m-lgcd(c, c-b&#39;-1,a&#39;,m)<br>$$</p>
 </li>
 </ol>
 <h3 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h3><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// Sum&#123;(ai+b)/c&#125; for i=0..n-1</span>
@@ -462,7 +467,7 @@ LL <span class="token function">lgcd</span><span class="token punctuation">(</sp
 
 <h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
 <li>质因数分解时，质因数要么小于等于$\sqrt{n}$，要么等于$n$。不要漏掉等于$n$的情况。</li>
-<li>1e8+7以内的质数<br>有5761456个，约为6e6，约为范围的1/15。</li>
+<li>1e8+7以内的质数<br>有5761456个，约为6e6，约为范围的1&#x2F;15。</li>
 </ol>
 <p><strong>范围越大，质数的占比越小</strong></p>
 
@@ -514,7 +519,7 @@ LL <span class="token function">lgcd</span><span class="token punctuation">(</sp
 
 
 
-    <div class="comments" id="SOHUCS"></div>
+    <div class="comments" id="SOHUCS" sid="eaa10e02da90f7ddbbd7e50f649bff7b"></div>
 </div>
   </main>
 
@@ -542,7 +547,9 @@ LL <span class="token function">lgcd</span><span class="token punctuation">(</sp
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
@@ -550,6 +557,8 @@ LL <span class="token function">lgcd</span><span class="token punctuation">(</sp
   
 
 
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"Nw4tc7C6QG2HeTBU0T1nFRay-MdYXbMMI","app_key":"ckihIHLVnT6ssbrDfnVNDUJi","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
   

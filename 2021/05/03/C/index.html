@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,11 +16,12 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="本文始于 2018&#x2F;6&#x2F;27，用于汇聚关于 C++ 的实用知识和碰到的坑，温故而知新。  2022&#x2F;1&#x2F;2 【更改】标题改为《C++ 标准笔记》2022&#x2F;1&#x2F;2 【新增】StandardLayout2022&#x2F;1&#x2F;2 【新增】bit field 更新预告：  CRTP 原理，目的和应用 CRTP 应用之表达式模板">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="本文始于 2018&#x2F;6&#x2F;27，用于汇聚关于 C++ 的实用知识和碰到的坑，温故而知新。  2022&#x2F;1&#x2F;2 【更改】标题改为《C++ 标准笔记》2022&#x2F;1&#x2F;2 【新增】StandardLayout2022&#x2F;1&#x2F;2 【新增】bit field 更新预告：  CRTP 原理，目的和应用 CRTP 应用之表达式模板">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++ 标准笔记">
 <meta property="og:url" content="https://codesire-deng.github.io/2021/05/03/C/index.html">
@@ -48,6 +49,7 @@
 
 
 
+
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
@@ -71,7 +73,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">等疾风</h1>
+      <p class="site-title">等疾风</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
@@ -153,8 +155,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="等疾风"
       src="/uploads/blogAvatar_s.jpg">
   <p class="site-author-name" itemprop="name">等疾风</p>
@@ -189,7 +190,6 @@
 
 
 
-          </div>
         </div>
       </div>
         <div class="back-to-top animated" role="button" aria-label="返回顶部">
@@ -247,15 +247,22 @@
 
       <time title="创建时间：2021-05-03 19:15:20" itemprop="dateCreated datePublished" datetime="2021-05-03T19:15:20+08:00">2021-05-03</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2022-01-02 22:23:10" itemprop="dateModified" datetime="2022-01-02T22:23:10+08:00">2022-01-02</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-01-02 22:23:10" itemprop="dateModified" datetime="2022-01-02T22:23:10+08:00">2022-01-02</time>
+    </span>
 
   
+    <span id="/2021/05/03/C/" class="post-meta-item leancloud_visitors" data-flag-title="C++ 标准笔记" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -264,11 +271,9 @@
       </span>
       <span class="post-meta-item-text">Changyan：</span>
     
-    
-      <a title="changyan" href="/2021/05/03/C/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2021/05/03/C/" itemprop="commentCount"></span>
-      </a>
-    
+    <a title="C++ 标准笔记" href="/2021/05/03/C/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::3033955cb45326cda134199e42fed104" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
   </span>
   
   
@@ -281,9 +286,9 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>本文始于 2018/6/27，用于汇聚关于 C++ 的实用知识和碰到的坑，温故而知新。</p>
+        <p>本文始于 2018&#x2F;6&#x2F;27，用于汇聚关于 C++ 的实用知识和碰到的坑，温故而知新。</p>
 <blockquote>
-<p>2022/1/2 【更改】标题改为《C++ 标准笔记》<br>2022/1/2 【新增】StandardLayout<br>2022/1/2 【新增】bit field</p>
+<p>2022&#x2F;1&#x2F;2 【更改】标题改为《C++ 标准笔记》<br>2022&#x2F;1&#x2F;2 【新增】StandardLayout<br>2022&#x2F;1&#x2F;2 【新增】bit field</p>
 <p>更新预告：</p>
 <ol>
 <li>CRTP 原理，目的和应用</li>
@@ -321,7 +326,7 @@
 <li><code>const char []</code>所定义的字符串被保护，有内存位置隔离，不允许跟踪（但允许查看）地址。</li>
 <li>char是否带符号取决于系统。</li>
 <li>wchar_t可以表示系统使用的最大扩展字符集，输入输出用wcin,wcout</li>
-<li>raw r&quot;(a/b\c回车defg*)&quot;,   标识符  &quot;(   )&quot;  可变为 &quot;*@(  )*@&quot; 等等，保持平移对称</li>
+<li>raw r&quot;(a&#x2F;b\c回车defg*)&quot;,   标识符  &quot;(   )&quot;  可变为 &quot;*@(  )*@&quot; 等等，保持平移对称</li>
 </ul>
 <h3 id="lt-cstring-gt-常用函数"><a href="#lt-cstring-gt-常用函数" class="headerlink" title="&lt;cstring&gt;常用函数"></a>&lt;cstring&gt;常用函数</h3><ul>
 <li><code>char* strcpy(char* dest, const char* src)</code><ul>
@@ -454,7 +459,7 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 <li>基类引用可以指向派生类对象</li>
 </ul>
 </li>
-<li>指针也能被引用, 例如 int*&amp; x = ptr;</li>
+<li>指针也能被引用, 例如 int*&amp; x &#x3D; ptr;</li>
 </ul>
 <hr>
 <h2 id="短路运算符"><a href="#短路运算符" class="headerlink" title="短路运算符"></a>短路运算符</h2><ul>
@@ -487,10 +492,11 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 </ul>
 <hr>
 <h2 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h2><ul>
-<li><strong>创建模板</strong><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>    <span class="token comment">//也可以用class代替typename</span>
-<span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span>T<span class="token operator">&amp;</span><span class="token punctuation">,</span> T<span class="token operator">&amp;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-</ul>
-<ul>
+<li><p><strong>创建模板</strong></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>    <span class="token comment">//也可以用class代替typename</span>
+<span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span>T<span class="token operator">&amp;</span><span class="token punctuation">,</span> T<span class="token operator">&amp;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+</li>
 <li><p><strong>显式具体化</strong></p>
   <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token operator">></span> <span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">&amp;</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token operator">&amp;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token operator">></span> <span class="token keyword">void</span> swap<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">&amp;</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token operator">&amp;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
@@ -573,10 +579,10 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 <li>因此使用using声明比使用using编译指令更安全.</li>
 </ul>
 </li>
-<li>名称空间可以拥有别名, 用于简化代码: namespace MEF = myth::elements::fire;</li>
+<li>名称空间可以拥有别名, 用于简化代码: namespace MEF &#x3D; myth::elements::fire;</li>
 <li>名称空间可以匿名, 声明之后自动隐式using, 用于避免其他using并替代static全局变量.</li>
 <li>&lt;.h&gt;文件是不支持名称空间的版本.新版一般将函数搬到std中.</li>
-<li>使用建议: 在大型程序/多单元程序使用<ul>
+<li>使用建议: 在大型程序&#x2F;多单元程序使用<ul>
 <li>少用<code>using namespace</code></li>
 <li>避免在头文件中使用using编译指令,若必须使用,则在所有#include之后使用</li>
 <li>避免直接声明外部全局变量和静态全局变量,改用已命名的名称空间</li>
@@ -628,14 +634,14 @@ Classname object <span class="token operator">=</span> value<span class="token p
 <li>编译器不能辨别复杂环形定义, 如<code>struct A &#123; A()&#123;&#125; A* a = new A(); &#125;</code></li>
 </ul>
 </li>
-<li>非静态变量在运行时才会创建, 所以如int arr[MAXN]的MAXN必须是静态量,可以是全局const, 类中static const, enum{MAXN=x}.</li>
+<li>非静态变量在运行时才会创建, 所以如int arr[MAXN]的MAXN必须是静态量,可以是全局const, 类中static const, enum{MAXN&#x3D;x}.</li>
 <li>友元函数<ul>
 <li>在共有部分声明友元函数原型, 也可以紧接定义以设为内联函数.后置的定义无需friend修饰</li>
 <li>友元函数视为类外函数, 但可以访问类私有成员变量.</li>
 <li>类的显式二元重载运算符应当用友元, 尽管没有直接修改类私有成员变量</li>
 <li>重载&lt;&lt; : <code>std::ostream&amp; operator &lt;&lt; (const std::ostream&amp; os, const Classname&amp; obj)</code>以方便输出.</li>
 <li>友元函数可方便隐式类型转换, 不必苛求由对象发起函数调用.例如cmp(&quot;asd&quot;, obj),可以对应原型cmp(string, string);</li>
-<li>可以在派生类友元函数中，强制向上转型并使用基类友元函<br>数据类型, 否则易有二义性<br>函数, 避免隐式转换出错<br>ass_name&amp;)`<br>始化、按值传递、按值返回、上转型并使用基类友元函数。</li>
+<li>可以在派生类友元函数中，强制向上转型并使用基类友元函<br>  数据类型, 否则易有二义性<br>  函数, 避免隐式转换出错<br>  ass_name&amp;)&#96;<br>  始化、按值传递、按值返回、上转型并使用基类友元函数。</li>
 </ul>
 </li>
 <li>转换函数<code>operator typeName()</code><ul>
@@ -668,7 +674,7 @@ Class_name a <span class="token operator">=</span> <span class="token function">
 </ul>
 </li>
 <li>默认方法的潜在危险<ul>
-<li>某个类在开发初期不需要复制构造函数/赋值运算符重载，但在以后可能需要</li>
+<li>某个类在开发初期不需要复制构造函数&#x2F;赋值运算符重载，但在以后可能需要</li>
 <li>可能写出符合常理的代码，但由于未覆盖默认方法而运行时异常</li>
 <li>可能在未察觉的情况下调用了默认方法（用重载加法时按值传递、按值返回将调用复制构造函数）</li>
 <li>解决办法：<ul>
@@ -696,7 +702,7 @@ Class_name a <span class="token operator">=</span> <span class="token function">
 <li>静态常量在声明同时定义.</li>
 </ul>
 </li>
-<li>派生/继承<ul>
+<li>派生&#x2F;继承<ul>
 <li><code>class newClass : public baseClase</code></li>
 <li>默认继承为private继承。私有继承的向上转型必须显式写出</li>
 <li>多重继承的向上转型也应显示写出，以防不同基类的方法冲突</li>
@@ -707,8 +713,8 @@ Class_name a <span class="token operator">=</span> <span class="token function">
 <li>若基类虚方法被重载了，则应在派生类中重新定义所有的基类版本</li>
 </ul>
 </li>
-<li>若派生类构造函数使用了new，则应提供复制构造函数/赋值运算符（含<code>base::operator=(o);</code>）/虚析构函数的定义</li>
-<li>公有继承表达了is-a关系，私有继承/包含表达了has-a关系。通常使用组合包含层次化来建立has-a关系。如果需要访问原有类的保护成员或重新定义虚方法，才使用私有继承。</li>
+<li>若派生类构造函数使用了new，则应提供复制构造函数&#x2F;赋值运算符（含<code>base::operator=(o);</code>）&#x2F;虚析构函数的定义</li>
+<li>公有继承表达了is-a关系，私有继承&#x2F;包含表达了has-a关系。通常使用组合包含层次化来建立has-a关系。如果需要访问原有类的保护成员或重新定义虚方法，才使用私有继承。</li>
 <li>欲调用基类对象，对(*this)强制向上转型(const Base &amp;)即可</li>
 <li>用using改变继承成员权限：在派生类的public处<code>using Base::methodName;</code>(省略using的技术是即将被抛弃的旧技术)</li>
 </ul>
@@ -1025,7 +1031,7 @@ std<span class="token operator">::</span>is_standard_layout<span class="token op
 
 
 
-    <div class="comments" id="SOHUCS"></div>
+    <div class="comments" id="SOHUCS" sid="3033955cb45326cda134199e42fed104"></div>
 </div>
   </main>
 
@@ -1053,7 +1059,9 @@ std<span class="token operator">::</span>is_standard_layout<span class="token op
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
@@ -1061,6 +1069,8 @@ std<span class="token operator">::</span>is_standard_layout<span class="token op
   
 
 
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"Nw4tc7C6QG2HeTBU0T1nFRay-MdYXbMMI","app_key":"ckihIHLVnT6ssbrDfnVNDUJi","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
   

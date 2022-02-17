@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,24 +16,25 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="实战不会SAM？导致比赛打铁？快 点 学 ！  前置知识后缀自动机(Suffix-Automaton)">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="实战不会SAM？导致比赛打铁？快 点 学 ！  前置知识后缀自动机(Suffix-Automaton)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SAM实战剖析">
 <meta property="og:url" content="https://codesire-deng.github.io/2020/10/11/SAM%E5%AE%9E%E6%88%98/index.html">
 <meta property="og:site_name" content="等疾风">
 <meta property="og:description" content="实战不会SAM？导致比赛打铁？快 点 学 ！  前置知识后缀自动机(Suffix-Automaton)">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://codesire-deng.github.io/2020/10/11/SAM%E5%AE%9E%E6%88%98/abaTree.png">
+<meta property="og:image" content="https://codesire-deng.github.io/abaTree.png">
 <meta property="article:published_time" content="2020-10-11T09:04:59.000Z">
 <meta property="article:modified_time" content="2021-06-15T15:47:49.630Z">
 <meta property="article:author" content="等疾风">
 <meta property="article:tag" content="字符串">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://codesire-deng.github.io/2020/10/11/SAM%E5%AE%9E%E6%88%98/abaTree.png">
+<meta name="twitter:image" content="https://codesire-deng.github.io/abaTree.png">
 
 
 <link rel="canonical" href="https://codesire-deng.github.io/2020/10/11/SAM%E5%AE%9E%E6%88%98/">
@@ -45,6 +46,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>SAM实战剖析 | 等疾风</title>
   
+
 
 
 
@@ -72,7 +74,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">等疾风</h1>
+      <p class="site-title">等疾风</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
@@ -154,8 +156,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="等疾风"
       src="/uploads/blogAvatar_s.jpg">
   <p class="site-author-name" itemprop="name">等疾风</p>
@@ -190,7 +191,6 @@
 
 
 
-          </div>
         </div>
       </div>
         <div class="back-to-top animated" role="button" aria-label="返回顶部">
@@ -248,15 +248,22 @@
 
       <time title="创建时间：2020-10-11 17:04:59" itemprop="dateCreated datePublished" datetime="2020-10-11T17:04:59+08:00">2020-10-11</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-06-15 23:47:49" itemprop="dateModified" datetime="2021-06-15T23:47:49+08:00">2021-06-15</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-06-15 23:47:49" itemprop="dateModified" datetime="2021-06-15T23:47:49+08:00">2021-06-15</time>
+    </span>
 
   
+    <span id="/2020/10/11/SAM%E5%AE%9E%E6%88%98/" class="post-meta-item leancloud_visitors" data-flag-title="SAM实战剖析" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -265,11 +272,9 @@
       </span>
       <span class="post-meta-item-text">Changyan：</span>
     
-    
-      <a title="changyan" href="/2020/10/11/SAM%E5%AE%9E%E6%88%98/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2020/10/11/SAM实战/" itemprop="commentCount"></span>
-      </a>
-    
+    <a title="SAM实战剖析" href="/2020/10/11/SAM%E5%AE%9E%E6%88%98/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::0c4848415ebaef8ece8de59e21fff7a6" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
   </span>
   
   
@@ -289,8 +294,8 @@
 
 <span id="more"></span>
 
-<h1 id="在自动机上游走"><a href="#在自动机上游走" class="headerlink" title="在自动机上游走"></a>在自动机上游走</h1><p>&emsp;&emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。</p>
-<h2 id="求最小表示"><a href="#求最小表示" class="headerlink" title="求最小表示"></a>求最小表示</h2><p>&emsp;&emsp;求字符串$S$的最小表示。<br><br/>　　<em>度娘有$O(n)$的特殊做法，此处不赘述。</em><br><br/>　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最小的出边走，走n步就得到了$SS$中长度为n的最小子串，即$S$的最小表示。</p>
+<h1 id="在自动机上游走"><a href="#在自动机上游走" class="headerlink" title="在自动机上游走"></a>在自动机上游走</h1><p>&amp;emsp;&amp;emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。</p>
+<h2 id="求最小表示"><a href="#求最小表示" class="headerlink" title="求最小表示"></a>求最小表示</h2><p>&amp;emsp;&amp;emsp;求字符串$S$的最小表示。<br><br/>　　<em>度娘有$O(n)$的特殊做法，此处不赘述。</em><br><br/>　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最小的出边走，走n步就得到了$SS$中长度为n的最小子串，即$S$的最小表示。</p>
 <h2 id="求本质不同的第k小子串"><a href="#求本质不同的第k小子串" class="headerlink" title="求本质不同的第k小子串"></a>求本质不同的第k小子串</h2><p><a target="_blank" rel="noopener" href="https://www.spoj.com/problems/SUBLEX/">SPOJ SUBLEX</a> 题意：求字符串$S$的所有本质不同子串中的第$k$小。$length(S)\le 9e4, 询问数量\le 500$。<br><br/>　　SAM构造完成后得到一个DAG，利用拓扑序求从每个点出发可能的路径数目。见<a href="#SAM%E4%B8%8A%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F">拓扑排序的方法</a>。最后用类似二分法求第k小即可。</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// 内存池+计数排序的SAM，相对优秀</span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;algorithm></span></span>
@@ -404,8 +409,8 @@ State<span class="token operator">*</span> b<span class="token punctuation">[</s
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算|Right|"></a>离线计算|Right|</h1><p>&emsp;&emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| = 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br/><img src="./abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"><br><br/>　　如上图所示，“1”在分裂的过程中消失了，不存在叶子节点中。<br><br/>　　为什么$Right$集合的元素无法往下分裂？这是因为它表示的子串无法向左端扩展，换句话说，它是前缀。注意到叶子节点也是前缀。综上所述，只要对前缀所在节点的$|Right|$预置为$1$（其他节点预置为$0$），然后自底向上更新分裂树即可得到所有$|Right|$</p>
-<h2 id="分裂树上拓扑排序"><a href="#分裂树上拓扑排序" class="headerlink" title="分裂树上拓扑排序"></a>分裂树上拓扑排序</h2><p>&emsp;&emsp;上文引出了一个新问题，如何自底向上地访问分裂树？一种直观的办法是bfs收集SAM所有节点再做拓扑排序，这逻辑复杂而代码繁琐。一种更好的办法是，在构造SAM时采用内存池技术，之后对内存池按照$Max$降序排序即可。原因是<br>$$ Max(fa)+1=Min(s) \Rightarrow Max(s) &gt; Max(fa)$$<br>有趣的是，分裂树的拓扑序也是自动机的拓扑序！原因是<br>$$ trans(s, *)=t \Rightarrow Max(t) &gt; Max(s) $$<br>如果你忘记了，请复习<a href="/2020/10/01/Suffix-Automaton/" title="后缀自动机的更多性质">后缀自动机的更多性质</a>。</p>
+<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算|Right|"></a>离线计算|Right|</h1><p>&amp;emsp;&amp;emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| &#x3D; 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br/><img src="/./abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"><br><br/>　　如上图所示，“1”在分裂的过程中消失了，不存在叶子节点中。<br><br/>　　为什么$Right$集合的元素无法往下分裂？这是因为它表示的子串无法向左端扩展，换句话说，它是前缀。注意到叶子节点也是前缀。综上所述，只要对前缀所在节点的$|Right|$预置为$1$（其他节点预置为$0$），然后自底向上更新分裂树即可得到所有$|Right|$</p>
+<h2 id="分裂树上拓扑排序"><a href="#分裂树上拓扑排序" class="headerlink" title="分裂树上拓扑排序"></a>分裂树上拓扑排序</h2><p>&amp;emsp;&amp;emsp;上文引出了一个新问题，如何自底向上地访问分裂树？一种直观的办法是bfs收集SAM所有节点再做拓扑排序，这逻辑复杂而代码繁琐。一种更好的办法是，在构造SAM时采用内存池技术，之后对内存池按照$Max$降序排序即可。原因是<br>$$ Max(fa)+1&#x3D;Min(s) \Rightarrow Max(s) &gt; Max(fa)$$<br>有趣的是，分裂树的拓扑序也是自动机的拓扑序！原因是<br>$$ trans(s, *)&#x3D;t \Rightarrow Max(t) &gt; Max(s) $$<br>如果你忘记了，请复习<a href="/2020/10/01/Suffix-Automaton/" title="后缀自动机的更多性质">后缀自动机的更多性质</a>。</p>
 <div class="note primary"><h4 id="拓扑排序要点"><a href="#拓扑排序要点" class="headerlink" title="拓扑排序要点"></a>拓扑排序要点</h4><ol>
 <li>指针板构造采用内存池技术</li>
 <li>$Max$可能的取值仅有$[1,n]$，所以要采用计数排序</li>
@@ -420,8 +425,8 @@ State<span class="token operator">*</span> b<span class="token punctuation">[</s
 <span class="token comment">// sam[] has been top sorted by b[].</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>剩余细节在<a href="#%E6%B1%82%E6%9C%AC%E8%B4%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E7%AC%ACk%E5%B0%8F%E5%AD%90%E4%B8%B2">例题1</a>、<a href="#%E6%B1%82%E9%95%BF%E5%BA%A6%E4%B8%BA-i-%E7%9A%84%E5%AD%90%E4%B8%B2%E7%9A%84%E6%9C%80%E5%A4%A7%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0">例题2</a>中体现</p>
-<h2 id="求长度为i的子串的最大出现次数"><a href="#求长度为i的子串的最大出现次数" class="headerlink" title="求长度为i的子串的最大出现次数"></a>求长度为i的子串的最大出现次数</h2><p><a target="_blank" rel="noopener" href="https://www.spoj.com/problems/NSUBSTR/">SPOJ NSUBSTR</a> 题意：给出字符串S（长度&lt;=2.5e5），设f(x)为S中长度为x的子串的最大出现次数，求f(1...length(s))。</p>
-<p>&emsp;&emsp;分析：后缀自动机中每个状态$s$蕴含的字符串长度为$[Min(s), Max(s)]$，每个出现了$Right(s)$次，只需用$|Right(s)|$更新$ans[Max(s)]$就行了，在最后输出前依次用$ans[i+1]$更新$ans[i]$即可。原因是长度更长的子串出现的次数一定不超过长度短的。</p>
+<h2 id="求长度为i的子串的最大出现次数"><a href="#求长度为i的子串的最大出现次数" class="headerlink" title="求长度为i的子串的最大出现次数"></a>求长度为i的子串的最大出现次数</h2><p><a target="_blank" rel="noopener" href="https://www.spoj.com/problems/NSUBSTR/">SPOJ NSUBSTR</a> 题意：给出字符串S（长度&lt;&#x3D;2.5e5），设f(x)为S中长度为x的子串的最大出现次数，求f(1...length(s))。</p>
+<p>&amp;emsp;&amp;emsp;分析：后缀自动机中每个状态$s$蕴含的字符串长度为$[Min(s), Max(s)]$，每个出现了$Right(s)$次，只需用$|Right(s)|$更新$ans[Max(s)]$就行了，在最后输出前依次用$ans[i+1]$更新$ans[i]$即可。原因是长度更长的子串出现的次数一定不超过长度短的。</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// 朴素的拓扑排序版本，推荐改用计数排序</span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;algorithm></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
@@ -551,9 +556,9 @@ State<span class="token operator">*</span> q<span class="token punctuation">[</s
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="跳向父亲，舍弃左端，寻求匹配"><a href="#跳向父亲，舍弃左端，寻求匹配" class="headerlink" title="跳向父亲，舍弃左端，寻求匹配"></a>跳向父亲，舍弃左端，寻求匹配</h1><p>&emsp;&emsp;<code>now = now-&gt;pa</code>的本质是抛弃左端一部分字符，带来的效果是$Right$集合的扩张。这个特性在求最长公共子串的时候尤为好用，与KMP舍弃右端部分字符以寻求匹配的原理有异曲同工之妙。</p>
+<h1 id="跳向父亲，舍弃左端，寻求匹配"><a href="#跳向父亲，舍弃左端，寻求匹配" class="headerlink" title="跳向父亲，舍弃左端，寻求匹配"></a>跳向父亲，舍弃左端，寻求匹配</h1><p>&amp;emsp;&amp;emsp;<code>now = now-&gt;pa</code>的本质是抛弃左端一部分字符，带来的效果是$Right$集合的扩张。这个特性在求最长公共子串的时候尤为好用，与KMP舍弃右端部分字符以寻求匹配的原理有异曲同工之妙。</p>
 <h2 id="求两字符串的最长公共子串"><a href="#求两字符串的最长公共子串" class="headerlink" title="求两字符串的最长公共子串"></a>求两字符串的最长公共子串</h2><p><a target="_blank" rel="noopener" href="https://www.spoj.com/problems/LCS/">SPOJ LCS</a> 题意：求字符串$S1,S2$的最长公共子串(要求连续)</p>
-<p>&emsp;&emsp;分析：后缀自动机很擅长处理连续串的匹配。试想我们做出$S1$的SAM，然后直接跑$S2$，势必出现出边不存在的问题——无法继续匹配了。不妨设无法继续匹配时，导致无法匹配的字符是$S2[i]$，当前状态为$s$，即$trans(s, S2[i])$不存在，即不存在$S1[r_j]=S2[i], r_j\in Right(s)$。想要寻求匹配，只能抛弃已匹配的子串左端，而<code>s=s-&gt;pa</code>恰好带来了最少的抛弃量，使得$Right(s)$能扩张，从而带来匹配的可能性。<br><br/>　　换句话说，当<code>s-&gt;go[S2[i]] == nullptr</code>时，重复<code>s = s-&gt;pa</code>，直到获得匹配<code>s-&gt;go[S2[i]] != nullptr</code>或不可能匹配<code>s == nullptr</code>。<br><br/>　　假如直接能匹配呢？那太简单了，匹配长度加一，下一位。<br><br/>　　于是最终解为：记当前已匹配长度$match$，当前答案$ans$，当前自动机状态$s$，接下来尝试匹配$S2[i]$，若$trans(s,S2[i])$存在，就转移，并且$match$加一；否则尝试不断跳分裂树的$fa$，直到转移存在，由于$Max(fa) &lt; Min(s) \le match$，$match$必能取到$Max(fa)$，所以$s$跳到$trans(fa, S2[i])$， $match$取为$Max(fa)+1$即可。每走一步都用$match$更新$ans$。</p>
+<p>&amp;emsp;&amp;emsp;分析：后缀自动机很擅长处理连续串的匹配。试想我们做出$S1$的SAM，然后直接跑$S2$，势必出现出边不存在的问题——无法继续匹配了。不妨设无法继续匹配时，导致无法匹配的字符是$S2[i]$，当前状态为$s$，即$trans(s, S2[i])$不存在，即不存在$S1[r_j]&#x3D;S2[i], r_j\in Right(s)$。想要寻求匹配，只能抛弃已匹配的子串左端，而<code>s=s-&gt;pa</code>恰好带来了最少的抛弃量，使得$Right(s)$能扩张，从而带来匹配的可能性。<br><br/>　　换句话说，当<code>s-&gt;go[S2[i]] == nullptr</code>时，重复<code>s = s-&gt;pa</code>，直到获得匹配<code>s-&gt;go[S2[i]] != nullptr</code>或不可能匹配<code>s == nullptr</code>。<br><br/>　　假如直接能匹配呢？那太简单了，匹配长度加一，下一位。<br><br/>　　于是最终解为：记当前已匹配长度$match$，当前答案$ans$，当前自动机状态$s$，接下来尝试匹配$S2[i]$，若$trans(s,S2[i])$存在，就转移，并且$match$加一；否则尝试不断跳分裂树的$fa$，直到转移存在，由于$Max(fa) &lt; Min(s) \le match$，$match$必能取到$Max(fa)$，所以$s$跳到$trans(fa, S2[i])$， $match$取为$Max(fa)+1$即可。每走一步都用$match$更新$ans$。</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// 省略SAM的构造和其他乱七八糟的东西</span>
     State<span class="token operator">*</span> now <span class="token operator">=</span> root<span class="token punctuation">;</span>
     <span class="token keyword">int</span> match <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> ans <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
@@ -625,7 +630,7 @@ State<span class="token operator">*</span> q<span class="token punctuation">[</s
 
 
 
-    <div class="comments" id="SOHUCS"></div>
+    <div class="comments" id="SOHUCS" sid="0c4848415ebaef8ece8de59e21fff7a6"></div>
 </div>
   </main>
 
@@ -653,7 +658,9 @@ State<span class="token operator">*</span> q<span class="token punctuation">[</s
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
@@ -661,6 +668,8 @@ State<span class="token operator">*</span> q<span class="token punctuation">[</s
   
 
 
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"Nw4tc7C6QG2HeTBU0T1nFRay-MdYXbMMI","app_key":"ckihIHLVnT6ssbrDfnVNDUJi","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
   

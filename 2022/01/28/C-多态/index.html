@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,11 +16,12 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="病重躺家，药不能停。 何以解忧？唯有博客。 数据在校，不在我心。 宿舍断电，学校英明！ 回滚旧版，泪眼嘤嘤。 &amp;nbsp;H T M L ，手写还行！   Preface「多态」是一个很宽泛的理念，对应繁多实现。本文将记录我所看到的多态的各种形态。作者见识短浅，还请读者多多指教。  本文已计划的内容：  基于 std::visit  实现运行时多态的优化  实现重载模式    CRTP 实现静态">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="病重躺家，药不能停。 何以解忧？唯有博客。 数据在校，不在我心。 宿舍断电，学校英明！ 回滚旧版，泪眼嘤嘤。 &amp;nbsp;H T M L ，手写还行！   Preface「多态」是一个很宽泛的理念，对应繁多实现。本文将记录我所看到的多态的各种形态。作者见识短浅，还请读者多多指教。  本文已计划的内容：  基于 std::visit  实现运行时多态的优化  实现重载模式    CRTP 实现静态">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++ 多态">
 <meta property="og:url" content="https://codesire-deng.github.io/2022/01/28/C-%E5%A4%9A%E6%80%81/index.html">
@@ -43,6 +44,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>C++ 多态 | 等疾风</title>
   
+
 
 
 
@@ -70,7 +72,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">等疾风</h1>
+      <p class="site-title">等疾风</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
@@ -152,8 +154,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="等疾风"
       src="/uploads/blogAvatar_s.jpg">
   <p class="site-author-name" itemprop="name">等疾风</p>
@@ -188,7 +189,6 @@
 
 
 
-          </div>
         </div>
       </div>
         <div class="back-to-top animated" role="button" aria-label="返回顶部">
@@ -246,15 +246,22 @@
 
       <time title="创建时间：2022-01-28 17:42:04" itemprop="dateCreated datePublished" datetime="2022-01-28T17:42:04+08:00">2022-01-28</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2022-02-01 16:05:38" itemprop="dateModified" datetime="2022-02-01T16:05:38+08:00">2022-02-01</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-02-01 16:05:38" itemprop="dateModified" datetime="2022-02-01T16:05:38+08:00">2022-02-01</time>
+    </span>
 
   
+    <span id="/2022/01/28/C-%E5%A4%9A%E6%80%81/" class="post-meta-item leancloud_visitors" data-flag-title="C++ 多态" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -263,11 +270,9 @@
       </span>
       <span class="post-meta-item-text">Changyan：</span>
     
-    
-      <a title="changyan" href="/2022/01/28/C-%E5%A4%9A%E6%80%81/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2022/01/28/C-多态/" itemprop="commentCount"></span>
-      </a>
-    
+    <a title="C++ 多态" href="/2022/01/28/C-%E5%A4%9A%E6%80%81/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::3e8d91dced8a5fba57c547611edfb014" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
   </span>
   
   
@@ -315,7 +320,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="std-visit"><a href="#std-visit" class="headerlink" title="std::visit"></a>std::visit</h1><h2 id="Runtime-Branching"><a href="#Runtime-Branching" class="headerlink" title="Runtime Branching"></a>Runtime Branching</h2><p>假如你要对一个矢量做线性变换 $\vec{x} = k \cdot \vec{x} + b$，又想针对 $k=1$ 或 $b=0$ 的情况做优化，应该怎么办？</p>
+<h1 id="std-visit"><a href="#std-visit" class="headerlink" title="std::visit"></a>std::visit</h1><h2 id="Runtime-Branching"><a href="#Runtime-Branching" class="headerlink" title="Runtime Branching"></a>Runtime Branching</h2><p>假如你要对一个矢量做线性变换 $\vec{x} &#x3D; k \cdot \vec{x} + b$，又想针对 $k&#x3D;1$ 或 $b&#x3D;0$ 的情况做优化，应该怎么办？</p>
 <p>这是最简单却很慢的代码：</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span>n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>k <span class="token operator">!=</span> <span class="token number">1</span><span class="token punctuation">)</span>
@@ -563,7 +568,7 @@
 <ol>
 <li>你不需要 <code>Scaleable</code> 的动态绑定  </li>
 <li>每个类都复制粘贴一样的代码十分愚蠢  </li>
-<li>C++20 concept 不能提供默认成员实现（作者以为的。如果可以请告诉我）  </li>
+<li>C++20 concept 不能提供默认成员实现（作者以为的。如果可以请告诉我）</li>
 </ol>
 <p>你知道可以用 CRTP！于是你设计出：</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>
@@ -643,7 +648,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 <li>要求类继承接口，不利于库设计；  </li>
 <li>难以表达两种接口的交集；  </li>
 <li>容易写 Bug，编译报错信息不友好；  </li>
-<li>宣告放弃动态绑定，需要谨慎设计。  </li>
+<li>宣告放弃动态绑定，需要谨慎设计。</li>
 </ol>
 <h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1pq4y1y7oN">双笙子佯谬 - 聊一聊C++设计模式、函数式编程等</a></li>
@@ -703,7 +708,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 
 
 
-    <div class="comments" id="SOHUCS"></div>
+    <div class="comments" id="SOHUCS" sid="3e8d91dced8a5fba57c547611edfb014"></div>
 </div>
   </main>
 
@@ -731,7 +736,9 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
@@ -739,6 +746,8 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
   
 
 
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"Nw4tc7C6QG2HeTBU0T1nFRay-MdYXbMMI","app_key":"ckihIHLVnT6ssbrDfnVNDUJi","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
   

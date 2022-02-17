@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,26 +16,27 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="后缀自动机 Suffix Automaton">
 <meta property="og:url" content="https://codesire-deng.github.io/2020/10/01/Suffix-Automaton/index.html">
 <meta property="og:site_name" content="等疾风">
 <meta property="og:description" content="前置知识自动机的五个部分 alpha 字符集 state 状态集合。另让$null$表示不存在的状态或转移 init 初始状态 end 结束状态集合 trans 状态转移函数：令$trans(s, str)$表示在状态$s$时读入字符串$str$后，所达到的状态。$trans$应具有传递性。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://codesire-deng.github.io/2020/10/01/Suffix-Automaton/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png">
-<meta property="og:image" content="https://codesire-deng.github.io/2020/10/01/Suffix-Automaton/%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png">
+<meta property="og:image" content="https://codesire-deng.github.io/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png">
+<meta property="og:image" content="https://codesire-deng.github.io/%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png">
 <meta property="article:published_time" content="2020-10-01T15:03:46.000Z">
 <meta property="article:modified_time" content="2021-06-15T15:47:43.929Z">
 <meta property="article:author" content="等疾风">
 <meta property="article:tag" content="字符串">
 <meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://codesire-deng.github.io/2020/10/01/Suffix-Automaton/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png">
+<meta name="twitter:image" content="https://codesire-deng.github.io/%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png">
 
 
 <link rel="canonical" href="https://codesire-deng.github.io/2020/10/01/Suffix-Automaton/">
@@ -47,6 +48,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>后缀自动机 Suffix Automaton | 等疾风</title>
   
+
 
 
 
@@ -74,7 +76,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">等疾风</h1>
+      <p class="site-title">等疾风</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
@@ -156,8 +158,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="等疾风"
       src="/uploads/blogAvatar_s.jpg">
   <p class="site-author-name" itemprop="name">等疾风</p>
@@ -192,7 +193,6 @@
 
 
 
-          </div>
         </div>
       </div>
         <div class="back-to-top animated" role="button" aria-label="返回顶部">
@@ -250,15 +250,22 @@
 
       <time title="创建时间：2020-10-01 23:03:46" itemprop="dateCreated datePublished" datetime="2020-10-01T23:03:46+08:00">2020-10-01</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-06-15 23:47:43" itemprop="dateModified" datetime="2021-06-15T23:47:43+08:00">2021-06-15</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-06-15 23:47:43" itemprop="dateModified" datetime="2021-06-15T23:47:43+08:00">2021-06-15</time>
+    </span>
 
   
+    <span id="/2020/10/01/Suffix-Automaton/" class="post-meta-item leancloud_visitors" data-flag-title="后缀自动机 Suffix Automaton" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -267,11 +274,9 @@
       </span>
       <span class="post-meta-item-text">Changyan：</span>
     
-    
-      <a title="changyan" href="/2020/10/01/Suffix-Automaton/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2020/10/01/Suffix-Automaton/" itemprop="commentCount"></span>
-      </a>
-    
+    <a title="后缀自动机 Suffix Automaton" href="/2020/10/01/Suffix-Automaton/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::0bf425801e2825b8dd46b196327f2ddd" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
   </span>
   
   
@@ -296,43 +301,43 @@
 <h2 id="设"><a href="#设" class="headerlink" title="设"></a>设</h2><ol>
 <li>自动机能识别的所有字符串集合<strong>Reg(A)</strong> ，其中的字符串$x$满足$trans(init, x)\in end$</li>
 <li>从状态$s$开始能识别的字符串 <strong>Reg(s)</strong></li>
-<li>后缀自动机<strong>SAM</strong>，一个能识别母串$S$的所有后缀的自动机。$SAM(x)=true$当且仅当$x$是$S$的后缀。</li>
+<li>后缀自动机<strong>SAM</strong>，一个能识别母串$S$的所有后缀的自动机。$SAM(x)&#x3D;true$当且仅当$x$是$S$的后缀。</li>
 <li>$trans(init, str)$即从初始状态读入$str$后到达的状态<strong>ST(str)</strong> <em>（ST是state的缩写)</em></li>
 <li>母串$S$的所有后缀的集合<strong>Suf</strong>，从$a$位置开始的后缀<strong>Suffix(a)</strong></li>
 <li>母串$S$的所有连续子串的集合<strong>Fac</strong>，位置为$[l,r)$的子串<strong>S[l,r)</strong></li>
 </ol>
 <h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><h2 id="SAM的可行性分析"><a href="#SAM的可行性分析" class="headerlink" title="SAM的可行性分析"></a>SAM的可行性分析</h2><ol>
-<li><p>对于字符串$s$，若$s\in Fac$，则$ST(s)$应存在，这是因为可以在$s$后面加上一些字符使其变成$S$的后缀。<em>反之$s\notin Fac$，则应有$ST(s)=null$以节省空间</em></p>
+<li><p>对于字符串$s$，若$s\in Fac$，则$ST(s)$应存在，这是因为可以在$s$后面加上一些字符使其变成$S$的后缀。<em>反之$s\notin Fac$，则应有$ST(s)&#x3D;null$以节省空间</em></p>
 </li>
 <li><p>考虑$ST(a)$能识别哪些字符串，即$Reg(ST(a))$。若$x\in Reg(ST(a))$，则$ax\in Suf$，故$ax$是后缀，$x$也是后缀。$Reg(ST(a))$是每次$a$出现后接下来的后缀。设<strong>Right(a)</strong> 为a每次出现的开区间末位置，则$Reg(ST(a))$完全由$Right(a)$决定。</p>
 </li>
-<li><p>对于状态$s$（不是单个字符串），我们关心$Reg(s)$。如果对于$a,b\in Fac$有$Right(a)=Right(b)$，那么可令$ST(a)= ST(b)$。所以一个状态$s$由所有$Right$集合是<strong>Right(s)</strong> 的字符串组成。</p>
+<li><p>对于状态$s$（不是单个字符串），我们关心$Reg(s)$。如果对于$a,b\in Fac$有$Right(a)&#x3D;Right(b)$，那么可令$ST(a)&#x3D; ST(b)$。所以一个状态$s$由所有$Right$集合是<strong>Right(s)</strong> 的字符串组成。</p>
 </li>
 <li><p>考虑状态$s$包括的字符串长度，易证若$s$包含长度为$l$,$r$的字符串，那么一定包含长度为$m(l \leq m \leq r)$的字符串。所以这些字符串长度一定可以组成一个区间，设为 <strong>[Min(s), Max(s)]</strong></p>
 </li>
-<li><p>状态数是线性的。<br/>　　状态由$Right$集合决定，考虑两个状态$a,b$的$Right$集合$R_a,R_b$。假设$R_a,R_b$有交集，设$r \in R_a \cap R_b$。由于一个子串只能属于一个状态，所以$a$，$b$所表示的子串不会有交集，即由$r$往前不能有长度相同的子串，故$[Min(a), Max(a)]$和$[Min(b), Max(b)]$没有交集，不妨设$Max(a) &lt; Min(b)$，由于$a$，$b$包含的所有串都可以视为$r$往前的子串，故$a$的所有串都是$b$的任意串的后缀。因$b$的任意串都能找到后缀属于$a$，两者$Right$集合又不相等，故$R_b \subset R_a$。那么任意两个状态的$Right$集合要么不相交，要么一个是另一个的真子集。<br/>　　疾风将以状态为节点，以$Right$包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br/>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，$SAM$的结点个数最多为$2n$。<br><br/><img src="./%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png" alt="分裂树举例"></p>
+<li><p>状态数是线性的。<br/>　　状态由$Right$集合决定，考虑两个状态$a,b$的$Right$集合$R_a,R_b$。假设$R_a,R_b$有交集，设$r \in R_a \cap R_b$。由于一个子串只能属于一个状态，所以$a$，$b$所表示的子串不会有交集，即由$r$往前不能有长度相同的子串，故$[Min(a), Max(a)]$和$[Min(b), Max(b)]$没有交集，不妨设$Max(a) &lt; Min(b)$，由于$a$，$b$包含的所有串都可以视为$r$往前的子串，故$a$的所有串都是$b$的任意串的后缀。因$b$的任意串都能找到后缀属于$a$，两者$Right$集合又不相等，故$R_b \subset R_a$。那么任意两个状态的$Right$集合要么不相交，要么一个是另一个的真子集。<br/>　　疾风将以状态为节点，以$Right$包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br/>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，$SAM$的结点个数最多为$2n$。<br><br/><img src="/./%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png" alt="分裂树举例"></p>
 </li>
-<li><p>更严谨的分裂树定义：令满足$Right(s) \subset Right(fa)$的最小$|Right(fa)|$的$fa$为状态$s$的父亲。<br/>　　直观地看，一定是$fa$中最长的字符串向前扩展一位导致了$Right$集合分裂，所以**Max(fa)+1=Min(s)**。</p>
+<li><p>更严谨的分裂树定义：令满足$Right(s) \subset Right(fa)$的最小$|Right(fa)|$的$fa$为状态$s$的父亲。<br/>　　直观地看，一定是$fa$中最长的字符串向前扩展一位导致了$Right$集合分裂，所以**Max(fa)+1&#x3D;Min(s)**。</p>
 </li>
 <li><p>自动机的边数是线性的。<br/>　　直观地看，自动机是一个DAG（否则可以无限地在自动机上走，即识别无限长的字符串，显然这是不可能的），而能从$init$走到某个$end$点的肯定是字符串的某一个后缀。字符串只有$n$个后缀，意味着从$init$到$end$只能有$n$种路径；另一方面，节点数只有$O(n)$，所以猜测边数也是$O(n)$的。<br/>　　标出自动机任意一个生成树，则对于一条非树边$(a\rightarrow b)$，存在若干路径${init \rightarrowtail a \rightarrow b \rightarrowtail e(e\in end)}$对应着一个后缀。对每一个后缀，对应在自动机上走到的第一条非树边。如此每个后缀最多对应一个非树边，而非树边至少被一个后缀对应，所以后缀数量$\geq$非树边数量。所以边数是$O(n)$的。</p>
 </li>
 </ol>
 <h2 id="归纳法构造SAM"><a href="#归纳法构造SAM" class="headerlink" title="归纳法构造SAM"></a>归纳法构造SAM</h2><h3 id="SAM的更多性质"><a href="#SAM的更多性质" class="headerlink" title="SAM的更多性质"></a>SAM的更多性质</h3><p><em>这一部分是SAM构造算法的重要依据。<br/>请确认上文所有加粗内容都已理解。</em></p>
 <ol>
-<li><p>后缀自动机是一个有向无环图<br>$$<br>SAM = {分裂树的点，自动机的有向边}<br>$$ </p>
+<li><p>后缀自动机是一个有向无环图<br>$$<br>SAM &#x3D; {分裂树的点，自动机的有向边}<br>$$ </p>
 </li>
 <li><p>SAM的构造算法是在线的，即从左到右逐个添加字符。根据数学归纳法，<strong>下文假设已有字符串$T$的后缀自动机</strong>。</p>
 </li>
-<li><p>考虑一个状态$s$，它的$Right(s)={r_1, r_2, \cdots, r_n}$，假如有状态转移$trans(s,c) = t$（即状态$s$后添加一个字符$c$得到状态$t$），由于向右扩展了一位字符，$Right(s)$中只有$T[r_i]=c$的满足要求。所以$Right(t)={r_i+1 | T[r_i]=c}$。<br/>　　如果$trans(s,c)$存在，那么$trans(Pa(s), c)$必定存在，其中$Pa(s)$表示分裂树上状态$s$的父亲。并且$Right(trans(s,c)) \subseteq Right(trans(Pa(s),c))$。<br/>　　另一个显然的结论是$Max(s)&lt;Max(t)$。</p>
+<li><p>考虑一个状态$s$，它的$Right(s)&#x3D;{r_1, r_2, \cdots, r_n}$，假如有状态转移$trans(s,c) &#x3D; t$（即状态$s$后添加一个字符$c$得到状态$t$），由于向右扩展了一位字符，$Right(s)$中只有$T[r_i]&#x3D;c$的满足要求。所以$Right(t)&#x3D;{r_i+1 | T[r_i]&#x3D;c}$。<br/>　　如果$trans(s,c)$存在，那么$trans(Pa(s), c)$必定存在，其中$Pa(s)$表示分裂树上状态$s$的父亲。并且$Right(trans(s,c)) \subseteq Right(trans(Pa(s),c))$。<br/>　　另一个显然的结论是$Max(s)&lt;Max(t)$。</p>
 </li>
 <li><p>后缀自动机没有显式地储存$Right$集合。因此可以认为修改$Right$的时间复杂度为$O(0)$。</p>
 </li>
 <li><p>初始状态时母串$T$为空字符串，自动机只有一个节点$root$。</p>
 </li>
 </ol>
-<h3 id="添加一位字符更新自动机"><a href="#添加一位字符更新自动机" class="headerlink" title="添加一位字符更新自动机"></a>添加一位字符更新自动机</h3><p>&emsp;&emsp;令当前字符串为$T$，长度为$L$；末尾添加一个字符$x$，要将$SAM(T)$更新为$SAM(Tx)$。<br><br/>　　那么新增的子串是$Tx$的所有后缀，可看作$T$的所有后缀后添加了$x$。令$SAM(T)$中表示$T$的后缀的节点为${v_1, v_2, \cdots, v_k=root}$。因为后缀在字符串的末尾出现，所以$L\in Right(v_i)$，可知$v_i$在分裂树上恰好构成一条从叶子到$root$的链，不妨设${v_1, v_2, \cdots, v_k=root}$已经按从叶子到祖先排序。<br><br/>　　添加字符$x$后，首先新建状态$np$表示$ST(Tx)$，这是一个已确定的状态（因为没有出边），可知$Right(np)={L+1}$。<br><br/>　　回头考虑旧自动机的$v_i$，设$Right(v_i)={r_1, r_2, \cdots, r_n=L}$。如果能在后面添加字符$x$（注意现在仍是字符串$T$的自动机），即$nv=trans(v_i, x)$存在，我们已经知道$Right(nv)={r_i+1|T[r_i]=x}$；反之如果$v_i$没有$x$的出边，意味着没有$r_i$满足$T[r_i]=x$。由于分裂树上父亲的$Right$扩大，如果$trans(v_i,x)$存在，那么$trans(v_{i+1}, x)$也存在。<br><br/>　　对于所有$trans(v,x)=null$的$v$，而只有$Tx[r_n=L]=x$满足转移条件，于是添加一条边$trans(v,x)=np$。<br><br/>　　令$v_p$是$v_1, v_2, \cdots, v_k$中第一个有$x$出边（即$trans(v_p, x)$存在）的状态。令$q=trans(v_p, x)$，注意，现在仍是旧的自动机。我们能不能直接在$Right(q)$中直接插入$L+1$呢？答案是不能。这是因为有可能$Max(q) &gt; Max(v_p)+1$，隐含意思是$q$在”$v_p$末尾添加$x$”的基础上，由于$Right$集合的缩减，纳入了左端更多字符；如果强行在$Right(q)$中插入$L+1$，会导致$Max(q)$减小而丢失了原来的状态，破坏了自动机的正确性。</p>
-<p><img src="./%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png" alt="强行插入的反例"><br><br/>　　如图所示，$v_p$含有的最长字符串是红色5个“A”，但$trans(v_p,x)=q$含有的最长字符串是蓝色7位字符串，如果在$Right(q)$中强行插入$L+1$即变为绿色部分，会使$Max(q)$从7减少到6从而丢失信息。<br><br/>　　如果足够幸运，$Max(q) = Max(v_p)+1$，就没有上面的问题，我们可以在$Right(q)$中插入$L+1$，然后只要令$Pa(np)=q$即可完成自动机更新。<em>注：理论上$Right(trans(v_p\dots v_k,x))$都要插入$L+1$，但这些状态的出边都没有发生改变，而后缀自动机实际上不记录$Right$，所以更新完成。</em><br><br/>　　如果没那么幸运，从图上可知，原状态$q$在插入末尾字符$x$后应转换两个状态，设蓝色对应的状态为$q&#39;$（沿用$q$)，绿色状态为$nq$（新建节点）。显然<br>$$<br>trans(q&#39;, *) = trans(q, *), \<br>Pa(q&#39;)=nq，\<br>Right(nq)=Right(q&#39;)\cup {L+1}，\<br>Max(nq) = Max(v_p)+1<br>$$<br>显然$Right(nq)$是真包含${L+1}$的最小集合，所以<br>$$ Pa(np)=nq $$<br>&emsp;&emsp;截至目前我们新添了$np$，将$q$转化为$q&#39;,nq$，其中$np,q&#39;$都正确处理了出边和分裂树父亲。<br>那么$nq$的分裂树父亲又是谁呢？结合上图易证<br>$$ Pa(nq)=Pa(q) $$</p>
-<p>$nq$的出边是哪一些？由于新添的最后一个字符不能带来更多的状态转移（最后一个字符后面再没有字符了），所以<br>$$ trans(nq, *) = trans(q, *) $$<br><br/>　　最后，我们还要考虑原自动机中指向$q$的状态，和新自动机中应当指向$q&#39;$和$nq$的状态。在$v_p,\cdots,v_k$中，由于$Right$的扩大，$Right(trans(v_i,x))$也逐渐扩大（不缩小），所以只有一段连续的$v_p,\cdots,v_e(e\le k)$是指向$q$的，由于要配合在$Right$集合中插入$L+1$，这些出边要修改为<br>$$ trans(v_i,x) = nq $$<br>其余指向$q$的状态必然由于左端有过多字符而无法指向$nq$，于是改为指向$q&#39;$，等效于不做任何修改。<br><br/>　　最后的最后，对于$v_{e+1},\cdots,v_k$，对于$nv=trans(v_i, x)$，必然可以粗暴地令$Right(nv)$插入$L+1$，所以转移关系可以保持不变，等效于不做任何修改。</p>
+<h3 id="添加一位字符更新自动机"><a href="#添加一位字符更新自动机" class="headerlink" title="添加一位字符更新自动机"></a>添加一位字符更新自动机</h3><p>&amp;emsp;&amp;emsp;令当前字符串为$T$，长度为$L$；末尾添加一个字符$x$，要将$SAM(T)$更新为$SAM(Tx)$。<br><br/>　　那么新增的子串是$Tx$的所有后缀，可看作$T$的所有后缀后添加了$x$。令$SAM(T)$中表示$T$的后缀的节点为${v_1, v_2, \cdots, v_k&#x3D;root}$。因为后缀在字符串的末尾出现，所以$L\in Right(v_i)$，可知$v_i$在分裂树上恰好构成一条从叶子到$root$的链，不妨设${v_1, v_2, \cdots, v_k&#x3D;root}$已经按从叶子到祖先排序。<br><br/>　　添加字符$x$后，首先新建状态$np$表示$ST(Tx)$，这是一个已确定的状态（因为没有出边），可知$Right(np)&#x3D;{L+1}$。<br><br/>　　回头考虑旧自动机的$v_i$，设$Right(v_i)&#x3D;{r_1, r_2, \cdots, r_n&#x3D;L}$。如果能在后面添加字符$x$（注意现在仍是字符串$T$的自动机），即$nv&#x3D;trans(v_i, x)$存在，我们已经知道$Right(nv)&#x3D;{r_i+1|T[r_i]&#x3D;x}$；反之如果$v_i$没有$x$的出边，意味着没有$r_i$满足$T[r_i]&#x3D;x$。由于分裂树上父亲的$Right$扩大，如果$trans(v_i,x)$存在，那么$trans(v_{i+1}, x)$也存在。<br><br/>　　对于所有$trans(v,x)&#x3D;null$的$v$，而只有$Tx[r_n&#x3D;L]&#x3D;x$满足转移条件，于是添加一条边$trans(v,x)&#x3D;np$。<br><br/>　　令$v_p$是$v_1, v_2, \cdots, v_k$中第一个有$x$出边（即$trans(v_p, x)$存在）的状态。令$q&#x3D;trans(v_p, x)$，注意，现在仍是旧的自动机。我们能不能直接在$Right(q)$中直接插入$L+1$呢？答案是不能。这是因为有可能$Max(q) &gt; Max(v_p)+1$，隐含意思是$q$在”$v_p$末尾添加$x$”的基础上，由于$Right$集合的缩减，纳入了左端更多字符；如果强行在$Right(q)$中插入$L+1$，会导致$Max(q)$减小而丢失了原来的状态，破坏了自动机的正确性。</p>
+<p><img src="/./%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png" alt="强行插入的反例"><br><br/>　　如图所示，$v_p$含有的最长字符串是红色5个“A”，但$trans(v_p,x)&#x3D;q$含有的最长字符串是蓝色7位字符串，如果在$Right(q)$中强行插入$L+1$即变为绿色部分，会使$Max(q)$从7减少到6从而丢失信息。<br><br/>　　如果足够幸运，$Max(q) &#x3D; Max(v_p)+1$，就没有上面的问题，我们可以在$Right(q)$中插入$L+1$，然后只要令$Pa(np)&#x3D;q$即可完成自动机更新。<em>注：理论上$Right(trans(v_p\dots v_k,x))$都要插入$L+1$，但这些状态的出边都没有发生改变，而后缀自动机实际上不记录$Right$，所以更新完成。</em><br><br/>　　如果没那么幸运，从图上可知，原状态$q$在插入末尾字符$x$后应转换两个状态，设蓝色对应的状态为$q&#39;$（沿用$q$)，绿色状态为$nq$（新建节点）。显然<br>$$<br>trans(q&#39;, *) &#x3D; trans(q, *), \<br>Pa(q&#39;)&#x3D;nq，\<br>Right(nq)&#x3D;Right(q&#39;)\cup {L+1}，\<br>Max(nq) &#x3D; Max(v_p)+1<br>$$<br>显然$Right(nq)$是真包含${L+1}$的最小集合，所以<br>$$ Pa(np)&#x3D;nq $$<br>&amp;emsp;&amp;emsp;截至目前我们新添了$np$，将$q$转化为$q&#39;,nq$，其中$np,q&#39;$都正确处理了出边和分裂树父亲。<br>那么$nq$的分裂树父亲又是谁呢？结合上图易证<br>$$ Pa(nq)&#x3D;Pa(q) $$</p>
+<p>$nq$的出边是哪一些？由于新添的最后一个字符不能带来更多的状态转移（最后一个字符后面再没有字符了），所以<br>$$ trans(nq, *) &#x3D; trans(q, *) $$<br><br/>　　最后，我们还要考虑原自动机中指向$q$的状态，和新自动机中应当指向$q&#39;$和$nq$的状态。在$v_p,\cdots,v_k$中，由于$Right$的扩大，$Right(trans(v_i,x))$也逐渐扩大（不缩小），所以只有一段连续的$v_p,\cdots,v_e(e\le k)$是指向$q$的，由于要配合在$Right$集合中插入$L+1$，这些出边要修改为<br>$$ trans(v_i,x) &#x3D; nq $$<br>其余指向$q$的状态必然由于左端有过多字符而无法指向$nq$，于是改为指向$q&#39;$，等效于不做任何修改。<br><br/>　　最后的最后，对于$v_{e+1},\cdots,v_k$，对于$nv&#x3D;trans(v_i, x)$，必然可以粗暴地令$Right(nv)$插入$L+1$，所以转移关系可以保持不变，等效于不做任何修改。</p>
 <h1 id="标准代码"><a href="#标准代码" class="headerlink" title="标准代码"></a>标准代码</h1><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cstring></span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
@@ -390,7 +395,7 @@
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>&emsp;&emsp;SAM思路真的异常精妙，环环相扣，巧夺天工。不幸的是优美的结论是以复杂而庞大的论证为代价的。<br><br/>　　被奉为圣经的<code>2012年noi冬令营陈立杰讲稿(SAM后缀自动机)</code>在描述构造过程的时候没有解释可以省略的操作为什么被省略，导致思路有很大残缺和跳跃。即使是本文也用了不少“显然”字眼，但比较原文已有较大改进。另外，原讲稿没有交代构造算法为什么是$O(n)$的。<del>疾风理解这ppt花了整整三天</del>如果本文对你有帮助，不妨赏疾风一支冰阔乐喝（馋.jpg）<br><br/>　　有人说SAM完全可以当做黑盒来用，我认为不然。黑盒SAM的唯一功能是判定子串是否存在，局限性很大。而SAM的实战应用代码相对裸构造有很大增改，例如要结合dfs序，平衡树，动态树等等技巧，且都是建立在完全理解后缀自动机的基础上，难度依然很大。这部分日后再填补。</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>&amp;emsp;&amp;emsp;SAM思路真的异常精妙，环环相扣，巧夺天工。不幸的是优美的结论是以复杂而庞大的论证为代价的。<br><br/>　　被奉为圣经的<code>2012年noi冬令营陈立杰讲稿(SAM后缀自动机)</code>在描述构造过程的时候没有解释可以省略的操作为什么被省略，导致思路有很大残缺和跳跃。即使是本文也用了不少“显然”字眼，但比较原文已有较大改进。另外，原讲稿没有交代构造算法为什么是$O(n)$的。<del>疾风理解这ppt花了整整三天</del>如果本文对你有帮助，不妨赏疾风一支冰阔乐喝（馋.jpg）<br><br/>　　有人说SAM完全可以当做黑盒来用，我认为不然。黑盒SAM的唯一功能是判定子串是否存在，局限性很大。而SAM的实战应用代码相对裸构造有很大增改，例如要结合dfs序，平衡树，动态树等等技巧，且都是建立在完全理解后缀自动机的基础上，难度依然很大。这部分日后再填补。</p>
 <p><em>转载请注明原作者和网址</em></p>
 
     </div>
@@ -442,7 +447,7 @@
 
 
 
-    <div class="comments" id="SOHUCS"></div>
+    <div class="comments" id="SOHUCS" sid="0bf425801e2825b8dd46b196327f2ddd"></div>
 </div>
   </main>
 
@@ -470,7 +475,9 @@
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
@@ -478,6 +485,8 @@
   
 
 
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"Nw4tc7C6QG2HeTBU0T1nFRay-MdYXbMMI","app_key":"ckihIHLVnT6ssbrDfnVNDUJi","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
   

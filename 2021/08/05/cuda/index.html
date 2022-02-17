@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,11 +16,12 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="参考资料：  《CUDA 编程 基础与实践》樊哲勇 CUDA Toolkit Documentation  获得 GPU 加速的关键总结必要条件 数据传输比例较小 核函数的算术强度较高 核函数中定义的线程数目较多  提高性能的技巧 减少主机与设备之间的数据传输 提高核函数的算术强度 增大核函数的并行规模">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="参考资料：  《CUDA 编程 基础与实践》樊哲勇 CUDA Toolkit Documentation  获得 GPU 加速的关键总结必要条件 数据传输比例较小 核函数的算术强度较高 核函数中定义的线程数目较多  提高性能的技巧 减少主机与设备之间的数据传输 提高核函数的算术强度 增大核函数的并行规模">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CUDA 学习笔记">
 <meta property="og:url" content="https://codesire-deng.github.io/2021/08/05/cuda/index.html">
@@ -43,6 +44,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>CUDA 学习笔记 | 等疾风</title>
   
+
 
 
 
@@ -70,7 +72,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">等疾风</h1>
+      <p class="site-title">等疾风</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
@@ -152,8 +154,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="等疾风"
       src="/uploads/blogAvatar_s.jpg">
   <p class="site-author-name" itemprop="name">等疾风</p>
@@ -188,7 +189,6 @@
 
 
 
-          </div>
         </div>
       </div>
         <div class="back-to-top animated" role="button" aria-label="返回顶部">
@@ -246,15 +246,22 @@
 
       <time title="创建时间：2021-08-05 23:50:25" itemprop="dateCreated datePublished" datetime="2021-08-05T23:50:25+08:00">2021-08-05</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-08-15 16:12:13" itemprop="dateModified" datetime="2021-08-15T16:12:13+08:00">2021-08-15</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-08-15 16:12:13" itemprop="dateModified" datetime="2021-08-15T16:12:13+08:00">2021-08-15</time>
+    </span>
 
   
+    <span id="/2021/08/05/cuda/" class="post-meta-item leancloud_visitors" data-flag-title="CUDA 学习笔记" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -263,11 +270,9 @@
       </span>
       <span class="post-meta-item-text">Changyan：</span>
     
-    
-      <a title="changyan" href="/2021/08/05/cuda/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2021/08/05/cuda/" itemprop="commentCount"></span>
-      </a>
-    
+    <a title="CUDA 学习笔记" href="/2021/08/05/cuda/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::c7cea0a899582faa81f3348037f31991" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
   </span>
   
   
@@ -310,13 +315,13 @@
 <h3 id="SM-的占有率"><a href="#SM-的占有率" class="headerlink" title="SM 的占有率"></a>SM 的占有率</h3><p>当并行规模较小，有些 SM 占有率为零，导致程序性能低下。当并行规模足够大时，也有可能得到非 100% 的占有率。</p>
 <p>考虑指标（查询官方文档 CUDA_Occupancy_Calculator.xls 的图灵架构）：</p>
 <ol>
-<li>一个 SM 最多拥有线程块个数$\ N_b = 16$。</li>
-<li>一个 SM 最多拥有的线程个数$\ N_t = 1536$。</li>
+<li>一个 SM 最多拥有线程块个数$\ N_b &#x3D; 16$。</li>
+<li>一个 SM 最多拥有的线程个数$\ N_t &#x3D; 1536$。</li>
 <li>线程块大小最大为$\ 1024$。</li>
 </ol>
 <p>当并行规模足够大（核函数配置的总线程数足够多），需要分几种情况讨论 SM 的理论占有率：</p>
 <ol>
-<li>寄存器核共享内存使用量很少。SM 的占有率完全由线程块大小决定。首先，由于线程束大小是 32，线程块大小最好是 32 的倍数。其次，线程块大小不能小于$\ N_t/N_b$​，才可能利用最大线程数量。因此，96 的线程块大小就能获得 100% 的占有率。类似的，128 的线程块大小在开普勒架构下能获得满占有率。（我选择 128）</li>
+<li>寄存器核共享内存使用量很少。SM 的占有率完全由线程块大小决定。首先，由于线程束大小是 32，线程块大小最好是 32 的倍数。其次，线程块大小不能小于$\ N_t&#x2F;N_b$​，才可能利用最大线程数量。因此，96 的线程块大小就能获得 100% 的占有率。类似的，128 的线程块大小在开普勒架构下能获得满占有率。（我选择 128）</li>
 <li>寄存器带来占有率瓶颈。一个 SM 最多有 65536（64K）个寄存器。如果令线程数最大化（1536），那么平均一个线程可用 42.7 个寄存器。当每个线程所用的寄存器个数大于 42 时，SM 的占有率将低于 50%。</li>
 <li>有限的共享内存对占有率的约束。一个 SM 拥有 65536 字节共享内存。如果线程块大小为 128，且SM 是线程满载（1536），要令占有率为 100%，则网格大小为 12，一个线程块最多有 5461 字节的共享内存。</li>
 </ol>
@@ -576,14 +581,17 @@ real <span class="token function">reduce</span><span class="token punctuation">(
 <span class="token comment">// ...</span>
 <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> <span class="token operator">&amp;</span>s <span class="token operator">:</span> stream<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token function">cudaStreamDestroy</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 销毁流，句柄不抹除</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
 <li><p>检测 CUDA 流是否空闲 </p>
  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">cudaError_t <span class="token function">cudaStreamSynchronize</span><span class="token punctuation">(</span>cudaStream_t stream<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 阻塞主机，直到 CUDA 流完成所有操作</span>
-cudaError_t <span class="token function">cudaStreamQuery</span><span class="token punctuation">(</span>cudaStream_t stream<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 返回 cudaSuccess（已完成）/ cudaErrorNotReady（未完成）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+cudaError_t <span class="token function">cudaStreamQuery</span><span class="token punctuation">(</span>cudaStream_t stream<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 返回 cudaSuccess（已完成）/ cudaErrorNotReady（未完成）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
 <li><p><code>cudaMemcpy</code> 会阻塞主机。但是核函数的调用总是异步的。应该尽量早地调用核函数，随后再进行主机的计算任务。</p>
 </li>
 <li><p>在核函数配置中指派 CUDA 流：</p>
- <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">my_kernel<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>N_grid<span class="token punctuation">,</span> N_block<span class="token punctuation">,</span> N_shared<span class="token punctuation">,</span> stream_id<span class="token operator">>></span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 四个模板参数必须齐全</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+ <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">my_kernel<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>N_grid<span class="token punctuation">,</span> N_block<span class="token punctuation">,</span> N_shared<span class="token punctuation">,</span> stream_id<span class="token operator">>></span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 四个模板参数必须齐全</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
 <li><p>异步的数据传输需要：</p>
 <ol>
 <li>使用 <code>cudaMemcpyAsync</code> 函数。</li>
@@ -594,7 +602,8 @@ cudaError_t <span class="token function">cudaStreamQuery</span><span class="toke
 <li><p>可以用 CUDA 运行时 API 来申请不可分页的内存（non-pageable memory），又称固定内存（pinned memory）。不可分页意味着操作系统无权修改虚拟地址所对应的物理地址。</p>
  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">cudaError_t <span class="token function">cudaMallocHost</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>ptr<span class="token punctuation">,</span> size_t size<span class="token punctuation">)</span><span class="token punctuation">;</span>
 cudaError_t <span class="token function">cudaHostAlloc</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>ptr<span class="token punctuation">,</span> size_t size<span class="token punctuation">,</span> size_t flags<span class="token punctuation">)</span><span class="token punctuation">;</span>
-cudaError_t <span class="token function">cudaFreeHost</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>ptr<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+cudaError_t <span class="token function">cudaFreeHost</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>ptr<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
 <li><p>良好的 CUDA 流指派会从流水线重叠中获得并行加速。但是 CUDA 流是有启动开销，且硬件环境有限，过多的 CUDA 流会拉低性能。</p>
 </li>
 </ol>
@@ -740,7 +749,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 
 
 
-    <div class="comments" id="SOHUCS"></div>
+    <div class="comments" id="SOHUCS" sid="c7cea0a899582faa81f3348037f31991"></div>
 </div>
   </main>
 
@@ -768,7 +777,9 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
@@ -776,6 +787,8 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
   
 
 
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"Nw4tc7C6QG2HeTBU0T1nFRay-MdYXbMMI","app_key":"ckihIHLVnT6ssbrDfnVNDUJi","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
   

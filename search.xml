@@ -110,9 +110,9 @@
 <p>然后，调用 <code>awaiter.await_ready()</code>并判断，决定是否暂停协程：</p>
 <ul>
 <li>若 <code>false</code>，协程暂停，必要的信息存放于 coroutine state。然后调用 <code>awaiter.await_suspend(handle)</code>。在这个函数中，通过 <code>handle</code> 可以访问 coroutine state，也是这个函数有责任安排协程在某个 executor 上恢复（甚至立即就地恢复），或者干脆销毁协程：<ul>
-<li>若 <code>awaiter.await_suspend(handle)</code> 返回 void，执行权立即转移（给 caller/resumer）。</li>
+<li>若 <code>awaiter.await_suspend(handle)</code> 返回 void，执行权立即转移（给 caller&#x2F;resumer）。</li>
 <li>否则若返回 bool，<ul>
-<li>若 <code>true</code> 则转移执行权（给 caller/resumer）。</li>
+<li>若 <code>true</code> 则转移执行权（给 caller&#x2F;resumer）。</li>
 <li>若 <code>false</code> 则恢复当前协程。</li>
 </ul>
 </li>
@@ -204,8 +204,8 @@
     <span class="token function">Best</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="应用场景-条件"><a href="#应用场景-条件" class="headerlink" title="应用场景/条件"></a>应用场景/条件</h3><ol>
-<li>多线程/异步协作，难以确定资源生命周期。</li>
+<h3 id="应用场景-x2F-条件"><a href="#应用场景-x2F-条件" class="headerlink" title="应用场景&#x2F;条件"></a>应用场景&#x2F;条件</h3><ol>
+<li>多线程&#x2F;异步协作，难以确定资源生命周期。</li>
 <li>主从关系明确，不存在环形引用：树、链表、DAG</li>
 <li>可以在构造函数参数中提供自定义析构器：<code>[](Y* rc) &#123; delect rc; &#125;</code>。</li>
 <li>原本使用 <code>unique_ptr</code> 的数据结构，需要对外提供强引用，则可以改用 <code>shared_ptr</code>。</li>
@@ -218,7 +218,7 @@
 <li>提供动态对象的 RAII，保证发生异常时对象仍被析构。</li>
 <li>表示对堆对象的独占关系。适合用作类的数据成员，例如表示树的儿子。<ul>
 <li>父亲指针永远只用裸指针，因为儿子存活时父亲一定存活</li>
-<li>单/双向链表是树的特例，也适用 <code>unique_ptr</code> + 裸指针。</li>
+<li>单&#x2F;双向链表是树的特例，也适用 <code>unique_ptr</code> + 裸指针。</li>
 </ul>
 </li>
 <li>在接口中明确表达「传递所有权」的语义。</li>
@@ -324,7 +324,7 @@ shared_ptr<span class="token operator">&lt;</span>Payload<span class="token oper
 </ul>
 </li>
 </ul>
-<h1 id="std-visit"><a href="#std-visit" class="headerlink" title="std::visit"></a>std::visit</h1><h2 id="Runtime-Branching"><a href="#Runtime-Branching" class="headerlink" title="Runtime Branching"></a>Runtime Branching</h2><p>假如你要对一个矢量做线性变换 $\vec{x} = k \cdot \vec{x} + b$，又想针对 $k=1$ 或 $b=0$ 的情况做优化，应该怎么办？</p>
+<h1 id="std-visit"><a href="#std-visit" class="headerlink" title="std::visit"></a>std::visit</h1><h2 id="Runtime-Branching"><a href="#Runtime-Branching" class="headerlink" title="Runtime Branching"></a>Runtime Branching</h2><p>假如你要对一个矢量做线性变换 $\vec{x} &#x3D; k \cdot \vec{x} + b$，又想针对 $k&#x3D;1$ 或 $b&#x3D;0$ 的情况做优化，应该怎么办？</p>
 <p>这是最简单却很慢的代码：</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span>n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>k <span class="token operator">!=</span> <span class="token number">1</span><span class="token punctuation">)</span>
@@ -572,7 +572,7 @@ shared_ptr<span class="token operator">&lt;</span>Payload<span class="token oper
 <ol>
 <li>你不需要 <code>Scaleable</code> 的动态绑定  </li>
 <li>每个类都复制粘贴一样的代码十分愚蠢  </li>
-<li>C++20 concept 不能提供默认成员实现（作者以为的。如果可以请告诉我）  </li>
+<li>C++20 concept 不能提供默认成员实现（作者以为的。如果可以请告诉我）</li>
 </ol>
 <p>你知道可以用 CRTP！于是你设计出：</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>
@@ -652,7 +652,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 <li>要求类继承接口，不利于库设计；  </li>
 <li>难以表达两种接口的交集；  </li>
 <li>容易写 Bug，编译报错信息不友好；  </li>
-<li>宣告放弃动态绑定，需要谨慎设计。  </li>
+<li>宣告放弃动态绑定，需要谨慎设计。</li>
 </ol>
 <h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
 <li><a href="https://www.bilibili.com/video/BV1pq4y1y7oN">双笙子佯谬 - 聊一聊C++设计模式、函数式编程等</a></li>
@@ -778,7 +778,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
   <entry>
     <title>Concurrency With C++</title>
     <url>/2021/04/01/Concurrency-with-C/</url>
-    <content><![CDATA[<p>不同语言/操作系统/硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。<br>C++ STL的线程支持库就是一个好例子。在这之前，最好先复习一下基础知识。</p>
+    <content><![CDATA[<p>不同语言&#x2F;操作系统&#x2F;硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。<br>C++ STL的线程支持库就是一个好例子。在这之前，最好先复习一下基础知识。</p>
 <h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><ul>
 <li><strong>不变量(invariants)</strong> 是指对数据结构的断言<ul>
 <li>例：某种帐本，任意前缀和不为负数。</li>
@@ -798,7 +798,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 <li>例：<code>tmp = s.top(); s.pop(); return tmp;</code> 在return时发生构造函数异常，数据丢失！</li>
 <li>解决办法：<ol>
 <li>传入引用或指针来接收返回值。缺点：一些类不支持赋值。</li>
-<li>要求拷贝/移动构造函数不抛出异常。缺点：用户说我偏不。</li>
+<li>要求拷贝&#x2F;移动构造函数不抛出异常。缺点：用户说我偏不。</li>
 <li>返回指向原返回值的指针，最好配合shared_ptr。缺点：性能损耗。</li>
 <li>1+2 或者 1+3。</li>
 </ol>
@@ -818,7 +818,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 </li>
 <li><strong>锁的粒度</strong>是指单个锁保护的数据量和保护时间。<ul>
 <li>挑选合适的数据量大小。</li>
-<li>在耗时的操作中尽可能地释放锁，例如I/O操作。</li>
+<li>在耗时的操作中尽可能地释放锁，例如I&#x2F;O操作。</li>
 </ul>
 </li>
 <li><strong>懒汉模式</strong>特指单例模式中的延迟初始化。<ul>
@@ -865,7 +865,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 <li><code>this_thread</code> 命名空间<ul>
 <li><code>yield()</code> 建议当前线程进入就绪状态</li>
 <li><code>get_id()</code> 获取线程id。结果可用<code>&lt;&lt;</code>序列化，虽然意义不大。</li>
-<li><code>sleep_for(duration)</code>/<code>sleep_until(time_point)</code> 当前线程阻塞一段时间</li>
+<li><code>sleep_for(duration)</code>&#x2F;<code>sleep_until(time_point)</code> 当前线程阻塞一段时间</li>
 </ul>
 </li>
 </ul>
@@ -961,7 +961,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 <li>避免在<code>pred</code>里加副作用，因为无法确定它会执行多少次。</li>
 </ul>
 </li>
-<li><code>notify_one()</code>/<code>notify_all()</code> <ul>
+<li><code>notify_one()</code>&#x2F;<code>notify_all()</code> <ul>
 <li>唤醒关联的阻塞线程。</li>
 <li>当前线程应当事先释放锁（lock_guard应已析构）。</li>
 </ul>
@@ -1145,7 +1145,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 <li><code>Vec</code> 类需要实现 <code>operator+()</code>，并由这个函数返回一个 <code>DeferredOperator</code></li>
 <li><code>DeferredOperator</code> 类需要实现 <code>operator+()</code>，这个函数同样返回一个 <code>DeferredOperator</code></li>
 </ol>
-<h2 id="Ambiguity-of-operator"><a href="#Ambiguity-of-operator" class="headerlink" title="Ambiguity of operator=()"></a>Ambiguity of operator=()</h2><p>为了区分 <code>Vec = Vec</code> 和 <code>Vec = DeferredOperator</code>，我们需要更精细地定义参数。</p>
+<h2 id="Ambiguity-of-operator-x3D"><a href="#Ambiguity-of-operator-x3D" class="headerlink" title="Ambiguity of operator&#x3D;()"></a>Ambiguity of operator&#x3D;()</h2><p>为了区分 <code>Vec = Vec</code> 和 <code>Vec = DeferredOperator</code>，我们需要更精细地定义参数。</p>
 <h2 id="Draft-2"><a href="#Draft-2" class="headerlink" title="Draft 2"></a>Draft 2</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;vector></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;functional></span></span>
@@ -1211,7 +1211,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 
 <h1 id="Peak-of-Evolution"><a href="#Peak-of-Evolution" class="headerlink" title="Peak of Evolution"></a>Peak of Evolution</h1><p>这次依然是原创代码，改进了一些地方：</p>
 <h2 id="Class-Diagram"><a href="#Class-Diagram" class="headerlink" title="Class Diagram"></a>Class Diagram</h2><p>多层次的 CRTP 用起来容易头晕，应该事先设计好类的关系：</p>
-<p><img src="./crtpEt.svg" alt="CRTP relationship"></p>
+<p><img src="/./crtpEt.svg" alt="CRTP relationship"></p>
 <p>橙色和红色的类才是 CRTP 的模板实参。白色的类主要用作接口，类似于抽象类。</p>
 <h2 id="ET-interface"><a href="#ET-interface" class="headerlink" title="ET interface"></a>ET interface</h2><ul>
 <li>用户类只要继承 <code>VectorExpresstion</code> 接口，同时定义合适的 <code>operator[]</code> 和 <code>operator=</code> 即可实现模板表达式。</li>
@@ -1407,7 +1407,7 @@ T <span class="token operator">&amp;</span><span class="token function">scale</s
 <p>但模板元编程暂时不是我的主要学习方向，所以还是再等等吧~</p>
 <h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
 <li><a href="https://en.wikipedia.org/wiki/Expression_templates">Expression templates - Wikipedia</a></li>
-<li><a href="https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Expression-template">More C++ Idioms/Expression-template - Wikibooks</a></li>
+<li><a href="https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Expression-template">More C++ Idioms&#x2F;Expression-template - Wikibooks</a></li>
 <li><a href="https://en.cppreference.com/w/cpp/language/using_declaration">Using-declaration - cppreference.com</a></li>
 </ul>
 ]]></content>
@@ -1443,7 +1443,7 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
     <title>跟我一起写Makefile</title>
     <url>/2020/02/01/Makefile/</url>
     <content><![CDATA[<p>路过一篇写得很到位的Makefile介绍文章，转载一下：</p>
-<p><a href="https://seisman.github.io/how-to-write-makefile/overview.html">seisman.github.io/how-to-write-makefile</a></p>
+<p><a href="https://seisman.github.io/how-to-write-makefile/overview.html">seisman.github.io&#x2F;how-to-write-makefile</a></p>
 ]]></content>
       <tags>
         <tag>杂项</tag>
@@ -1481,7 +1481,7 @@ Defer guard<span class="token punctuation">&#123;</span><span class="token punct
 <li>You may need to capture some local variables into the lambda.</li>
 <li><code>-O1</code> is recommended for the lambda inlining, which makes this idiom zero-overhead.</li>
 <li>Using C macro, this idiom can be developed more concise. Personally I don&#39;t like C macro, however, because of safety concerns.</li>
-<li>A library: <a href="https://github.com/lizho/FakeGolang/blob/master/include/fake_golang.h">lizho/FakeGolang</a></li>
+<li>A library: <a href="https://github.com/lizho/FakeGolang/blob/master/include/fake_golang.h">lizho&#x2F;FakeGolang</a></li>
 </ol>
 ]]></content>
       <tags>
@@ -1498,8 +1498,8 @@ Defer guard<span class="token punctuation">&#123;</span><span class="token punct
 
 <span id="more"></span>
 
-<h1 id="在自动机上游走"><a href="#在自动机上游走" class="headerlink" title="在自动机上游走"></a>在自动机上游走</h1><p>&emsp;&emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。</p>
-<h2 id="求最小表示"><a href="#求最小表示" class="headerlink" title="求最小表示"></a>求最小表示</h2><p>&emsp;&emsp;求字符串$S$的最小表示。<br><br/>　　<em>度娘有$O(n)$的特殊做法，此处不赘述。</em><br><br/>　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最小的出边走，走n步就得到了$SS$中长度为n的最小子串，即$S$的最小表示。</p>
+<h1 id="在自动机上游走"><a href="#在自动机上游走" class="headerlink" title="在自动机上游走"></a>在自动机上游走</h1><p>&amp;emsp;&amp;emsp;从$root$开始，沿目标字符串逐个字符走。若路径存在，即当前子串存在；反之，若出边不存在，即目标子串不存在。</p>
+<h2 id="求最小表示"><a href="#求最小表示" class="headerlink" title="求最小表示"></a>求最小表示</h2><p>&amp;emsp;&amp;emsp;求字符串$S$的最小表示。<br><br/>　　<em>度娘有$O(n)$的特殊做法，此处不赘述。</em><br><br/>　　构造字符串$SS$的后缀自动机，从$root$开始，每次沿最小的出边走，走n步就得到了$SS$中长度为n的最小子串，即$S$的最小表示。</p>
 <h2 id="求本质不同的第k小子串"><a href="#求本质不同的第k小子串" class="headerlink" title="求本质不同的第k小子串"></a>求本质不同的第k小子串</h2><p><a href="https://www.spoj.com/problems/SUBLEX/">SPOJ SUBLEX</a> 题意：求字符串$S$的所有本质不同子串中的第$k$小。$length(S)\le 9e4, 询问数量\le 500$。<br><br/>　　SAM构造完成后得到一个DAG，利用拓扑序求从每个点出发可能的路径数目。见<a href="#SAM%E4%B8%8A%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F">拓扑排序的方法</a>。最后用类似二分法求第k小即可。</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// 内存池+计数排序的SAM，相对优秀</span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;algorithm></span></span>
@@ -1613,8 +1613,8 @@ State<span class="token operator">*</span> b<span class="token punctuation">[</s
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算|Right|"></a>离线计算|Right|</h1><p>&emsp;&emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| = 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br/><img src="./abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"><br><br/>　　如上图所示，“1”在分裂的过程中消失了，不存在叶子节点中。<br><br/>　　为什么$Right$集合的元素无法往下分裂？这是因为它表示的子串无法向左端扩展，换句话说，它是前缀。注意到叶子节点也是前缀。综上所述，只要对前缀所在节点的$|Right|$预置为$1$（其他节点预置为$0$），然后自底向上更新分裂树即可得到所有$|Right|$</p>
-<h2 id="分裂树上拓扑排序"><a href="#分裂树上拓扑排序" class="headerlink" title="分裂树上拓扑排序"></a>分裂树上拓扑排序</h2><p>&emsp;&emsp;上文引出了一个新问题，如何自底向上地访问分裂树？一种直观的办法是bfs收集SAM所有节点再做拓扑排序，这逻辑复杂而代码繁琐。一种更好的办法是，在构造SAM时采用内存池技术，之后对内存池按照$Max$降序排序即可。原因是<br>$$ Max(fa)+1=Min(s) \Rightarrow Max(s) &gt; Max(fa)$$<br>有趣的是，分裂树的拓扑序也是自动机的拓扑序！原因是<br>$$ trans(s, *)=t \Rightarrow Max(t) &gt; Max(s) $$<br>如果你忘记了，请复习<a href="/2020/10/01/Suffix-Automaton/" title="后缀自动机的更多性质">后缀自动机的更多性质</a>。</p>
+<h1 id="离线计算-Right"><a href="#离线计算-Right" class="headerlink" title="离线计算|Right|"></a>离线计算|Right|</h1><p>&amp;emsp;&amp;emsp;构造好的后缀自动机隐含了一颗分裂树，只需访问所有节点和$Pa$指针，就能还原这颗分裂树。显然，叶子节点的$|Right| &#x3D; 1$，但仅有这些信息还不足推出其他节点的$|Right|$，这是因为节点在往下分裂时可能丢失元素<br><br/><img src="/./abaTree.png" alt="&quot;aba&quot;的分裂树。“1”没有出现在叶节点中"><br><br/>　　如上图所示，“1”在分裂的过程中消失了，不存在叶子节点中。<br><br/>　　为什么$Right$集合的元素无法往下分裂？这是因为它表示的子串无法向左端扩展，换句话说，它是前缀。注意到叶子节点也是前缀。综上所述，只要对前缀所在节点的$|Right|$预置为$1$（其他节点预置为$0$），然后自底向上更新分裂树即可得到所有$|Right|$</p>
+<h2 id="分裂树上拓扑排序"><a href="#分裂树上拓扑排序" class="headerlink" title="分裂树上拓扑排序"></a>分裂树上拓扑排序</h2><p>&amp;emsp;&amp;emsp;上文引出了一个新问题，如何自底向上地访问分裂树？一种直观的办法是bfs收集SAM所有节点再做拓扑排序，这逻辑复杂而代码繁琐。一种更好的办法是，在构造SAM时采用内存池技术，之后对内存池按照$Max$降序排序即可。原因是<br>$$ Max(fa)+1&#x3D;Min(s) \Rightarrow Max(s) &gt; Max(fa)$$<br>有趣的是，分裂树的拓扑序也是自动机的拓扑序！原因是<br>$$ trans(s, *)&#x3D;t \Rightarrow Max(t) &gt; Max(s) $$<br>如果你忘记了，请复习<a href="/2020/10/01/Suffix-Automaton/" title="后缀自动机的更多性质">后缀自动机的更多性质</a>。</p>
 <div class="note primary"><h4 id="拓扑排序要点"><a href="#拓扑排序要点" class="headerlink" title="拓扑排序要点"></a>拓扑排序要点</h4><ol>
 <li>指针板构造采用内存池技术</li>
 <li>$Max$可能的取值仅有$[1,n]$，所以要采用计数排序</li>
@@ -1629,8 +1629,8 @@ State<span class="token operator">*</span> b<span class="token punctuation">[</s
 <span class="token comment">// sam[] has been top sorted by b[].</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>剩余细节在<a href="#%E6%B1%82%E6%9C%AC%E8%B4%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E7%AC%ACk%E5%B0%8F%E5%AD%90%E4%B8%B2">例题1</a>、<a href="#%E6%B1%82%E9%95%BF%E5%BA%A6%E4%B8%BA-i-%E7%9A%84%E5%AD%90%E4%B8%B2%E7%9A%84%E6%9C%80%E5%A4%A7%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0">例题2</a>中体现</p>
-<h2 id="求长度为i的子串的最大出现次数"><a href="#求长度为i的子串的最大出现次数" class="headerlink" title="求长度为i的子串的最大出现次数"></a>求长度为i的子串的最大出现次数</h2><p><a href="https://www.spoj.com/problems/NSUBSTR/">SPOJ NSUBSTR</a> 题意：给出字符串S（长度&lt;=2.5e5），设f(x)为S中长度为x的子串的最大出现次数，求f(1...length(s))。</p>
-<p>&emsp;&emsp;分析：后缀自动机中每个状态$s$蕴含的字符串长度为$[Min(s), Max(s)]$，每个出现了$Right(s)$次，只需用$|Right(s)|$更新$ans[Max(s)]$就行了，在最后输出前依次用$ans[i+1]$更新$ans[i]$即可。原因是长度更长的子串出现的次数一定不超过长度短的。</p>
+<h2 id="求长度为i的子串的最大出现次数"><a href="#求长度为i的子串的最大出现次数" class="headerlink" title="求长度为i的子串的最大出现次数"></a>求长度为i的子串的最大出现次数</h2><p><a href="https://www.spoj.com/problems/NSUBSTR/">SPOJ NSUBSTR</a> 题意：给出字符串S（长度&lt;&#x3D;2.5e5），设f(x)为S中长度为x的子串的最大出现次数，求f(1...length(s))。</p>
+<p>&amp;emsp;&amp;emsp;分析：后缀自动机中每个状态$s$蕴含的字符串长度为$[Min(s), Max(s)]$，每个出现了$Right(s)$次，只需用$|Right(s)|$更新$ans[Max(s)]$就行了，在最后输出前依次用$ans[i+1]$更新$ans[i]$即可。原因是长度更长的子串出现的次数一定不超过长度短的。</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// 朴素的拓扑排序版本，推荐改用计数排序</span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;algorithm></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
@@ -1760,9 +1760,9 @@ State<span class="token operator">*</span> q<span class="token punctuation">[</s
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="跳向父亲，舍弃左端，寻求匹配"><a href="#跳向父亲，舍弃左端，寻求匹配" class="headerlink" title="跳向父亲，舍弃左端，寻求匹配"></a>跳向父亲，舍弃左端，寻求匹配</h1><p>&emsp;&emsp;<code>now = now-&gt;pa</code>的本质是抛弃左端一部分字符，带来的效果是$Right$集合的扩张。这个特性在求最长公共子串的时候尤为好用，与KMP舍弃右端部分字符以寻求匹配的原理有异曲同工之妙。</p>
+<h1 id="跳向父亲，舍弃左端，寻求匹配"><a href="#跳向父亲，舍弃左端，寻求匹配" class="headerlink" title="跳向父亲，舍弃左端，寻求匹配"></a>跳向父亲，舍弃左端，寻求匹配</h1><p>&amp;emsp;&amp;emsp;<code>now = now-&gt;pa</code>的本质是抛弃左端一部分字符，带来的效果是$Right$集合的扩张。这个特性在求最长公共子串的时候尤为好用，与KMP舍弃右端部分字符以寻求匹配的原理有异曲同工之妙。</p>
 <h2 id="求两字符串的最长公共子串"><a href="#求两字符串的最长公共子串" class="headerlink" title="求两字符串的最长公共子串"></a>求两字符串的最长公共子串</h2><p><a href="https://www.spoj.com/problems/LCS/">SPOJ LCS</a> 题意：求字符串$S1,S2$的最长公共子串(要求连续)</p>
-<p>&emsp;&emsp;分析：后缀自动机很擅长处理连续串的匹配。试想我们做出$S1$的SAM，然后直接跑$S2$，势必出现出边不存在的问题——无法继续匹配了。不妨设无法继续匹配时，导致无法匹配的字符是$S2[i]$，当前状态为$s$，即$trans(s, S2[i])$不存在，即不存在$S1[r_j]=S2[i], r_j\in Right(s)$。想要寻求匹配，只能抛弃已匹配的子串左端，而<code>s=s-&gt;pa</code>恰好带来了最少的抛弃量，使得$Right(s)$能扩张，从而带来匹配的可能性。<br><br/>　　换句话说，当<code>s-&gt;go[S2[i]] == nullptr</code>时，重复<code>s = s-&gt;pa</code>，直到获得匹配<code>s-&gt;go[S2[i]] != nullptr</code>或不可能匹配<code>s == nullptr</code>。<br><br/>　　假如直接能匹配呢？那太简单了，匹配长度加一，下一位。<br><br/>　　于是最终解为：记当前已匹配长度$match$，当前答案$ans$，当前自动机状态$s$，接下来尝试匹配$S2[i]$，若$trans(s,S2[i])$存在，就转移，并且$match$加一；否则尝试不断跳分裂树的$fa$，直到转移存在，由于$Max(fa) &lt; Min(s) \le match$，$match$必能取到$Max(fa)$，所以$s$跳到$trans(fa, S2[i])$， $match$取为$Max(fa)+1$即可。每走一步都用$match$更新$ans$。</p>
+<p>&amp;emsp;&amp;emsp;分析：后缀自动机很擅长处理连续串的匹配。试想我们做出$S1$的SAM，然后直接跑$S2$，势必出现出边不存在的问题——无法继续匹配了。不妨设无法继续匹配时，导致无法匹配的字符是$S2[i]$，当前状态为$s$，即$trans(s, S2[i])$不存在，即不存在$S1[r_j]&#x3D;S2[i], r_j\in Right(s)$。想要寻求匹配，只能抛弃已匹配的子串左端，而<code>s=s-&gt;pa</code>恰好带来了最少的抛弃量，使得$Right(s)$能扩张，从而带来匹配的可能性。<br><br/>　　换句话说，当<code>s-&gt;go[S2[i]] == nullptr</code>时，重复<code>s = s-&gt;pa</code>，直到获得匹配<code>s-&gt;go[S2[i]] != nullptr</code>或不可能匹配<code>s == nullptr</code>。<br><br/>　　假如直接能匹配呢？那太简单了，匹配长度加一，下一位。<br><br/>　　于是最终解为：记当前已匹配长度$match$，当前答案$ans$，当前自动机状态$s$，接下来尝试匹配$S2[i]$，若$trans(s,S2[i])$存在，就转移，并且$match$加一；否则尝试不断跳分裂树的$fa$，直到转移存在，由于$Max(fa) &lt; Min(s) \le match$，$match$必能取到$Max(fa)$，所以$s$跳到$trans(fa, S2[i])$， $match$取为$Max(fa)+1$即可。每走一步都用$match$更新$ans$。</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// 省略SAM的构造和其他乱七八糟的东西</span>
     State<span class="token operator">*</span> now <span class="token operator">=</span> root<span class="token punctuation">;</span>
     <span class="token keyword">int</span> match <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> ans <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
@@ -1805,43 +1805,43 @@ State<span class="token operator">*</span> q<span class="token punctuation">[</s
 <h2 id="设"><a href="#设" class="headerlink" title="设"></a>设</h2><ol>
 <li>自动机能识别的所有字符串集合<strong>Reg(A)</strong> ，其中的字符串$x$满足$trans(init, x)\in end$</li>
 <li>从状态$s$开始能识别的字符串 <strong>Reg(s)</strong></li>
-<li>后缀自动机<strong>SAM</strong>，一个能识别母串$S$的所有后缀的自动机。$SAM(x)=true$当且仅当$x$是$S$的后缀。</li>
+<li>后缀自动机<strong>SAM</strong>，一个能识别母串$S$的所有后缀的自动机。$SAM(x)&#x3D;true$当且仅当$x$是$S$的后缀。</li>
 <li>$trans(init, str)$即从初始状态读入$str$后到达的状态<strong>ST(str)</strong> <em>（ST是state的缩写)</em></li>
 <li>母串$S$的所有后缀的集合<strong>Suf</strong>，从$a$位置开始的后缀<strong>Suffix(a)</strong></li>
 <li>母串$S$的所有连续子串的集合<strong>Fac</strong>，位置为$[l,r)$的子串<strong>S[l,r)</strong></li>
 </ol>
 <h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><h2 id="SAM的可行性分析"><a href="#SAM的可行性分析" class="headerlink" title="SAM的可行性分析"></a>SAM的可行性分析</h2><ol>
-<li><p>对于字符串$s$，若$s\in Fac$，则$ST(s)$应存在，这是因为可以在$s$后面加上一些字符使其变成$S$的后缀。<em>反之$s\notin Fac$，则应有$ST(s)=null$以节省空间</em></p>
+<li><p>对于字符串$s$，若$s\in Fac$，则$ST(s)$应存在，这是因为可以在$s$后面加上一些字符使其变成$S$的后缀。<em>反之$s\notin Fac$，则应有$ST(s)&#x3D;null$以节省空间</em></p>
 </li>
 <li><p>考虑$ST(a)$能识别哪些字符串，即$Reg(ST(a))$。若$x\in Reg(ST(a))$，则$ax\in Suf$，故$ax$是后缀，$x$也是后缀。$Reg(ST(a))$是每次$a$出现后接下来的后缀。设<strong>Right(a)</strong> 为a每次出现的开区间末位置，则$Reg(ST(a))$完全由$Right(a)$决定。</p>
 </li>
-<li><p>对于状态$s$（不是单个字符串），我们关心$Reg(s)$。如果对于$a,b\in Fac$有$Right(a)=Right(b)$，那么可令$ST(a)= ST(b)$。所以一个状态$s$由所有$Right$集合是<strong>Right(s)</strong> 的字符串组成。</p>
+<li><p>对于状态$s$（不是单个字符串），我们关心$Reg(s)$。如果对于$a,b\in Fac$有$Right(a)&#x3D;Right(b)$，那么可令$ST(a)&#x3D; ST(b)$。所以一个状态$s$由所有$Right$集合是<strong>Right(s)</strong> 的字符串组成。</p>
 </li>
 <li><p>考虑状态$s$包括的字符串长度，易证若$s$包含长度为$l$,$r$的字符串，那么一定包含长度为$m(l \leq m \leq r)$的字符串。所以这些字符串长度一定可以组成一个区间，设为 <strong>[Min(s), Max(s)]</strong></p>
 </li>
-<li><p>状态数是线性的。<br/>　　状态由$Right$集合决定，考虑两个状态$a,b$的$Right$集合$R_a,R_b$。假设$R_a,R_b$有交集，设$r \in R_a \cap R_b$。由于一个子串只能属于一个状态，所以$a$，$b$所表示的子串不会有交集，即由$r$往前不能有长度相同的子串，故$[Min(a), Max(a)]$和$[Min(b), Max(b)]$没有交集，不妨设$Max(a) &lt; Min(b)$，由于$a$，$b$包含的所有串都可以视为$r$往前的子串，故$a$的所有串都是$b$的任意串的后缀。因$b$的任意串都能找到后缀属于$a$，两者$Right$集合又不相等，故$R_b \subset R_a$。那么任意两个状态的$Right$集合要么不相交，要么一个是另一个的真子集。<br/>　　疾风将以状态为节点，以$Right$包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br/>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，$SAM$的结点个数最多为$2n$。<br><br/><img src="./%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png" alt="分裂树举例"></p>
+<li><p>状态数是线性的。<br/>　　状态由$Right$集合决定，考虑两个状态$a,b$的$Right$集合$R_a,R_b$。假设$R_a,R_b$有交集，设$r \in R_a \cap R_b$。由于一个子串只能属于一个状态，所以$a$，$b$所表示的子串不会有交集，即由$r$往前不能有长度相同的子串，故$[Min(a), Max(a)]$和$[Min(b), Max(b)]$没有交集，不妨设$Max(a) &lt; Min(b)$，由于$a$，$b$包含的所有串都可以视为$r$往前的子串，故$a$的所有串都是$b$的任意串的后缀。因$b$的任意串都能找到后缀属于$a$，两者$Right$集合又不相等，故$R_b \subset R_a$。那么任意两个状态的$Right$集合要么不相交，要么一个是另一个的真子集。<br/>　　疾风将以状态为节点，以$Right$包含关系为父子关系构成的树叫 <strong>“分裂树”</strong> <br/>　　不考虑字符串这个主题，“分裂树”易证是线性的；实际上，$SAM$的结点个数最多为$2n$。<br><br/><img src="/./%E5%88%86%E8%A3%82%E6%A0%91%E4%B8%BE%E4%BE%8B.png" alt="分裂树举例"></p>
 </li>
-<li><p>更严谨的分裂树定义：令满足$Right(s) \subset Right(fa)$的最小$|Right(fa)|$的$fa$为状态$s$的父亲。<br/>　　直观地看，一定是$fa$中最长的字符串向前扩展一位导致了$Right$集合分裂，所以**Max(fa)+1=Min(s)**。</p>
+<li><p>更严谨的分裂树定义：令满足$Right(s) \subset Right(fa)$的最小$|Right(fa)|$的$fa$为状态$s$的父亲。<br/>　　直观地看，一定是$fa$中最长的字符串向前扩展一位导致了$Right$集合分裂，所以**Max(fa)+1&#x3D;Min(s)**。</p>
 </li>
 <li><p>自动机的边数是线性的。<br/>　　直观地看，自动机是一个DAG（否则可以无限地在自动机上走，即识别无限长的字符串，显然这是不可能的），而能从$init$走到某个$end$点的肯定是字符串的某一个后缀。字符串只有$n$个后缀，意味着从$init$到$end$只能有$n$种路径；另一方面，节点数只有$O(n)$，所以猜测边数也是$O(n)$的。<br/>　　标出自动机任意一个生成树，则对于一条非树边$(a\rightarrow b)$，存在若干路径${init \rightarrowtail a \rightarrow b \rightarrowtail e(e\in end)}$对应着一个后缀。对每一个后缀，对应在自动机上走到的第一条非树边。如此每个后缀最多对应一个非树边，而非树边至少被一个后缀对应，所以后缀数量$\geq$非树边数量。所以边数是$O(n)$的。</p>
 </li>
 </ol>
 <h2 id="归纳法构造SAM"><a href="#归纳法构造SAM" class="headerlink" title="归纳法构造SAM"></a>归纳法构造SAM</h2><h3 id="SAM的更多性质"><a href="#SAM的更多性质" class="headerlink" title="SAM的更多性质"></a>SAM的更多性质</h3><p><em>这一部分是SAM构造算法的重要依据。<br/>请确认上文所有加粗内容都已理解。</em></p>
 <ol>
-<li><p>后缀自动机是一个有向无环图<br>$$<br>SAM = {分裂树的点，自动机的有向边}<br>$$ </p>
+<li><p>后缀自动机是一个有向无环图<br>$$<br>SAM &#x3D; {分裂树的点，自动机的有向边}<br>$$ </p>
 </li>
 <li><p>SAM的构造算法是在线的，即从左到右逐个添加字符。根据数学归纳法，<strong>下文假设已有字符串$T$的后缀自动机</strong>。</p>
 </li>
-<li><p>考虑一个状态$s$，它的$Right(s)={r_1, r_2, \cdots, r_n}$，假如有状态转移$trans(s,c) = t$（即状态$s$后添加一个字符$c$得到状态$t$），由于向右扩展了一位字符，$Right(s)$中只有$T[r_i]=c$的满足要求。所以$Right(t)={r_i+1 | T[r_i]=c}$。<br/>　　如果$trans(s,c)$存在，那么$trans(Pa(s), c)$必定存在，其中$Pa(s)$表示分裂树上状态$s$的父亲。并且$Right(trans(s,c)) \subseteq Right(trans(Pa(s),c))$。<br/>　　另一个显然的结论是$Max(s)&lt;Max(t)$。</p>
+<li><p>考虑一个状态$s$，它的$Right(s)&#x3D;{r_1, r_2, \cdots, r_n}$，假如有状态转移$trans(s,c) &#x3D; t$（即状态$s$后添加一个字符$c$得到状态$t$），由于向右扩展了一位字符，$Right(s)$中只有$T[r_i]&#x3D;c$的满足要求。所以$Right(t)&#x3D;{r_i+1 | T[r_i]&#x3D;c}$。<br/>　　如果$trans(s,c)$存在，那么$trans(Pa(s), c)$必定存在，其中$Pa(s)$表示分裂树上状态$s$的父亲。并且$Right(trans(s,c)) \subseteq Right(trans(Pa(s),c))$。<br/>　　另一个显然的结论是$Max(s)&lt;Max(t)$。</p>
 </li>
 <li><p>后缀自动机没有显式地储存$Right$集合。因此可以认为修改$Right$的时间复杂度为$O(0)$。</p>
 </li>
 <li><p>初始状态时母串$T$为空字符串，自动机只有一个节点$root$。</p>
 </li>
 </ol>
-<h3 id="添加一位字符更新自动机"><a href="#添加一位字符更新自动机" class="headerlink" title="添加一位字符更新自动机"></a>添加一位字符更新自动机</h3><p>&emsp;&emsp;令当前字符串为$T$，长度为$L$；末尾添加一个字符$x$，要将$SAM(T)$更新为$SAM(Tx)$。<br><br/>　　那么新增的子串是$Tx$的所有后缀，可看作$T$的所有后缀后添加了$x$。令$SAM(T)$中表示$T$的后缀的节点为${v_1, v_2, \cdots, v_k=root}$。因为后缀在字符串的末尾出现，所以$L\in Right(v_i)$，可知$v_i$在分裂树上恰好构成一条从叶子到$root$的链，不妨设${v_1, v_2, \cdots, v_k=root}$已经按从叶子到祖先排序。<br><br/>　　添加字符$x$后，首先新建状态$np$表示$ST(Tx)$，这是一个已确定的状态（因为没有出边），可知$Right(np)={L+1}$。<br><br/>　　回头考虑旧自动机的$v_i$，设$Right(v_i)={r_1, r_2, \cdots, r_n=L}$。如果能在后面添加字符$x$（注意现在仍是字符串$T$的自动机），即$nv=trans(v_i, x)$存在，我们已经知道$Right(nv)={r_i+1|T[r_i]=x}$；反之如果$v_i$没有$x$的出边，意味着没有$r_i$满足$T[r_i]=x$。由于分裂树上父亲的$Right$扩大，如果$trans(v_i,x)$存在，那么$trans(v_{i+1}, x)$也存在。<br><br/>　　对于所有$trans(v,x)=null$的$v$，而只有$Tx[r_n=L]=x$满足转移条件，于是添加一条边$trans(v,x)=np$。<br><br/>　　令$v_p$是$v_1, v_2, \cdots, v_k$中第一个有$x$出边（即$trans(v_p, x)$存在）的状态。令$q=trans(v_p, x)$，注意，现在仍是旧的自动机。我们能不能直接在$Right(q)$中直接插入$L+1$呢？答案是不能。这是因为有可能$Max(q) &gt; Max(v_p)+1$，隐含意思是$q$在”$v_p$末尾添加$x$”的基础上，由于$Right$集合的缩减，纳入了左端更多字符；如果强行在$Right(q)$中插入$L+1$，会导致$Max(q)$减小而丢失了原来的状态，破坏了自动机的正确性。</p>
-<p><img src="./%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png" alt="强行插入的反例"><br><br/>　　如图所示，$v_p$含有的最长字符串是红色5个“A”，但$trans(v_p,x)=q$含有的最长字符串是蓝色7位字符串，如果在$Right(q)$中强行插入$L+1$即变为绿色部分，会使$Max(q)$从7减少到6从而丢失信息。<br><br/>　　如果足够幸运，$Max(q) = Max(v_p)+1$，就没有上面的问题，我们可以在$Right(q)$中插入$L+1$，然后只要令$Pa(np)=q$即可完成自动机更新。<em>注：理论上$Right(trans(v_p\dots v_k,x))$都要插入$L+1$，但这些状态的出边都没有发生改变，而后缀自动机实际上不记录$Right$，所以更新完成。</em><br><br/>　　如果没那么幸运，从图上可知，原状态$q$在插入末尾字符$x$后应转换两个状态，设蓝色对应的状态为$q&#39;$（沿用$q$)，绿色状态为$nq$（新建节点）。显然<br>$$<br>trans(q&#39;, *) = trans(q, *), \<br>Pa(q&#39;)=nq，\<br>Right(nq)=Right(q&#39;)\cup {L+1}，\<br>Max(nq) = Max(v_p)+1<br>$$<br>显然$Right(nq)$是真包含${L+1}$的最小集合，所以<br>$$ Pa(np)=nq $$<br>&emsp;&emsp;截至目前我们新添了$np$，将$q$转化为$q&#39;,nq$，其中$np,q&#39;$都正确处理了出边和分裂树父亲。<br>那么$nq$的分裂树父亲又是谁呢？结合上图易证<br>$$ Pa(nq)=Pa(q) $$</p>
-<p>$nq$的出边是哪一些？由于新添的最后一个字符不能带来更多的状态转移（最后一个字符后面再没有字符了），所以<br>$$ trans(nq, *) = trans(q, *) $$<br><br/>　　最后，我们还要考虑原自动机中指向$q$的状态，和新自动机中应当指向$q&#39;$和$nq$的状态。在$v_p,\cdots,v_k$中，由于$Right$的扩大，$Right(trans(v_i,x))$也逐渐扩大（不缩小），所以只有一段连续的$v_p,\cdots,v_e(e\le k)$是指向$q$的，由于要配合在$Right$集合中插入$L+1$，这些出边要修改为<br>$$ trans(v_i,x) = nq $$<br>其余指向$q$的状态必然由于左端有过多字符而无法指向$nq$，于是改为指向$q&#39;$，等效于不做任何修改。<br><br/>　　最后的最后，对于$v_{e+1},\cdots,v_k$，对于$nv=trans(v_i, x)$，必然可以粗暴地令$Right(nv)$插入$L+1$，所以转移关系可以保持不变，等效于不做任何修改。</p>
+<h3 id="添加一位字符更新自动机"><a href="#添加一位字符更新自动机" class="headerlink" title="添加一位字符更新自动机"></a>添加一位字符更新自动机</h3><p>&amp;emsp;&amp;emsp;令当前字符串为$T$，长度为$L$；末尾添加一个字符$x$，要将$SAM(T)$更新为$SAM(Tx)$。<br><br/>　　那么新增的子串是$Tx$的所有后缀，可看作$T$的所有后缀后添加了$x$。令$SAM(T)$中表示$T$的后缀的节点为${v_1, v_2, \cdots, v_k&#x3D;root}$。因为后缀在字符串的末尾出现，所以$L\in Right(v_i)$，可知$v_i$在分裂树上恰好构成一条从叶子到$root$的链，不妨设${v_1, v_2, \cdots, v_k&#x3D;root}$已经按从叶子到祖先排序。<br><br/>　　添加字符$x$后，首先新建状态$np$表示$ST(Tx)$，这是一个已确定的状态（因为没有出边），可知$Right(np)&#x3D;{L+1}$。<br><br/>　　回头考虑旧自动机的$v_i$，设$Right(v_i)&#x3D;{r_1, r_2, \cdots, r_n&#x3D;L}$。如果能在后面添加字符$x$（注意现在仍是字符串$T$的自动机），即$nv&#x3D;trans(v_i, x)$存在，我们已经知道$Right(nv)&#x3D;{r_i+1|T[r_i]&#x3D;x}$；反之如果$v_i$没有$x$的出边，意味着没有$r_i$满足$T[r_i]&#x3D;x$。由于分裂树上父亲的$Right$扩大，如果$trans(v_i,x)$存在，那么$trans(v_{i+1}, x)$也存在。<br><br/>　　对于所有$trans(v,x)&#x3D;null$的$v$，而只有$Tx[r_n&#x3D;L]&#x3D;x$满足转移条件，于是添加一条边$trans(v,x)&#x3D;np$。<br><br/>　　令$v_p$是$v_1, v_2, \cdots, v_k$中第一个有$x$出边（即$trans(v_p, x)$存在）的状态。令$q&#x3D;trans(v_p, x)$，注意，现在仍是旧的自动机。我们能不能直接在$Right(q)$中直接插入$L+1$呢？答案是不能。这是因为有可能$Max(q) &gt; Max(v_p)+1$，隐含意思是$q$在”$v_p$末尾添加$x$”的基础上，由于$Right$集合的缩减，纳入了左端更多字符；如果强行在$Right(q)$中插入$L+1$，会导致$Max(q)$减小而丢失了原来的状态，破坏了自动机的正确性。</p>
+<p><img src="/./%E5%BC%BA%E8%A1%8C%E6%8F%92%E5%85%A5%E7%9A%84%E5%8F%8D%E4%BE%8B.png" alt="强行插入的反例"><br><br/>　　如图所示，$v_p$含有的最长字符串是红色5个“A”，但$trans(v_p,x)&#x3D;q$含有的最长字符串是蓝色7位字符串，如果在$Right(q)$中强行插入$L+1$即变为绿色部分，会使$Max(q)$从7减少到6从而丢失信息。<br><br/>　　如果足够幸运，$Max(q) &#x3D; Max(v_p)+1$，就没有上面的问题，我们可以在$Right(q)$中插入$L+1$，然后只要令$Pa(np)&#x3D;q$即可完成自动机更新。<em>注：理论上$Right(trans(v_p\dots v_k,x))$都要插入$L+1$，但这些状态的出边都没有发生改变，而后缀自动机实际上不记录$Right$，所以更新完成。</em><br><br/>　　如果没那么幸运，从图上可知，原状态$q$在插入末尾字符$x$后应转换两个状态，设蓝色对应的状态为$q&#39;$（沿用$q$)，绿色状态为$nq$（新建节点）。显然<br>$$<br>trans(q&#39;, *) &#x3D; trans(q, *), \<br>Pa(q&#39;)&#x3D;nq，\<br>Right(nq)&#x3D;Right(q&#39;)\cup {L+1}，\<br>Max(nq) &#x3D; Max(v_p)+1<br>$$<br>显然$Right(nq)$是真包含${L+1}$的最小集合，所以<br>$$ Pa(np)&#x3D;nq $$<br>&amp;emsp;&amp;emsp;截至目前我们新添了$np$，将$q$转化为$q&#39;,nq$，其中$np,q&#39;$都正确处理了出边和分裂树父亲。<br>那么$nq$的分裂树父亲又是谁呢？结合上图易证<br>$$ Pa(nq)&#x3D;Pa(q) $$</p>
+<p>$nq$的出边是哪一些？由于新添的最后一个字符不能带来更多的状态转移（最后一个字符后面再没有字符了），所以<br>$$ trans(nq, *) &#x3D; trans(q, *) $$<br><br/>　　最后，我们还要考虑原自动机中指向$q$的状态，和新自动机中应当指向$q&#39;$和$nq$的状态。在$v_p,\cdots,v_k$中，由于$Right$的扩大，$Right(trans(v_i,x))$也逐渐扩大（不缩小），所以只有一段连续的$v_p,\cdots,v_e(e\le k)$是指向$q$的，由于要配合在$Right$集合中插入$L+1$，这些出边要修改为<br>$$ trans(v_i,x) &#x3D; nq $$<br>其余指向$q$的状态必然由于左端有过多字符而无法指向$nq$，于是改为指向$q&#39;$，等效于不做任何修改。<br><br/>　　最后的最后，对于$v_{e+1},\cdots,v_k$，对于$nv&#x3D;trans(v_i, x)$，必然可以粗暴地令$Right(nv)$插入$L+1$，所以转移关系可以保持不变，等效于不做任何修改。</p>
 <h1 id="标准代码"><a href="#标准代码" class="headerlink" title="标准代码"></a>标准代码</h1><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cstring></span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
@@ -1899,7 +1899,7 @@ State<span class="token operator">*</span> q<span class="token punctuation">[</s
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>&emsp;&emsp;SAM思路真的异常精妙，环环相扣，巧夺天工。不幸的是优美的结论是以复杂而庞大的论证为代价的。<br><br/>　　被奉为圣经的<code>2012年noi冬令营陈立杰讲稿(SAM后缀自动机)</code>在描述构造过程的时候没有解释可以省略的操作为什么被省略，导致思路有很大残缺和跳跃。即使是本文也用了不少“显然”字眼，但比较原文已有较大改进。另外，原讲稿没有交代构造算法为什么是$O(n)$的。<del>疾风理解这ppt花了整整三天</del>如果本文对你有帮助，不妨赏疾风一支冰阔乐喝（馋.jpg）<br><br/>　　有人说SAM完全可以当做黑盒来用，我认为不然。黑盒SAM的唯一功能是判定子串是否存在，局限性很大。而SAM的实战应用代码相对裸构造有很大增改，例如要结合dfs序，平衡树，动态树等等技巧，且都是建立在完全理解后缀自动机的基础上，难度依然很大。这部分日后再填补。</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>&amp;emsp;&amp;emsp;SAM思路真的异常精妙，环环相扣，巧夺天工。不幸的是优美的结论是以复杂而庞大的论证为代价的。<br><br/>　　被奉为圣经的<code>2012年noi冬令营陈立杰讲稿(SAM后缀自动机)</code>在描述构造过程的时候没有解释可以省略的操作为什么被省略，导致思路有很大残缺和跳跃。即使是本文也用了不少“显然”字眼，但比较原文已有较大改进。另外，原讲稿没有交代构造算法为什么是$O(n)$的。<del>疾风理解这ppt花了整整三天</del>如果本文对你有帮助，不妨赏疾风一支冰阔乐喝（馋.jpg）<br><br/>　　有人说SAM完全可以当做黑盒来用，我认为不然。黑盒SAM的唯一功能是判定子串是否存在，局限性很大。而SAM的实战应用代码相对裸构造有很大增改，例如要结合dfs序，平衡树，动态树等等技巧，且都是建立在完全理解后缀自动机的基础上，难度依然很大。这部分日后再填补。</p>
 <p><em>转载请注明原作者和网址</em></p>
 ]]></content>
       <tags>
@@ -1960,7 +1960,7 @@ blacklist nvidiafb
 <h1 id="VIM"><a href="#VIM" class="headerlink" title="VIM"></a>VIM</h1><p>ubuntu默认源已经很久没更新Vim，所以加上源</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> add-apt-repository ppa:jonathonf/vim <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>再给出竞赛用~/.vimrc岂不美哉！赶紧背下来！</p>
+<p>再给出竞赛用~&#x2F;.vimrc岂不美哉！赶紧背下来！</p>
 <pre class="line-numbers language-vim" data-language="vim"><code class="language-vim"><span class="token keyword">set</span> <span class="token keyword">number</span>
 <span class="token keyword">set</span> <span class="token builtin">cindent</span>
 <span class="token keyword">set</span> <span class="token builtin">autoread</span>
@@ -1989,7 +1989,7 @@ endfunc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 <span class="token comment"># 司马笑</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h1 id="VSCode"><a href="#VSCode" class="headerlink" title="VSCode"></a>VSCode</h1><p>借助Settings Sync插件可以很快配置Code，但是各种task还需要自行备份。</p>
-<h1 id="飞机"><a href="#飞机" class="headerlink" title="飞机"></a>飞机</h1><p>第一次在~/.local下安装软件，需要注销重登陆才能正常使用。<br>某些算法需要额外的库，比如</p>
+<h1 id="飞机"><a href="#飞机" class="headerlink" title="飞机"></a>飞机</h1><p>第一次在~&#x2F;.local下安装软件，需要注销重登陆才能正常使用。<br>某些算法需要额外的库，比如</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libsodium-dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>搞定之后在Settings-&gt;...-&gt;Socks Host作调整即可。</p>
 <h1 id="美化"><a href="#美化" class="headerlink" title="美化"></a>美化</h1><p>调整控制台的配色和透明度，换壁纸等等，不多说了。</p>
@@ -2006,7 +2006,7 @@ endfunc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
   <entry>
     <title>Kotlin语法笔记</title>
     <url>/2019/10/12/kotlin/</url>
-    <content><![CDATA[<p>Since 2019/10/12</p>
+    <content><![CDATA[<p>Since 2019&#x2F;10&#x2F;12</p>
 <span id="more"></span>
 
 <h2 id="变量和函数"><a href="#变量和函数" class="headerlink" title="变量和函数"></a>变量和函数</h2><h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><ol>
@@ -2490,10 +2490,10 @@ Custom::
 <p><strong>传递性</strong><br>$$<br>a\equiv c \mod m, c\equiv b\mod m \Rightarrow a\equiv b \mod m<br>$$</p>
 <h3 id="等式的性质"><a href="#等式的性质" class="headerlink" title="等式的性质"></a>等式的性质</h3><p><strong>可加减性</strong><br>$$<br>模m意义下\<br>a\equiv b, c\equiv d \Rightarrow a+c\equiv b+d<br>$$<br><strong>可乘性</strong><br>$$<br>模m意义下\<br>a\equiv b, c\equiv d \Rightarrow ac\equiv bd<br>$$</p>
 <blockquote>
-<p>证明：设$a-b=km$, $c-d=lm$. 则$a=b+km$, $c=d+lm$, $ac=klm^2+(bl+ck)m+bd$, 显然$m|(ac-bd)$</p>
+<p>证明：设$a-b&#x3D;km$, $c-d&#x3D;lm$. 则$a&#x3D;b+km$, $c&#x3D;d+lm$, $ac&#x3D;klm^2+(bl+ck)m+bd$, 显然$m|(ac-bd)$</p>
 <p>推论：模$m$意义下,$a\equiv b \Rightarrow an\equiv bn$, $n$是自然数</p>
 </blockquote>
-<p><strong>消去律</strong>（乘法逆元的充要条件）<br>$$<br>模m意义下\<br>ac\equiv bc, gcd(c,m)=1 \Rightarrow a\equiv b<br>$$</p>
+<p><strong>消去律</strong>（乘法逆元的充要条件）<br>$$<br>模m意义下\<br>ac\equiv bc, gcd(c,m)&#x3D;1 \Rightarrow a\equiv b<br>$$</p>
 <blockquote>
 <p>证明：m|c(a-b), 因为c,m公因子为1，所以m|(a-b).</p>
 </blockquote>
@@ -2507,13 +2507,13 @@ Custom::
 <blockquote>
 <p>证明：$c|(a-b)\Rightarrow cd|d(a-b)$。</p>
 </blockquote>
-<h2 id="高级定理"><a href="#高级定理" class="headerlink" title="高级定理"></a>高级定理</h2><h3 id="贝祖定理"><a href="#贝祖定理" class="headerlink" title="贝祖定理"></a>贝祖定理</h3><p>$$<br>gcd(a,b)是a,b的线性组合。即存在整数x,y,使得xa+yb=gcd(a,b).<br>$$</p>
+<h2 id="高级定理"><a href="#高级定理" class="headerlink" title="高级定理"></a>高级定理</h2><h3 id="贝祖定理"><a href="#贝祖定理" class="headerlink" title="贝祖定理"></a>贝祖定理</h3><p>$$<br>gcd(a,b)是a,b的线性组合。即存在整数x,y,使得xa+yb&#x3D;gcd(a,b).<br>$$</p>
 <blockquote>
 <p>证明：</p>
-<p>当$a=b$时结论显然成立。</p>
-<p>当$a\neq b$时，不妨设$a\neq0$，取$d$为$a,b$的所有线性组合中最小的正整数。作带余除法$a=qd+r$，则$0\leq r&lt;d$. 若$r\neq 0$,则$r=a-qd$是比d更小的线性组合，与假设矛盾,所以$r=0$,$d$是$a$的因子;同理可得$d$是$b$的因子,故$d$是$a,b$的公因子.取$c$为$a,b$的任意公因子,对$d=(xa+yb)$提取$c$得$d=c(xa&#39;+yb&#39;)$,可知$c$是$d$的因子,所以$|c|\leq d$,故$d=gcd(a,b)$.</p>
+<p>当$a&#x3D;b$时结论显然成立。</p>
+<p>当$a\neq b$时，不妨设$a\neq0$，取$d$为$a,b$的所有线性组合中最小的正整数。作带余除法$a&#x3D;qd+r$，则$0\leq r&lt;d$. 若$r\neq 0$,则$r&#x3D;a-qd$是比d更小的线性组合，与假设矛盾,所以$r&#x3D;0$,$d$是$a$的因子;同理可得$d$是$b$的因子,故$d$是$a,b$的公因子.取$c$为$a,b$的任意公因子,对$d&#x3D;(xa+yb)$提取$c$得$d&#x3D;c(xa&#39;+yb&#39;)$,可知$c$是$d$的因子,所以$|c|\leq d$,故$d&#x3D;gcd(a,b)$.</p>
 </blockquote>
-<h3 id="中国剩余定理"><a href="#中国剩余定理" class="headerlink" title="中国剩余定理"></a>中国剩余定理</h3><p>$$<br>有线性同余方程组\<br>x\equiv a_1 \mod m_1\<br>x\equiv a_2 \mod m_2\<br>\dotsm \<br>x\equiv a_3 \mod m_n \<br>其中m_i两两互质，则在模M=m_1m_2\dotsm m_n意义下解有且只有一个。\<br>构造方法如下：<br>设M_i为\frac{M}{m_i}，在模m_i意义下M_i的逆为t_i。则\<br>x=\sum_{i=1}^{n} a_it_iM_i<br>$$</p>
+<h3 id="中国剩余定理"><a href="#中国剩余定理" class="headerlink" title="中国剩余定理"></a>中国剩余定理</h3><p>$$<br>有线性同余方程组\<br>x\equiv a_1 \mod m_1\<br>x\equiv a_2 \mod m_2\<br>\dotsm \<br>x\equiv a_3 \mod m_n \<br>其中m_i两两互质，则在模M&#x3D;m_1m_2\dotsm m_n意义下解有且只有一个。\<br>构造方法如下：<br>设M_i为\frac{M}{m_i}，在模m_i意义下M_i的逆为t_i。则\<br>x&#x3D;\sum_{i&#x3D;1}^{n} a_it_iM_i<br>$$</p>
 <blockquote>
 <p>证明：</p>
 <p>构造解$x$的正确性。对于方程$i$,$\quad t_iM_i\equiv 1 \mod m_i, M_j\equiv 0 \mod m_i$。所以解满足每一条方程式。</p>
@@ -2522,60 +2522,60 @@ Custom::
 <h1 id="欧拉函数"><a href="#欧拉函数" class="headerlink" title="欧拉函数"></a>欧拉函数</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>m的化简剩余系（又称既约剩余系，缩系），<strong>本文记为$Z_m$</strong><br>$$<br>m的剩余系中与m互质的数构成的子集<br>$$</p>
 <p>欧拉函数$\phi(n)$<br>$$<br>m的化简剩余系的元素个数，即|Z_m|<br>$$</p>
 <h2 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h2><ol>
-<li><p>对于质数$p$，$\phi(p)=p-1$ </p>
+<li><p>对于质数$p$，$\phi(p)&#x3D;p-1$ </p>
 </li>
-<li><p>对于质数$p$，$\phi(p^k)=p^{k-1}(p-1)$</p>
+<li><p>对于质数$p$，$\phi(p^k)&#x3D;p^{k-1}(p-1)$</p>
 <blockquote>
-<p>证明：在$[1,p^k]$中，不与$p^k$互质的有${p,2p,3p,\dotsc,p^k}$共$\frac{p^k}{p}=p^{k-1}$个数，则互质的有$p^k-p^{k-1}=p^{k-1}(p-1)$个数。</p>
+<p>证明：在$[1,p^k]$中，不与$p^k$互质的有${p,2p,3p,\dotsc,p^k}$共$\frac{p^k}{p}&#x3D;p^{k-1}$个数，则互质的有$p^k-p^{k-1}&#x3D;p^{k-1}(p-1)$个数。</p>
 </blockquote>
 </li>
-<li><p><strong>欧拉函数是积性函数</strong>，即对于互质的两数$m_1,m_2$，有$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$</p>
+<li><p><strong>欧拉函数是积性函数</strong>，即对于互质的两数$m_1,m_2$，有$\phi(m_1m_2)&#x3D;\phi(m_1)\phi(m_2)$</p>
 </li>
 </ol>
 <blockquote>
-<p>证明：设$a\in Z_{m_1}, b\in Z_{m_2}$，则有同余方程组<br>$$ N \equiv a \mod m_1\<br>N \equiv b \mod m_2\ $$<br>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$互质。则N在模$m_1m_2$下有且仅有唯一解$N=am_2^{-1}m_2+bm_1^{-1}m_1$，显然$N$与$m_1,m_2$都互质，故与$m_1m_2$互质，$N\in Z_{m_1m_2}$。对任意的$N\in Z_{m_1m_2}$，其对应的$(a,b)$也是唯一的。综上，映射$Z_{m_1m_2}\rightarrow Z_{m_1}\times Z_{m_2}$是满射也是单射，则此映射是双射，故$|Z_{m_1m_2}|=|Z_{m_1}||Z_{m_2}|$，即$\phi(m_1m_2)=\phi(m_1)\phi(m_2)$。</p>
+<p>证明：设$a\in Z_{m_1}, b\in Z_{m_2}$，则有同余方程组<br>$$ N \equiv a \mod m_1\<br>N \equiv b \mod m_2\ $$<br>其中$a,m_1$互质，$b,m_2$互质，$m_1,m_2$互质。则N在模$m_1m_2$下有且仅有唯一解$N&#x3D;am_2^{-1}m_2+bm_1^{-1}m_1$，显然$N$与$m_1,m_2$都互质，故与$m_1m_2$互质，$N\in Z_{m_1m_2}$。对任意的$N\in Z_{m_1m_2}$，其对应的$(a,b)$也是唯一的。综上，映射$Z_{m_1m_2}\rightarrow Z_{m_1}\times Z_{m_2}$是满射也是单射，则此映射是双射，故$|Z_{m_1m_2}|&#x3D;|Z_{m_1}||Z_{m_2}|$，即$\phi(m_1m_2)&#x3D;\phi(m_1)\phi(m_2)$。</p>
 </blockquote>
 <ol start="4">
-<li>对于质数$p$，且$p|a$，则$\phi(ap)=\phi(a)p$</li>
+<li>对于质数$p$，且$p|a$，则$\phi(ap)&#x3D;\phi(a)p$</li>
 </ol>
 <blockquote>
-<p>证明：提取$a$的所有p因子得$ap=a&#39;p^xp=a&#39;p^{x+1}$，由积性函数得<br>$$ \begin{aligned}<br>  \phi(ap)=&amp;\phi(a&#39;)\phi(p^{x+1}) \<br>  =&amp;\phi(a&#39;)p^x(p-1)\<br>  =&amp;\phi(a&#39;)p^{x-1}(p-1)p\<br>  =&amp;\phi(a&#39;)\phi(p^x)p\<br>  =&amp;\phi(a&#39;p^x)p\<br>  =&amp;\phi(a)p<br>\end{aligned} $$</p>
+<p>证明：提取$a$的所有p因子得$ap&#x3D;a&#39;p^xp&#x3D;a&#39;p^{x+1}$，由积性函数得<br>$$ \begin{aligned}<br>  \phi(ap)&#x3D;&amp;\phi(a&#39;)\phi(p^{x+1}) \<br>  &#x3D;&amp;\phi(a&#39;)p^x(p-1)\<br>  &#x3D;&amp;\phi(a&#39;)p^{x-1}(p-1)p\<br>  &#x3D;&amp;\phi(a&#39;)\phi(p^x)p\<br>  &#x3D;&amp;\phi(a&#39;p^x)p\<br>  &#x3D;&amp;\phi(a)p<br>\end{aligned} $$</p>
 </blockquote>
 <ol start="5">
-<li>欧拉函数通项<br>$$<br>令{p_1,p_2,\dotsc,p_m}为n的所有质因子\<br>\phi(n)=n\prod_{i=1}^m(1-\frac{1}{p_i})<br>$$</li>
+<li>欧拉函数通项<br>$$<br>令{p_1,p_2,\dotsc,p_m}为n的所有质因子\<br>\phi(n)&#x3D;n\prod_{i&#x3D;1}^m(1-\frac{1}{p_i})<br>$$</li>
 </ol>
 <blockquote>
-<p>证明：<br>$$\begin{aligned}<br>  设n=&amp;\prod_{i=1}^mp_i^{x_i}\<br>  由积性&amp;函数得\<br>  \phi(n)=&amp;\prod_{i=1}^{m}\phi(p_i^{x_i})\<br>  =&amp;\prod_{i=1}^{m}p_i^{x_i}(1-\frac{1}{p_i})\<br>  =&amp;n\prod_{i=1}^m(1-\frac{1}{p_i})<br>  \end{aligned}<br>$$</p>
+<p>证明：<br>$$\begin{aligned}<br>  设n&#x3D;&amp;\prod_{i&#x3D;1}^mp_i^{x_i}\<br>  由积性&amp;函数得\<br>  \phi(n)&#x3D;&amp;\prod_{i&#x3D;1}^{m}\phi(p_i^{x_i})\<br>  &#x3D;&amp;\prod_{i&#x3D;1}^{m}p_i^{x_i}(1-\frac{1}{p_i})\<br>  &#x3D;&amp;n\prod_{i&#x3D;1}^m(1-\frac{1}{p_i})<br>  \end{aligned}<br>$$</p>
 </blockquote>
 <ol start="6">
 <li>$\phi(n)(n&gt;2)$是偶数</li>
 </ol>
 <blockquote>
-<p>证明：由欧几里得算法可知$\forall i \in [1,n]$且$i$与n互质，则$(n-i)$也与$n$互质。并且$i \neq (n-i)$，这是因为若相等，有$2i=n$，此时$i(i&gt;1)$不与$n$互质。所以与$n$互质的数成对出现，$\phi(n)(n&gt;2)$是偶数。</p>
+<p>证明：由欧几里得算法可知$\forall i \in [1,n]$且$i$与n互质，则$(n-i)$也与$n$互质。并且$i \neq (n-i)$，这是因为若相等，有$2i&#x3D;n$，此时$i(i&gt;1)$不与$n$互质。所以与$n$互质的数成对出现，$\phi(n)(n&gt;2)$是偶数。</p>
 </blockquote>
 <ol start="7">
-<li><strong>质因子的次数不超过欧拉函数值</strong><br>$$<br>设n=p^xs，其中gcd(p,s)=1，则x\leq \phi(n)<br>$$</li>
+<li><strong>质因子的次数不超过欧拉函数值</strong><br>$$<br>设n&#x3D;p^xs，其中gcd(p,s)&#x3D;1，则x\leq \phi(n)<br>$$</li>
 </ol>
 <blockquote>
-<p>证明：<br>$$<br>\begin{aligned}<br>\phi(n)=&amp;\phi(p^x)\phi(s) \<br>\geq&amp; \phi(p^x) = p^{x-1}(p-1)<br>\end{aligned}\<br>下面证明x\leq p^{x-1}(p-1)<br>$$<br>取$p=2$，验证得当$x=1,2,3$时不等式都成立。由归纳法可知$p=2$时不等式成立。取$p&gt;2$，等式左边不变，右边变大，不等式仍成立。</p>
+<p>证明：<br>$$<br>\begin{aligned}<br>\phi(n)&#x3D;&amp;\phi(p^x)\phi(s) \<br>\geq&amp; \phi(p^x) &#x3D; p^{x-1}(p-1)<br>\end{aligned}\<br>下面证明x\leq p^{x-1}(p-1)<br>$$<br>取$p&#x3D;2$，验证得当$x&#x3D;1,2,3$时不等式都成立。由归纳法可知$p&#x3D;2$时不等式成立。取$p&gt;2$，等式左边不变，右边变大，不等式仍成立。</p>
 </blockquote>
 <ol start="8">
-<li>$\sum\limits_{d|n}\phi(d) = n$</li>
+<li>$\sum\limits_{d|n}\phi(d) &#x3D; n$</li>
 </ol>
 <blockquote>
-<p>证明：$\forall k \in [1,n]$，对应有一个$d=gcd(k,n)$。所有可能的$d$取遍了$n$的所有因子。对$d|n$，考虑其对应的$k$，不妨设$k=k_1d,n=k_2d，且gcd(k_1,k_2)=1,那么k_1\leq k_2$。显然$k_2=\frac{n}{d}$是固定的，那么可能的$k_1$的取值有$\phi(k_2)=\phi(\frac{n}{d})$种。所以<br>$$<br>n=\sum\limits_{d|n}\phi(\frac{n}{d})=\sum\limits_{d|n}\phi(d)<br>$$</p>
+<p>证明：$\forall k \in [1,n]$，对应有一个$d&#x3D;gcd(k,n)$。所有可能的$d$取遍了$n$的所有因子。对$d|n$，考虑其对应的$k$，不妨设$k&#x3D;k_1d,n&#x3D;k_2d，且gcd(k_1,k_2)&#x3D;1,那么k_1\leq k_2$。显然$k_2&#x3D;\frac{n}{d}$是固定的，那么可能的$k_1$的取值有$\phi(k_2)&#x3D;\phi(\frac{n}{d})$种。所以<br>$$<br>n&#x3D;\sum\limits_{d|n}\phi(\frac{n}{d})&#x3D;\sum\limits_{d|n}\phi(d)<br>$$</p>
 </blockquote>
 <h2 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h2><h3 id="欧拉定理"><a href="#欧拉定理" class="headerlink" title="欧拉定理"></a>欧拉定理</h3><p>$$<br>对于互质的两个数a,n有\<br>a^{\phi(n)} \equiv 1 \mod n<br>$$</p>
 <blockquote>
-<p>证明：设$Z_n={x_1,x_2,\dotsc,x_{\phi(n)}}$，因$a,n互质$，则$ax_i \mod n \in Z_n$；而对$x_i\neq x_j$，由消去律有$ax_i\neq ax_j \mod n$。故模n意义下$Z_n={ax_1,ax_2,\dotsc,ax_{\phi(n)}}$。</p>
-<p>故<br>$$<br>\prod_{i=1}^{\phi(n)}x_i \equiv \prod_{i=1}^{\phi(n)}ax_i \mod n\<br>$$<br>由消去律得<br>$$<br>a^{\phi(n)} \equiv 1 \mod n<br>$$</p>
+<p>证明：设$Z_n&#x3D;{x_1,x_2,\dotsc,x_{\phi(n)}}$，因$a,n互质$，则$ax_i \mod n \in Z_n$；而对$x_i\neq x_j$，由消去律有$ax_i\neq ax_j \mod n$。故模n意义下$Z_n&#x3D;{ax_1,ax_2,\dotsc,ax_{\phi(n)}}$。</p>
+<p>故<br>$$<br>\prod_{i&#x3D;1}^{\phi(n)}x_i \equiv \prod_{i&#x3D;1}^{\phi(n)}ax_i \mod n\<br>$$<br>由消去律得<br>$$<br>a^{\phi(n)} \equiv 1 \mod n<br>$$</p>
 <p>推论：<strong>费马小定理</strong>。</p>
 </blockquote>
 <h3 id="扩展欧拉定理（欧拉降幂）"><a href="#扩展欧拉定理（欧拉降幂）" class="headerlink" title="扩展欧拉定理（欧拉降幂）"></a>扩展欧拉定理（欧拉降幂）</h3><p>$$<br>模m意义下\<br>a^c\equiv<br>\begin{cases}<br>    a^{c \mod \phi(m)}, \qquad &amp;a,m互质\<br>    a^c, \qquad &amp;a,m不互质，c&lt;\phi(m)\<br>    a^{c \mod \phi(m)+\phi(m)}, \qquad &amp;a,m不互质，c\geq \phi(m)<br>\end{cases}<br>$$</p>
 <blockquote>
 <p>证明：$当a,m互质时$，由欧拉定理知$a^{\phi(m)}\equiv 1 \mod m$，定理显然成立。</p>
 <p>$当a,m不互质，c&lt;\phi(m)时$，定理显然成立。</p>
-<p>$当 a,m不互质，c\geq \phi(m)时$，取$a$的任意质因子$p$，即$a=p^xs且gcd(p,s)=1$，由欧拉定理知<br>$$p^{\phi(s)}\equiv 1 \mod s$$<br>由积性函数知$\phi(s)|\phi(m)$，故<br>$$p^{\phi(m)}\equiv 1 \mod s$$<br>同余方程同乘$p^x$(<strong>换模的另一种途径</strong>)得<br>$$<br>p^{\phi(m)+x} \equiv p^x \mod m<br>$$<br>由<strong>欧拉函数的性质7</strong>知$x\leq \phi(m)$，已知$\phi(m)\leq c$，所以<br>$$<br>x \leq \phi(m) \leq c\<br>p^c\equiv p^{x+(c-x)}\equiv p^{\phi(m)+x+(c-x)}\equiv p^{\phi(m)+c} \mod m<br>$$<br>由$c(c\geq \phi(m))$的任意性和数学归纳法得<br>$$<br>p^c\equiv p^{c \mod \phi(m) + \phi(m)} \mod m \<br>$$<br>对$p$的幂$p^k$，易得<br>$$<br>(p^k)^c\equiv p^{kc}\equiv p^{kc \mod \phi(m)+\phi(m)}\<br>\equiv p^{kc\mod \phi(m)+k\phi(m)}\equiv (p^k)^{c \mod \phi(m)+\phi(m)} \mod m<br>$$<br>对$a=\prod\limits_{i=1}^np_i^{x_i}$，得<br>$$ \begin{aligned}<br>  a^c\equiv &amp; \prod\limits_{i=1}^n(p_i^{x_i})^c \<br>  \equiv &amp; \prod\limits_{i=1}^n(p_i^{x_i})^{c \mod \phi(m)+\phi(m)} \<br>  \equiv &amp; a^{c \mod \phi(m) + \phi(m)} \mod m<br>\end{aligned}<br>$$</p>
+<p>$当 a,m不互质，c\geq \phi(m)时$，取$a$的任意质因子$p$，即$a&#x3D;p^xs且gcd(p,s)&#x3D;1$，由欧拉定理知<br>$$p^{\phi(s)}\equiv 1 \mod s$$<br>由积性函数知$\phi(s)|\phi(m)$，故<br>$$p^{\phi(m)}\equiv 1 \mod s$$<br>同余方程同乘$p^x$(<strong>换模的另一种途径</strong>)得<br>$$<br>p^{\phi(m)+x} \equiv p^x \mod m<br>$$<br>由<strong>欧拉函数的性质7</strong>知$x\leq \phi(m)$，已知$\phi(m)\leq c$，所以<br>$$<br>x \leq \phi(m) \leq c\<br>p^c\equiv p^{x+(c-x)}\equiv p^{\phi(m)+x+(c-x)}\equiv p^{\phi(m)+c} \mod m<br>$$<br>由$c(c\geq \phi(m))$的任意性和数学归纳法得<br>$$<br>p^c\equiv p^{c \mod \phi(m) + \phi(m)} \mod m \<br>$$<br>对$p$的幂$p^k$，易得<br>$$<br>(p^k)^c\equiv p^{kc}\equiv p^{kc \mod \phi(m)+\phi(m)}\<br>\equiv p^{kc\mod \phi(m)+k\phi(m)}\equiv (p^k)^{c \mod \phi(m)+\phi(m)} \mod m<br>$$<br>对$a&#x3D;\prod\limits_{i&#x3D;1}^np_i^{x_i}$，得<br>$$ \begin{aligned}<br>  a^c\equiv &amp; \prod\limits_{i&#x3D;1}^n(p_i^{x_i})^c \<br>  \equiv &amp; \prod\limits_{i&#x3D;1}^n(p_i^{x_i})^{c \mod \phi(m)+\phi(m)} \<br>  \equiv &amp; a^{c \mod \phi(m) + \phi(m)} \mod m<br>\end{aligned}<br>$$</p>
 </blockquote>
 <hr>
 <h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="线性筛质数"><a href="#线性筛质数" class="headerlink" title="线性筛质数"></a>线性筛质数</h2><p>求$[1,n]$内的所有素数。</p>
@@ -2597,7 +2597,7 @@ Custom::
 <h2 id="线性筛欧拉函数"><a href="#线性筛欧拉函数" class="headerlink" title="线性筛欧拉函数"></a>线性筛欧拉函数</h2><p>求$[1,n]$内所有欧拉函数值</p>
 <ol>
 <li>算法核心是<strong>积性函数</strong>和<strong>欧拉函数性质4</strong></li>
-<li>在线性筛的同时完成欧拉函数计算。当前判断完$i$是否质数，若是合数，则函数值在前面计算过了；若是质数，直接赋值$\phi(i)=i-1$。枚举已知质数$p_j$时，若$p_j$不是$i$的因子，由积性函数可知$\phi(i\cdot p_j)=\phi(i)\cdot \phi(p_j)=\phi(i)\cdot (p_j-1)$ ; 若$p_j$是$i$的因子，由<strong>性质4</strong>得$\phi(i\cdot p_j)=\phi(i)\cdot p_j$，然后break。<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void getPhi(int n) &#123;
+<li>在线性筛的同时完成欧拉函数计算。当前判断完$i$是否质数，若是合数，则函数值在前面计算过了；若是质数，直接赋值$\phi(i)&#x3D;i-1$。枚举已知质数$p_j$时，若$p_j$不是$i$的因子，由积性函数可知$\phi(i\cdot p_j)&#x3D;\phi(i)\cdot \phi(p_j)&#x3D;\phi(i)\cdot (p_j-1)$ ; 若$p_j$是$i$的因子，由<strong>性质4</strong>得$\phi(i\cdot p_j)&#x3D;\phi(i)\cdot p_j$，然后break。<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void getPhi(int n) &#123;
     &#x2F;&#x2F; memset(phi, 0, sizeof(phi));
     pcnt &#x3D; 0;
     phi[1] &#x3D; 1;
@@ -2620,17 +2620,17 @@ Custom::
 <h2 id="欧几里得算法（辗转相除法）"><a href="#欧几里得算法（辗转相除法）" class="headerlink" title="欧几里得算法（辗转相除法）"></a><strong>欧几里得算法</strong>（辗转相除法）</h2><p>求$gcd(a,b)$。</p>
 <ol>
 <li>$gcd(a, 0)$的结果显然等于$a$。</li>
-<li>当$a，b$全不为零，则$gcd(a,b) = gcd(b, a \mod b )$使问题规模减小。<blockquote>
-<p>证明：令$c=a\mod b$,则$a=kb+c$.设$r$是$a,b$的公约数，则$r|a-kb$即$r|c$.设$r$是$b,c$的公约数,则$r|kb+c$即$r|a$.可见$a,b$的公约数和$b,a\mod b$的公约数完全相同，则最大公约数也必然相同。</p>
+<li>当$a，b$全不为零，则$gcd(a,b) &#x3D; gcd(b, a \mod b )$使问题规模减小。<blockquote>
+<p>证明：令$c&#x3D;a\mod b$,则$a&#x3D;kb+c$.设$r$是$a,b$的公约数，则$r|a-kb$即$r|c$.设$r$是$b,c$的公约数,则$r|kb+c$即$r|a$.可见$a,b$的公约数和$b,a\mod b$的公约数完全相同，则最大公约数也必然相同。</p>
 <p>应用：从$1$到$n(n&gt;2)$中与$n$互质的数成对出现，每一对和为$n$</p>
 </blockquote>
 </li>
 </ol>
-<h2 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a><strong>扩展欧几里得算法</strong></h2><p>求$ax+by=gcd(a,b)$的一组整数解$x,y$。</p>
+<h2 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a><strong>扩展欧几里得算法</strong></h2><p>求$ax+by&#x3D;gcd(a,b)$的一组整数解$x,y$。</p>
 <ol>
-<li>直接由<strong>贝祖定理</strong>可知整数解一定存在。（贝祖定理：存在整数$s，t$使得$sa+tb=gcd(a,b)$）</li>
-<li>由辗转相除法知$bx&#39;+(a%b)y&#39;=gcd(b,a%b)=gcd(a,b)$的解也存在。由整数除法得<br>$$\begin{aligned}<br> bx&#39;+(a%b)y&#39;=&amp;bx&#39;+(a-\frac{a}{b}b)y&#39;\<br> =&amp;b(x&#39;-\frac{a}{b}y&#39;)+ay&#39;=gcd(a,b)<br>\end{aligned}<br>$$</li>
-<li>递归进行求解，直到$b=0$，显然有解$1a+0b=gcd(a,b)$，令$x=1, y=0$，回溯，得解$x=y&#39;, y=x&#39;-\frac{a}{b}y&#39;$</li>
+<li>直接由<strong>贝祖定理</strong>可知整数解一定存在。（贝祖定理：存在整数$s，t$使得$sa+tb&#x3D;gcd(a,b)$）</li>
+<li>由辗转相除法知$bx&#39;+(a%b)y&#39;&#x3D;gcd(b,a%b)&#x3D;gcd(a,b)$的解也存在。由整数除法得<br>$$\begin{aligned}<br> bx&#39;+(a%b)y&#39;&#x3D;&amp;bx&#39;+(a-\frac{a}{b}b)y&#39;\<br> &#x3D;&amp;b(x&#39;-\frac{a}{b}y&#39;)+ay&#39;&#x3D;gcd(a,b)<br>\end{aligned}<br>$$</li>
+<li>递归进行求解，直到$b&#x3D;0$，显然有解$1a+0b&#x3D;gcd(a,b)$，令$x&#x3D;1, y&#x3D;0$，回溯，得解$x&#x3D;y&#39;, y&#x3D;x&#39;-\frac{a}{b}y&#39;$</li>
 <li>实际写代码时用引用，减少临时变量。<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void exgcd(int a, int b, int &amp;d, int &amp;x, int &amp;y) &#123;
     if (b &#x3D;&#x3D; 0) &#123;
         x &#x3D; 1; y &#x3D; 0;
@@ -2641,19 +2641,19 @@ Custom::
     y -&#x3D; a &#x2F; b * x;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ol>
-<h2 id="类欧几里得算法"><a href="#类欧几里得算法" class="headerlink" title="类欧几里得算法"></a><strong>类欧几里得算法</strong></h2><p>求等差数列对每一项做整数除法的和，即<br>$$<br>lgcd(a, b, c, n) = \sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor<br>$$</p>
+<h2 id="类欧几里得算法"><a href="#类欧几里得算法" class="headerlink" title="类欧几里得算法"></a><strong>类欧几里得算法</strong></h2><p>求等差数列对每一项做整数除法的和，即<br>$$<br>lgcd(a, b, c, n) &#x3D; \sum_{i&#x3D;0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor<br>$$</p>
 <ol>
 <li><p>首先标准化$a,b$，使满足$a\geq 0, b\geq 0$，在答案中预先减去补上的$c$即可。</p>
 </li>
-<li><p>把$a,b$中含$c$的贡献拆出来，使问题规模变小。答案加上$n\lfloor \frac{b}{c}\rfloor + \frac{(n-1)n}{2}\lfloor \frac{a}{c}\rfloor$。即<br>$$<br>\sum_{i=0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor = \sum_{i=0}^{n-1}\lfloor \frac{(a%c)i+(b%c)}{c}\rfloor + n\lfloor \frac{b}{c}\rfloor + \frac{(n-1)n}{2}\lfloor \frac{a}{c}\rfloor<br>$$<br>现在可以令$a&#39;=a%c,\quad b&#39;=b%c$。</p>
+<li><p>把$a,b$中含$c$的贡献拆出来，使问题规模变小。答案加上$n\lfloor \frac{b}{c}\rfloor + \frac{(n-1)n}{2}\lfloor \frac{a}{c}\rfloor$。即<br>$$<br>\sum_{i&#x3D;0}^{n-1}\lfloor \frac{ai+b}{c}\rfloor &#x3D; \sum_{i&#x3D;0}^{n-1}\lfloor \frac{(a%c)i+(b%c)}{c}\rfloor + n\lfloor \frac{b}{c}\rfloor + \frac{(n-1)n}{2}\lfloor \frac{a}{c}\rfloor<br>$$<br>现在可以令$a&#39;&#x3D;a%c,\quad b&#39;&#x3D;b%c$。</p>
 </li>
-<li><p>计算$\sum\limits_{i=0}^{n-1}\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor$，得到的商肯定介于$[0,\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor]$，设某次除法得到的商是$x$，可以认为$[1,x]$中每一个数对答案贡献了$1$，考虑每个数的总贡献，则<br>$$<br>\sum\limits_{i=0}^{n-1}\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor = \sum_{j=1}^{\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor} \sum_{i=0}^{n-1} [\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor \geq j]<br>$$</p>
+<li><p>计算$\sum\limits_{i&#x3D;0}^{n-1}\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor$，得到的商肯定介于$[0,\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor]$，设某次除法得到的商是$x$，可以认为$[1,x]$中每一个数对答案贡献了$1$，考虑每个数的总贡献，则<br>$$<br>\sum\limits_{i&#x3D;0}^{n-1}\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor &#x3D; \sum_{j&#x3D;1}^{\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor} \sum_{i&#x3D;0}^{n-1} [\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor \geq j]<br>$$</p>
 </li>
 <li><p>接下来变换不等式$\lfloor \frac{a&#39;i+b&#39;}{c}\rfloor \geq j$。 取整符号不影响大于等于号的判断，可直接去掉；可直接通分；移项得$a&#39;i\geq jc-b&#39;$。整数除法的同除会影响大于等于号的判断，但不影响大于号，于是右边减一，两边同除$a&#39;$得$i&gt;\frac{jc-b&#39;-1}{a&#39;}$。</p>
 </li>
-<li><p>为了方便统计合法的$i$，也为了转化形式满足递归，利用补集统计数量。对于固定的$j$，<br>$$ \begin{aligned}<br> \sum\limits_{i=0}^{n-1} [i&gt;\frac{jc-b&#39;-1}{a&#39;}] =&amp; n-\sum\limits_{i=0}^{n-1} [i\leq\frac{jc-b&#39;-1}{a&#39;}] \<br> =&amp; n-(\lfloor\frac{jc-b&#39;-1}{a&#39;}\rfloor+1)<br>\end{aligned}<br>$$</p>
+<li><p>为了方便统计合法的$i$，也为了转化形式满足递归，利用补集统计数量。对于固定的$j$，<br>$$ \begin{aligned}<br> \sum\limits_{i&#x3D;0}^{n-1} [i&gt;\frac{jc-b&#39;-1}{a&#39;}] &#x3D;&amp; n-\sum\limits_{i&#x3D;0}^{n-1} [i\leq\frac{jc-b&#39;-1}{a&#39;}] \<br> &#x3D;&amp; n-(\lfloor\frac{jc-b&#39;-1}{a&#39;}\rfloor+1)<br>\end{aligned}<br>$$</p>
 </li>
-<li><p>套上前一层Sigma，得到递归形式（<strong>注意j变成从0开始</strong>）<br>$$<br>令m={\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor} \<br>\sum_{j=0}^{m-1}[n-(\lfloor\frac{(j+1)c-b&#39;-1}{a&#39;}\rfloor+1)] = (n-1)m-lgcd(c, c-b&#39;-1,a&#39;,m)<br>$$</p>
+<li><p>套上前一层Sigma，得到递归形式（<strong>注意j变成从0开始</strong>）<br>$$<br>令m&#x3D;{\lfloor\frac{a&#39;(n-1)+b&#39;}{c}\rfloor} \<br>\sum_{j&#x3D;0}^{m-1}[n-(\lfloor\frac{(j+1)c-b&#39;-1}{a&#39;}\rfloor+1)] &#x3D; (n-1)m-lgcd(c, c-b&#39;-1,a&#39;,m)<br>$$</p>
 </li>
 </ol>
 <h3 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h3><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// Sum&#123;(ai+b)/c&#125; for i=0..n-1</span>
@@ -2667,7 +2667,7 @@ LL <span class="token function">lgcd</span><span class="token punctuation">(</sp
 
 <h1 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
 <li>质因数分解时，质因数要么小于等于$\sqrt{n}$，要么等于$n$。不要漏掉等于$n$的情况。</li>
-<li>1e8+7以内的质数<br>有5761456个，约为6e6，约为范围的1/15。</li>
+<li>1e8+7以内的质数<br>有5761456个，约为6e6，约为范围的1&#x2F;15。</li>
 </ol>
 <p><strong>范围越大，质数的占比越小</strong></p>
 ]]></content>
@@ -2693,7 +2693,7 @@ LL <span class="token function">lgcd</span><span class="token punctuation">(</sp
 </ol>
 <h3 id="后手必胜的必要条件"><a href="#后手必胜的必要条件" class="headerlink" title="后手必胜的必要条件"></a>后手必胜的必要条件</h3><p>如果后手有必胜策略，则无论先手怎么取，都会存在后继可导致必败状态（即先手的所有后继都是必胜）。若先手能直接到达必败状态，则后手必输。</p>
 <p>如Chomp!游戏（m*n棋盘，每次取某个点的所有右上格子，取到最后一个输）中，只要格子大于1，先手取最右上的一个格子，若后手能导致必败状态，则开局先手模仿后手的策略即可。故格子大于1时后手必败。</p>
-<h2 id="SG函数"><a href="#SG函数" class="headerlink" title="SG函数"></a>SG函数</h2><p>设有状态x，令SG(x) = mex(S), S为x的所有后继状态的SG值的集合，mex(S)为不在集合中的最小非负整数。对于没有后继的状态，SG=0，因为S是空集。其余的SG值可由递推得到。<br>当且仅当SG(x) == 0, x是必败状态。</p>
+<h2 id="SG函数"><a href="#SG函数" class="headerlink" title="SG函数"></a>SG函数</h2><p>设有状态x，令SG(x) &#x3D; mex(S), S为x的所有后继状态的SG值的集合，mex(S)为不在集合中的最小非负整数。对于没有后继的状态，SG&#x3D;0，因为S是空集。其余的SG值可由递推得到。<br>当且仅当SG(x) &#x3D;&#x3D; 0, x是必败状态。</p>
 <h2 id="SG定理"><a href="#SG定理" class="headerlink" title="SG定理"></a>SG定理</h2><p>一个总游戏的SG值等于子游戏的SG值的Nim和（异或和）</p>
 <h3 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h3><ol>
 <li>证明P状态的所有后继都是N状态<ol>
@@ -2706,7 +2706,7 @@ LL <span class="token function">lgcd</span><span class="token punctuation">(</sp
 </li>
 </ol>
 <h3 id="Nim游戏"><a href="#Nim游戏" class="headerlink" title="Nim游戏"></a>Nim游戏</h3><p>有n堆火柴，每堆有ai根火柴。每次选择一堆取走任意根，不能取的游戏者输。</p>
-<p>考虑只有一堆的情况，设剩余火柴数为x。若x==0，没有后继状态，SG(0) = 0; 若x==1，所有后继状态的SG集合{0}，则SG(1) = 1; 若x==2，对应的S=={0，1}，SG(2) = 2; 归纳法证明SG(x) = x;</p>
+<p>考虑只有一堆的情况，设剩余火柴数为x。若x&#x3D;&#x3D;0，没有后继状态，SG(0) &#x3D; 0; 若x&#x3D;&#x3D;1，所有后继状态的SG集合{0}，则SG(1) &#x3D; 1; 若x&#x3D;&#x3D;2，对应的S&#x3D;&#x3D;{0，1}，SG(2) &#x3D; 2; 归纳法证明SG(x) &#x3D; x;</p>
 <p>应用SG定理，对于多堆游戏，总游戏SG值为所有子游戏的SG值的Nim和，即所有堆火柴数的异或和。当且仅当异或和为0，先手必败。</p>
 <h2 id="组合游戏题解法"><a href="#组合游戏题解法" class="headerlink" title="组合游戏题解法"></a>组合游戏题解法</h2><p>小范围内暴力计算子游戏SG值，找规律找到SG公式。</p>
 <h1 id="博弈搜索"><a href="#博弈搜索" class="headerlink" title="博弈搜索"></a>博弈搜索</h1><p>CF ROUND 460 DIV2 F</p>
@@ -2720,8 +2720,8 @@ LL <span class="token function">lgcd</span><span class="token punctuation">(</sp
 </ol>
 </li>
 <li>威佐夫博弈：两堆石子，取任意个时可对两堆同时操作<ol>
-<li>记结论(x0=0, y0=0),(xk=mex{xi,yi}, yk=xk+k)必败</li>
-<li>$a_k=\frac{\sqrt{5}+1}{2}k$</li>
+<li>记结论(x0&#x3D;0, y0&#x3D;0),(xk&#x3D;mex{xi,yi}, yk&#x3D;xk+k)必败</li>
+<li>$a_k&#x3D;\frac{\sqrt{5}+1}{2}k$</li>
 <li>扩展：三堆，可同时操作两堆<ol>
 <li>必败态少，跳过必胜态</li>
 </ol>
@@ -2735,7 +2735,7 @@ LL <span class="token function">lgcd</span><span class="token punctuation">(</sp
 </ol>
 </li>
 <li>SJ定理（泛化反NIM游戏）先手必胜条件<ol>
-<li>每个子游戏SG值&lt;=1，SG异或和为零</li>
+<li>每个子游戏SG值&lt;&#x3D;1，SG异或和为零</li>
 <li>存在一个子游戏SG&gt;1，SG异或和不为零</li>
 </ol>
 </li>
@@ -2753,10 +2753,10 @@ LL <span class="token function">lgcd</span><span class="token punctuation">(</sp
 <li>齐肯多夫定理：任何正整数可以唯一的表示为若干个不连续的斐波那契数之和</li>
 <li>动态减法游戏（一倍，两倍，k倍）</li>
 <li>翻硬币，最右必须由正变反<ol>
-<li> 多种扩展</li>
-<li> 打表吧</li>
+<li>多种扩展</li>
+<li>打表吧</li>
 <li>tartan定理<ol>
-<li> 二维硬币分解成一维硬币的积，logn2求nim积。这种积有结合律，可扩展到更高维</li>
+<li>二维硬币分解成一维硬币的积，logn2求nim积。这种积有结合律，可扩展到更高维</li>
 <li></li>
 </ol>
 </li>
@@ -2876,8 +2876,8 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>迭代器begin(), end(), rbegin(), rend().</li>
 <li>容量empty(), size();</li>
 <li>插入<ul>
-<li> <code>pair&lt;iterator, bool&gt; insert(const value_type&amp; val);</code> 同时有非const的右值引用版本。</li>
-<li> 返回的pair包括一个指向被插入值的迭代器，bool指明是否真的发生了插入操作。（如果元素被来就存在，就为false）</li>
+<li><code>pair&lt;iterator, bool&gt; insert(const value_type&amp; val);</code> 同时有非const的右值引用版本。</li>
+<li>返回的pair包括一个指向被插入值的迭代器，bool指明是否真的发生了插入操作。（如果元素被来就存在，就为false）</li>
 </ul>
 </li>
 <li>删除<ul>
@@ -3005,22 +3005,22 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <span id="more"></span>
 
 <h1 id="均值不等式"><a href="#均值不等式" class="headerlink" title="均值不等式"></a>均值不等式</h1><h2 id="四种均值"><a href="#四种均值" class="headerlink" title="四种均值"></a>四种均值</h2><ol>
-<li>平方平均值 $Q_n=\sqrt{ \frac{\sum_{i=1}^n x_i^2}{n} }$</li>
-<li>算术平均值 $A_n=\frac{\sum_{i=1}^n x_i}{n}$</li>
-<li>几何平均值 $G_n=\sqrt[n]{x_1 x_2 \cdots x_n}$</li>
-<li>调和平均值 $H_n=\frac{1}{\sum_{i=1}^n {\frac{1}{x_i}}}$</li>
+<li>平方平均值 $Q_n&#x3D;\sqrt{ \frac{\sum_{i&#x3D;1}^n x_i^2}{n} }$</li>
+<li>算术平均值 $A_n&#x3D;\frac{\sum_{i&#x3D;1}^n x_i}{n}$</li>
+<li>几何平均值 $G_n&#x3D;\sqrt[n]{x_1 x_2 \cdots x_n}$</li>
+<li>调和平均值 $H_n&#x3D;\frac{1}{\sum_{i&#x3D;1}^n {\frac{1}{x_i}}}$</li>
 </ol>
 <h2 id="四种均值的大小关系"><a href="#四种均值的大小关系" class="headerlink" title="四种均值的大小关系"></a>四种均值的大小关系</h2><p>$$ Q_n \geq A_n \geq G_n \geq H_n $$</p>
 <h3 id="证明-G-n-leq-A-n"><a href="#证明-G-n-leq-A-n" class="headerlink" title="证明$G_n \leq A_n$"></a>证明$G_n \leq A_n$</h3><ul>
-<li><p>分析: 采用数学归纳法. 易证$n=2$的情况. 令$a=A_n$. 要从n-1推出n, 先让开n次方转为幂次. 左端设法变为$a_1a_2\cdots a_n$, 右端设法变为$a^{n-1}\times a$. 原右边是n-1个数求均, 要变成n个数求均, 需要修改第一项以加入$a_n$. 令$\frac{a_2+\cdots +a_{n-1}+x}{n-1}=a$, 左边只能平分n-1份, 少了一份恰为a, 则$x=a_1+a_n-a$. 原左边对应地要将$a_1$替换成$a_1+a_n-a$, 且最后补乘了$a$, 所以应该建立关系$a_1a_n$~$a(a_1+a_n-a)$. 从不等式$(a-a_1)(a-a_n)\leq 0$可以获得这个关系.</p>
+<li><p>分析: 采用数学归纳法. 易证$n&#x3D;2$的情况. 令$a&#x3D;A_n$. 要从n-1推出n, 先让开n次方转为幂次. 左端设法变为$a_1a_2\cdots a_n$, 右端设法变为$a^{n-1}\times a$. 原右边是n-1个数求均, 要变成n个数求均, 需要修改第一项以加入$a_n$. 令$\frac{a_2+\cdots +a_{n-1}+x}{n-1}&#x3D;a$, 左边只能平分n-1份, 少了一份恰为a, 则$x&#x3D;a_1+a_n-a$. 原左边对应地要将$a_1$替换成$a_1+a_n-a$, 且最后补乘了$a$, 所以应该建立关系$a_1a_n$~$a(a_1+a_n-a)$. 从不等式$(a-a_1)(a-a_n)\leq 0$可以获得这个关系.</p>
 </li>
-<li><p>证明:<br>  不妨设$a_1, a_2$为所有项中的最小,最大值.  $a=\frac{a_1+\cdots +a_n}{n}$, 则$a_1\leq a\leq a_n$.<br>  $$(a-a_1)(a-a_n)\leq 0 \Rightarrow a_1a_n \leq a(a_1+a_n-a)$$<br>  易证n=2时成立.<br>  假设当n-1时成立,即<br>  $$\sqrt[n-1]{a_2+\cdots +a_{n-1}+(a_1+a_n-a)}\leq \frac{a_2+\cdots +a_{n-1}+(a_1+a_n-a)}{n-1}=a$$<br>  $$a_1a_2\cdots a_n\leq a2+\cdots +a_{n-1}+a(a_1+a_n-a)\leq a^{n-1}\cdot a=a^n $$<br>  $$\therefore\sqrt[n]{a_1\cdots a_n}\leq a=\frac{a_1+\cdots +a_n}{n}$$</p>
+<li><p>证明:<br>  不妨设$a_1, a_2$为所有项中的最小,最大值.  $a&#x3D;\frac{a_1+\cdots +a_n}{n}$, 则$a_1\leq a\leq a_n$.<br>  $$(a-a_1)(a-a_n)\leq 0 \Rightarrow a_1a_n \leq a(a_1+a_n-a)$$<br>  易证n&#x3D;2时成立.<br>  假设当n-1时成立,即<br>  $$\sqrt[n-1]{a_2+\cdots +a_{n-1}+(a_1+a_n-a)}\leq \frac{a_2+\cdots +a_{n-1}+(a_1+a_n-a)}{n-1}&#x3D;a$$<br>  $$a_1a_2\cdots a_n\leq a2+\cdots +a_{n-1}+a(a_1+a_n-a)\leq a^{n-1}\cdot a&#x3D;a^n $$<br>  $$\therefore\sqrt[n]{a_1\cdots a_n}\leq a&#x3D;\frac{a_1+\cdots +a_n}{n}$$</p>
 </li>
 </ul>
-<h1 id="数列"><a href="#数列" class="headerlink" title="数列"></a>数列</h1><h2 id="收敛数列定义"><a href="#收敛数列定义" class="headerlink" title="收敛数列定义"></a>收敛数列定义</h2><p>$设数列a_n及常数a, 若\forall \epsilon &gt; 0, \exists N \in Z^+,当n&gt;N时, 总有|a_n-a|&lt;\epsilon, 则称数列{a_n}的极限为a, 记作$<br>$$\lim\limits_{n\to \infty}a_n=a或a_n \to a(n\to \infty)$$<br>$此时也称数列收敛, 否则称数列发散.$</p>
+<h1 id="数列"><a href="#数列" class="headerlink" title="数列"></a>数列</h1><h2 id="收敛数列定义"><a href="#收敛数列定义" class="headerlink" title="收敛数列定义"></a>收敛数列定义</h2><p>$设数列a_n及常数a, 若\forall \epsilon &gt; 0, \exists N \in Z^+,当n&gt;N时, 总有|a_n-a|&lt;\epsilon, 则称数列{a_n}的极限为a, 记作$<br>$$\lim\limits_{n\to \infty}a_n&#x3D;a或a_n \to a(n\to \infty)$$<br>$此时也称数列收敛, 否则称数列发散.$</p>
 <h2 id="收敛数列的性质"><a href="#收敛数列的性质" class="headerlink" title="收敛数列的性质"></a>收敛数列的性质</h2><ul>
 <li>收敛数列的极限唯一<ul>
-<li>证法: 反证法.取$\epsilon = \frac{b-a}{2}$, 当$n&gt;max{N_1, N_2}, \frac{a+b}{2} &lt; a_n &lt; \frac{a+b}{2}$, 矛盾.</li>
+<li>证法: 反证法.取$\epsilon &#x3D; \frac{b-a}{2}$, 当$n&gt;max{N_1, N_2}, \frac{a+b}{2} &lt; a_n &lt; \frac{a+b}{2}$, 矛盾.</li>
 </ul>
 </li>
 <li>收敛数列必有界<ul>
@@ -3058,45 +3058,45 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <p>改变数列的有限项, 数列的收敛性和极限不变</p>
 </blockquote>
 <ul>
-<li>若收敛数列被改变, 设被改变的最后一项是k, 取$N=\max(k, N_1)$, 就能维持$\epsilon-N$定义.</li>
+<li>若收敛数列被改变, 设被改变的最后一项是k, 取$N&#x3D;\max(k, N_1)$, 就能维持$\epsilon-N$定义.</li>
 <li>若发散数列改变有限项, 变为收敛数列, 则与上矛盾.</li>
 </ul>
-<h2 id="lim-limits-n-rightarrow-infty-a-n-a-epsilon-N-定义"><a href="#lim-limits-n-rightarrow-infty-a-n-a-epsilon-N-定义" class="headerlink" title="$\lim\limits_{n\rightarrow\infty} a_n=a$ $\epsilon-N$定义"></a>$\lim\limits_{n\rightarrow\infty} a_n=a$ $\epsilon-N$定义</h2><blockquote>
+<h2 id="lim-limits-n-rightarrow-infty-a-n-x3D-a-epsilon-N-定义"><a href="#lim-limits-n-rightarrow-infty-a-n-x3D-a-epsilon-N-定义" class="headerlink" title="$\lim\limits_{n\rightarrow\infty} a_n&#x3D;a$ $\epsilon-N$定义"></a>$\lim\limits_{n\rightarrow\infty} a_n&#x3D;a$ $\epsilon-N$定义</h2><blockquote>
 <p>$\forall \epsilon &gt;0, \exists N\in Z^*, 当n&gt;N时, 总有|a_n-a|&lt;\epsilon.$</p>
 </blockquote>
 <h2 id="常见数列极限"><a href="#常见数列极限" class="headerlink" title="常见数列极限"></a>常见数列极限</h2><ul>
-<li>$\lim\limits_{n\rightarrow\infty} \sqrt[n]{n}=1$<ul>
-<li>分析: 令$h_n=\sqrt[n]{n}-1&gt;0$, 难以直接由$h_n-0&lt;\epsilon$推算出$N$, 应当适当放大$h_n$. 变形得$n=(h_n+1)^n$, 应令右边缩小并抛弃n次方. 用二项式定理展开, 最终得到$h_n&lt;某个值$.</li>
-<li>证明:<br>  令$h_n=\sqrt[n]{n}-1&gt;0$, 则<br>  $$n=(h_n+1)^n=1+nh_n+\frac{n(n-1)}{2}h_n^2+\cdots+h_n^n&gt;1+\frac{n(n-1)}{2}h_n^2$$<br>  $$\Rightarrow n&gt;1+\frac{n(n-1)}{2}h_n^2\Rightarrow h_n&lt;\sqrt{\frac{2}{n}}$$<br>  令$\sqrt{\frac{2}{n}}&lt;\epsilon$, 得$n&gt;\frac{2}{\epsilon^2}$<br>  $\therefore \forall \epsilon &gt;0, 取N&gt;\frac{2}{\epsilon^2}, 则当n&gt;N时,总有|\sqrt[n]{n}-1|&lt;\epsilon$.<br>  $\therefore \lim\limits_{n\rightarrow\infty} \sqrt[n]{n}=1$</li>
+<li>$\lim\limits_{n\rightarrow\infty} \sqrt[n]{n}&#x3D;1$<ul>
+<li>分析: 令$h_n&#x3D;\sqrt[n]{n}-1&gt;0$, 难以直接由$h_n-0&lt;\epsilon$推算出$N$, 应当适当放大$h_n$. 变形得$n&#x3D;(h_n+1)^n$, 应令右边缩小并抛弃n次方. 用二项式定理展开, 最终得到$h_n&lt;某个值$.</li>
+<li>证明:<br>  令$h_n&#x3D;\sqrt[n]{n}-1&gt;0$, 则<br>  $$n&#x3D;(h_n+1)^n&#x3D;1+nh_n+\frac{n(n-1)}{2}h_n^2+\cdots+h_n^n&gt;1+\frac{n(n-1)}{2}h_n^2$$<br>  $$\Rightarrow n&gt;1+\frac{n(n-1)}{2}h_n^2\Rightarrow h_n&lt;\sqrt{\frac{2}{n}}$$<br>  令$\sqrt{\frac{2}{n}}&lt;\epsilon$, 得$n&gt;\frac{2}{\epsilon^2}$<br>  $\therefore \forall \epsilon &gt;0, 取N&gt;\frac{2}{\epsilon^2}, 则当n&gt;N时,总有|\sqrt[n]{n}-1|&lt;\epsilon$.<br>  $\therefore \lim\limits_{n\rightarrow\infty} \sqrt[n]{n}&#x3D;1$</li>
 </ul>
 </li>
-<li>$\lim\limits_{n\to\infty} \sqrt[n]{k\frac{1}{n}} = 1(k&gt;0)$</li>
+<li>$\lim\limits_{n\to\infty} \sqrt[n]{k\frac{1}{n}} &#x3D; 1(k&gt;0)$</li>
 <li>$q^n \to 0(|q|&lt;1, n \to \infty)$<ul>
-<li>分析: 若q=0... 若q!=0, 取n &gt; $[\frac{\ln \epsilon}{\ln |q|}]$.</li>
+<li>分析: 若q&#x3D;0... 若q!&#x3D;0, 取n &gt; $[\frac{\ln \epsilon}{\ln |q|}]$.</li>
 </ul>
 </li>
-<li>$\lim\limits_{n \to \infty} \sqrt[n]{a}=1$<ul>
-<li>分析: 若a=1... 若a&gt;1, 强行$\log_a$. 若a&lt;1, 倒数.</li>
+<li>$\lim\limits_{n \to \infty} \sqrt[n]{a}&#x3D;1$<ul>
+<li>分析: 若a&#x3D;1... 若a&gt;1, 强行$\log_a$. 若a&lt;1, 倒数.</li>
 </ul>
 </li>
-<li>$\lim\limits_{n\to \infty} \sqrt{n+1}-\sqrt{n} = 0$<ul>
+<li>$\lim\limits_{n\to \infty} \sqrt{n+1}-\sqrt{n} &#x3D; 0$<ul>
 <li>分析: 分子有理化后, 分母缩小(适当放大法).</li>
 </ul>
 </li>
-<li>$\lim\limits_{n\to \infty} \frac{1}{n^k} = 0(k&gt;0)$</li>
-<li>$\lim\limits_{n\to \infty} \frac{n^k}{a^n} = 0$<ul>
+<li>$\lim\limits_{n\to \infty} \frac{1}{n^k} &#x3D; 0(k&gt;0)$</li>
+<li>$\lim\limits_{n\to \infty} \frac{n^k}{a^n} &#x3D; 0$<ul>
 <li>分析: 单调有界. 求一下$\lim\limits_{n\to\infty} \frac{x_{n+1}}{x_n}$. 证明收敛后对递推式两边求极限.</li>
 </ul>
 </li>
-<li>$\lim\limits_{n\to \infty} \frac{a^n}{n!} = 0$</li>
+<li>$\lim\limits_{n\to \infty} \frac{a^n}{n!} &#x3D; 0$</li>
 <li>$\lim\limits_{n\to\infty} 分式: 观察最高次$</li>
-<li>$\lim\limits_{n\to\infty} \sqrt[n]{a_1^n+\cdots+a_m^n} = max(a_1,\cdots,a_m), a_i&gt;0$ 下文分析</li>
-<li>$\lim\limits_{n\to\infty}(1+\frac{1}{n})^k = 1, k是任意常数$ 下文分析. <strong>这意味着不对接下来一个极限造成影响</strong></li>
-<li>$\lim\limits_{n\to\infty}(1+\frac{1}{n})^n=e(e的一个定义)$ 收敛性在下文分析</li>
-<li>$\lim\limits_{n\to\infty} \frac{1}{0!}+\frac{1}{1!}+\frac{1}{2!}+\frac{1}{3!}+\cdots + \frac{1}{n!} = e$ 夹逼准则, 课件1_2-3 22页</li>
+<li>$\lim\limits_{n\to\infty} \sqrt[n]{a_1^n+\cdots+a_m^n} &#x3D; max(a_1,\cdots,a_m), a_i&gt;0$ 下文分析</li>
+<li>$\lim\limits_{n\to\infty}(1+\frac{1}{n})^k &#x3D; 1, k是任意常数$ 下文分析. <strong>这意味着不对接下来一个极限造成影响</strong></li>
+<li>$\lim\limits_{n\to\infty}(1+\frac{1}{n})^n&#x3D;e(e的一个定义)$ 收敛性在下文分析</li>
+<li>$\lim\limits_{n\to\infty} \frac{1}{0!}+\frac{1}{1!}+\frac{1}{2!}+\frac{1}{3!}+\cdots + \frac{1}{n!} &#x3D; e$ 夹逼准则, 课件1_2-3 22页</li>
 </ul>
 <h2 id="无穷大数列定义"><a href="#无穷大数列定义" class="headerlink" title="无穷大数列定义"></a>无穷大数列定义</h2><blockquote>
-<p>$设数列a_n及常数a, 若\forall M &gt; 0, \exists N \in Z^+,当n&gt;N时, 总有|a_n| &gt;M, 则称数列{a_n}是无穷大数列, 或称{a_n}趋于无穷大, 记作$<br>$$\lim\limits_{n\to \infty}a_n=\infty或a_n \to \infty(n\to \infty)$$<br>$特别地, 有正无穷大数列和负无穷大数列, 记作.\lim\limits_{n\to \infty}a_n=+\infty或\lim\limits_{n\to \infty}a_n=-\infty$</p>
+<p>$设数列a_n及常数a, 若\forall M &gt; 0, \exists N \in Z^+,当n&gt;N时, 总有|a_n| &gt;M, 则称数列{a_n}是无穷大数列, 或称{a_n}趋于无穷大, 记作$<br>$$\lim\limits_{n\to \infty}a_n&#x3D;\infty或a_n \to \infty(n\to \infty)$$<br>$特别地, 有正无穷大数列和负无穷大数列, 记作.\lim\limits_{n\to \infty}a_n&#x3D;+\infty或\lim\limits_{n\to \infty}a_n&#x3D;-\infty$</p>
 </blockquote>
 <ul>
 <li>无穷大数列是发散数列(极限不存在), 是无界数列</li>
@@ -3104,9 +3104,9 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>无界数列不一定是无穷大数列</li>
 </ul>
 <h2 id="数列极限存在的准则"><a href="#数列极限存在的准则" class="headerlink" title="数列极限存在的准则"></a>数列极限存在的准则</h2><h3 id="夹逼定理"><a href="#夹逼定理" class="headerlink" title="夹逼定理"></a>夹逼定理</h3><ol>
-<li>$\lim\limits_{n\to\infty}a_n=\lim\limits_{n\to\infty}b_n=a$</li>
+<li>$\lim\limits_{n\to\infty}a_n&#x3D;\lim\limits_{n\to\infty}b_n&#x3D;a$</li>
 <li>$a_n\leq c_n\leq b_n(n&gt;N_0)$</li>
-<li>$\Rightarrow \lim\limits_{n\to\infty}c_n=a$</li>
+<li>$\Rightarrow \lim\limits_{n\to\infty}c_n&#x3D;a$</li>
 </ol>
 <ul>
 <li>分析: 取$n&gt;max {N_0,N_1,N_2}$, 此时a_n, b_n都在邻域内, 所以夹着的c_n也在邻域内.</li>
@@ -3116,16 +3116,16 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>分析: 分别放大缩小分母.</li>
 </ul>
 </li>
-<li>$\lim\limits_{n\to\infty} \sqrt[n]{a_1^n+\cdots+a_m^n} = max(a_1,\cdots,a_m), a_i&gt;0$<ul>
+<li>$\lim\limits_{n\to\infty} \sqrt[n]{a_1^n+\cdots+a_m^n} &#x3D; max(a_1,\cdots,a_m), a_i&gt;0$<ul>
 <li>分析: 常数在开无穷次方根时可以忽略, 因此只挑出最大的, 缩小系数为1, 放大系数为m即可.</li>
 </ul>
 </li>
-<li>$\lim\limits_{n\to\infty} \frac{1}{2}\frac{3}{4}\frac{5}{6}\cdots\frac{2n-1}{2n} = 0$<ul>
+<li>$\lim\limits_{n\to\infty} \frac{1}{2}\frac{3}{4}\frac{5}{6}\cdots\frac{2n-1}{2n} &#x3D; 0$<ul>
 <li>分析: 大于零是显然的, 将分子平方再开方, 利用$1\cdot 3&lt;2^2$形式放大分子约分.</li>
 </ul>
 </li>
-<li>$\lim\limits_{n\to\infty}(1+\frac{1}{n})^k = 1, k是任意常数$<ul>
-<li>分析: k=0时显然. k为正整数时由有限项极限四则运算可得, k为负整数时倒数. 一般地, 另m=k向下取整, $(1+\frac{1}{n})^m \leq (1+\frac{1}{n})^k \leq (1+\frac{1}{n})^{m+1})$, 夹逼.</li>
+<li>$\lim\limits_{n\to\infty}(1+\frac{1}{n})^k &#x3D; 1, k是任意常数$<ul>
+<li>分析: k&#x3D;0时显然. k为正整数时由有限项极限四则运算可得, k为负整数时倒数. 一般地, 另m&#x3D;k向下取整, $(1+\frac{1}{n})^m \leq (1+\frac{1}{n})^k \leq (1+\frac{1}{n})^{m+1})$, 夹逼.</li>
 </ul>
 </li>
 <li>已知$|a_{n+1}|\leq q|a_n|(n&gt;N, 0&lt;q&lt;1)$,证明数列极限为0.<ul>
@@ -3163,105 +3163,105 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 </ul>
 <h4 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h4><ul>
 <li>$数列:(1+\frac{1}{n})^n收敛$<ul>
-<li>分析: 单调性.均值不等式$\sqrt[n+1]{(1+\frac{1}{n})^n\cdot 1}&lt;\frac{n(1+\frac{1}{n})+1}{n+1}=1+\frac{1}{n+1}$, 故$a_n&lt;a_{n+1}$. 有界性. 二项式展开, 各项放大剩分母阶乘, 阶乘放大到分母为2的幂, 等比求和.</li>
+<li>分析: 单调性.均值不等式$\sqrt[n+1]{(1+\frac{1}{n})^n\cdot 1}&lt;\frac{n(1+\frac{1}{n})+1}{n+1}&#x3D;1+\frac{1}{n+1}$, 故$a_n&lt;a_{n+1}$. 有界性. 二项式展开, 各项放大剩分母阶乘, 阶乘放大到分母为2的幂, 等比求和.</li>
 </ul>
 </li>
-<li>$\lim\limits_{n\to \infty} \frac{n^k}{a^n} = 0$<ul>
+<li>$\lim\limits_{n\to \infty} \frac{n^k}{a^n} &#x3D; 0$<ul>
 <li>分析: 单调有界. 求一下$\lim\limits_{n\to\infty} \frac{x_{n+1}}{x_n}$. 证明收敛后对递推式两边求极限.</li>
 </ul>
 </li>
 </ul>
 <h4 id="单调常用方法"><a href="#单调常用方法" class="headerlink" title="单调常用方法"></a>单调常用方法</h4><ul>
 <li>递推式直接看出, 或求两边极限后看出</li>
-<li>作差法/作商法, 结合上下界看出</li>
+<li>作差法&#x2F;作商法, 结合上下界看出</li>
 </ul>
 <h4 id="有界常用方法"><a href="#有界常用方法" class="headerlink" title="有界常用方法"></a>有界常用方法</h4><ul>
-<li>递推式放缩/均值不等式, 得到界</li>
+<li>递推式放缩&#x2F;均值不等式, 得到界</li>
 <li>符号显然</li>
 </ul>
 <h1 id="三角函数"><a href="#三角函数" class="headerlink" title="三角函数"></a>三角函数</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><ul>
-<li>余切 $\cot x = \frac{\cos x}{\sin x} = \frac{1}{\tan x}$</li>
-<li>正割 $\sec x = \frac{1}{\cos x}$</li>
-<li>余割 $\csc x = \frac{1}{\sin x}$</li>
+<li>余切 $\cot x &#x3D; \frac{\cos x}{\sin x} &#x3D; \frac{1}{\tan x}$</li>
+<li>正割 $\sec x &#x3D; \frac{1}{\cos x}$</li>
+<li>余割 $\csc x &#x3D; \frac{1}{\sin x}$</li>
 </ul>
 <h2 id="变换"><a href="#变换" class="headerlink" title="变换"></a>变换</h2><h3 id="弦和公式"><a href="#弦和公式" class="headerlink" title="弦和公式"></a>弦和公式</h3><ul>
-<li>$\sin^2 x + \cos^2 x = 1$</li>
-<li>$1 + \cot^2 x = \csc^2 x$</li>
-<li>$\tan^2 x + 1 = \sec^2 x$</li>
+<li>$\sin^2 x + \cos^2 x &#x3D; 1$</li>
+<li>$1 + \cot^2 x &#x3D; \csc^2 x$</li>
+<li>$\tan^2 x + 1 &#x3D; \sec^2 x$</li>
 </ul>
 <h3 id="诱导公式"><a href="#诱导公式" class="headerlink" title="诱导公式"></a>诱导公式</h3><ul>
 <li>半周期性<ul>
-<li>$\sin(x+\pi) = -\sin(x)$</li>
-<li>$\cos(x+\pi) = -\cos(x)$</li>
+<li>$\sin(x+\pi) &#x3D; -\sin(x)$</li>
+<li>$\cos(x+\pi) &#x3D; -\cos(x)$</li>
 <li>$\tan x, \cot x最小正周期是\pi$</li>
 </ul>
 </li>
 <li>奇偶性<ul>
-<li>$\sin(-x) = -\sin(x) 奇函数$</li>
-<li>$\cos(-x) = \cos(x) 偶函数$</li>
-<li>$\tan(-x) = -\tan(x) 奇函数$</li>
-<li>$\cot(-x) = -\cot(x) 奇函数$</li>
+<li>$\sin(-x) &#x3D; -\sin(x) 奇函数$</li>
+<li>$\cos(-x) &#x3D; \cos(x) 偶函数$</li>
+<li>$\tan(-x) &#x3D; -\tan(x) 奇函数$</li>
+<li>$\cot(-x) &#x3D; -\cot(x) 奇函数$</li>
 </ul>
 </li>
 <li>圆关于y轴对称性<ul>
-<li>$\sin(\pi-x) = \sin(x)$</li>
-<li>$\cos(\pi-x) = -\cos(x)$</li>
+<li>$\sin(\pi-x) &#x3D; \sin(x)$</li>
+<li>$\cos(\pi-x) &#x3D; -\cos(x)$</li>
 <li>$\tan, \cot的周期是\pi, 套用奇函数性质$</li>
 </ul>
 </li>
 <li>直角加<ul>
-<li>$\sin(\pi/2+x) = \cos x$</li>
-<li>$\cos(\pi/2+x) = -\sin x$</li>
-<li>$\tan(\pi/2+x) = -\cot x$</li>
-<li>$\cot(\pi/2+x) = -\tan x$</li>
+<li>$\sin(\pi&#x2F;2+x) &#x3D; \cos x$</li>
+<li>$\cos(\pi&#x2F;2+x) &#x3D; -\sin x$</li>
+<li>$\tan(\pi&#x2F;2+x) &#x3D; -\cot x$</li>
+<li>$\cot(\pi&#x2F;2+x) &#x3D; -\tan x$</li>
 </ul>
 </li>
 <li>直角减(余角)<ul>
-<li>$\sin(\pi/2-x) = \cos x$</li>
-<li>$\cos(\pi/2-x) = \sin x$</li>
-<li>$\tan(\pi/2-x) = \cot x$</li>
-<li>$\cot(\pi/2-x) = \tan x$</li>
+<li>$\sin(\pi&#x2F;2-x) &#x3D; \cos x$</li>
+<li>$\cos(\pi&#x2F;2-x) &#x3D; \sin x$</li>
+<li>$\tan(\pi&#x2F;2-x) &#x3D; \cot x$</li>
+<li>$\cot(\pi&#x2F;2-x) &#x3D; \tan x$</li>
 </ul>
 </li>
 <li>倍角公式<ul>
-<li>$\sin2x = 2\sin x\cos x$</li>
-<li>$\cos2x = \cos^2 x - \sin^2 x$</li>
-<li>$\tan2x = \frac{2\tan x}{1-\tan^2x}$</li>
+<li>$\sin2x &#x3D; 2\sin x\cos x$</li>
+<li>$\cos2x &#x3D; \cos^2 x - \sin^2 x$</li>
+<li>$\tan2x &#x3D; \frac{2\tan x}{1-\tan^2x}$</li>
 </ul>
 </li>
 <li>半角公式<ul>
-<li>来源<br>$$ \cos 2x = 2 \cos^2 x-1 = 1-2\sin^2 x $$</li>
-<li>$\cos^2 \frac{x}{2} = \frac{1+\cos x}{2}$</li>
-<li>$\sin^2 \frac{x}{2} = \frac{1-\cos x}{2}$</li>
-<li>$\tan \frac{x}{2} = \frac{\sin \frac{x}{2}}{\cos \frac{x}{2}}_{(同乘凑倍角)} =\frac{\sin x}{1+ \cos x} = \frac{1-\cos x}{\sin x}$</li>
+<li>来源<br>  $$ \cos 2x &#x3D; 2 \cos^2 x-1 &#x3D; 1-2\sin^2 x $$</li>
+<li>$\cos^2 \frac{x}{2} &#x3D; \frac{1+\cos x}{2}$</li>
+<li>$\sin^2 \frac{x}{2} &#x3D; \frac{1-\cos x}{2}$</li>
+<li>$\tan \frac{x}{2} &#x3D; \frac{\sin \frac{x}{2}}{\cos \frac{x}{2}}_{(同乘凑倍角)} &#x3D;\frac{\sin x}{1+ \cos x} &#x3D; \frac{1-\cos x}{\sin x}$</li>
 </ul>
 </li>
 <li>万能公式<ul>
-<li>$\sin x = \sin(2\frac{x}{2}) = 2\sin\frac{x}{2}\cos\frac{x}{2} = \frac{2\tan \frac{x}{2}}{\sec^2\frac{x}{2}}=\frac{2\tan \frac{x}{2}}{1+\tan^2 \frac{x}{2}}$</li>
-<li>$\cos x = \sin(2\frac{x}{2}) = \cos^2\frac{x}{2} - \sin^2\frac{x}{2} = \frac{1-\tan^2\frac{x}{2}}{1+\tan^2\frac{x}{2}}$</li>
-<li>$\tan x = \frac{2\tan\frac{x}{2}}{1-\tan^2\frac{x}{2}}$</li>
+<li>$\sin x &#x3D; \sin(2\frac{x}{2}) &#x3D; 2\sin\frac{x}{2}\cos\frac{x}{2} &#x3D; \frac{2\tan \frac{x}{2}}{\sec^2\frac{x}{2}}&#x3D;\frac{2\tan \frac{x}{2}}{1+\tan^2 \frac{x}{2}}$</li>
+<li>$\cos x &#x3D; \sin(2\frac{x}{2}) &#x3D; \cos^2\frac{x}{2} - \sin^2\frac{x}{2} &#x3D; \frac{1-\tan^2\frac{x}{2}}{1+\tan^2\frac{x}{2}}$</li>
+<li>$\tan x &#x3D; \frac{2\tan\frac{x}{2}}{1-\tan^2\frac{x}{2}}$</li>
 </ul>
 </li>
 <li>积化和差<ul>
 <li>用$\sin(a \pm b)$凑$\sin\cdot \cos$</li>
 <li>用$\cos(a \pm b)$凑$\sin \cdot\sin, \cos\cdot \cos.$</li>
-<li>$\sin a \cos b = \frac{1}{2}(\sin(a+b)+\sin(a-b))$</li>
-<li>$\cos a \sin b = \frac{1}{2}(\sin(a+b)-\sin(a-b))$</li>
-<li>$\cos a \cos b = \frac{1}{2}(\cos(a+b)+\cos(a-b))$</li>
-<li>$\sin a \sin b = -\frac{1}{2}(\cos(a+b)-\cos(a-b))$</li>
+<li>$\sin a \cos b &#x3D; \frac{1}{2}(\sin(a+b)+\sin(a-b))$</li>
+<li>$\cos a \sin b &#x3D; \frac{1}{2}(\sin(a+b)-\sin(a-b))$</li>
+<li>$\cos a \cos b &#x3D; \frac{1}{2}(\cos(a+b)+\cos(a-b))$</li>
+<li>$\sin a \sin b &#x3D; -\frac{1}{2}(\cos(a+b)-\cos(a-b))$</li>
 </ul>
 </li>
 <li>和差化积<ul>
-<li>$a=\frac{a+b}{2}+\frac{a-b}{2}$</li>
-<li>$b=\frac{a+b}{2}-\frac{a-b}{2}$</li>
-<li>$\sin a + \sin b = 2\sin\frac{a+b}{2}\cos\frac{a-b}{2}$</li>
-<li>$\sin a - \sin b = 2\cos\frac{a+b}{2}\sin\frac{a-b}{2}$</li>
-<li>$\cos a + \cos b = 2\cos\frac{a+b}{2}\cos\frac{a-b}{2}$</li>
-<li>$\cos a - \cos b = -2\sin\frac{a+b}{2}\sin\frac{a-b}{2}$</li>
-<li>帅+帅=帅哥</li>
-<li>帅-帅=哥帅</li>
-<li>哥+哥=哥哥</li>
-<li>哥-哥=负嫂嫂</li>
+<li>$a&#x3D;\frac{a+b}{2}+\frac{a-b}{2}$</li>
+<li>$b&#x3D;\frac{a+b}{2}-\frac{a-b}{2}$</li>
+<li>$\sin a + \sin b &#x3D; 2\sin\frac{a+b}{2}\cos\frac{a-b}{2}$</li>
+<li>$\sin a - \sin b &#x3D; 2\cos\frac{a+b}{2}\sin\frac{a-b}{2}$</li>
+<li>$\cos a + \cos b &#x3D; 2\cos\frac{a+b}{2}\cos\frac{a-b}{2}$</li>
+<li>$\cos a - \cos b &#x3D; -2\sin\frac{a+b}{2}\sin\frac{a-b}{2}$</li>
+<li>帅+帅&#x3D;帅哥</li>
+<li>帅-帅&#x3D;哥帅</li>
+<li>哥+哥&#x3D;哥哥</li>
+<li>哥-哥&#x3D;负嫂嫂</li>
 </ul>
 </li>
 </ul>
@@ -3272,14 +3272,14 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>0是唯一一个可视作无穷小的常熟</li>
 </ul>
 <h3 id="函数极限与无穷小量"><a href="#函数极限与无穷小量" class="headerlink" title="函数极限与无穷小量"></a>函数极限与无穷小量</h3><ul>
-<li>（定理）$x \to x_0$,f(x)极限为A$\Leftrightarrow f(x)=A+a(x)$, a(x)为无穷小量</li>
+<li>（定理）$x \to x_0$,f(x)极限为A$\Leftrightarrow f(x)&#x3D;A+a(x)$, a(x)为无穷小量</li>
 </ul>
 <h3 id="无穷小阶的比较"><a href="#无穷小阶的比较" class="headerlink" title="无穷小阶的比较"></a>无穷小阶的比较</h3><ul>
-<li>$\lim\limits_{x \to x_0^+} \frac{f(x)}{(x-x_0)^k} = c \neq 0$,则当$x \to x_0$时,f(x)是$(x-x_0)$的k阶无穷小.</li>
+<li>$\lim\limits_{x \to x_0^+} \frac{f(x)}{(x-x_0)^k} &#x3D; c \neq 0$,则当$x \to x_0$时,f(x)是$(x-x_0)$的k阶无穷小.</li>
 <li>特殊的无穷小量<ul>
-<li>$x \to 0, f(x),g(x)是无穷小量,且f(x)=(x+1)g(x), 则f(x) \sim g(x)$, 尽管他们最高次数不相同</li>
+<li>$x \to 0, f(x),g(x)是无穷小量,且f(x)&#x3D;(x+1)g(x), 则f(x) \sim g(x)$, 尽管他们最高次数不相同</li>
 <li>最高次数不同而等价, 意味着相乘不改变等价性, 但相加会改变等价性.</li>
-<li>具体例子:$f(x)=x^3-x \sim x^2-x, g(x)=x, f(x)+g(x)=x^3, 但x^2-x+x=x^2不等价于x^3$</li>
+<li>具体例子:$f(x)&#x3D;x^3-x \sim x^2-x, g(x)&#x3D;x, f(x)+g(x)&#x3D;x^3, 但x^2-x+x&#x3D;x^2不等价于x^3$</li>
 <li>同阶与否与最高次数无关, 一切判定以比值为准.</li>
 </ul>
 </li>
@@ -3289,39 +3289,39 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>$\tan x \sim x$</li>
 <li>$1 - \cos x \sim \frac{1}{2}x$</li>
 <li>$\sqrt[n]{1+x}-1 \sim \frac{1}{n}x$ (n为正整数)(注意是加号)</li>
-<li>$\arcsin x \sim x, (u=\arcsin x)$</li>
+<li>$\arcsin x \sim x, (u&#x3D;\arcsin x)$</li>
 <li>$\arctan x \sim x$</li>
 <li>$\ln(1+x) \sim x, (\lim \ln(1+x)^{\frac{1}{x}})$</li>
-<li>$e^x-1 \sim x, (u=e^x-1, \lim \frac{u}{\ln(1+u)})$</li>
-<li>$a^x-1 \sim x\ln a, (\lim \frac{e^{x\ln a}-1}{x}=\lim \frac{x\ln a}{x} = \ln a), a &gt; 0$</li>
-<li>$(1+x)^a-1 \sim ax, (\lim \frac{(1+x)^a-1}{x}=\lim \frac{e^{a \ln (1+x)}-1}{x} = \lim \frac{a \ln (1+x)}{x} = a), a \neq 0$</li>
+<li>$e^x-1 \sim x, (u&#x3D;e^x-1, \lim \frac{u}{\ln(1+u)})$</li>
+<li>$a^x-1 \sim x\ln a, (\lim \frac{e^{x\ln a}-1}{x}&#x3D;\lim \frac{x\ln a}{x} &#x3D; \ln a), a &gt; 0$</li>
+<li>$(1+x)^a-1 \sim ax, (\lim \frac{(1+x)^a-1}{x}&#x3D;\lim \frac{e^{a \ln (1+x)}-1}{x} &#x3D; \lim \frac{a \ln (1+x)}{x} &#x3D; a), a \neq 0$</li>
 <li>x可以用其他函数替代，只要趋向于0即可</li>
 </ul>
 <h3 id="常用变换"><a href="#常用变换" class="headerlink" title="常用变换"></a>常用变换</h3><ul>
-<li>$\lim \limits_{x \to 0} (1-x)^{\frac {1}{x}} = \frac{1}{e}$</li>
-<li>$\sin x + x^2=x(\frac{\sin x}{x} + x)$</li>
-<li>$\tan x - \sin x = \tan x(1- \cos x)$</li>
-<li>$a^x = e^{x \ln a}$ (留意后面有没有-1配合等价无穷小替换)</li>
-<li>$x^a = e^{a \ln x}$</li>
+<li>$\lim \limits_{x \to 0} (1-x)^{\frac {1}{x}} &#x3D; \frac{1}{e}$</li>
+<li>$\sin x + x^2&#x3D;x(\frac{\sin x}{x} + x)$</li>
+<li>$\tan x - \sin x &#x3D; \tan x(1- \cos x)$</li>
+<li>$a^x &#x3D; e^{x \ln a}$ (留意后面有没有-1配合等价无穷小替换)</li>
+<li>$x^a &#x3D; e^{a \ln x}$</li>
 <li>在$x \to \infty, 求\lim e^{f(x)g(x)}, 留意最高次相同\Rightarrow 系数比$</li>
-<li>$\lim \limits_{n \to \infty} (\frac{\sqrt[n]{a_1}+\cdots +\sqrt[n]{a_m}}{m}-1)n = \lim \limits_{x \to 0} (\frac{a_1^x+\cdots + a_m^x}{m}-1)\frac{1}{x} = \lim \limits_{x \to 0} \frac{x\ln a_1 + \cdots + x\ln a_m}{mx} = \ln \sqrt[m]{a_1 \cdots a_m}, m是正整数, 归结准则$</li>
+<li>$\lim \limits_{n \to \infty} (\frac{\sqrt[n]{a_1}+\cdots +\sqrt[n]{a_m}}{m}-1)n &#x3D; \lim \limits_{x \to 0} (\frac{a_1^x+\cdots + a_m^x}{m}-1)\frac{1}{x} &#x3D; \lim \limits_{x \to 0} \frac{x\ln a_1 + \cdots + x\ln a_m}{mx} &#x3D; \ln \sqrt[m]{a_1 \cdots a_m}, m是正整数, 归结准则$</li>
 <li>次方相同, 底数不同,强行同除?!<blockquote>
-<p>求$\lim \limits_{x \to 0} \frac{(1+x)^\frac{1}{x}+(1+2x)^\frac{1}{2x}}{\sin x} = \frac{e}{2}$</p>
+<p>求$\lim \limits_{x \to 0} \frac{(1+x)^\frac{1}{x}+(1+2x)^\frac{1}{2x}}{\sin x} &#x3D; \frac{e}{2}$</p>
 </blockquote>
 </li>
 <li>求极限的最后, 有界量(尤其与$\sin\infty$,$\cos \infty$有关)乘无穷小量等于无穷小量</li>
 </ul>
 <h3 id="无穷小量阶数的性质"><a href="#无穷小量阶数的性质" class="headerlink" title="无穷小量阶数的性质"></a>无穷小量阶数的性质</h3><ul>
-<li>$o(x^n)+o(x^m) = o(x^m), x \to 0, n&gt;m&gt;0$</li>
-<li>$o(x^n) \cdot o(x^m) = o(x^{n+m}), x \to 0$</li>
+<li>$o(x^n)+o(x^m) &#x3D; o(x^m), x \to 0, n&gt;m&gt;0$</li>
+<li>$o(x^n) \cdot o(x^m) &#x3D; o(x^{n+m}), x \to 0$</li>
 <li>无穷小量相加，高阶丢失，保留低阶.</li>
 <li>无穷小量相乘，阶数相加.</li>
-<li>无穷小量$o(高阶)=o(低阶)$是正确的.</li>
-<li>无穷小量可以写成$f(x)=g(x)+o(x^2)$, 求极限时设法出现$\frac {o(x^2)}{kx^2}$即可消去</li>
+<li>无穷小量$o(高阶)&#x3D;o(低阶)$是正确的.</li>
+<li>无穷小量可以写成$f(x)&#x3D;g(x)+o(x^2)$, 求极限时设法出现$\frac {o(x^2)}{kx^2}$即可消去</li>
 </ul>
 <h2 id="证明题"><a href="#证明题" class="headerlink" title="证明题"></a>证明题</h2><ul>
-<li>证明$x \to 0, f(x) = g(x)+o(h(x))$<blockquote>
-<p>计算$\lim\limits_{x \to 0}\frac{f(x)-g(x)}{h(x)} = 0$</p>
+<li>证明$x \to 0, f(x) &#x3D; g(x)+o(h(x))$<blockquote>
+<p>计算$\lim\limits_{x \to 0}\frac{f(x)-g(x)}{h(x)} &#x3D; 0$</p>
 </blockquote>
 </li>
 <li>证明函数是无穷小量<blockquote>
@@ -3343,27 +3343,27 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>若无穷小量恒不为零,则该无穷小量的倒数量为无穷大量</li>
 </ul>
 <h2 id="等价量"><a href="#等价量" class="headerlink" title="等价量"></a>等价量</h2><ul>
-<li>不论无穷大或无穷小, 只要$\lim\limits_{x \to x_0} \frac{f(x)}{g(x)}=1$, 就称$当x \to x_0时,f(x)与g(x)是等价的量, 记作f(x) \sim g(x), (x \to x_0)$</li>
+<li>不论无穷大或无穷小, 只要$\lim\limits_{x \to x_0} \frac{f(x)}{g(x)}&#x3D;1$, 就称$当x \to x_0时,f(x)与g(x)是等价的量, 记作f(x) \sim g(x), (x \to x_0)$</li>
 <li>g(x)可以是不为零的常数.故可以有$f(x)~A, (A \neq 0)$</li>
 <li>函数等价于零无意义</li>
 <li>极限相等是等价的非必要非充分条件(可能两函数的极限都不存在, 另外还需要同阶)</li>
 </ul>
 <h3 id="等价量替换定理"><a href="#等价量替换定理" class="headerlink" title="等价量替换定理"></a>等价量替换定理</h3><ul>
-<li>若函数分别等价,且$\lim \frac{f&#39;(x)g&#39;(x)}{h&#39;(x)}=A$, 则$\lim \frac{f(x)g(x)}{h(x)} = \lim \frac{f&#39;(x)g&#39;(x)}{h&#39;(x)}=A$<ul>
+<li>若函数分别等价,且$\lim \frac{f&#39;(x)g&#39;(x)}{h&#39;(x)}&#x3D;A$, 则$\lim \frac{f(x)g(x)}{h(x)} &#x3D; \lim \frac{f&#39;(x)g&#39;(x)}{h&#39;(x)}&#x3D;A$<ul>
 <li>两项相加不能直接使用等价量替换</li>
-<li>可以使用$\lim f(x)+g(x) = \lim f(x) + \lim g(x) = \lim f&#39;(x) + \lim g&#39;(x) = \lim f&#39;(x)+g&#39;(x)$, 这里要求各函数极限都存在.</li>
+<li>可以使用$\lim f(x)+g(x) &#x3D; \lim f(x) + \lim g(x) &#x3D; \lim f&#39;(x) + \lim g&#39;(x) &#x3D; \lim f&#39;(x)+g&#39;(x)$, 这里要求各函数极限都存在.</li>
 <li>常用极限值(常数)可以代入, 但不保证顺利计算出极限.</li>
 </ul>
 </li>
 </ul>
 <h2 id="给函数极限-求参数"><a href="#给函数极限-求参数" class="headerlink" title="给函数极限, 求参数"></a>给函数极限, 求参数</h2><ul>
 <li>求等价量,确定参数</li>
-<li>直接移项得出$常数=\lim g(x)=A$</li>
+<li>直接移项得出$常数&#x3D;\lim g(x)&#x3D;A$</li>
 </ul>
 <h1 id="微分"><a href="#微分" class="headerlink" title="微分"></a>微分</h1><h2 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h2><blockquote>
-<p>设$y=f(x)$在$x$的某邻域$U(x)$内有定义，若$\Delta y = f(x+ \Delta x)-f(x)$可表示为<br>$$<br>   \Delta y = A\Delta x + o(\Delta x) \quad (\Delta \rightarrow 0),<br>$$<br>其中$A$是与$\Delta x$无关的量，则称$y=f(x)$在点$x$处可微. $A\Delta x$是$\Delta y$的线性主部，并称其为$y=f(x)$在点$x$处的微分，记为$dy, dy = A\Delta x$。</p>
+<p>设$y&#x3D;f(x)$在$x$的某邻域$U(x)$内有定义，若$\Delta y &#x3D; f(x+ \Delta x)-f(x)$可表示为<br>$$<br>   \Delta y &#x3D; A\Delta x + o(\Delta x) \quad (\Delta \rightarrow 0),<br>$$<br>其中$A$是与$\Delta x$无关的量，则称$y&#x3D;f(x)$在点$x$处可微. $A\Delta x$是$\Delta y$的线性主部，并称其为$y&#x3D;f(x)$在点$x$处的微分，记为$dy, dy &#x3D; A\Delta x$。</p>
 </blockquote>
-<h1 id="积分"><a href="#积分" class="headerlink" title="积分"></a>积分</h1><h2 id="变上下限积分的求导公式"><a href="#变上下限积分的求导公式" class="headerlink" title="变上下限积分的求导公式"></a>变上下限积分的求导公式</h2><p>d s^b(y)_a(y) =  f(b(y))b&#39;(y) - f(a(y))a&#39;(y)</p>
+<h1 id="积分"><a href="#积分" class="headerlink" title="积分"></a>积分</h1><h2 id="变上下限积分的求导公式"><a href="#变上下限积分的求导公式" class="headerlink" title="变上下限积分的求导公式"></a>变上下限积分的求导公式</h2><p>d s^b(y)_a(y) &#x3D;  f(b(y))b&#39;(y) - f(a(y))a&#39;(y)</p>
 <p>[toc]</p>
 ]]></content>
       <tags>
@@ -3373,11 +3373,11 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
   <entry>
     <title>数位DP</title>
     <url>/2019/08/20/%E6%95%B0%E4%BD%8DDP/</url>
-    <content><![CDATA[<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="求-L-R-中满足-y-geq-x-且y-mod-x-x-oplus-y-的数对-x-y-的个数"><a href="#求-L-R-中满足-y-geq-x-且y-mod-x-x-oplus-y-的数对-x-y-的个数" class="headerlink" title="求$[L,R]$中满足$y\geq x,且y\mod x=x\oplus y$的数对$(x,y)$的个数"></a>求$[L,R]$中满足$y\geq x,且y\mod x=x\oplus y$的数对$(x,y)$的个数</h2><span id="more"></span>
+    <content><![CDATA[<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="求-L-R-中满足-y-geq-x-且y-mod-x-x3D-x-oplus-y-的数对-x-y-的个数"><a href="#求-L-R-中满足-y-geq-x-且y-mod-x-x3D-x-oplus-y-的数对-x-y-的个数" class="headerlink" title="求$[L,R]$中满足$y\geq x,且y\mod x&#x3D;x\oplus y$的数对$(x,y)$的个数"></a>求$[L,R]$中满足$y\geq x,且y\mod x&#x3D;x\oplus y$的数对$(x,y)$的个数</h2><span id="more"></span>
 
 <h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><ol>
 <li>题目涉及位操作，对所有数以二进制看待。x和y的最高位应相同，这是因为$y\mod x&lt;x$，其二进制最高位有限制。</li>
-<li>两数最高位相同，则y不超过x的两倍。$y\mod x = y-x = y\oplus x$。</li>
+<li>两数最高位相同，则y不超过x的两倍。$y\mod x &#x3D; y-x &#x3D; y\oplus x$。</li>
 <li>$y-x$不可能退位。由$y\geq x$找到两者不同的最高位（y一定是1，x一定是0），这一位异或和为1，若低位退位，则差为0，矛盾，故低位不能退位。由低位不能退位，分类讨论$1-0, 1-1, 0-0$三种情况，发现更低位也不能退位，由归纳法可知$y-x$不可能退位。</li>
 <li>综上，以bitset看待，$x\subseteq y$。</li>
 <li>考虑记忆化搜索。$x,y$都受到上下界限制，且$y\geq x$，故分别dp枚举$x,y$的合法取值。另外要记录状态保证$x,y$的最高位相同。</li>
@@ -3407,14 +3407,14 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
   <entry>
     <title>斜率优化DP</title>
     <url>/2019/08/25/%E6%96%9C%E7%8E%87%E4%BC%98%E5%8C%96/</url>
-    <content><![CDATA[<h2 id="单状态的斜率优化"><a href="#单状态的斜率优化" class="headerlink" title="单状态的斜率优化"></a>单状态的斜率优化</h2><p>写出状态转移方程，形如：<br>$$ f[j]=\max_{i=1}^{j-1} { F_1(j)+F_2(i)+F_3(i,j)} $$<br>由于$F_3$涉及i和j，若枚举两个变量会超时。</p>
+    <content><![CDATA[<h2 id="单状态的斜率优化"><a href="#单状态的斜率优化" class="headerlink" title="单状态的斜率优化"></a>单状态的斜率优化</h2><p>写出状态转移方程，形如：<br>$$ f[j]&#x3D;\max_{i&#x3D;1}^{j-1} { F_1(j)+F_2(i)+F_3(i,j)} $$<br>由于$F_3$涉及i和j，若枚举两个变量会超时。</p>
 <p>化简方程，得到</p>
 <span id="more"></span>
-<p>$$ f[j]=\max_{i=1}^{j-1} {F_2(i)+F_4(j)*F_5(i) } + const(j) $$</p>
-<p>这里涉及的每个函数都能事先算出。于是求最大值转化为线性规划：将$f[j]$看作b，$F_2(i)$看作y，$-F_4(j)$看作k，$F_5(i)$看作x，则形式可转化为$b=y-kx$，求b的最大值。维护可能的点队列，则这是一条上凸线，用二分找到最相近斜率的线段的对应点即可。</p>
+<p>$$ f[j]&#x3D;\max_{i&#x3D;1}^{j-1} {F_2(i)+F_4(j)*F_5(i) } + const(j) $$</p>
+<p>这里涉及的每个函数都能事先算出。于是求最大值转化为线性规划：将$f[j]$看作b，$F_2(i)$看作y，$-F_4(j)$看作k，$F_5(i)$看作x，则形式可转化为$b&#x3D;y-kx$，求b的最大值。维护可能的点队列，则这是一条上凸线，用二分找到最相近斜率的线段的对应点即可。</p>
 <p>某些题目的$F_4(j)$具有单调性，即目标直线的斜率有单调性，则可用朴素单调队列代替二分。</p>
 <p>也可以将max改成min，这时求最小的b，维护下凸线即可。</p>
-<h2 id="双状态的斜率优化"><a href="#双状态的斜率优化" class="headerlink" title="双状态的斜率优化"></a>双状态的斜率优化</h2><p>拓展单状态下的方程，形如：<br>$$ f(j,k]=\max_{i=1}^{j} { F_1(j,k]+F_2(i,j]+F_3(i,j,k)} $$<br>同样化简方程，得到<br>$$ f(j,k]=\max_{i=1}^{j} { F_2(i,j]+F_4(i)*F_5(j,k]} + const(j,k]$$<br>类似地令$F_4(i)$为横坐标x，待求的$f(j,k]$看作截距b，$F_2(i,j]$看作纵坐标y构建线性规划。之后的步骤同上。</p>
+<h2 id="双状态的斜率优化"><a href="#双状态的斜率优化" class="headerlink" title="双状态的斜率优化"></a>双状态的斜率优化</h2><p>拓展单状态下的方程，形如：<br>$$ f(j,k]&#x3D;\max_{i&#x3D;1}^{j} { F_1(j,k]+F_2(i,j]+F_3(i,j,k)} $$<br>同样化简方程，得到<br>$$ f(j,k]&#x3D;\max_{i&#x3D;1}^{j} { F_2(i,j]+F_4(i)*F_5(j,k]} + const(j,k]$$<br>类似地令$F_4(i)$为横坐标x，待求的$f(j,k]$看作截距b，$F_2(i,j]$看作纵坐标y构建线性规划。之后的步骤同上。</p>
 <p>斜率优化的目的是减少枚举前驱状态的时间，用O(1)或O(log n)完成状态转移。这将要求在完成状态计算后，将新获得的点加入凸线中。加点后，视情况选择是否维护凸性。<br>对于双状态的题目，不同的j对应不同的凸线（这是因为$F_2(i,j]$会随j变化，即点的坐标会变化）。应当判断对于同一个j、不同的k，能否从同一条凸线得到答案。</p>
 <p>如果加点操作的横坐标具有非单调性，可能需要数据结构支持二分查找、中间加点、中间删点的操作。如果不需要即时维护，可以用排序完成维护。</p>
 ]]></content>
@@ -3623,7 +3623,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>插入：<ul>
 <li><strong>自带查找</strong></li>
 <li>新结点分配随机优先级，像排序二叉树一样<strong>插到一个叶子</strong>上（每个结点有计数器，可节省插入相同结点），然后旋转维护优先级树。</li>
-<li>递归地写，<strong>insert()后判断</strong>一下是否需要leftRotate() / rightRotate()。</li>
+<li>递归地写，<strong>insert()后判断</strong>一下是否需要leftRotate() &#x2F; rightRotate()。</li>
 </ul>
 </li>
 <li>删除：<ul>
@@ -3651,7 +3651,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 </ul>
 <h2 id="Splay"><a href="#Splay" class="headerlink" title="Splay"></a>Splay</h2><ul>
 <li>拥有将某一个结点旋转到根的操作Splay(&amp;root, const x)，并在大多数操作中主动调用splay()</li>
-<li>新建结点newNode(const v, const father = 0)<ul>
+<li>新建结点newNode(const v, const father &#x3D; 0)<ul>
 <li>返回地址</li>
 </ul>
 </li>
@@ -3671,7 +3671,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>插入(&amp;root, const v)<ul>
 <li><strong>自带查找</strong></li>
 <li>先判根，然后开始循环</li>
-<li>保存父亲y，引用孩子x，若x==0 则 x=newNode</li>
+<li>保存父亲y，引用孩子x，若x&#x3D;&#x3D;0 则 x&#x3D;newNode</li>
 <li>因为插入包含了splay()，所以要带引用root。</li>
 </ul>
 </li>
@@ -3682,7 +3682,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>如果被删结点不是外结点，那么被删结点肯定有前驱和后继<strong>在子树上</strong>，任取一个代替自己，然后splay()自己</li>
 </ul>
 </li>
-<li>前驱后继(&amp;root const v) / (&amp;root const x)<ul>
+<li>前驱后继(&amp;root const v) &#x2F; (&amp;root const x)<ul>
 <li><strong>将x旋到根</strong>，前驱就是左子树的最右结点，后继就是右子树的最左结点。</li>
 <li>因为包含了splay()，所以要带<strong>引用root</strong>。</li>
 </ul>
@@ -3754,15 +3754,15 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 </ul>
 </li>
 <li>在每个dfs中, 设当前节点为x, 枚举边连到y.<ul>
-<li>如果dfn[y]未定义, 则y是x在搜索树上的儿子. low[x] = min(low[x], dfs(y)).</li>
-<li>如果y == fa[x], 则y是x在搜索树上的父亲, 不管此y</li>
-<li>若dfn[y]有定义且y!=fa[x], 则y即是x通过非父子边连到的节点, 尝试用dfn[y]更新low[x].</li>
+<li>如果dfn[y]未定义, 则y是x在搜索树上的儿子. low[x] &#x3D; min(low[x], dfs(y)).</li>
+<li>如果y &#x3D;&#x3D; fa[x], 则y是x在搜索树上的父亲, 不管此y</li>
+<li>若dfn[y]有定义且y!&#x3D;fa[x], 则y即是x通过非父子边连到的节点, 尝试用dfn[y]更新low[x].</li>
 </ul>
 </li>
 <li>利用桥和割点的性质判定.</li>
 </ol>
-<h2 id="性质-依据"><a href="#性质-依据" class="headerlink" title="性质/依据"></a>性质/依据</h2><h3 id="沿x的边找其他节点y"><a href="#沿x的边找其他节点y" class="headerlink" title="沿x的边找其他节点y."></a>沿x的边找其他节点y.</h3><ol>
-<li>dfn[y]有定义 &lt;==&gt; y是x在搜索树中的祖先<ul>
+<h2 id="性质-x2F-依据"><a href="#性质-x2F-依据" class="headerlink" title="性质&#x2F;依据"></a>性质&#x2F;依据</h2><h3 id="沿x的边找其他节点y"><a href="#沿x的边找其他节点y" class="headerlink" title="沿x的边找其他节点y."></a>沿x的边找其他节点y.</h3><ol>
+<li>dfn[y]有定义 &lt;&#x3D;&#x3D;&gt; y是x在搜索树中的祖先<ul>
 <li>充分性是显然的.</li>
 <li>必要性: 若y不是祖先, 则y是兄弟或祖先的兄弟. 又因为dfn[y]有定义, 所以y一定完成了dfs的过程, 但x和y连接的边却没有处理, 矛盾.</li>
 <li>尝试用dfn[y]更新low[x], 而不是用low[y]. (使回溯边不经过祖先点). 这样能保持算法的正确性. 否则因为回溯边经过割点在找割点时产生错误.</li>
@@ -3779,13 +3779,13 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 </li>
 </ol>
 <h3 id="桥的性质"><a href="#桥的性质" class="headerlink" title="桥的性质"></a>桥的性质</h3><ol>
-<li>桥是一条边, 连接着在搜索树中的父亲和儿子/祖先和儿子</li>
-<li>设一条边连接着祖先节点u, 儿子节点v, 若dfn[u]&lt;low[v], 则若边删除, 祖先儿子无法连通, 即此边是桥. 反之亦然: 边(u, v)是桥 &lt;==&gt; dfn[u]&lt;low[v] (u是v的祖先)</li>
+<li>桥是一条边, 连接着在搜索树中的父亲和儿子&#x2F;祖先和儿子</li>
+<li>设一条边连接着祖先节点u, 儿子节点v, 若dfn[u]&lt;low[v], 则若边删除, 祖先儿子无法连通, 即此边是桥. 反之亦然: 边(u, v)是桥 &lt;&#x3D;&#x3D;&gt; dfn[u]&lt;low[v] (u是v的祖先)</li>
 </ol>
 <h3 id="割点的性质"><a href="#割点的性质" class="headerlink" title="割点的性质"></a>割点的性质</h3><ol>
 <li>割点是一个点, 它要么是根节点, 要么有一个父亲节点.</li>
 <li>对于根节点, 若搜索树上根节点有多余一个儿子, 则任意两对儿子以根节点为割点.</li>
-<li>对于非根节点, 设为u, 其父亲为fa, 儿子v(i), 若dfn[u] &lt;= low[v], 则若u删除, fa/v不连通, 即u是割点;  特别地, dfn[u] &lt;= low[v1], 则v1与v2, v3....都以fa为割点.</li>
+<li>对于非根节点, 设为u, 其父亲为fa, 儿子v(i), 若dfn[u] &lt;&#x3D; low[v], 则若u删除, fa&#x2F;v不连通, 即u是割点;  特别地, dfn[u] &lt;&#x3D; low[v1], 则v1与v2, v3....都以fa为割点.</li>
 </ol>
 <p>找桥：用dfs遍历图，记录结点访问次序；当某个结点有一条边通往已被访问过的结点时，代表找到了环；不在环上的边就是桥。</p>
 <h1 id="强连通分量"><a href="#强连通分量" class="headerlink" title="强连通分量"></a>强连通分量</h1><p>在有向图中两个顶点Vi，Vj之间有一条从Vi到Vj的有向路径，同时还有一条从vj到vi的有向路径，则称两个顶点强连通。如果有向图G的每两个顶点都强连通，称G是一个强连通图。有向图的极大强连通子图，称为强连通分量（百度百科）</p>
@@ -3807,7 +3807,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <span id="more"></span>
 
 <p>树链剖分最重要的地方在于分解树的规则， 下面是一种通用的分解方法：对于每个结点，如果它有儿子，那么取其子树最重（子树结点最多）的儿子为“重儿子”， 重儿子与其父亲的连边称为“重边”。相对的，其余的儿子成为“轻儿子”，轻儿子与父亲的连边称为轻边 。连续的重边构成“重链”，在同一条重链上的点 在线段树中 按重链的顺序相邻。显然，非叶子结点都有重儿子， 它们必定能映射到唯一的重链上。对于多个同父亲的叶子结点，随便取一个作为重儿子就可以了。可以想象， 轻边连接着不相交的重链，树上的每个结点都能唯一的映射到线段的某一个点上。</p>
-<p><img src="./%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86%E4%BE%8B%E5%AD%90.png" alt="树链剖分例子"></p>
+<p><img src="/./%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86%E4%BE%8B%E5%AD%90.png" alt="树链剖分例子"></p>
 <p>这样一来，一些数据结构就能够推广到树上。比如能求区间最值、区间求和的线段树，在映射做好后，就能套用在树上。<br>假如我们要求树上两点(u,v)之间的路径的权值和。例如上图求(11, 14)间路径权值和，分别从11和14往上跳，跳到重链的顶端，（为了不超过两点的最近公共祖先， 要选择更深的重链头跳），11跳到2，用线段树求出(2,11)的和（利用重链在映射线段上连续的特点），暴力加一下轻边(1,2)，此时两方面同时跳到重链头1，用线段树求出(1,14)的和，得到答案。</p>
 <h1 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h1><h2 id="主要数据"><a href="#主要数据" class="headerlink" title="主要数据"></a>主要数据</h2><ol>
 <li>树<ul>
@@ -4022,7 +4022,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <ul>
 <li>注意权值在树中摆放的位置， 在边上或者在结点上，通常可以转化成在结点上。</li>
 <li>在一条重链上，深度小的点在线段树左边，深度大的在右边（相对而言）。</li>
-<li>find()中当f1==f2后，路径a~b是尚未被计算的，特别是要留意if (a==b)，将其权值记上。</li>
+<li>find()中当f1=&#x3D;f2后，路径a~b是尚未被计算的，特别是要留意if (a=&#x3D;b)，将其权值记上。</li>
 <li>dfs()先解决深度、大小（轻重）、重儿子、父亲的问题。</li>
 <li>set_tree()后解决top重链头标记、安排映射的问题。</li>
 </ul>
@@ -4294,19 +4294,19 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>用OD动态追踪，尝试还原被加壳代码（等待去壳），再用QV还原EXE（用块复制的办法加快速度）</li>
 </ol>
 <h2 id="面对序列号"><a href="#面对序列号" class="headerlink" title="面对序列号"></a>面对序列号</h2><ol>
-<li><p>观察到现象：弹框并消失。可行办法：跟踪CreateWindow/ShowWindow/DestoryWindow（推荐）</p>
+<li><p>观察到现象：弹框并消失。可行办法：跟踪CreateWindow&#x2F;ShowWindow&#x2F;DestoryWindow（推荐）</p>
 </li>
 <li><p>用OD动态追踪，尝试中断DestoryWindow，观察堆栈顶端找到出栈后的程序运行位置（或直接跑retn)</p>
 </li>
-<li><p>对不当场判断的场合（没有明显现象） 怀疑有文件/注册表读写 <code>FileMon + RegMon = ProcMon</code></p>
+<li><p>对不当场判断的场合（没有明显现象） 怀疑有文件&#x2F;注册表读写 <code>FileMon + RegMon = ProcMon</code></p>
 <p> RegCreateKey()<br> RegQueryValue()<br> RegSetValue()</p>
 <p> CreateFile<br> CreateFileEx<br> ReadFile<br> WriteFile</p>
 </li>
 <li><p>软件断点：当前断点指令的首字节改为<code>0xCC</code>（对应的汇编指令为int 3）。 可能被程序自检。</p>
 </li>
-<li><p>硬件断点：选中某条指令-&gt;断点-&gt;硬件执行。  检查已设置的断点：调试-&gt;硬件断点... 原理：CPU调试寄存器保存了断点地址和断点条件，每个周期都会检查条件。触发条件有<code>execute</code>，<code>read</code>, <code>write</code>。  要设置读/写断点，选中变量的首字节-&gt;右键-&gt;断点-&gt;硬件写入-&gt;DWORD（对应的类型）。要设置DWORD断点对变量首字节有要求。读/写完成后到达断点。<br>可以用<code>printf(&quot;%p&quot;,...)</code>知道要跟踪的变量的地址。</p>
+<li><p>硬件断点：选中某条指令-&gt;断点-&gt;硬件执行。  检查已设置的断点：调试-&gt;硬件断点... 原理：CPU调试寄存器保存了断点地址和断点条件，每个周期都会检查条件。触发条件有<code>execute</code>，<code>read</code>, <code>write</code>。  要设置读&#x2F;写断点，选中变量的首字节-&gt;右键-&gt;断点-&gt;硬件写入-&gt;DWORD（对应的类型）。要设置DWORD断点对变量首字节有要求。读&#x2F;写完成后到达断点。<br>可以用<code>printf(&quot;%p&quot;,...)</code>知道要跟踪的变量的地址。</p>
 </li>
-<li><p>利用读/写硬件断点，当操作序列号时就能断住。<code>Ctrl+B</code>搜索已输入的序列号找到内存地址。跳跃几次看到<code>rep movs</code>（字符串拷贝），此时取消断点，回到用户代码，跳出几次，看到getText</p>
+<li><p>利用读&#x2F;写硬件断点，当操作序列号时就能断住。<code>Ctrl+B</code>搜索已输入的序列号找到内存地址。跳跃几次看到<code>rep movs</code>（字符串拷贝），此时取消断点，回到用户代码，跳出几次，看到getText</p>
 </li>
 <li><p>如果进入系统代码，则应跳出到用户代码<code>Alt+F9</code>，再按<code>Ctrl+F9</code>跳出一些函数。</p>
 </li>
@@ -4314,7 +4314,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 </li>
 </ol>
 <h1 id="汇编规则"><a href="#汇编规则" class="headerlink" title="汇编规则"></a>汇编规则</h1><ol>
-<li>cdq edx:eax, idiv, edx = edx:eax %n</li>
+<li>cdq edx:eax, idiv, edx &#x3D; edx:eax %n</li>
 </ol>
 <h1 id="逆向工程历史"><a href="#逆向工程历史" class="headerlink" title="逆向工程历史"></a>逆向工程历史</h1><ol>
 <li>微软开发<code>debug</code>，<code>codeview</code>, 宝蓝开发<code>TurboDebug</code>;</li>
@@ -4324,7 +4324,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <li>u(unassemble) 反汇编，指定开始地址和末地址（l+长度亦可)，反汇编对应地址内的机器语言。</li>
 <li>r(register) 查看寄存器 SF+PL-NG UP上DN下.  r + 寄存器名字, 修改内存</li>
 <li>p (optional 地址) 单步前进，目标地址是执行完毕的</li>
-<li>g (optional =首地址 (optional) 末地址) (从csip)跳跃直到int 3(末地址是未执行的);</li>
+<li>g (optional &#x3D;首地址 (optional) 末地址) (从csip)跳跃直到int 3(末地址是未执行的);</li>
 <li>d(dump) 查看内存 可以指定(d cs:100 120 || d cs:100 l20)</li>
 <li>e(edit) 修改内存 地址 + &quot;string&quot; || hex</li>
 <li>t(track in)</li>
@@ -4341,7 +4341,7 @@ pair<span class="token operator">&lt;</span><span class="token keyword">int</spa
 <p><code>es:[bx]</code> 0:32是一个中断向量的地址</p>
 <p>0:0 ~ 0:3FF 是中断向量表，每个中断向量占用4字节。 例如<code>int 00h</code>的中断向量储存在0:0 ~ 0:3之间; <code>int 01h</code>的中断向量储存在0:4 ~ 0:7之间。</p>
 <p>当cpu执行<code>int 00h</code>时：<br>pushf 保护当前标志位（flag）的状态<br>push cs 当前短地址<br>push 下条指令的偏移地址<br>cli<br>jmp 8756h:3412h</p>
-<p>// cli disable interrupt    (clear interrupt)<br>// sti enable.              (set interrupt)</p>
+<p>&#x2F;&#x2F; cli disable interrupt    (clear interrupt)<br>&#x2F;&#x2F; sti enable.              (set interrupt)</p>
 <p>8756h:3412h 是中断服务程序的入口地址<br>    ……<br>    iret; 中断返回</p>
 <p>当cpu执行<code>iret</code>时：<br>pop ip;<br>pop cs;<br>popf;       从而实现恢复现场。</p>
 <pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">; 调换中断向量表
@@ -4406,7 +4406,7 @@ pc
 
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="dosboxdeb"><a href="#dosboxdeb" class="headerlink" title="dosboxdeb"></a>dosboxdeb</h2><p>dos mcbs 获得当前程序的PSP （memory control block)<br>u 01dd:1785  // 查看反汇编</p>
+<h2 id="dosboxdeb"><a href="#dosboxdeb" class="headerlink" title="dosboxdeb"></a>dosboxdeb</h2><p>dos mcbs 获得当前程序的PSP （memory control block)<br>u 01dd:1785  &#x2F;&#x2F; 查看反汇编</p>
 <h2 id="单步中断"><a href="#单步中断" class="headerlink" title="单步中断"></a>单步中断</h2><pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">pushf
 pop ax
 or ax, 0100h
@@ -4428,18 +4428,18 @@ infect_exe:
     call dword ptr cs:[old_2h]; call 隐含push段地址、偏移地址 ..?
     <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>原始的<code>int 21h</code>中断向量的段地址&lt;=70h</p>
+<p>原始的<code>int 21h</code>中断向量的段地址&lt;&#x3D;70h</p>
 <p>假装调用一个无用的<code>int 21h</code>功能，如获取dos版本号</p>
 <pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">mov ah, 30h
 pushf
 置位TF ; 不能手动int 21h，因为系统将flag置零
 call dword ptr [current_21h]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="EXE文件格式"><a href="#EXE文件格式" class="headerlink" title="EXE文件格式"></a>EXE文件格式</h2><p>+00 4D, 5A; EXE标志“MZ”<br>+02 50, 01; 最后一个扇区的字节数为150h （例外：如果是00 00则最后一个扇区是满载）<br>+04 02, 00; EXE占用的扇区数量（200字节/一个扇区）<br>+06 02, 00; 重定位项数<br>+08 02, 00; 文件头的节长度=20h，所以字节长度=200h (20h x 10h)<br>+0A 00, 00; 至少内存   DOS是单任务的，所以内存限制没有太大意义<br>+0C FF, FF; 至多内存<br>+0E 05, 00; SS与程序首段地址的距离 （程序首段地址在运行时确定, = psp+10h）<br>+10 00, 01; SP = 100h</p>
-<p>+12 E8, 20; EXE文件头的校验值<br>+14 28, 00; IP=0028h            ; 注意此处先IP后CS   CS:IP第一句指令<br>+16 02, 00; CS与程序首段地址的距离<br>+18 1E, 00; 重定位表的偏移地址</p>
-<p>; 下面是重定位表。每个重定位项4个字节。每两个字节为一个信息。<br>+1E 01, 00; 重定位的偏移地址=0001h<br>+20 02, 00; Δ=0002h,<br>; 首段地址+Δ=重定位的段地址<br>;<br>+22 0D, 00; 重定位的偏移地址=000Dh<br>+24 02, 00; Δ=0002h,<br>; 首段地址+Δ=重定位的段地址</p>
+<h2 id="EXE文件格式"><a href="#EXE文件格式" class="headerlink" title="EXE文件格式"></a>EXE文件格式</h2><p>+00 4D, 5A; EXE标志“MZ”<br>+02 50, 01; 最后一个扇区的字节数为150h （例外：如果是00 00则最后一个扇区是满载）<br>+04 02, 00; EXE占用的扇区数量（200字节&#x2F;一个扇区）<br>+06 02, 00; 重定位项数<br>+08 02, 00; 文件头的节长度&#x3D;20h，所以字节长度&#x3D;200h (20h x 10h)<br>+0A 00, 00; 至少内存   DOS是单任务的，所以内存限制没有太大意义<br>+0C FF, FF; 至多内存<br>+0E 05, 00; SS与程序首段地址的距离 （程序首段地址在运行时确定, &#x3D; psp+10h）<br>+10 00, 01; SP &#x3D; 100h</p>
+<p>+12 E8, 20; EXE文件头的校验值<br>+14 28, 00; IP&#x3D;0028h            ; 注意此处先IP后CS   CS:IP第一句指令<br>+16 02, 00; CS与程序首段地址的距离<br>+18 1E, 00; 重定位表的偏移地址</p>
+<p>; 下面是重定位表。每个重定位项4个字节。每两个字节为一个信息。<br>+1E 01, 00; 重定位的偏移地址&#x3D;0001h<br>+20 02, 00; Δ&#x3D;0002h,<br>; 首段地址+Δ&#x3D;重定位的段地址<br>;<br>+22 0D, 00; 重定位的偏移地址&#x3D;000Dh<br>+24 02, 00; Δ&#x3D;0002h,<br>; 首段地址+Δ&#x3D;重定位的段地址</p>
 <p>DOS运行程序时，文件头不载入内存，所以内存头可认为是文件头长度</p>
-<p>200h+2:1 = 0:200h + 0:21 = 0:211</p>
+<p>200h+2:1 &#x3D; 0:200h + 0:21 &#x3D; 0:211</p>
 <pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">mov ah, 2
 mov dl, &#39;A&#39;
 int 21h
@@ -4508,7 +4508,31 @@ end shell<span aria-hidden="true" class="line-numbers-rows"><span></span><span><
 
 <p>注意加密堆栈后引发的解密对新数据的影响的问题。</p>
 <p>保存ss和sp，之后修改它为一段预留空间</p>
-<h1 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h1><p><em>32位系统下</em><br>|            |  保护模式  |      实模式       |<br>| :--------: | :--------: | :---------------: |<br>| 最大段长度 |     4G     |        64K        |<br>|  越界访问  | 运行时错误 |       允许        |<br>|  物理寻址  |  查gdt表   | 基址*10h+10h+偏移 |</p>
+<h1 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h1><p><em>32位系统下</em></p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">保护模式</th>
+<th align="center">实模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">最大段长度</td>
+<td align="center">4G</td>
+<td align="center">64K</td>
+</tr>
+<tr>
+<td align="center">越界访问</td>
+<td align="center">运行时错误</td>
+<td align="center">允许</td>
+</tr>
+<tr>
+<td align="center">物理寻址</td>
+<td align="center">查gdt表</td>
+<td align="center">基址*10h+10h+偏移</td>
+</tr>
+</tbody></table>
 <h2 id="查gdt表"><a href="#查gdt表" class="headerlink" title="查gdt表"></a>查gdt表</h2><p>设<code>ds=10h</code>，现通过查gdt表获得其物理地址。gdt表储存描述符，每个占8字节。表的首地址存在于<code>gdtr</code>寄存器。</p>
 <p>gdt+10h xx xx xx xx xx xx xx xx</p>
 <h2 id="idt中断描述符表"><a href="#idt中断描述符表" class="headerlink" title="idt中断描述符表"></a>idt中断描述符表</h2><p>首地址存在于<code>idtr</code>中。每项有8字节。基址2字节，偏移4字节，剩余2字节记录权限。</p>
@@ -4531,24 +4555,24 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
     <url>/2019/06/30/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/</url>
     <content><![CDATA[<p><em>本文的编撰仅面向作者本人</em></p>
 <h1 id="1-6-Rules-of-Inference"><a href="#1-6-Rules-of-Inference" class="headerlink" title="1.6 Rules of Inference"></a>1.6 Rules of Inference</h1><ol>
-<li>Modus ponens 假言推理 p &amp; p-&gt;q =&gt; q </li>
-<li>Modus tollens 取拒式 !q &amp; p-&gt;q =&gt; !p</li>
-<li>Hypothetical syllogism /,haɪpə&#39;θɛtɪk, &#39;sɪlə,dʒɪz(ə)m/ 假言三段论 p-&gt;q &amp; q-&gt;r =&gt; p-&gt;r </li>
-<li>Disjunctive syllogism 析取三段论 pVq &amp; !p = p</li>
-<li>Addtion 附加律 p =&gt; pVq  （附加在析取式中）</li>
-<li>Simplification 化简律 p&amp;&amp;q =&gt; p （合取条件的拆分）</li>
-<li>Resolution 消解律 pVq &amp; !pVr =&gt; qVr 条件相斥必有一T</li>
+<li>Modus ponens 假言推理 p &amp; p-&gt;q &#x3D;&gt; q </li>
+<li>Modus tollens 取拒式 !q &amp; p-&gt;q &#x3D;&gt; !p</li>
+<li>Hypothetical syllogism &#x2F;,haɪpə&#39;θɛtɪk, &#39;sɪlə,dʒɪz(ə)m&#x2F; 假言三段论 p-&gt;q &amp; q-&gt;r &#x3D;&gt; p-&gt;r </li>
+<li>Disjunctive syllogism 析取三段论 pVq &amp; !p &#x3D; p</li>
+<li>Addtion 附加律 p &#x3D;&gt; pVq  （附加在析取式中）</li>
+<li>Simplification 化简律 p&amp;&amp;q &#x3D;&gt; p （合取条件的拆分）</li>
+<li>Resolution 消解律 pVq &amp; !pVr &#x3D;&gt; qVr 条件相斥必有一T</li>
 <li>? Logical equivalence<span id="more"></span></li>
 </ol>
 <p>$$<br>\begin{matrix}<br>    Step &amp; Reason \</p>
 <ol>
 <li>xxx &amp; Premise \</li>
 <li>xxx &amp; Contrapositive,of,(1) \</li>
-<li>xxx &amp; XXrule,using,(n),and,(m)<br>\end{matrix}<br>$$</li>
+<li>xxx &amp; XXrule,using,(n),and,(m)<br>\end{matrix}<br> $$</li>
 </ol>
 <h2 id="Fallacies-谬误"><a href="#Fallacies-谬误" class="headerlink" title="Fallacies 谬误"></a>Fallacies 谬误</h2><ol>
 <li>fallacy of affirming the conclusion 肯定结论的谬误 由结论推出条件</li>
-<li>fallacy of denying the hypothesis  /haɪ&#39;pɒθɪsɪs/ 否定假设的谬误 从否定条件推出否定结论</li>
+<li>fallacy of denying the hypothesis  &#x2F;haɪ&#39;pɒθɪsɪs&#x2F; 否定假设的谬误 从否定条件推出否定结论</li>
 </ol>
 <h2 id="Rules-of-Inference-for-Quantified-Statements-量化命题的推理规则"><a href="#Rules-of-Inference-for-Quantified-Statements-量化命题的推理规则" class="headerlink" title="Rules of Inference for Quantified Statements 量化命题的推理规则"></a>Rules of Inference for Quantified Statements 量化命题的推理规则</h2><ol>
 <li>Universal instantiation 全称实例 $\forall xP(x) \implies P(c)$</li>
@@ -4562,11 +4586,11 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 </ol>
 <hr>
 <h1 id="1-7-Introduction-to-Proofs"><a href="#1-7-Introduction-to-Proofs" class="headerlink" title="1.7 Introduction to Proofs"></a>1.7 Introduction to Proofs</h1><ol>
-<li>theorem /&#39;θɪərəm/ 定理 （定理的证明有定义、其他定理、公理、推断规则）</li>
-<li>lemma /&#39;lemə/ 引理 用于证明定理的其他定理</li>
-<li>corollary /kə&#39;rɒlərɪ/ 推论 定理下的直接结论</li>
+<li>theorem &#x2F;&#39;θɪərəm&#x2F; 定理 （定理的证明有定义、其他定理、公理、推断规则）</li>
+<li>lemma &#x2F;&#39;lemə&#x2F; 引理 用于证明定理的其他定理</li>
+<li>corollary &#x2F;kə&#39;rɒlərɪ&#x2F; 推论 定理下的直接结论</li>
 <li>propositions 命题 偶尔用来称呼不重要的定理，或称事实、结论</li>
-<li>conjecture /kən&#39;dʒektʃə/ 猜想 一旦找到证明，猜想就变成定理；也有可能被证伪</li>
+<li>conjecture &#x2F;kən&#39;dʒektʃə&#x2F; 猜想 一旦找到证明，猜想就变成定理；也有可能被证伪</li>
 </ol>
 <h2 id="To-Proof-p-gt-q-or-to-proof-p"><a href="#To-Proof-p-gt-q-or-to-proof-p" class="headerlink" title="To Proof p-&gt;q (or to proof p)"></a>To Proof p-&gt;q (or to proof p)</h2><ol>
 <li>Trivial Proof : 平凡证明 if q is true then p-&gt;q is true.</li>
@@ -4588,18 +4612,18 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <li>Constructive existence proof 构造性 : Find an explicit c, for which P(c) is true.</li>
 <li>Nonconstructive existence proof 非构造性证明 ： 不直接构造例子，但说明多种情况之一必有符合的例子；或若不存在，就得到某些矛盾。</li>
 </ol>
-<h2 id="Uniqueness-Proof-唯一性证明"><a href="#Uniqueness-Proof-唯一性证明" class="headerlink" title="Uniqueness Proof 唯一性证明"></a>Uniqueness Proof 唯一性证明</h2><p>同时证明存在性和唯一性，即x符合某种期望，而若y!=x，则y不符合这种期望。也可以等价地证明若y符合这种期望，则y=x。</p>
+<h2 id="Uniqueness-Proof-唯一性证明"><a href="#Uniqueness-Proof-唯一性证明" class="headerlink" title="Uniqueness Proof 唯一性证明"></a>Uniqueness Proof 唯一性证明</h2><p>同时证明存在性和唯一性，即x符合某种期望，而若y!&#x3D;x，则y不符合这种期望。也可以等价地证明若y符合这种期望，则y&#x3D;x。</p>
 <hr>
 <h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><ol>
 <li>The cardinality of  a finite set A 集合的基数，|A|</li>
-<li>finite 有限的 /faɪnaɪt/</li>
-<li>infinite 无限的 /&#39;ɪnfɪnət/</li>
-<li>Power Set 幂集 P(A) The set of all subsets of a set A. $|P(A)| = 2^{|A|}$</li>
+<li>finite 有限的 &#x2F;faɪnaɪt&#x2F;</li>
+<li>infinite 无限的 &#x2F;&#39;ɪnfɪnət&#x2F;</li>
+<li>Power Set 幂集 P(A) The set of all subsets of a set A. $|P(A)| &#x3D; 2^{|A|}$</li>
 <li>Cartesian Product 笛卡尔积 A x B x C的意义和(A x B) x C不一样！</li>
 <li>coordinate</li>
 </ol>
 <h2 id="Set-Operations"><a href="#Set-Operations" class="headerlink" title="Set Operations"></a>Set Operations</h2><ol>
-<li>Union /&#39;junɪən/</li>
+<li>Union &#x2F;&#39;junɪən&#x2F;</li>
 <li>Intersection</li>
 <li>Complementation : complement 补集，必须有universal set U。A上一横杠</li>
 <li>Difference 不满足交换律，A-B</li>
@@ -4611,51 +4635,51 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <li>Membership Tables 成员表，枚举任意元素属于各个集合情况，从而验证恒等式（和真值表类似）</li>
 </ol>
 <h2 id="Funtion-f-maps-A-to-B-f-is-a-mapping-from-A-to-B"><a href="#Funtion-f-maps-A-to-B-f-is-a-mapping-from-A-to-B" class="headerlink" title="Funtion (f maps A to B) (f is a mapping from A to B)"></a>Funtion (f maps A to B) (f is a mapping from A to B)</h2><ol start="0">
-<li>assignment 指派，分配。 指定f(a)=b。</li>
+<li>assignment 指派，分配。 指定f(a)&#x3D;b。</li>
 <li>domain 定义域 A</li>
 <li>codomain 陪域 B</li>
 <li>image 像 b is an image of a under f</li>
 <li>preimage 原像 可能是单个元素，也可能是一个集合。</li>
 <li>f(A) range 值域</li>
 <li>等价的函数具有相同的domain &amp; codomain &amp; map each element to the same element of the codomain</li>
-<li>$f(S) = {f(s)|s\in S}$</li>
-<li>$(f_1+f_2)(x) = f_1(x)+f_2(x)$</li>
-<li>$(f_1*f_2)(x) = f_1(x)*f_2(x)$</li>
+<li>$f(S) &#x3D; {f(s)|s\in S}$</li>
+<li>$(f_1+f_2)(x) &#x3D; f_1(x)+f_2(x)$</li>
+<li>$(f_1*f_2)(x) &#x3D; f_1(x)*f_2(x)$</li>
 <li>injection injective 单射 one-to-one 可在值域上定义反函数</li>
 <li>surjection surjective (or onto) 满射 映上 陪域中每个元素都能找到原像</li>
-<li>injective and surjective =&gt; bijection or one-to-one correspondence 双射 一一对应</li>
+<li>injective and surjective &#x3D;&gt; bijection or one-to-one correspondence 双射 一一对应</li>
 <li>invertible 可逆的 Inverse Function 反函数</li>
-<li>Composition 复合函数 $f \circ g = f(g(x))$</li>
-<li>Factorial/fæk&#39;tɔrɪəl/ Function 阶乘函数</li>
+<li>Composition 复合函数 $f \circ g &#x3D; f(g(x))$</li>
+<li>Factorial&#x2F;fæk&#39;tɔrɪəl&#x2F; Function 阶乘函数</li>
 <li>Partial Function 局部函数，对某个函数截取部分domain</li>
 </ol>
-<h2 id="Sequence-序列-a-n"><a href="#Sequence-序列-a-n" class="headerlink" title="Sequence 序列 ${a_n}$"></a>Sequence 序列 ${a_n}$</h2><p>A funtion from N or N+ to S<br>$$a_n = f(n)$$</p>
+<h2 id="Sequence-序列-a-n"><a href="#Sequence-序列-a-n" class="headerlink" title="Sequence 序列 ${a_n}$"></a>Sequence 序列 ${a_n}$</h2><p>A funtion from N or N+ to S<br>$$a_n &#x3D; f(n)$$</p>
 <ol>
 <li>term 项</li>
-<li>Geometric Progression 几何级数 a*r^n, n=0,1...  (a and r are real numbers)</li>
+<li>Geometric Progression 几何级数 a*r^n, n&#x3D;0,1...  (a and r are real numbers)</li>
 <li>Arithmetic Progression 算术级数 （等差数列）</li>
 <li>Recurrence relation 递推关系 </li>
-<li> a solution of a recurrence relation 满足递推关系的序列称为这个递推关系的一个解</li>
-<li> initial conditions 初始条件 递推关系生效前的所有terms</li>
-<li> solving the recurrence relation 找到通项公式 这样的公式叫closed formula闭公式</li>
-<li> iteration 迭代法，正向替换 working upward； 反向替换 working downward。 用于猜测formula，然后用the method of induction数学归纳法证明。</li>
-<li> Summation （序列的部分）总和</li>
-<li>in lexicographic order /,lɛksɪkə&#39;græfɪk/ 字典序</li>
+<li>a solution of a recurrence relation 满足递推关系的序列称为这个递推关系的一个解</li>
+<li>initial conditions 初始条件 递推关系生效前的所有terms</li>
+<li>solving the recurrence relation 找到通项公式 这样的公式叫closed formula闭公式</li>
+<li>iteration 迭代法，正向替换 working upward； 反向替换 working downward。 用于猜测formula，然后用the method of induction数学归纳法证明。</li>
+<li>Summation （序列的部分）总和</li>
+<li>in lexicographic order &#x2F;,lɛksɪkə&#39;græfɪk&#x2F; 字典序</li>
 </ol>
 <h2 id="Matrices-矩阵"><a href="#Matrices-矩阵" class="headerlink" title="Matrices 矩阵"></a>Matrices 矩阵</h2><ol>
 <li>Boolean Product 布尔积 类似矩阵乘法，各项求交之后求并</li>
-<li>Boolean Powers 多次布尔积。 写作$A^{[n]}$, 记$A^{[n]}=I$</li>
+<li>Boolean Powers 多次布尔积。 写作$A^{[n]}$, 记$A^{[n]}&#x3D;I$</li>
 </ol>
 <hr>
 <h1 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h1><ol>
-<li>pseudocode /&#39;sju:doˌkod/ 伪代码</li>
+<li>pseudocode &#x2F;&#39;sju:doˌkod&#x2F; 伪代码</li>
 <li>Halt Problem 停机问题，无解</li>
 <li>Big-O f(x) of big-O of g(x)</li>
 <li>|f(x)| &lt; |c*g(x)| (x &gt; k) : the constants c and k are called witnesses. Only one pair of witnesses is needed.</li>
-<li>if f = O(g) &amp;&amp; g = O(f), then the two functions are of the same order.</li>
-<li>polynomial /,pɒlɪ&#39;nəʊmɪəl/ 多项式</li>
+<li>if f &#x3D; O(g) &amp;&amp; g &#x3D; O(f), then the two functions are of the same order.</li>
+<li>polynomial &#x2F;,pɒlɪ&#39;nəʊmɪəl&#x2F; 多项式</li>
 <li>if |f(x)| &gt; |C*g(x)| (x &gt; k) : Big-Omega</li>
-<li>if f = O(g) &amp;&amp; g = O(f), then f = θ(g) : Big-Theta; f(x) is of order g(x).</li>
+<li>if f &#x3D; O(g) &amp;&amp; g &#x3D; O(f), then f &#x3D; θ(g) : Big-Theta; f(x) is of order g(x).</li>
 <li>brute-force 蛮力（算法）</li>
 <li>Tractable Problem ：P类问题，多项式时间内解决</li>
 <li>Intractable Problem</li>
@@ -4664,19 +4688,19 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <li>NP Complete Class: NPC问题，所有的NP问题都能约化为NPC问题。</li>
 </ol>
 <hr>
-<h1 id="Number-Theory-and-Cryptography-数论和密码学"><a href="#Number-Theory-and-Cryptography-数论和密码学" class="headerlink" title="Number Theory and Cryptography 数论和密码学"></a>Number Theory and Cryptography 数论和密码学</h1><p>/krɪp&#39;tɑgrəfi/</p>
+<h1 id="Number-Theory-and-Cryptography-数论和密码学"><a href="#Number-Theory-and-Cryptography-数论和密码学" class="headerlink" title="Number Theory and Cryptography 数论和密码学"></a>Number Theory and Cryptography 数论和密码学</h1><p>&#x2F;krɪp&#39;tɑgrəfi&#x2F;</p>
 <ol>
-<li>divisibility /di,vizi&#39;biləti/ 可除性</li>
-<li>hexadecimal /,hɛksə&#39;dɛsɪml/ 十六进制（的）</li>
-<li>modular /&#39;mɑdjʊlɚ/ 模的</li>
-<li>congruence 同余 /&#39;kɑŋgrʊəns/</li>
+<li>divisibility &#x2F;di,vizi&#39;biləti&#x2F; 可除性</li>
+<li>hexadecimal &#x2F;,hɛksə&#39;dɛsɪml&#x2F; 十六进制（的）</li>
+<li>modular &#x2F;&#39;mɑdjʊlɚ&#x2F; 模的</li>
+<li>congruence 同余 &#x2F;&#39;kɑŋgrʊəns&#x2F;</li>
 <li>a divides b  a除b， a is a factor or divisor of b, b is a multiple of a.</li>
-<li>quotient /&#39;kwoʃnt/商; remainder /rɪ&#39;mendɚ/余数</li>
-<li>-11 / 3 = -4 ... 1</li>
+<li>quotient &#x2F;&#39;kwoʃnt&#x2F;商; remainder &#x2F;rɪ&#39;mendɚ&#x2F;余数</li>
+<li>-11 &#x2F; 3 &#x3D; -4 ... 1</li>
 <li>The notation a  ≡  b (mod m)  says  that a is <strong>congruent</strong> to b modulo m.   a  ≡  b (mod m) is a congruence and that m is its modulus.</li>
-<li>doing arithmatic modulo m: $a+_mb = (a+b) \mod m; a*_mb = (a*b) \mod m$</li>
+<li>doing arithmatic modulo m: $a+_mb &#x3D; (a+b) \mod m; a*_mb &#x3D; (a*b) \mod m$</li>
 </ol>
-<h2 id="Zm-0-m-1"><a href="#Zm-0-m-1" class="headerlink" title="Zm = {0...m-1}"></a>Zm = {0...m-1}</h2><ol>
+<h2 id="Zm-x3D-0-m-1"><a href="#Zm-x3D-0-m-1" class="headerlink" title="Zm &#x3D; {0...m-1}"></a>Zm &#x3D; {0...m-1}</h2><ol>
 <li>Closure 封闭性</li>
 <li>Associativity 结合律</li>
 <li>Commutativity 交换律</li>
@@ -4686,10 +4710,10 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <li>判定同余式，左边减右边是m的倍数。</li>
 </ol>
 <h2 id="Prime"><a href="#Prime" class="headerlink" title="Prime"></a>Prime</h2><ol>
-<li>composite /kɑm&#39;pɑzɪt/ 合数</li>
+<li>composite &#x2F;kɑm&#39;pɑzɪt&#x2F; 合数</li>
 <li>divisible by 7 能被7整除</li>
 <li>Mersenne Primes 梅森素数：满足2的素数次方减一的素数。检验2的素数次方减一是否素数是容易的，由此得到已知的最大素数。$2^{11}-1不是素数$</li>
-<li>Prime Number Theorem: 不超过x的素数个数大约是(x / ln x)，任取一个不超过n的数，则这个数是素数的概率是1/lnx。</li>
+<li>Prime Number Theorem: 不超过x的素数个数大约是(x &#x2F; ln x)，任取一个不超过n的数，则这个数是素数的概率是1&#x2F;lnx。</li>
 <li>对两个互质的数a,b:ak+b可以生成无限个素数。</li>
 <li>存在由任意个素数组成的等差数列（Arithmetic Progression）</li>
 <li>现阶段没有发现高效生成素数的算法f(n)</li>
@@ -4698,27 +4722,27 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <li>Conjecture: There are infinitly many primes of the form $n^2+1$.</li>
 <li>The Twin Prime Conjecture: 相差2的素数有无限多组</li>
 </ol>
-<h2 id="Great-Commom-Divisor-dɪ-39-vaɪzɚ"><a href="#Great-Commom-Divisor-dɪ-39-vaɪzɚ" class="headerlink" title="Great Commom Divisor /dɪ&#39;vaɪzɚ/"></a>Great Commom Divisor /dɪ&#39;vaɪzɚ/</h2><ol>
+<h2 id="Great-Commom-Divisor-x2F-dɪ-39-vaɪzɚ-x2F"><a href="#Great-Commom-Divisor-x2F-dɪ-39-vaɪzɚ-x2F" class="headerlink" title="Great Commom Divisor &#x2F;dɪ&#39;vaɪzɚ&#x2F;"></a>Great Commom Divisor &#x2F;dɪ&#39;vaɪzɚ&#x2F;</h2><ol>
 <li>relatively prime 互质数</li>
 <li>pairwise relatively prime 两两互质</li>
-<li>Prime Factorizations /,fæktərai&#39;zeiʃən/ 质因数分解</li>
+<li>Prime Factorizations &#x2F;,fæktərai&#39;zeiʃən&#x2F; 质因数分解</li>
 <li>Least Common Multiple 最小公倍数 lcm(a,b)</li>
-<li>Euclidean /ju:&#39;klidiən/ 欧几里得的</li>
-<li>Bézout’s Theorem 贝祖定理 gcd(a,b) = sa+tb. （求s、t用扩展欧几里得）</li>
-<li>if gcd(a,b)=1 &amp;&amp; a|bc, then a|c; Therefore, a ≡ b (mod m) if ac ≡ bc (mod m) &amp;&amp; gcd(c,m)=1.</li>
+<li>Euclidean &#x2F;ju:&#39;klidiən&#x2F; 欧几里得的</li>
+<li>Bézout’s Theorem 贝祖定理 gcd(a,b) &#x3D; sa+tb. （求s、t用扩展欧几里得）</li>
+<li>if gcd(a,b)&#x3D;1 &amp;&amp; a|bc, then a|c; Therefore, a ≡ b (mod m) if ac ≡ bc (mod m) &amp;&amp; gcd(c,m)&#x3D;1.</li>
 </ol>
 <h2 id="Solving-Congruences"><a href="#Solving-Congruences" class="headerlink" title="Solving Congruences"></a>Solving Congruences</h2><ol>
 <li>linear congruences 线性同余方程 ax≡b ( mod m)</li>
 <li>an inverse of A modulo m 模m下a的乘法逆元</li>
-<li>逆元存在的充要条件：若gcd(a,m)=1, 则存在a在模m下的乘法逆元。 Proof: Since gcd(a,m)=1, there are integers s and t such that sa+tm=1. Hence, sa+tm ≡ 1 ( mod m), and it follows that sa ≡ 1 ( mod m). 用扩展欧几里得求出s即逆元。</li>
-<li>coefficient /koʊəˈfɪʃənt/ 系数</li>
-<li>Chinese Remainder Theorem: 对于模数两两互质的同余方程组（一条方程的形式为$x≡a_i (\mod m_i), m&gt;1$）,在$模M=\prod\limits_{i=1}^n m_i系$中有且仅有唯一解。一个解的构造为$x = \sum\limits_{i=1}^n a_i M_i y_i$, 其中$M_i = M\div m_i, y_i*M_i≡1 (\mod m_i)$。如此构造后，对任意的i，都满足同余方程$x ≡ a_i M_i y_i ≡ a_i (\mod m_i)$。模系下的唯一性<strong>待证 练习30</strong>。</li>
+<li>逆元存在的充要条件：若gcd(a,m)&#x3D;1, 则存在a在模m下的乘法逆元。 Proof: Since gcd(a,m)&#x3D;1, there are integers s and t such that sa+tm&#x3D;1. Hence, sa+tm ≡ 1 ( mod m), and it follows that sa ≡ 1 ( mod m). 用扩展欧几里得求出s即逆元。</li>
+<li>coefficient &#x2F;koʊəˈfɪʃənt&#x2F; 系数</li>
+<li>Chinese Remainder Theorem: 对于模数两两互质的同余方程组（一条方程的形式为$x≡a_i (\mod m_i), m&gt;1$）,在$模M&#x3D;\prod\limits_{i&#x3D;1}^n m_i系$中有且仅有唯一解。一个解的构造为$x &#x3D; \sum\limits_{i&#x3D;1}^n a_i M_i y_i$, 其中$M_i &#x3D; M\div m_i, y_i*M_i≡1 (\mod m_i)$。如此构造后，对任意的i，都满足同余方程$x ≡ a_i M_i y_i ≡ a_i (\mod m_i)$。模系下的唯一性<strong>待证 练习30</strong>。</li>
 <li>Fermat’s Little Theorem： $有质数p，有整数a不是p的倍数，则a^{p-1}≡1(\mod p)$</li>
 <li>利用费马小定理可以简化$a^q \mod p$的运算，其中q很大。可以将q替换为$(q \mod (p-1))$</li>
 <li>满足$b^{n-1}≡1(\mod n)$的非质数n成为以b为基的伪质数 Pseudoprimes to the base b。（苏豆）</li>
-<li>因为在一定范围内的对于某个基的pseudoprimes总是很少，所以可以进行质数近似判定测试。可惜，对于某些数n，对于所有基b满足gcd(b,n)=1，总是能通过伪素数测试，即$b^{n-1}≡1(\mod n)$，这些数称为Carmichael Numbers（卡麦抠 卡米切尔）。 Carmichael Numbers有无穷多个。</li>
+<li>因为在一定范围内的对于某个基的pseudoprimes总是很少，所以可以进行质数近似判定测试。可惜，对于某些数n，对于所有基b满足gcd(b,n)&#x3D;1，总是能通过伪素数测试，即$b^{n-1}≡1(\mod n)$，这些数称为Carmichael Numbers（卡麦抠 卡米切尔）。 Carmichael Numbers有无穷多个。</li>
 <li>欧拉定理：费马小定理的推广。$有互质整数a,n.则a^{\phi(n)}≡1 (\mod n)$，而a在模n意义下存在逆元的充要条件就是a,n互质，从而得到推论：若a的逆元存在，则为$a^{\Phi(n)-1}$。</li>
-<li>Discrete Logarithms (模p意义下的)离散对数 对已知质数p，在模p意义下存在唯一一个primitive root $r$ 原始根，使得$r^n$取遍所有模p意义下所有非零数。 对任意$a\in [1,p-1]$，若有$r^e≡a(\mod p), e \in [1, p-1]$ ，则即$\log_r a=e$</li>
+<li>Discrete Logarithms (模p意义下的)离散对数 对已知质数p，在模p意义下存在唯一一个primitive root $r$ 原始根，使得$r^n$取遍所有模p意义下所有非零数。 对任意$a\in [1,p-1]$，若有$r^e≡a(\mod p), e \in [1, p-1]$ ，则即$\log_r a&#x3D;e$</li>
 <li>求discrete logarithms $\log_r a$(模质数p意义下)没有找到多项式时间的算法。这个问题是密码学的一部分。</li>
 <li></li>
 </ol>
@@ -4731,8 +4755,8 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
     <title>网络编程实战</title>
     <url>/2021/11/08/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98/</url>
     <content><![CDATA[<h2 id="前方施工中"><a href="#前方施工中" class="headerlink" title="前方施工中"></a>前方施工中</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="http://chenshuo.com/practical-network-programming/">chenshuo.com/pnp</a></li>
-<li><a href="https://www.bilibili.com/video/BV1TA411q75p">陈硕-网络编程实战(TCP/UDP/Socket)</a></li>
+<li><a href="http://chenshuo.com/practical-network-programming/">chenshuo.com&#x2F;pnp</a></li>
+<li><a href="https://www.bilibili.com/video/BV1TA411q75p">陈硕-网络编程实战(TCP&#x2F;UDP&#x2F;Socket)</a></li>
 <li>原来的 <a href="http://boolan.com/course/10093">Boolan 博览课</a>已经 404</li>
 </ul>
 <span id="more"></span>
@@ -4762,7 +4786,7 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 </li>
 </ul>
 <h3 id="在-Server-中处理-SIGPIPE-信号"><a href="#在-Server-中处理-SIGPIPE-信号" class="headerlink" title="在 Server 中处理 SIGPIPE 信号"></a>在 Server 中处理 SIGPIPE 信号</h3><ul>
-<li>在 Linux I/O 中，若输出管道已经关闭，则 writer 会收到 SIGPIPE 信号。默认的反应行为是中止进程。</li>
+<li>在 Linux I&#x2F;O 中，若输出管道已经关闭，则 writer 会收到 SIGPIPE 信号。默认的反应行为是中止进程。</li>
 <li>默认行为在多数场景下十分好用，可以提前结束工作流，减少 CPU 浪费。  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gunzip -c huge.log.gz <span class="token operator">|</span> <span class="token function">grep</span> ERROR <span class="token operator">|</span> <span class="token function">head</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 然而在网络编程中，若 Client 已经关闭，则 Server 同样会收到 SIGPIPE 信号。</li>
 <li>Server 应当小心处理 SIGPIPE 信号，以防 Client 出错或者恶意响应。</li>
@@ -4789,7 +4813,7 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 </ul>
 <h2 id="netcat-实现"><a href="#netcat-实现" class="headerlink" title="netcat 实现"></a>netcat 实现</h2><ol>
 <li>阻塞式，2 threads per connection</li>
-<li>IO-multiplexing </li>
+<li>IO-multiplexing</li>
 </ol>
 ]]></content>
       <tags>
@@ -4803,17 +4827,17 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
     <url>/2019/04/07/%E8%AF%86%E8%B6%A3/</url>
     <content><![CDATA[<span id="more"></span>
 
-<h3 id="换底公式"><a href="#换底公式" class="headerlink" title="换底公式"></a>换底公式</h3><p>$\log_ab = \frac{\ln b}{\ln a}$</p>
+<h3 id="换底公式"><a href="#换底公式" class="headerlink" title="换底公式"></a>换底公式</h3><p>$\log_ab &#x3D; \frac{\ln b}{\ln a}$</p>
 <blockquote>
-<p>证明：<br>$e^{\ln a * \log_an} = b$ 两边取对数，移项。</p>
+<p>证明：<br>$e^{\ln a * \log_an} &#x3D; b$ 两边取对数，移项。</p>
 </blockquote>
-<p>$A^{\log_bC} = C^{\log_bA}$</p>
+<p>$A^{\log_bC} &#x3D; C^{\log_bA}$</p>
 <blockquote>
-<p>证明：两边取对数，得$\log_bC \ln A = \frac{\ln C}{\ln b}*\ln A$</p>
+<p>证明：两边取对数，得$\log_bC \ln A &#x3D; \frac{\ln C}{\ln b}*\ln A$</p>
 </blockquote>
-<h3 id="分治的时间复杂度"><a href="#分治的时间复杂度" class="headerlink" title="分治的时间复杂度"></a>分治的时间复杂度</h3><p>$T(N) = aT(N/b) + \Theta(N^k \log_p N)$</p>
-<p>$$<br>T(N) = \begin{cases}<br>O(N^{\log_b a})&amp; \text{if }a &gt; b^k \<br>O(N^k \log_{p+1} N)&amp; \text{if }a = b^k \<br>O(N^k \log_{p} N)&amp; \text{if }a &lt; b^k \<br>\end{cases}<br>$$</p>
-<h3 id="三角函数"><a href="#三角函数" class="headerlink" title="三角函数"></a>三角函数</h3><h4 id="sin-cos-tan知一求二"><a href="#sin-cos-tan知一求二" class="headerlink" title="sin,cos,tan知一求二"></a>sin,cos,tan知一求二</h4><p>试试$(\tan^2x)^{(-1)^k}+1 = ?$</p>
+<h3 id="分治的时间复杂度"><a href="#分治的时间复杂度" class="headerlink" title="分治的时间复杂度"></a>分治的时间复杂度</h3><p>$T(N) &#x3D; aT(N&#x2F;b) + \Theta(N^k \log_p N)$</p>
+<p>$$<br>T(N) &#x3D; \begin{cases}<br>O(N^{\log_b a})&amp; \text{if }a &gt; b^k \<br>O(N^k \log_{p+1} N)&amp; \text{if }a &#x3D; b^k \<br>O(N^k \log_{p} N)&amp; \text{if }a &lt; b^k \<br>\end{cases}<br>$$</p>
+<h3 id="三角函数"><a href="#三角函数" class="headerlink" title="三角函数"></a>三角函数</h3><h4 id="sin-cos-tan知一求二"><a href="#sin-cos-tan知一求二" class="headerlink" title="sin,cos,tan知一求二"></a>sin,cos,tan知一求二</h4><p>试试$(\tan^2x)^{(-1)^k}+1 &#x3D; ?$</p>
 ]]></content>
       <tags>
         <tag>数学</tag>
@@ -4822,9 +4846,9 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
   <entry>
     <title>C++ 标准笔记</title>
     <url>/2021/05/03/C/</url>
-    <content><![CDATA[<p>本文始于 2018/6/27，用于汇聚关于 C++ 的实用知识和碰到的坑，温故而知新。</p>
+    <content><![CDATA[<p>本文始于 2018&#x2F;6&#x2F;27，用于汇聚关于 C++ 的实用知识和碰到的坑，温故而知新。</p>
 <blockquote>
-<p>2022/1/2 【更改】标题改为《C++ 标准笔记》<br>2022/1/2 【新增】StandardLayout<br>2022/1/2 【新增】bit field</p>
+<p>2022&#x2F;1&#x2F;2 【更改】标题改为《C++ 标准笔记》<br>2022&#x2F;1&#x2F;2 【新增】StandardLayout<br>2022&#x2F;1&#x2F;2 【新增】bit field</p>
 <p>更新预告：</p>
 <ol>
 <li>CRTP 原理，目的和应用</li>
@@ -4862,7 +4886,7 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <li><code>const char []</code>所定义的字符串被保护，有内存位置隔离，不允许跟踪（但允许查看）地址。</li>
 <li>char是否带符号取决于系统。</li>
 <li>wchar_t可以表示系统使用的最大扩展字符集，输入输出用wcin,wcout</li>
-<li>raw r&quot;(a/b\c回车defg*)&quot;,   标识符  &quot;(   )&quot;  可变为 &quot;*@(  )*@&quot; 等等，保持平移对称</li>
+<li>raw r&quot;(a&#x2F;b\c回车defg*)&quot;,   标识符  &quot;(   )&quot;  可变为 &quot;*@(  )*@&quot; 等等，保持平移对称</li>
 </ul>
 <h3 id="lt-cstring-gt-常用函数"><a href="#lt-cstring-gt-常用函数" class="headerlink" title="&lt;cstring&gt;常用函数"></a>&lt;cstring&gt;常用函数</h3><ul>
 <li><code>char* strcpy(char* dest, const char* src)</code><ul>
@@ -4995,7 +5019,7 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 <li>基类引用可以指向派生类对象</li>
 </ul>
 </li>
-<li>指针也能被引用, 例如 int*&amp; x = ptr;</li>
+<li>指针也能被引用, 例如 int*&amp; x &#x3D; ptr;</li>
 </ul>
 <hr>
 <h2 id="短路运算符"><a href="#短路运算符" class="headerlink" title="短路运算符"></a>短路运算符</h2><ul>
@@ -5028,10 +5052,11 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 </ul>
 <hr>
 <h2 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h2><ul>
-<li><strong>创建模板</strong><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>    <span class="token comment">//也可以用class代替typename</span>
-<span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span>T<span class="token operator">&amp;</span><span class="token punctuation">,</span> T<span class="token operator">&amp;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
-</ul>
-<ul>
+<li><p><strong>创建模板</strong></p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>    <span class="token comment">//也可以用class代替typename</span>
+<span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span>T<span class="token operator">&amp;</span><span class="token punctuation">,</span> T<span class="token operator">&amp;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+</li>
 <li><p><strong>显式具体化</strong></p>
   <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token operator">></span> <span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">&amp;</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token operator">&amp;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">template</span> <span class="token operator">&lt;</span><span class="token operator">></span> <span class="token keyword">void</span> swap<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">&amp;</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token operator">&amp;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
@@ -5114,10 +5139,10 @@ p_fun ar<span class="token punctuation">[</span><span class="token number">3</sp
 <li>因此使用using声明比使用using编译指令更安全.</li>
 </ul>
 </li>
-<li>名称空间可以拥有别名, 用于简化代码: namespace MEF = myth::elements::fire;</li>
+<li>名称空间可以拥有别名, 用于简化代码: namespace MEF &#x3D; myth::elements::fire;</li>
 <li>名称空间可以匿名, 声明之后自动隐式using, 用于避免其他using并替代static全局变量.</li>
 <li>&lt;.h&gt;文件是不支持名称空间的版本.新版一般将函数搬到std中.</li>
-<li>使用建议: 在大型程序/多单元程序使用<ul>
+<li>使用建议: 在大型程序&#x2F;多单元程序使用<ul>
 <li>少用<code>using namespace</code></li>
 <li>避免在头文件中使用using编译指令,若必须使用,则在所有#include之后使用</li>
 <li>避免直接声明外部全局变量和静态全局变量,改用已命名的名称空间</li>
@@ -5169,14 +5194,14 @@ Classname object <span class="token operator">=</span> value<span class="token p
 <li>编译器不能辨别复杂环形定义, 如<code>struct A &#123; A()&#123;&#125; A* a = new A(); &#125;</code></li>
 </ul>
 </li>
-<li>非静态变量在运行时才会创建, 所以如int arr[MAXN]的MAXN必须是静态量,可以是全局const, 类中static const, enum{MAXN=x}.</li>
+<li>非静态变量在运行时才会创建, 所以如int arr[MAXN]的MAXN必须是静态量,可以是全局const, 类中static const, enum{MAXN&#x3D;x}.</li>
 <li>友元函数<ul>
 <li>在共有部分声明友元函数原型, 也可以紧接定义以设为内联函数.后置的定义无需friend修饰</li>
 <li>友元函数视为类外函数, 但可以访问类私有成员变量.</li>
 <li>类的显式二元重载运算符应当用友元, 尽管没有直接修改类私有成员变量</li>
 <li>重载&lt;&lt; : <code>std::ostream&amp; operator &lt;&lt; (const std::ostream&amp; os, const Classname&amp; obj)</code>以方便输出.</li>
 <li>友元函数可方便隐式类型转换, 不必苛求由对象发起函数调用.例如cmp(&quot;asd&quot;, obj),可以对应原型cmp(string, string);</li>
-<li>可以在派生类友元函数中，强制向上转型并使用基类友元函<br>数据类型, 否则易有二义性<br>函数, 避免隐式转换出错<br>ass_name&amp;)`<br>始化、按值传递、按值返回、上转型并使用基类友元函数。</li>
+<li>可以在派生类友元函数中，强制向上转型并使用基类友元函<br>  数据类型, 否则易有二义性<br>  函数, 避免隐式转换出错<br>  ass_name&amp;)&#96;<br>  始化、按值传递、按值返回、上转型并使用基类友元函数。</li>
 </ul>
 </li>
 <li>转换函数<code>operator typeName()</code><ul>
@@ -5209,7 +5234,7 @@ Class_name a <span class="token operator">=</span> <span class="token function">
 </ul>
 </li>
 <li>默认方法的潜在危险<ul>
-<li>某个类在开发初期不需要复制构造函数/赋值运算符重载，但在以后可能需要</li>
+<li>某个类在开发初期不需要复制构造函数&#x2F;赋值运算符重载，但在以后可能需要</li>
 <li>可能写出符合常理的代码，但由于未覆盖默认方法而运行时异常</li>
 <li>可能在未察觉的情况下调用了默认方法（用重载加法时按值传递、按值返回将调用复制构造函数）</li>
 <li>解决办法：<ul>
@@ -5237,7 +5262,7 @@ Class_name a <span class="token operator">=</span> <span class="token function">
 <li>静态常量在声明同时定义.</li>
 </ul>
 </li>
-<li>派生/继承<ul>
+<li>派生&#x2F;继承<ul>
 <li><code>class newClass : public baseClase</code></li>
 <li>默认继承为private继承。私有继承的向上转型必须显式写出</li>
 <li>多重继承的向上转型也应显示写出，以防不同基类的方法冲突</li>
@@ -5248,8 +5273,8 @@ Class_name a <span class="token operator">=</span> <span class="token function">
 <li>若基类虚方法被重载了，则应在派生类中重新定义所有的基类版本</li>
 </ul>
 </li>
-<li>若派生类构造函数使用了new，则应提供复制构造函数/赋值运算符（含<code>base::operator=(o);</code>）/虚析构函数的定义</li>
-<li>公有继承表达了is-a关系，私有继承/包含表达了has-a关系。通常使用组合包含层次化来建立has-a关系。如果需要访问原有类的保护成员或重新定义虚方法，才使用私有继承。</li>
+<li>若派生类构造函数使用了new，则应提供复制构造函数&#x2F;赋值运算符（含<code>base::operator=(o);</code>）&#x2F;虚析构函数的定义</li>
+<li>公有继承表达了is-a关系，私有继承&#x2F;包含表达了has-a关系。通常使用组合包含层次化来建立has-a关系。如果需要访问原有类的保护成员或重新定义虚方法，才使用私有继承。</li>
 <li>欲调用基类对象，对(*this)强制向上转型(const Base &amp;)即可</li>
 <li>用using改变继承成员权限：在派生类的public处<code>using Base::methodName;</code>(省略using的技术是即将被抛弃的旧技术)</li>
 </ul>
@@ -5555,13 +5580,13 @@ std<span class="token operator">::</span>is_standard_layout<span class="token op
 <h3 id="SM-的占有率"><a href="#SM-的占有率" class="headerlink" title="SM 的占有率"></a>SM 的占有率</h3><p>当并行规模较小，有些 SM 占有率为零，导致程序性能低下。当并行规模足够大时，也有可能得到非 100% 的占有率。</p>
 <p>考虑指标（查询官方文档 CUDA_Occupancy_Calculator.xls 的图灵架构）：</p>
 <ol>
-<li>一个 SM 最多拥有线程块个数$\ N_b = 16$。</li>
-<li>一个 SM 最多拥有的线程个数$\ N_t = 1536$。</li>
+<li>一个 SM 最多拥有线程块个数$\ N_b &#x3D; 16$。</li>
+<li>一个 SM 最多拥有的线程个数$\ N_t &#x3D; 1536$。</li>
 <li>线程块大小最大为$\ 1024$。</li>
 </ol>
 <p>当并行规模足够大（核函数配置的总线程数足够多），需要分几种情况讨论 SM 的理论占有率：</p>
 <ol>
-<li>寄存器核共享内存使用量很少。SM 的占有率完全由线程块大小决定。首先，由于线程束大小是 32，线程块大小最好是 32 的倍数。其次，线程块大小不能小于$\ N_t/N_b$​，才可能利用最大线程数量。因此，96 的线程块大小就能获得 100% 的占有率。类似的，128 的线程块大小在开普勒架构下能获得满占有率。（我选择 128）</li>
+<li>寄存器核共享内存使用量很少。SM 的占有率完全由线程块大小决定。首先，由于线程束大小是 32，线程块大小最好是 32 的倍数。其次，线程块大小不能小于$\ N_t&#x2F;N_b$​，才可能利用最大线程数量。因此，96 的线程块大小就能获得 100% 的占有率。类似的，128 的线程块大小在开普勒架构下能获得满占有率。（我选择 128）</li>
 <li>寄存器带来占有率瓶颈。一个 SM 最多有 65536（64K）个寄存器。如果令线程数最大化（1536），那么平均一个线程可用 42.7 个寄存器。当每个线程所用的寄存器个数大于 42 时，SM 的占有率将低于 50%。</li>
 <li>有限的共享内存对占有率的约束。一个 SM 拥有 65536 字节共享内存。如果线程块大小为 128，且SM 是线程满载（1536），要令占有率为 100%，则网格大小为 12，一个线程块最多有 5461 字节的共享内存。</li>
 </ol>
@@ -5821,14 +5846,17 @@ real <span class="token function">reduce</span><span class="token punctuation">(
 <span class="token comment">// ...</span>
 <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> <span class="token operator">&amp;</span>s <span class="token operator">:</span> stream<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token function">cudaStreamDestroy</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 销毁流，句柄不抹除</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
 <li><p>检测 CUDA 流是否空闲 </p>
  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">cudaError_t <span class="token function">cudaStreamSynchronize</span><span class="token punctuation">(</span>cudaStream_t stream<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 阻塞主机，直到 CUDA 流完成所有操作</span>
-cudaError_t <span class="token function">cudaStreamQuery</span><span class="token punctuation">(</span>cudaStream_t stream<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 返回 cudaSuccess（已完成）/ cudaErrorNotReady（未完成）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+cudaError_t <span class="token function">cudaStreamQuery</span><span class="token punctuation">(</span>cudaStream_t stream<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 返回 cudaSuccess（已完成）/ cudaErrorNotReady（未完成）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
 <li><p><code>cudaMemcpy</code> 会阻塞主机。但是核函数的调用总是异步的。应该尽量早地调用核函数，随后再进行主机的计算任务。</p>
 </li>
 <li><p>在核函数配置中指派 CUDA 流：</p>
- <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">my_kernel<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>N_grid<span class="token punctuation">,</span> N_block<span class="token punctuation">,</span> N_shared<span class="token punctuation">,</span> stream_id<span class="token operator">>></span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 四个模板参数必须齐全</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+ <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">my_kernel<span class="token operator">&lt;&lt;</span><span class="token operator">&lt;</span>N_grid<span class="token punctuation">,</span> N_block<span class="token punctuation">,</span> N_shared<span class="token punctuation">,</span> stream_id<span class="token operator">>></span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 四个模板参数必须齐全</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
 <li><p>异步的数据传输需要：</p>
 <ol>
 <li>使用 <code>cudaMemcpyAsync</code> 函数。</li>
@@ -5839,7 +5867,8 @@ cudaError_t <span class="token function">cudaStreamQuery</span><span class="toke
 <li><p>可以用 CUDA 运行时 API 来申请不可分页的内存（non-pageable memory），又称固定内存（pinned memory）。不可分页意味着操作系统无权修改虚拟地址所对应的物理地址。</p>
  <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">cudaError_t <span class="token function">cudaMallocHost</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>ptr<span class="token punctuation">,</span> size_t size<span class="token punctuation">)</span><span class="token punctuation">;</span>
 cudaError_t <span class="token function">cudaHostAlloc</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span>ptr<span class="token punctuation">,</span> size_t size<span class="token punctuation">,</span> size_t flags<span class="token punctuation">)</span><span class="token punctuation">;</span>
-cudaError_t <span class="token function">cudaFreeHost</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>ptr<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+cudaError_t <span class="token function">cudaFreeHost</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>ptr<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
 <li><p>良好的 CUDA 流指派会从流水线重叠中获得并行加速。但是 CUDA 流是有启动开销，且硬件环境有限，过多的 CUDA 流会拉低性能。</p>
 </li>
 </ol>
@@ -5944,7 +5973,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
   <entry>
     <title>Java语法笔记</title>
     <url>/2019/10/11/java/</url>
-    <content><![CDATA[<p>Since 2018/07/12</p>
+    <content><![CDATA[<p>Since 2018&#x2F;07&#x2F;12</p>
 <span id="more"></span>
 
 <h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><ul>
@@ -5993,7 +6022,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>访问限制级别必须相同或放宽</li>
 <li>若父类函数返回类型为基础类型,则子类重写返回类型必须相同</li>
 <li>若父类返回引用类型, 则子类返回相同或其子类类型</li>
-<li>重写方法不能抛出新异常, 只可以抛出相同/更少异常</li>
+<li>重写方法不能抛出新异常, 只可以抛出相同&#x2F;更少异常</li>
 <li>抽象方法必须在具体类中被重写</li>
 <li>父类引用指向子类对象时,会动态绑定子类重写函数</li>
 </ul>
@@ -6006,14 +6035,14 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 </li>
 <li><strong>向上转型</strong><ul>
 <li>成员方法<ol>
-<li>   编译时<strong>检查声明类型类</strong>中是否含有被调用的成员方法,而不检查子类对象</li>
-<li>   运行时<strong>根据对象</strong>调用最后重写的成员方法,而不依赖与声明类型类</li>
-<li>   被重写的方法没有丢失,但仅能通过类方法中super访问.</li>
+<li>编译时<strong>检查声明类型类</strong>中是否含有被调用的成员方法,而不检查子类对象</li>
+<li>运行时<strong>根据对象</strong>调用最后重写的成员方法,而不依赖与声明类型类</li>
+<li>被重写的方法没有丢失,但仅能通过类方法中super访问.</li>
 </ol>
 </li>
 <li>成员变量<ol>
-<li>   编译时<strong>检查声明类型类</strong>中是否含有被访问的成员变量, 而不检查子类对象</li>
-<li>   运行时<strong>访问声明类型类</strong>中的成员变量, 而不访问子类对象所重写的</li>
+<li>编译时<strong>检查声明类型类</strong>中是否含有被访问的成员变量, 而不检查子类对象</li>
+<li>运行时<strong>访问声明类型类</strong>中的成员变量, 而不访问子类对象所重写的</li>
 </ol>
 </li>
 </ul>
@@ -6050,7 +6079,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>final修饰变量: 声明常量, 其内容不可修改<ul>
 <li>对于基本数据类型, 其值不可修改</li>
 <li>对于引用数据类型, 指向不能更换, 但所指向的内容仍可修改</li>
-<li>常量和普通变量一样可以重写/隐藏.</li>
+<li>常量和普通变量一样可以重写&#x2F;隐藏.</li>
 <li>每个对象都包含各自的final变量, 在构造其中初始化</li>
 </ul>
 </li>
@@ -6116,7 +6145,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 </li>
 <li>静态内部类<ul>
 <li>在类中以静态成员形式定义的另一个类, 称为静态内部类.</li>
-<li>静态内部类的外部类一定全是静态的.==?_?==</li>
+<li>静态内部类的外部类一定全是静态的.&#x3D;&#x3D;?_?&#x3D;&#x3D;</li>
 <li>静态内部类可以访问外部类的静态成员.</li>
 <li>静态内部类可以定义静态成员变量,静态成员方法和静态内部类.</li>
 <li>初始化某个静态内部类不会触发外部类的初始化.</li>
@@ -6133,8 +6162,8 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>匿名类<ul>
 <li>匿名类是没有类名的子类, 使用格式: <code>new FatherClassOrInterface() &#123;...&#125; ;</code></li>
 <li>匿名类通常意味着向上转型, 并即时生成一个实例, 因此本身不是静态的.</li>
-<li>匿名类可以出现在成员变量中/方法中.</li>
-<li>匿名类不能定义新的构造方法/实现新的接口/派生出子类.</li>
+<li>匿名类可以出现在成员变量中&#x2F;方法中.</li>
+<li>匿名类不能定义新的构造方法&#x2F;实现新的接口&#x2F;派生出子类.</li>
 <li>匿名类若出现在成员变量中, 则类似于成员内部类; 若出现在方法中, 则类似于局部类.</li>
 </ul>
 </li>
@@ -6390,33 +6419,33 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>个人区域网 (Personal Area Networl, PAN)，个人使用的电子设备。</li>
 </ol>
 <h2 id="1-6-计算机网络的性能"><a href="#1-6-计算机网络的性能" class="headerlink" title="1.6 计算机网络的性能"></a>1.6 计算机网络的性能</h2><h3 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h3><h4 id="速率"><a href="#速率" class="headerlink" title="速率"></a>速率</h4><ul>
-<li>1Mbps = $10^6$ bits / second</li>
-<li>1MB = $2^{20}$ Bytes</li>
+<li>1Mbps &#x3D; $10^6$ bits &#x2F; second</li>
+<li>1MB &#x3D; $2^{20}$ Bytes</li>
 </ul>
 <h4 id="带宽"><a href="#带宽" class="headerlink" title="带宽"></a>带宽</h4><ul>
-<li>某个信号具有的频带宽度（300Hz &lt;-&gt; 3.4 kHz ==&gt; 3.1kHz），频域</li>
+<li>某个信号具有的频带宽度（300Hz &lt;-&gt; 3.4 kHz &#x3D;&#x3D;&gt; 3.1kHz），频域</li>
 <li>某通道传输数据的能力，时域</li>
 </ul>
 <h4 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h4><ul>
 <li>单位时间内通过某个网络（或信道、接口）的实际数据量</li>
 </ul>
 <h4 id="时延"><a href="#时延" class="headerlink" title="时延"></a>时延</h4><ol>
-<li>发送时延（传输时延）（transmission delay）：发送数据帧所需的时间，与发送器（网络适配器）有关。$发送时间 = \frac{数据长度}{发送速率}$</li>
+<li>发送时延（传输时延）（transmission delay）：发送数据帧所需的时间，与发送器（网络适配器）有关。$发送时间 &#x3D; \frac{数据长度}{发送速率}$</li>
 <li>传播时延（propagation delay）：电磁波传播花费的时间，与线路有关</li>
 <li>处理时延：收到分组后的计算耗时</li>
 <li>排队时延：输入队列、输出队列耗时</li>
 </ol>
 <h4 id="时延带宽积"><a href="#时延带宽积" class="headerlink" title="时延带宽积"></a>时延带宽积</h4><p>传播时延 * 带宽。表示线路的“容积”</p>
 <h4 id="往返时间"><a href="#往返时间" class="headerlink" title="往返时间"></a>往返时间</h4><p>（Round-Trip Time, RTT）最后一帧的传播延迟+ack的传播延迟（假设忽略发送时延）</p>
-<p>$有效数据率 = \frac{数据长度}{发送时间+\text{RTT}}$</p>
+<p>$有效数据率 &#x3D; \frac{数据长度}{发送时间+\text{RTT}}$</p>
 <h4 id="利用率"><a href="#利用率" class="headerlink" title="利用率"></a>利用率</h4><ul>
 <li>信道利用率：信道有数据通过的时间的比率</li>
 <li>网络利用率：全网络的信道利用率的加权平均值</li>
 </ul>
-<p>设$D_0$为网络空闲时（利用率0%）的时延，$D$表示当前网络时延，当前利用率$U$，则$D = \frac{D_0}{1-U}$。</p>
+<p>设$D_0$为网络空闲时（利用率0%）的时延，$D$表示当前网络时延，当前利用率$U$，则$D &#x3D; \frac{D_0}{1-U}$。</p>
 <h2 id="1-7-计算机网络体系结构"><a href="#1-7-计算机网络体系结构" class="headerlink" title="1.7 计算机网络体系结构"></a>1.7 计算机网络体系结构</h2><ul>
 <li>系统网络体系结构 SNA（System Network Architecture）。IBM开发。</li>
-<li><strong>开放系统互连基本参考模型 OSI/RM</strong>（Open Systems Interconnection Reference Model）ISO制定。</li>
+<li><strong>开放系统互连基本参考模型 OSI&#x2F;RM</strong>（Open Systems Interconnection Reference Model）ISO制定。</li>
 </ul>
 <h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><ul>
 <li><p>定义：为进行网络中的数据交换而建立的规则、标准或约定</p>
@@ -6424,7 +6453,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li><p>三要素：语法，语义，同步</p>
 </li>
 </ul>
-<h4 id="五层协议的体系结构"><a href="#五层协议的体系结构" class="headerlink" title="五层协议的体系结构"></a>五层协议的体系结构</h4><p><img src="./%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png"></p>
+<h4 id="五层协议的体系结构"><a href="#五层协议的体系结构" class="headerlink" title="五层协议的体系结构"></a>五层协议的体系结构</h4><p><img src="/./%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png"></p>
 <p>无论哪一层传送的数据单元，都笼统地用“<strong>分组</strong>”或“<strong>协议数据单元PDU（Protocol Data Unit）</strong>”来表示</p>
 <h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p><strong>application layer</strong></p>
 <p>负责应用进程间交互。  协议定义进程间通信和交互的规则。</p>
@@ -6432,7 +6461,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <p>数据单元称为<strong>报文（message）</strong>。</p>
 <h4 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h4><p><strong>transport layer</strong></p>
 <p>负责为进程间通信提供<strong>通用的</strong>数据传输服务。</p>
-<p>一个主机，多个进程 =&gt; 传输层有复用和分用的功能</p>
+<p>一个主机，多个进程 &#x3D;&gt; 传输层有复用和分用的功能</p>
 <p>主要协议：  </p>
 <ul>
 <li>传输控制协议 TCP（Transmission Control Protocol）：面向连接的、可靠的数据传输服务。数据传输的单位是<strong>报文段（segment）</strong></li>
@@ -6441,7 +6470,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <h4 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h4><p><strong>network layer</strong></p>
 <p>也叫网际层、IP层。</p>
 <p>负责为分组交换网上的不同主机提供通信服务。 发送数据时，将运输层的报文段或用户数据报封装成<strong>分组</strong>或<strong>包</strong>进行传送。</p>
-<p>在TCP/IP中，网络层使用IP协议，所以分组也叫<strong>IP数据报</strong>，简称数据报。</p>
+<p>在TCP&#x2F;IP中，网络层使用IP协议，所以分组也叫<strong>IP数据报</strong>，简称数据报。</p>
 <p>网络层要选择合适的路由。</p>
 <h4 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h4><p><strong>data link layer</strong></p>
 <p>将网络层的包<strong>组装成帧（framing）</strong>，在两个相邻结点之间传送<strong>帧（frame）</strong>。每一帧包括数据和<strong>控制信息</strong>（如同步信息、地址信息、差错控制等）。</p>
@@ -6457,7 +6486,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <p>计算机网络的协议必须把<strong>所有</strong>不利的条件都事先估计到，而不能假定一切都是正常的和理想的。</p>
 <h2 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h2><ol>
 <li>OSI的三个核心概念是服务、接口、协议。</li>
-<li>原数据1000字节，七层体系结构，每层20字节的头。则头占用了$140/1140 = 12%$的带宽。</li>
+<li>原数据1000字节，七层体系结构，每层20字节的头。则头占用了$140&#x2F;1140 &#x3D; 12%$的带宽。</li>
 <li>最早实现分组交换（<strong>packet switched</strong>）的网络是<strong>ARPAnet</strong>。</li>
 <li>网络层控制了子网的操作、决定分组的路由。</li>
 <li>应用层有一系列用户常用的协议。</li>
@@ -6508,7 +6537,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li><strong>基带调制</strong>（<strong>编码</strong>）：对波形变换，变换后仍是基带信号，仍是数字信号。</li>
 <li><strong>带通调制</strong>：使用<strong>载波（carrier）</strong>进行调制，把基带信号的频率范围搬移到较高的频段，并转换为模拟信号。载波调制后的信号成为<strong>带通信号</strong>（仅在一段频率范围内能通过信号）。</li>
 </ol>
-<h4 id="常用的编码方式"><a href="#常用的编码方式" class="headerlink" title="常用的编码方式"></a>常用的编码方式</h4><p><img src="./%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%B8%B8%E7%94%A8%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F.png" alt="数字信号常用的编码方式"></p>
+<h4 id="常用的编码方式"><a href="#常用的编码方式" class="headerlink" title="常用的编码方式"></a>常用的编码方式</h4><p><img src="/./%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%B8%B8%E7%94%A8%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F.png" alt="数字信号常用的编码方式"></p>
 <ol>
 <li><strong>不归零制</strong>：电平代表01</li>
 <li><strong>归零制</strong>：脉冲代表01；位开始边界总是中间电平。</li>
@@ -6516,12 +6545,11 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li><strong>差分曼彻斯特编码</strong>：位中心总是跳变；位开始边界跳变为0，不跳变为1。</li>
 </ol>
 <p>自同步：从信号波形本身提取信号时钟频率。</p>
-<h4 id="基本的带通调制方法"><a href="#基本的带通调制方法" class="headerlink" title="基本的带通调制方法"></a>基本的带通调制方法</h4><p><img src="./%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E6%96%B9%E6%B3%95.png" alt="基本的带通调制方法"></p>
+<h4 id="基本的带通调制方法"><a href="#基本的带通调制方法" class="headerlink" title="基本的带通调制方法"></a>基本的带通调制方法</h4><p><img src="/./%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E6%96%B9%E6%B3%95.png" alt="基本的带通调制方法"></p>
 <ol>
 <li><strong>调幅（AM）</strong>：振幅随数字信号变化。</li>
-<li><strong>调频（FM）</strong>：频率随数字信号变化。</li>
-<li><strong>调相（PM）</strong>：初相位随数字信号变化。</li>
 </ol>
+<p>2.<strong>调频（FM）</strong>：频率随数字信号变化。<br>3. <strong>调相（PM）</strong>：初相位随数字信号变化。</p>
 <p>为了更高的信息传输速率，必须采用多元制的振幅相位混合调制方法。例如<strong>正交振幅调制QAM（Quadrature Amplitude Modulation）</strong>。</p>
 <h3 id="信道的极限容量"><a href="#信道的极限容量" class="headerlink" title="信道的极限容量"></a>信道的极限容量</h3><p>限制码元在信道上的传输速率的因素有两个：  </p>
 <ol>
@@ -6531,10 +6559,10 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <h4 id="信道能通过的频率范围"><a href="#信道能通过的频率范围" class="headerlink" title="信道能通过的频率范围"></a>信道能通过的频率范围</h4><p><strong>码间串扰</strong>：接收端收到的信号波形失去了码元之间的清晰界限。</p>
 <p><strong>奈氏准则</strong>：算出理想条件下、避免码间串扰，码元的传输速率的上限值。超过此上限，接收端对码元的识别成为不可能。</p>
 <p>信道的频带越宽，能通过的信号高频分量越多，就可用更高速率传送码元而不出现码间串扰。</p>
-<h4 id="信噪比"><a href="#信噪比" class="headerlink" title="信噪比"></a>信噪比</h4><p>信噪比就是信号的平均功率和噪声的平均功率之比，记为$S/N$。</p>
-<p>$$<br>\text{信噪比(dB)} = 10 \log_{10}(S/N) \text{(dB)}<br>$$</p>
+<h4 id="信噪比"><a href="#信噪比" class="headerlink" title="信噪比"></a>信噪比</h4><p>信噪比就是信号的平均功率和噪声的平均功率之比，记为$S&#x2F;N$。</p>
+<p>$$<br>\text{信噪比(dB)} &#x3D; 10 \log_{10}(S&#x2F;N) \text{(dB)}<br>$$</p>
 <h4 id="香农公式"><a href="#香农公式" class="headerlink" title="香农公式"></a>香农公式</h4><p><strong>信道的极限信息传输速率</strong>$C$：</p>
-<p>$$<br>C = W \log_2(1 + S/N) \text{(bit/s)}<br>$$</p>
+<p>$$<br>C &#x3D; W \log_2(1 + S&#x2F;N) \text{(bit&#x2F;s)}<br>$$</p>
 <p>$W$是信道的带宽(Hz)，S是信道内所传信号的平均功率，N是信道内高斯噪声功率。</p>
 <p>只要信息传输速率低于信道的极限信息传输速率，就一定存在某种办法来实现无差错的传输。</p>
 <p>要提高信息的传输速率，还可用编码的方法让每一个码元携带更多比特的信息量。</p>
@@ -6572,12 +6600,12 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>波特率（baud rate）为1000的信道，若其电平级数为16（2^4），则数据率（data rate）可达4Kbps。</li>
 <li>影响数据传输率的因素有信噪比、频率带宽、调制效率（Modulation rate）。不受传播速率影响。</li>
 <li>频分复用时，最左右两侧可不设置保护频段。</li>
-<li><img src="./%E7%94%B5%E8%AF%9D%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%84%E6%88%90.png" alt="电话系统结构"></li>
+<li><img src="/./%E7%94%B5%E8%AF%9D%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%84%E6%88%90.png" alt="电话系统结构"></li>
 <li>光纤具有较好的抗干扰性</li>
-<li>二元信号，3KHz信道，信噪比S/N 31，最大传输数据率为6Kbps。（当做无噪声信道计算）</li>
-<li>E1载波，2.048Mbps速率的PCM载波，同步时分复用，30个话音信道（64K）和两个控制信道（16K）。  开始和中间各有8位分别做同步和信令；30路8位数据；组成一帧，256位，每一帧125us时间（每秒8000帧）。 开销占比2/32 = 6.25%， 有效数据率1.92Mbps。</li>
-<li>T1载波，24个信道（每个8bit），外加1bit帧同步数据，共193bit每帧。每个8bit中有1bit是控制数据。对一路语音通道，数据比特率是7b/125us=56kb/s。总的比特率193b/125us=1.544Mb/s。开销占比(1*24+1)/193 = 13%。</li>
-<li><img src="./%E4%BF%A1%E9%81%93%E6%9C%80%E5%A4%A7%E4%BC%A0%E8%BE%93%E9%80%9F%E7%8E%87.png" alt="信道最大传输速率"></li>
+<li>二元信号，3KHz信道，信噪比S&#x2F;N 31，最大传输数据率为6Kbps。（当做无噪声信道计算）</li>
+<li>E1载波，2.048Mbps速率的PCM载波，同步时分复用，30个话音信道（64K）和两个控制信道（16K）。  开始和中间各有8位分别做同步和信令；30路8位数据；组成一帧，256位，每一帧125us时间（每秒8000帧）。 开销占比2&#x2F;32 &#x3D; 6.25%， 有效数据率1.92Mbps。</li>
+<li>T1载波，24个信道（每个8bit），外加1bit帧同步数据，共193bit每帧。每个8bit中有1bit是控制数据。对一路语音通道，数据比特率是7b&#x2F;125us&#x3D;56kb&#x2F;s。总的比特率193b&#x2F;125us&#x3D;1.544Mb&#x2F;s。开销占比(1*24+1)&#x2F;193 &#x3D; 13%。</li>
+<li><img src="/./%E4%BF%A1%E9%81%93%E6%9C%80%E5%A4%A7%E4%BC%A0%E8%BE%93%E9%80%9F%E7%8E%87.png" alt="信道最大传输速率"></li>
 <li>物理层关心在一个通信信道上传输纯比特。</li>
 </ol>
 <h1 id="3-数据链路层"><a href="#3-数据链路层" class="headerlink" title="3 数据链路层"></a>3 数据链路层</h1><p>主要信道类型：  </p>
@@ -6585,7 +6613,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>点对点信道</li>
 <li>广播信道</li>
 </ol>
-<h2 id="点对点信道的数据链路层"><a href="#点对点信道的数据链路层" class="headerlink" title="点对点信道的数据链路层"></a>点对点信道的数据链路层</h2><h3 id="数据链路和帧"><a href="#数据链路和帧" class="headerlink" title="数据链路和帧"></a>数据链路和帧</h3><p>数据链路 = 物理链路 + 通信协议</p>
+<h2 id="点对点信道的数据链路层"><a href="#点对点信道的数据链路层" class="headerlink" title="点对点信道的数据链路层"></a>点对点信道的数据链路层</h2><h3 id="数据链路和帧"><a href="#数据链路和帧" class="headerlink" title="数据链路和帧"></a>数据链路和帧</h3><p>数据链路 &#x3D; 物理链路 + 通信协议</p>
 <p>常用<strong>网络适配器</strong>实现这些硬件和软件，适配器也含有物理层的功能。</p>
 <p>网络层交下来的数据构成<strong>帧</strong>——数据链路层的协议数据单元。 帧上交到网络层组成IP数据包（数据包、分组、包）。</p>
 <p>点对点信道在数据链路层通信时的主要步骤：  </p>
@@ -6610,15 +6638,15 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <p>差错检测：</p>
 <p><strong>误码率（BER, Bit Error Rate）</strong>指单位时间内错误比特的比率。</p>
 <p><strong>循环冗余检验（CRC, Cyclic Redundancy）</strong></p>
-<p>假设传送数据$M$，<em>事先约定</em>除数$P\text（n+1位二进制）$，做异或取模$R\text{(n位二进制)} =  2^nM \mod P$。</p>
+<p>假设传送数据$M$，<em>事先约定</em>除数$P\text（n+1位二进制）$，做异或取模$R\text{(n位二进制)} &#x3D;  2^nM \mod P$。</p>
 <p>$R$作为<strong>帧检验序列（FCS, Frame Check Sequence）</strong>，也放在数据末尾。</p>
 <p>接收端直接做异或取模，若无差错，余数为0。</p>
-<p>用多项式表示，除数$P=1100=X^3 + X^2 + 1$。</p>
+<p>用多项式表示，除数$P&#x3D;1100&#x3D;X^3 + X^2 + 1$。</p>
 <p>现在可以近似认为“凡是接收端数据链路层接收的帧均无差错”。但尚未考虑<strong>帧丢失、重复、失序</strong>等问题，即非<strong>可靠传输</strong>。</p>
 <p>OSI要求可靠传输，因此有CRC，<strong>帧编号、确认</strong>和<strong>重传机制</strong>。但现在的数据链路层不使用确认和重传，而将差错交给上层协议（如运输层TCP）来处理。</p>
 <h2 id="点对点协议PPP"><a href="#点对点协议PPP" class="headerlink" title="点对点协议PPP"></a>点对点协议PPP</h2><p>PPP协议是用户和ISP通信时使用的数据链路层协议。</p>
 <h3 id="PPP协议的特点"><a href="#PPP协议的特点" class="headerlink" title="PPP协议的特点"></a>PPP协议的特点</h3><ol>
-<li>简单。将繁杂任务丢给TCP/IP。不纠错，无序号，无流量控制。仅做CRC检验。</li>
+<li>简单。将繁杂任务丢给TCP&#x2F;IP。不纠错，无序号，无流量控制。仅做CRC检验。</li>
 <li>封装成帧。使用帧定界符。</li>
 <li>透明性。规避文本出现的帧定界符。</li>
 <li>支持多种网络层协议，在同一物理链路上。</li>
@@ -6643,7 +6671,7 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li><strong>链路控制协议LCP（Link Control Protocol）</strong>。建立、配置和测试数据链路连接。</li>
 <li><strong>网络控制协议NCP（Network Control Protocol）</strong>。用来支持不同的网络层协议。</li>
 </ol>
-<h3 id="PPP协议的帧格式"><a href="#PPP协议的帧格式" class="headerlink" title="PPP协议的帧格式"></a>PPP协议的帧格式</h3><p><img src="./PPP%E5%B8%A7%E7%9A%84%E6%A0%BC%E5%BC%8F.png" alt="PPP协议的帧格式"></p>
+<h3 id="PPP协议的帧格式"><a href="#PPP协议的帧格式" class="headerlink" title="PPP协议的帧格式"></a>PPP协议的帧格式</h3><p><img src="/./PPP%E5%B8%A7%E7%9A%84%E6%A0%BC%E5%BC%8F.png" alt="PPP协议的帧格式"></p>
 <p>当“协议”为0x0021就是IP数据包，<br>为0xC021就是LCP数据，<br>为0x8021就是网络层的控制数据。</p>
 <p>字节填充：</p>
 <p>异步：  </p>
@@ -6652,11 +6680,11 @@ __managed__ <span class="token comment"># 修饰全局变量，使它成为统�
 <li>0x7D -&gt; (0x7D, 0x5D)</li>
 <li>ASCII控制字符（小于0x20） -&gt; (0x7D 0x??)</li>
 </ol>
-<p>零比特填充： 用于SONET/SDH链路，同步传输<br>信息字段中5个连续的1后插入一个0。有效避开了0x7E。</p>
-<h3 id="PPP协议的工作状态"><a href="#PPP协议的工作状态" class="headerlink" title="PPP协议的工作状态"></a>PPP协议的工作状态</h3><p><img src="./PPP%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%8A%B6%E6%80%81%E5%9B%BE.png" alt="PPP协议的状态图"></p>
+<p>零比特填充： 用于SONET&#x2F;SDH链路，同步传输<br>信息字段中5个连续的1后插入一个0。有效避开了0x7E。</p>
+<h3 id="PPP协议的工作状态"><a href="#PPP协议的工作状态" class="headerlink" title="PPP协议的工作状态"></a>PPP协议的工作状态</h3><p><img src="/./PPP%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%8A%B6%E6%80%81%E5%9B%BE.png" alt="PPP协议的状态图"></p>
 <h2 id="习题-2"><a href="#习题-2" class="headerlink" title="习题"></a>习题</h2><ol>
 <li>selective repeat protocol 最大接受窗口为$2^M-1$</li>
-<li>Go-Back-N 最大接收窗口是$2^{M-1}$（默认接收窗口大小 = 发送窗口大小）</li>
+<li>Go-Back-N 最大接收窗口是$2^{M-1}$（默认接收窗口大小 &#x3D; 发送窗口大小）</li>
 <li>CRC异或取模。别忘了先左移n位</li>
 <li>纠错需要距离为2d+1比特的编码</li>
 <li>检测需要距离为d+1比特的编码</li>

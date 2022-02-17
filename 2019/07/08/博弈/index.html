@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,11 +16,12 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="组合游戏 两个游戏者轮流操作 游戏的状态集有限，每种状态最多出现一次（游戏可以结束） 无法操作的输，另一个获胜（游戏必有胜负） 公平游戏。两个游戏者面对相同的状态允许有相同的操作。">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="组合游戏 两个游戏者轮流操作 游戏的状态集有限，每种状态最多出现一次（游戏可以结束） 无法操作的输，另一个获胜（游戏必有胜负） 公平游戏。两个游戏者面对相同的状态允许有相同的操作。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="博弈">
 <meta property="og:url" content="https://codesire-deng.github.io/2019/07/08/%E5%8D%9A%E5%BC%88/index.html">
@@ -43,6 +44,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>博弈 | 等疾风</title>
   
+
 
 
 
@@ -70,7 +72,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">等疾风</h1>
+      <p class="site-title">等疾风</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
@@ -152,8 +154,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="等疾风"
       src="/uploads/blogAvatar_s.jpg">
   <p class="site-author-name" itemprop="name">等疾风</p>
@@ -188,7 +189,6 @@
 
 
 
-          </div>
         </div>
       </div>
         <div class="back-to-top animated" role="button" aria-label="返回顶部">
@@ -246,15 +246,22 @@
 
       <time title="创建时间：2019-07-08 09:51:38" itemprop="dateCreated datePublished" datetime="2019-07-08T09:51:38+08:00">2019-07-08</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-09-19 01:03:17" itemprop="dateModified" datetime="2020-09-19T01:03:17+08:00">2020-09-19</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2020-09-19 01:03:17" itemprop="dateModified" datetime="2020-09-19T01:03:17+08:00">2020-09-19</time>
+    </span>
 
   
+    <span id="/2019/07/08/%E5%8D%9A%E5%BC%88/" class="post-meta-item leancloud_visitors" data-flag-title="博弈" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -263,11 +270,9 @@
       </span>
       <span class="post-meta-item-text">Changyan：</span>
     
-    
-      <a title="changyan" href="/2019/07/08/%E5%8D%9A%E5%BC%88/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2019/07/08/博弈/" itemprop="commentCount"></span>
-      </a>
-    
+    <a title="博弈" href="/2019/07/08/%E5%8D%9A%E5%BC%88/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::c305f73d73c26039140a8ee2dfa613a8" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
   </span>
   
   
@@ -295,7 +300,7 @@
 </ol>
 <h3 id="后手必胜的必要条件"><a href="#后手必胜的必要条件" class="headerlink" title="后手必胜的必要条件"></a>后手必胜的必要条件</h3><p>如果后手有必胜策略，则无论先手怎么取，都会存在后继可导致必败状态（即先手的所有后继都是必胜）。若先手能直接到达必败状态，则后手必输。</p>
 <p>如Chomp!游戏（m*n棋盘，每次取某个点的所有右上格子，取到最后一个输）中，只要格子大于1，先手取最右上的一个格子，若后手能导致必败状态，则开局先手模仿后手的策略即可。故格子大于1时后手必败。</p>
-<h2 id="SG函数"><a href="#SG函数" class="headerlink" title="SG函数"></a>SG函数</h2><p>设有状态x，令SG(x) = mex(S), S为x的所有后继状态的SG值的集合，mex(S)为不在集合中的最小非负整数。对于没有后继的状态，SG=0，因为S是空集。其余的SG值可由递推得到。<br>当且仅当SG(x) == 0, x是必败状态。</p>
+<h2 id="SG函数"><a href="#SG函数" class="headerlink" title="SG函数"></a>SG函数</h2><p>设有状态x，令SG(x) &#x3D; mex(S), S为x的所有后继状态的SG值的集合，mex(S)为不在集合中的最小非负整数。对于没有后继的状态，SG&#x3D;0，因为S是空集。其余的SG值可由递推得到。<br>当且仅当SG(x) &#x3D;&#x3D; 0, x是必败状态。</p>
 <h2 id="SG定理"><a href="#SG定理" class="headerlink" title="SG定理"></a>SG定理</h2><p>一个总游戏的SG值等于子游戏的SG值的Nim和（异或和）</p>
 <h3 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h3><ol>
 <li>证明P状态的所有后继都是N状态<ol>
@@ -308,7 +313,7 @@
 </li>
 </ol>
 <h3 id="Nim游戏"><a href="#Nim游戏" class="headerlink" title="Nim游戏"></a>Nim游戏</h3><p>有n堆火柴，每堆有ai根火柴。每次选择一堆取走任意根，不能取的游戏者输。</p>
-<p>考虑只有一堆的情况，设剩余火柴数为x。若x==0，没有后继状态，SG(0) = 0; 若x==1，所有后继状态的SG集合{0}，则SG(1) = 1; 若x==2，对应的S=={0，1}，SG(2) = 2; 归纳法证明SG(x) = x;</p>
+<p>考虑只有一堆的情况，设剩余火柴数为x。若x&#x3D;&#x3D;0，没有后继状态，SG(0) &#x3D; 0; 若x&#x3D;&#x3D;1，所有后继状态的SG集合{0}，则SG(1) &#x3D; 1; 若x&#x3D;&#x3D;2，对应的S&#x3D;&#x3D;{0，1}，SG(2) &#x3D; 2; 归纳法证明SG(x) &#x3D; x;</p>
 <p>应用SG定理，对于多堆游戏，总游戏SG值为所有子游戏的SG值的Nim和，即所有堆火柴数的异或和。当且仅当异或和为0，先手必败。</p>
 <h2 id="组合游戏题解法"><a href="#组合游戏题解法" class="headerlink" title="组合游戏题解法"></a>组合游戏题解法</h2><p>小范围内暴力计算子游戏SG值，找规律找到SG公式。</p>
 <h1 id="博弈搜索"><a href="#博弈搜索" class="headerlink" title="博弈搜索"></a>博弈搜索</h1><p>CF ROUND 460 DIV2 F</p>
@@ -322,8 +327,8 @@
 </ol>
 </li>
 <li>威佐夫博弈：两堆石子，取任意个时可对两堆同时操作<ol>
-<li>记结论(x0=0, y0=0),(xk=mex{xi,yi}, yk=xk+k)必败</li>
-<li>$a_k=\frac{\sqrt{5}+1}{2}k$</li>
+<li>记结论(x0&#x3D;0, y0&#x3D;0),(xk&#x3D;mex{xi,yi}, yk&#x3D;xk+k)必败</li>
+<li>$a_k&#x3D;\frac{\sqrt{5}+1}{2}k$</li>
 <li>扩展：三堆，可同时操作两堆<ol>
 <li>必败态少，跳过必胜态</li>
 </ol>
@@ -337,7 +342,7 @@
 </ol>
 </li>
 <li>SJ定理（泛化反NIM游戏）先手必胜条件<ol>
-<li>每个子游戏SG值&lt;=1，SG异或和为零</li>
+<li>每个子游戏SG值&lt;&#x3D;1，SG异或和为零</li>
 <li>存在一个子游戏SG&gt;1，SG异或和不为零</li>
 </ol>
 </li>
@@ -355,10 +360,10 @@
 <li>齐肯多夫定理：任何正整数可以唯一的表示为若干个不连续的斐波那契数之和</li>
 <li>动态减法游戏（一倍，两倍，k倍）</li>
 <li>翻硬币，最右必须由正变反<ol>
-<li> 多种扩展</li>
-<li> 打表吧</li>
+<li>多种扩展</li>
+<li>打表吧</li>
 <li>tartan定理<ol>
-<li> 二维硬币分解成一维硬币的积，logn2求nim积。这种积有结合律，可扩展到更高维</li>
+<li>二维硬币分解成一维硬币的积，logn2求nim积。这种积有结合律，可扩展到更高维</li>
 <li></li>
 </ol>
 </li>
@@ -414,7 +419,7 @@
 
 
 
-    <div class="comments" id="SOHUCS"></div>
+    <div class="comments" id="SOHUCS" sid="c305f73d73c26039140a8ee2dfa613a8"></div>
 </div>
   </main>
 
@@ -442,7 +447,9 @@
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
@@ -450,6 +457,8 @@
   
 
 
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"Nw4tc7C6QG2HeTBU0T1nFRay-MdYXbMMI","app_key":"ckihIHLVnT6ssbrDfnVNDUJi","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
   

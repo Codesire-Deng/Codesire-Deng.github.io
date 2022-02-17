@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,11 +16,12 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  #pragma comment(linker, &quot;&#x2F;section:test,RWE&quot;)">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="不会汇编，强行刚软保，瑟瑟发抖稳得一匹 本文的编撰仅面向作者本人 前置知识C语法 指针作差得到区间元素个数。指针的类型参与计算！ 要动态改变函数体，需要在编译期赋予权限。  #pragma comment(linker, &quot;&#x2F;section:test,RWE&quot;)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汇编语言">
 <meta property="og:url" content="https://codesire-deng.github.io/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/index.html">
@@ -43,6 +44,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>汇编语言 | 等疾风</title>
   
+
 
 
 
@@ -70,7 +72,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">等疾风</h1>
+      <p class="site-title">等疾风</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
@@ -152,8 +154,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="等疾风"
       src="/uploads/blogAvatar_s.jpg">
   <p class="site-author-name" itemprop="name">等疾风</p>
@@ -188,7 +189,6 @@
 
 
 
-          </div>
         </div>
       </div>
         <div class="back-to-top animated" role="button" aria-label="返回顶部">
@@ -246,15 +246,22 @@
 
       <time title="创建时间：2019-09-16 18:39:11" itemprop="dateCreated datePublished" datetime="2019-09-16T18:39:11+08:00">2019-09-16</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2020-09-19 01:03:17" itemprop="dateModified" datetime="2020-09-19T01:03:17+08:00">2020-09-19</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2020-09-19 01:03:17" itemprop="dateModified" datetime="2020-09-19T01:03:17+08:00">2020-09-19</time>
+    </span>
 
   
+    <span id="/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" class="post-meta-item leancloud_visitors" data-flag-title="汇编语言" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -263,11 +270,9 @@
       </span>
       <span class="post-meta-item-text">Changyan：</span>
     
-    
-      <a title="changyan" href="/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2019/09/16/汇编语言/" itemprop="commentCount"></span>
-      </a>
-    
+    <a title="汇编语言" href="/2019/09/16/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::a5c2c2106213a0c361058d8f140d0bae" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
   </span>
   
   
@@ -319,19 +324,19 @@
 <li>用OD动态追踪，尝试还原被加壳代码（等待去壳），再用QV还原EXE（用块复制的办法加快速度）</li>
 </ol>
 <h2 id="面对序列号"><a href="#面对序列号" class="headerlink" title="面对序列号"></a>面对序列号</h2><ol>
-<li><p>观察到现象：弹框并消失。可行办法：跟踪CreateWindow/ShowWindow/DestoryWindow（推荐）</p>
+<li><p>观察到现象：弹框并消失。可行办法：跟踪CreateWindow&#x2F;ShowWindow&#x2F;DestoryWindow（推荐）</p>
 </li>
 <li><p>用OD动态追踪，尝试中断DestoryWindow，观察堆栈顶端找到出栈后的程序运行位置（或直接跑retn)</p>
 </li>
-<li><p>对不当场判断的场合（没有明显现象） 怀疑有文件/注册表读写 <code>FileMon + RegMon = ProcMon</code></p>
+<li><p>对不当场判断的场合（没有明显现象） 怀疑有文件&#x2F;注册表读写 <code>FileMon + RegMon = ProcMon</code></p>
 <p> RegCreateKey()<br> RegQueryValue()<br> RegSetValue()</p>
 <p> CreateFile<br> CreateFileEx<br> ReadFile<br> WriteFile</p>
 </li>
 <li><p>软件断点：当前断点指令的首字节改为<code>0xCC</code>（对应的汇编指令为int 3）。 可能被程序自检。</p>
 </li>
-<li><p>硬件断点：选中某条指令-&gt;断点-&gt;硬件执行。  检查已设置的断点：调试-&gt;硬件断点... 原理：CPU调试寄存器保存了断点地址和断点条件，每个周期都会检查条件。触发条件有<code>execute</code>，<code>read</code>, <code>write</code>。  要设置读/写断点，选中变量的首字节-&gt;右键-&gt;断点-&gt;硬件写入-&gt;DWORD（对应的类型）。要设置DWORD断点对变量首字节有要求。读/写完成后到达断点。<br>可以用<code>printf(&quot;%p&quot;,...)</code>知道要跟踪的变量的地址。</p>
+<li><p>硬件断点：选中某条指令-&gt;断点-&gt;硬件执行。  检查已设置的断点：调试-&gt;硬件断点... 原理：CPU调试寄存器保存了断点地址和断点条件，每个周期都会检查条件。触发条件有<code>execute</code>，<code>read</code>, <code>write</code>。  要设置读&#x2F;写断点，选中变量的首字节-&gt;右键-&gt;断点-&gt;硬件写入-&gt;DWORD（对应的类型）。要设置DWORD断点对变量首字节有要求。读&#x2F;写完成后到达断点。<br>可以用<code>printf(&quot;%p&quot;,...)</code>知道要跟踪的变量的地址。</p>
 </li>
-<li><p>利用读/写硬件断点，当操作序列号时就能断住。<code>Ctrl+B</code>搜索已输入的序列号找到内存地址。跳跃几次看到<code>rep movs</code>（字符串拷贝），此时取消断点，回到用户代码，跳出几次，看到getText</p>
+<li><p>利用读&#x2F;写硬件断点，当操作序列号时就能断住。<code>Ctrl+B</code>搜索已输入的序列号找到内存地址。跳跃几次看到<code>rep movs</code>（字符串拷贝），此时取消断点，回到用户代码，跳出几次，看到getText</p>
 </li>
 <li><p>如果进入系统代码，则应跳出到用户代码<code>Alt+F9</code>，再按<code>Ctrl+F9</code>跳出一些函数。</p>
 </li>
@@ -339,7 +344,7 @@
 </li>
 </ol>
 <h1 id="汇编规则"><a href="#汇编规则" class="headerlink" title="汇编规则"></a>汇编规则</h1><ol>
-<li>cdq edx:eax, idiv, edx = edx:eax %n</li>
+<li>cdq edx:eax, idiv, edx &#x3D; edx:eax %n</li>
 </ol>
 <h1 id="逆向工程历史"><a href="#逆向工程历史" class="headerlink" title="逆向工程历史"></a>逆向工程历史</h1><ol>
 <li>微软开发<code>debug</code>，<code>codeview</code>, 宝蓝开发<code>TurboDebug</code>;</li>
@@ -349,7 +354,7 @@
 <li>u(unassemble) 反汇编，指定开始地址和末地址（l+长度亦可)，反汇编对应地址内的机器语言。</li>
 <li>r(register) 查看寄存器 SF+PL-NG UP上DN下.  r + 寄存器名字, 修改内存</li>
 <li>p (optional 地址) 单步前进，目标地址是执行完毕的</li>
-<li>g (optional =首地址 (optional) 末地址) (从csip)跳跃直到int 3(末地址是未执行的);</li>
+<li>g (optional &#x3D;首地址 (optional) 末地址) (从csip)跳跃直到int 3(末地址是未执行的);</li>
 <li>d(dump) 查看内存 可以指定(d cs:100 120 || d cs:100 l20)</li>
 <li>e(edit) 修改内存 地址 + &quot;string&quot; || hex</li>
 <li>t(track in)</li>
@@ -366,7 +371,7 @@
 <p><code>es:[bx]</code> 0:32是一个中断向量的地址</p>
 <p>0:0 ~ 0:3FF 是中断向量表，每个中断向量占用4字节。 例如<code>int 00h</code>的中断向量储存在0:0 ~ 0:3之间; <code>int 01h</code>的中断向量储存在0:4 ~ 0:7之间。</p>
 <p>当cpu执行<code>int 00h</code>时：<br>pushf 保护当前标志位（flag）的状态<br>push cs 当前短地址<br>push 下条指令的偏移地址<br>cli<br>jmp 8756h:3412h</p>
-<p>// cli disable interrupt    (clear interrupt)<br>// sti enable.              (set interrupt)</p>
+<p>&#x2F;&#x2F; cli disable interrupt    (clear interrupt)<br>&#x2F;&#x2F; sti enable.              (set interrupt)</p>
 <p>8756h:3412h 是中断服务程序的入口地址<br>    ……<br>    iret; 中断返回</p>
 <p>当cpu执行<code>iret</code>时：<br>pop ip;<br>pop cs;<br>popf;       从而实现恢复现场。</p>
 <pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">; 调换中断向量表
@@ -431,7 +436,7 @@ pc
 
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="dosboxdeb"><a href="#dosboxdeb" class="headerlink" title="dosboxdeb"></a>dosboxdeb</h2><p>dos mcbs 获得当前程序的PSP （memory control block)<br>u 01dd:1785  // 查看反汇编</p>
+<h2 id="dosboxdeb"><a href="#dosboxdeb" class="headerlink" title="dosboxdeb"></a>dosboxdeb</h2><p>dos mcbs 获得当前程序的PSP （memory control block)<br>u 01dd:1785  &#x2F;&#x2F; 查看反汇编</p>
 <h2 id="单步中断"><a href="#单步中断" class="headerlink" title="单步中断"></a>单步中断</h2><pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">pushf
 pop ax
 or ax, 0100h
@@ -453,18 +458,18 @@ infect_exe:
     call dword ptr cs:[old_2h]; call 隐含push段地址、偏移地址 ..?
     <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>原始的<code>int 21h</code>中断向量的段地址&lt;=70h</p>
+<p>原始的<code>int 21h</code>中断向量的段地址&lt;&#x3D;70h</p>
 <p>假装调用一个无用的<code>int 21h</code>功能，如获取dos版本号</p>
 <pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">mov ah, 30h
 pushf
 置位TF ; 不能手动int 21h，因为系统将flag置零
 call dword ptr [current_21h]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="EXE文件格式"><a href="#EXE文件格式" class="headerlink" title="EXE文件格式"></a>EXE文件格式</h2><p>+00 4D, 5A; EXE标志“MZ”<br>+02 50, 01; 最后一个扇区的字节数为150h （例外：如果是00 00则最后一个扇区是满载）<br>+04 02, 00; EXE占用的扇区数量（200字节/一个扇区）<br>+06 02, 00; 重定位项数<br>+08 02, 00; 文件头的节长度=20h，所以字节长度=200h (20h x 10h)<br>+0A 00, 00; 至少内存   DOS是单任务的，所以内存限制没有太大意义<br>+0C FF, FF; 至多内存<br>+0E 05, 00; SS与程序首段地址的距离 （程序首段地址在运行时确定, = psp+10h）<br>+10 00, 01; SP = 100h</p>
-<p>+12 E8, 20; EXE文件头的校验值<br>+14 28, 00; IP=0028h            ; 注意此处先IP后CS   CS:IP第一句指令<br>+16 02, 00; CS与程序首段地址的距离<br>+18 1E, 00; 重定位表的偏移地址</p>
-<p>; 下面是重定位表。每个重定位项4个字节。每两个字节为一个信息。<br>+1E 01, 00; 重定位的偏移地址=0001h<br>+20 02, 00; Δ=0002h,<br>; 首段地址+Δ=重定位的段地址<br>;<br>+22 0D, 00; 重定位的偏移地址=000Dh<br>+24 02, 00; Δ=0002h,<br>; 首段地址+Δ=重定位的段地址</p>
+<h2 id="EXE文件格式"><a href="#EXE文件格式" class="headerlink" title="EXE文件格式"></a>EXE文件格式</h2><p>+00 4D, 5A; EXE标志“MZ”<br>+02 50, 01; 最后一个扇区的字节数为150h （例外：如果是00 00则最后一个扇区是满载）<br>+04 02, 00; EXE占用的扇区数量（200字节&#x2F;一个扇区）<br>+06 02, 00; 重定位项数<br>+08 02, 00; 文件头的节长度&#x3D;20h，所以字节长度&#x3D;200h (20h x 10h)<br>+0A 00, 00; 至少内存   DOS是单任务的，所以内存限制没有太大意义<br>+0C FF, FF; 至多内存<br>+0E 05, 00; SS与程序首段地址的距离 （程序首段地址在运行时确定, &#x3D; psp+10h）<br>+10 00, 01; SP &#x3D; 100h</p>
+<p>+12 E8, 20; EXE文件头的校验值<br>+14 28, 00; IP&#x3D;0028h            ; 注意此处先IP后CS   CS:IP第一句指令<br>+16 02, 00; CS与程序首段地址的距离<br>+18 1E, 00; 重定位表的偏移地址</p>
+<p>; 下面是重定位表。每个重定位项4个字节。每两个字节为一个信息。<br>+1E 01, 00; 重定位的偏移地址&#x3D;0001h<br>+20 02, 00; Δ&#x3D;0002h,<br>; 首段地址+Δ&#x3D;重定位的段地址<br>;<br>+22 0D, 00; 重定位的偏移地址&#x3D;000Dh<br>+24 02, 00; Δ&#x3D;0002h,<br>; 首段地址+Δ&#x3D;重定位的段地址</p>
 <p>DOS运行程序时，文件头不载入内存，所以内存头可认为是文件头长度</p>
-<p>200h+2:1 = 0:200h + 0:21 = 0:211</p>
+<p>200h+2:1 &#x3D; 0:200h + 0:21 &#x3D; 0:211</p>
 <pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">mov ah, 2
 mov dl, &#39;A&#39;
 int 21h
@@ -533,7 +538,31 @@ end shell<span aria-hidden="true" class="line-numbers-rows"><span></span><span><
 
 <p>注意加密堆栈后引发的解密对新数据的影响的问题。</p>
 <p>保存ss和sp，之后修改它为一段预留空间</p>
-<h1 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h1><p><em>32位系统下</em><br>|            |  保护模式  |      实模式       |<br>| :--------: | :--------: | :---------------: |<br>| 最大段长度 |     4G     |        64K        |<br>|  越界访问  | 运行时错误 |       允许        |<br>|  物理寻址  |  查gdt表   | 基址*10h+10h+偏移 |</p>
+<h1 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h1><p><em>32位系统下</em></p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">保护模式</th>
+<th align="center">实模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">最大段长度</td>
+<td align="center">4G</td>
+<td align="center">64K</td>
+</tr>
+<tr>
+<td align="center">越界访问</td>
+<td align="center">运行时错误</td>
+<td align="center">允许</td>
+</tr>
+<tr>
+<td align="center">物理寻址</td>
+<td align="center">查gdt表</td>
+<td align="center">基址*10h+10h+偏移</td>
+</tr>
+</tbody></table>
 <h2 id="查gdt表"><a href="#查gdt表" class="headerlink" title="查gdt表"></a>查gdt表</h2><p>设<code>ds=10h</code>，现通过查gdt表获得其物理地址。gdt表储存描述符，每个占8字节。表的首地址存在于<code>gdtr</code>寄存器。</p>
 <p>gdt+10h xx xx xx xx xx xx xx xx</p>
 <h2 id="idt中断描述符表"><a href="#idt中断描述符表" class="headerlink" title="idt中断描述符表"></a>idt中断描述符表</h2><p>首地址存在于<code>idtr</code>中。每项有8字节。基址2字节，偏移4字节，剩余2字节记录权限。</p>
@@ -595,7 +624,7 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 
 
 
-    <div class="comments" id="SOHUCS"></div>
+    <div class="comments" id="SOHUCS" sid="a5c2c2106213a0c361058d8f140d0bae"></div>
 </div>
   </main>
 
@@ -623,7 +652,9 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
@@ -631,6 +662,8 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
   
 
 
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"Nw4tc7C6QG2HeTBU0T1nFRay-MdYXbMMI","app_key":"ckihIHLVnT6ssbrDfnVNDUJi","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
   

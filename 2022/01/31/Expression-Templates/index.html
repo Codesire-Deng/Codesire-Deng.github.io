@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,23 +16,24 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="Preface在研究 CRTP 时发现了一种经典应用——表达式模板。今天学一学，顺便水一篇博客。🐶 Motivation and example表达式模板是一种模板元编程，它在编译期展开向量的一系列复合运算，从而将辅助空间从 $O(n)$ 降到 $O(1)$。相比于朴素算法，表达式模板属于惰性求值，求值时间点是赋值运算。">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="Preface在研究 CRTP 时发现了一种经典应用——表达式模板。今天学一学，顺便水一篇博客。🐶 Motivation and example表达式模板是一种模板元编程，它在编译期展开向量的一系列复合运算，从而将辅助空间从 $O(n)$ 降到 $O(1)$。相比于朴素算法，表达式模板属于惰性求值，求值时间点是赋值运算。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Expression Templates">
 <meta property="og:url" content="https://codesire-deng.github.io/2022/01/31/Expression-Templates/index.html">
 <meta property="og:site_name" content="等疾风">
 <meta property="og:description" content="Preface在研究 CRTP 时发现了一种经典应用——表达式模板。今天学一学，顺便水一篇博客。🐶 Motivation and example表达式模板是一种模板元编程，它在编译期展开向量的一系列复合运算，从而将辅助空间从 $O(n)$ 降到 $O(1)$。相比于朴素算法，表达式模板属于惰性求值，求值时间点是赋值运算。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://codesire-deng.github.io/2022/01/31/Expression-Templates/crtpEt.svg">
+<meta property="og:image" content="https://codesire-deng.github.io/crtpEt.svg">
 <meta property="article:published_time" content="2022-01-31T07:58:13.000Z">
 <meta property="article:modified_time" content="2022-02-02T13:02:40.768Z">
 <meta property="article:author" content="等疾风">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://codesire-deng.github.io/2022/01/31/Expression-Templates/crtpEt.svg">
+<meta name="twitter:image" content="https://codesire-deng.github.io/crtpEt.svg">
 
 
 <link rel="canonical" href="https://codesire-deng.github.io/2022/01/31/Expression-Templates/">
@@ -44,6 +45,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Expression Templates | 等疾风</title>
   
+
 
 
 
@@ -71,7 +73,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">等疾风</h1>
+      <p class="site-title">等疾风</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
@@ -148,13 +150,12 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation-and-example"><span class="nav-number">2.</span> <span class="nav-text">Motivation and example</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#My-first-attempt"><span class="nav-number">3.</span> <span class="nav-text">My first attempt</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Draft-1"><span class="nav-number">3.1.</span> <span class="nav-text">Draft 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-39-s-wrong"><span class="nav-number">3.2.</span> <span class="nav-text">What&#39;s wrong</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-second-attempt"><span class="nav-number">4.</span> <span class="nav-text">The second attempt</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Inheriting-constructors"><span class="nav-number">4.1.</span> <span class="nav-text">Inheriting constructors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Template-Inner-Class"><span class="nav-number">4.2.</span> <span class="nav-text">Template Inner Class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Who-needs-operator"><span class="nav-number">4.3.</span> <span class="nav-text">Who needs operator+()?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ambiguity-of-operator"><span class="nav-number">4.4.</span> <span class="nav-text">Ambiguity of operator&#x3D;()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Draft-2"><span class="nav-number">4.5.</span> <span class="nav-text">Draft 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Direction-of-improvement"><span class="nav-number">4.6.</span> <span class="nav-text">Direction of improvement</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Peak-of-Evolution"><span class="nav-number">5.</span> <span class="nav-text">Peak of Evolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-Diagram"><span class="nav-number">5.1.</span> <span class="nav-text">Class Diagram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ET-interface"><span class="nav-number">5.2.</span> <span class="nav-text">ET interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">5.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion-and-Prospect"><span class="nav-number">6.</span> <span class="nav-text">Conclusion and Prospect</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation-and-example"><span class="nav-number">2.</span> <span class="nav-text">Motivation and example</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#My-first-attempt"><span class="nav-number">3.</span> <span class="nav-text">My first attempt</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Draft-1"><span class="nav-number">3.1.</span> <span class="nav-text">Draft 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-39-s-wrong"><span class="nav-number">3.2.</span> <span class="nav-text">What&#39;s wrong</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-second-attempt"><span class="nav-number">4.</span> <span class="nav-text">The second attempt</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Inheriting-constructors"><span class="nav-number">4.1.</span> <span class="nav-text">Inheriting constructors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Template-Inner-Class"><span class="nav-number">4.2.</span> <span class="nav-text">Template Inner Class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Who-needs-operator"><span class="nav-number">4.3.</span> <span class="nav-text">Who needs operator+()?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ambiguity-of-operator-x3D"><span class="nav-number">4.4.</span> <span class="nav-text">Ambiguity of operator&#x3D;()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Draft-2"><span class="nav-number">4.5.</span> <span class="nav-text">Draft 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Direction-of-improvement"><span class="nav-number">4.6.</span> <span class="nav-text">Direction of improvement</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Peak-of-Evolution"><span class="nav-number">5.</span> <span class="nav-text">Peak of Evolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-Diagram"><span class="nav-number">5.1.</span> <span class="nav-text">Class Diagram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ET-interface"><span class="nav-number">5.2.</span> <span class="nav-text">ET interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">5.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion-and-Prospect"><span class="nav-number">6.</span> <span class="nav-text">Conclusion and Prospect</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="等疾风"
       src="/uploads/blogAvatar_s.jpg">
   <p class="site-author-name" itemprop="name">等疾风</p>
@@ -189,7 +190,6 @@
 
 
 
-          </div>
         </div>
       </div>
         <div class="back-to-top animated" role="button" aria-label="返回顶部">
@@ -247,15 +247,22 @@
 
       <time title="创建时间：2022-01-31 15:58:13" itemprop="dateCreated datePublished" datetime="2022-01-31T15:58:13+08:00">2022-01-31</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2022-02-02 21:02:40" itemprop="dateModified" datetime="2022-02-02T21:02:40+08:00">2022-02-02</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-02-02 21:02:40" itemprop="dateModified" datetime="2022-02-02T21:02:40+08:00">2022-02-02</time>
+    </span>
 
   
+    <span id="/2022/01/31/Expression-Templates/" class="post-meta-item leancloud_visitors" data-flag-title="Expression Templates" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -264,11 +271,9 @@
       </span>
       <span class="post-meta-item-text">Changyan：</span>
     
-    
-      <a title="changyan" href="/2022/01/31/Expression-Templates/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2022/01/31/Expression-Templates/" itemprop="commentCount"></span>
-      </a>
-    
+    <a title="Expression Templates" href="/2022/01/31/Expression-Templates/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::f6a16d96d06f43515613bc5214613a98" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
   </span>
   
   
@@ -379,7 +384,7 @@
 <li><code>Vec</code> 类需要实现 <code>operator+()</code>，并由这个函数返回一个 <code>DeferredOperator</code></li>
 <li><code>DeferredOperator</code> 类需要实现 <code>operator+()</code>，这个函数同样返回一个 <code>DeferredOperator</code></li>
 </ol>
-<h2 id="Ambiguity-of-operator"><a href="#Ambiguity-of-operator" class="headerlink" title="Ambiguity of operator=()"></a>Ambiguity of operator=()</h2><p>为了区分 <code>Vec = Vec</code> 和 <code>Vec = DeferredOperator</code>，我们需要更精细地定义参数。</p>
+<h2 id="Ambiguity-of-operator-x3D"><a href="#Ambiguity-of-operator-x3D" class="headerlink" title="Ambiguity of operator&#x3D;()"></a>Ambiguity of operator&#x3D;()</h2><p>为了区分 <code>Vec = Vec</code> 和 <code>Vec = DeferredOperator</code>，我们需要更精细地定义参数。</p>
 <h2 id="Draft-2"><a href="#Draft-2" class="headerlink" title="Draft 2"></a>Draft 2</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;vector></span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;functional></span></span>
@@ -445,7 +450,7 @@
 
 <h1 id="Peak-of-Evolution"><a href="#Peak-of-Evolution" class="headerlink" title="Peak of Evolution"></a>Peak of Evolution</h1><p>这次依然是原创代码，改进了一些地方：</p>
 <h2 id="Class-Diagram"><a href="#Class-Diagram" class="headerlink" title="Class Diagram"></a>Class Diagram</h2><p>多层次的 CRTP 用起来容易头晕，应该事先设计好类的关系：</p>
-<p><img src="./crtpEt.svg" alt="CRTP relationship"></p>
+<p><img src="/./crtpEt.svg" alt="CRTP relationship"></p>
 <p>橙色和红色的类才是 CRTP 的模板实参。白色的类主要用作接口，类似于抽象类。</p>
 <h2 id="ET-interface"><a href="#ET-interface" class="headerlink" title="ET interface"></a>ET interface</h2><ul>
 <li>用户类只要继承 <code>VectorExpresstion</code> 接口，同时定义合适的 <code>operator[]</code> 和 <code>operator=</code> 即可实现模板表达式。</li>
@@ -641,7 +646,7 @@
 <p>但模板元编程暂时不是我的主要学习方向，所以还是再等等吧~</p>
 <h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Expression_templates">Expression templates - Wikipedia</a></li>
-<li><a target="_blank" rel="noopener" href="https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Expression-template">More C++ Idioms/Expression-template - Wikibooks</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Expression-template">More C++ Idioms&#x2F;Expression-template - Wikibooks</a></li>
 <li><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/using_declaration">Using-declaration - cppreference.com</a></li>
 </ul>
 
@@ -690,7 +695,7 @@
 
 
 
-    <div class="comments" id="SOHUCS"></div>
+    <div class="comments" id="SOHUCS" sid="f6a16d96d06f43515613bc5214613a98"></div>
 </div>
   </main>
 
@@ -718,7 +723,9 @@
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
@@ -726,6 +733,8 @@
   
 
 
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"Nw4tc7C6QG2HeTBU0T1nFRay-MdYXbMMI","app_key":"ckihIHLVnT6ssbrDfnVNDUJi","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
   

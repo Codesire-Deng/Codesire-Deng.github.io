@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,11 +16,12 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code+Retina:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","version":"8.7.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
-<meta name="description" content="Since 2018&#x2F;07&#x2F;12">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="Since 2018&#x2F;07&#x2F;12">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java语法笔记">
 <meta property="og:url" content="https://codesire-deng.github.io/2019/10/11/java/index.html">
@@ -48,6 +49,7 @@
 
 
 
+
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
@@ -71,7 +73,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">等疾风</h1>
+      <p class="site-title">等疾风</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
@@ -153,8 +155,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="等疾风"
       src="/uploads/blogAvatar_s.jpg">
   <p class="site-author-name" itemprop="name">等疾风</p>
@@ -189,7 +190,6 @@
 
 
 
-          </div>
         </div>
       </div>
         <div class="back-to-top animated" role="button" aria-label="返回顶部">
@@ -247,15 +247,22 @@
 
       <time title="创建时间：2019-10-11 13:11:41" itemprop="dateCreated datePublished" datetime="2019-10-11T13:11:41+08:00">2019-10-11</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-06-15 23:47:01" itemprop="dateModified" datetime="2021-06-15T23:47:01+08:00">2021-06-15</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-06-15 23:47:01" itemprop="dateModified" datetime="2021-06-15T23:47:01+08:00">2021-06-15</time>
+    </span>
 
   
+    <span id="/2019/10/11/java/" class="post-meta-item leancloud_visitors" data-flag-title="Java语法笔记" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
   
   <span class="post-meta-item">
     
@@ -264,11 +271,9 @@
       </span>
       <span class="post-meta-item-text">Changyan：</span>
     
-    
-      <a title="changyan" href="/2019/10/11/java/#SOHUCS" itemprop="discussionUrl">
-        <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2019/10/11/java/" itemprop="commentCount"></span>
-      </a>
-    
+    <a title="Java语法笔记" href="/2019/10/11/java/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::22fad8624162fa854c2eb447fb729cf8" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
   </span>
   
   
@@ -281,7 +286,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>Since 2018/07/12</p>
+        <p>Since 2018&#x2F;07&#x2F;12</p>
 <span id="more"></span>
 
 <h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><ul>
@@ -330,7 +335,7 @@
 <li>访问限制级别必须相同或放宽</li>
 <li>若父类函数返回类型为基础类型,则子类重写返回类型必须相同</li>
 <li>若父类返回引用类型, 则子类返回相同或其子类类型</li>
-<li>重写方法不能抛出新异常, 只可以抛出相同/更少异常</li>
+<li>重写方法不能抛出新异常, 只可以抛出相同&#x2F;更少异常</li>
 <li>抽象方法必须在具体类中被重写</li>
 <li>父类引用指向子类对象时,会动态绑定子类重写函数</li>
 </ul>
@@ -343,14 +348,14 @@
 </li>
 <li><strong>向上转型</strong><ul>
 <li>成员方法<ol>
-<li>   编译时<strong>检查声明类型类</strong>中是否含有被调用的成员方法,而不检查子类对象</li>
-<li>   运行时<strong>根据对象</strong>调用最后重写的成员方法,而不依赖与声明类型类</li>
-<li>   被重写的方法没有丢失,但仅能通过类方法中super访问.</li>
+<li>编译时<strong>检查声明类型类</strong>中是否含有被调用的成员方法,而不检查子类对象</li>
+<li>运行时<strong>根据对象</strong>调用最后重写的成员方法,而不依赖与声明类型类</li>
+<li>被重写的方法没有丢失,但仅能通过类方法中super访问.</li>
 </ol>
 </li>
 <li>成员变量<ol>
-<li>   编译时<strong>检查声明类型类</strong>中是否含有被访问的成员变量, 而不检查子类对象</li>
-<li>   运行时<strong>访问声明类型类</strong>中的成员变量, 而不访问子类对象所重写的</li>
+<li>编译时<strong>检查声明类型类</strong>中是否含有被访问的成员变量, 而不检查子类对象</li>
+<li>运行时<strong>访问声明类型类</strong>中的成员变量, 而不访问子类对象所重写的</li>
 </ol>
 </li>
 </ul>
@@ -387,7 +392,7 @@
 <li>final修饰变量: 声明常量, 其内容不可修改<ul>
 <li>对于基本数据类型, 其值不可修改</li>
 <li>对于引用数据类型, 指向不能更换, 但所指向的内容仍可修改</li>
-<li>常量和普通变量一样可以重写/隐藏.</li>
+<li>常量和普通变量一样可以重写&#x2F;隐藏.</li>
 <li>每个对象都包含各自的final变量, 在构造其中初始化</li>
 </ul>
 </li>
@@ -453,7 +458,7 @@
 </li>
 <li>静态内部类<ul>
 <li>在类中以静态成员形式定义的另一个类, 称为静态内部类.</li>
-<li>静态内部类的外部类一定全是静态的.==?_?==</li>
+<li>静态内部类的外部类一定全是静态的.&#x3D;&#x3D;?_?&#x3D;&#x3D;</li>
 <li>静态内部类可以访问外部类的静态成员.</li>
 <li>静态内部类可以定义静态成员变量,静态成员方法和静态内部类.</li>
 <li>初始化某个静态内部类不会触发外部类的初始化.</li>
@@ -470,8 +475,8 @@
 <li>匿名类<ul>
 <li>匿名类是没有类名的子类, 使用格式: <code>new FatherClassOrInterface() &#123;...&#125; ;</code></li>
 <li>匿名类通常意味着向上转型, 并即时生成一个实例, 因此本身不是静态的.</li>
-<li>匿名类可以出现在成员变量中/方法中.</li>
-<li>匿名类不能定义新的构造方法/实现新的接口/派生出子类.</li>
+<li>匿名类可以出现在成员变量中&#x2F;方法中.</li>
+<li>匿名类不能定义新的构造方法&#x2F;实现新的接口&#x2F;派生出子类.</li>
 <li>匿名类若出现在成员变量中, 则类似于成员内部类; 若出现在方法中, 则类似于局部类.</li>
 </ul>
 </li>
@@ -668,7 +673,7 @@
 
 
 
-    <div class="comments" id="SOHUCS"></div>
+    <div class="comments" id="SOHUCS" sid="22fad8624162fa854c2eb447fb729cf8"></div>
 </div>
   </main>
 
@@ -696,7 +701,9 @@
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
 
 
 
@@ -704,6 +711,8 @@
   
 
 
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"Nw4tc7C6QG2HeTBU0T1nFRay-MdYXbMMI","app_key":"ckihIHLVnT6ssbrDfnVNDUJi","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
   
