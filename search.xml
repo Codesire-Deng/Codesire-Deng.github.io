@@ -95,6 +95,7 @@
 <h2 id="co-await"><a href="#co-await" class="headerlink" title="co_await"></a>co_await</h2><p>一元运算符 <code>co_await</code> 会暂停协程并将转移执行权。其操作数必须定义 <code>operator co_await</code>，或者能通过当前协程的 <code>Promise::await_transform</code> 转换成这种类型。</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">co_await</span> expr<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
+<p><img src="/2021/11/18/C-20-Coroutine/co_await.svg" alt="co_await"></p>
 <p>首先，<code>expr</code> 要被转换为 awaitable，规则如下：</p>
 <ol>
 <li>如果 <code>expr</code> 是由 initial suspend point，final suspend point 或者 yield expression 生成的，那么 awaitable 就是 <code>expr</code> 本身。</li>
