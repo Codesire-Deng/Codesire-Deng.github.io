@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+  <meta name="description" content="Preface要掌握 C++20 协程，仅仅看完文档是远远不够的。C++ 和其他语言的协程的最大不同点在于，C++ 提供了最少量的编译器实现和极大量的「可定制点」，而其他语言可能连「调度器」都给用户准备好了。 在茫茫多的可定制点面前，如果你能一眼看出「为什么 C++ 要这样设计」，那么我愿称你为天才。否则，还是从常见的范式下手，逐渐体会设计者的思想吧。 我们将从最简单的范式——Generator">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coroutine Tutorial: Generators">
+<meta property="og:url" content="https://codesire-deng.github.io/2022/02/22/Generators-with-Coroutine/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="Preface要掌握 C++20 协程，仅仅看完文档是远远不够的。C++ 和其他语言的协程的最大不同点在于，C++ 提供了最少量的编译器实现和极大量的「可定制点」，而其他语言可能连「调度器」都给用户准备好了。 在茫茫多的可定制点面前，如果你能一眼看出「为什么 C++ 要这样设计」，那么我愿称你为天才。否则，还是从常见的范式下手，逐渐体会设计者的思想吧。 我们将从最简单的范式——Generator">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-02-22T08:28:51.000Z">
+<meta property="article:modified_time" content="2022-02-22T13:41:00.447Z">
+<meta property="article:author" content="等疾风">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="C++协程">
+<meta property="article:tag" content="并发编程">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2022/02/22/Generators-with-Coroutine/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://codesire-deng.github.io/2022/02/22/Generators-with-Coroutine/","path":"2022/02/22/Generators-with-Coroutine/","title":"Coroutine Tutorial: Generators"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Coroutine Tutorial: Generators | 等疾风</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">等疾风</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">终有弱水替沧海<br/>再无相思寄巫山</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+        <li class="menu-item menu-item-log"><a href="/log/" rel="section"><i class="fa fa-sync-alt fa-fw"></i>Log</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#What-is-Generator"><span class="nav-number">2.</span> <span class="nav-text">What is Generator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Why-Generator"><span class="nav-number">3.</span> <span class="nav-text">Why Generator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Analysis-How-to"><span class="nav-number">4.</span> <span class="nav-text">Analysis How-to</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#get-return-object"><span class="nav-number">4.1.</span> <span class="nav-text">get_return_object</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inital-suspend"><span class="nav-number">4.2.</span> <span class="nav-text">inital_suspend</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#caller-resume"><span class="nav-number">4.3.</span> <span class="nav-text">caller resume</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#co-yield"><span class="nav-number">4.4.</span> <span class="nav-text">co_yield</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Finish-the-leftover"><span class="nav-number">4.5.</span> <span class="nav-text">Finish the leftover</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#uncaught-exception-handler"><span class="nav-number">4.5.1.</span> <span class="nav-text">uncaught exception handler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#define-co-return"><span class="nav-number">4.5.2.</span> <span class="nav-text">define co_return</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo-fibonacci"><span class="nav-number">4.6.</span> <span class="nav-text">Demo: fibonacci</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion-and-Prospect"><span class="nav-number">5.</span> <span class="nav-text">Conclusion and Prospect</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Some-Slight-Improvements"><span class="nav-number">7.</span> <span class="nav-text">Some Slight Improvements</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2022/02/22/Generators-with-Coroutine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Coroutine Tutorial: Generators
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-02-22 16:28:51 / Modified: 21:41:00" itemprop="dateCreated datePublished" datetime="2022-02-22T16:28:51+08:00">2022-02-22</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="firestore-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Changyan: </span>
+    
+    <a title="Coroutine Tutorial: Generators" href="/2022/02/22/Generators-with-Coroutine/#SOHUCS" itemprop="discussionUrl">
+      <span id="sourceId::a29420a71de44b9954308349a1b3ee64" class="cy_cmt_count" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h1><p>要掌握 C++20 协程，仅仅看完文档是远远不够的。C++ 和其他语言的协程的最大不同点在于，C++ 提供了最少量的编译器实现和极大量的「可定制点」，而其他语言可能连「调度器」都给用户准备好了。</p>
+<p>在茫茫多的可定制点面前，如果你能一眼看出「为什么 C++ 要这样设计」，那么我愿称你为天才。否则，还是从常见的范式下手，逐渐体会设计者的思想吧。</p>
+<p>我们将从最简单的范式——Generator 下手。</p>
+<span id="more"></span>
+
+<p><small>本文力求概念定义的权威性，但无法做任何保证。</small></p>
+<h1 id="What-is-Generator"><a href="#What-is-Generator" class="headerlink" title="What is Generator"></a>What is Generator</h1><p>Generator 泛指一段序列（有限或无限长）的生成器。在协程的语境下，Generator 特指一个<strong>懒惰</strong>的协程，它每次运行时会在调用者线程<strong>同步</strong>地计算一个值，然后暂停自己，同时把值返回给调用者。</p>
+<div class="note info"><p>因为 Generator 在是在调用者线程下立即同步执行的，所以它不需要任何调度器。</p>
+</div>
+
+<p>Fibonacci 数列就是 Generator 的 hello-world。我们来看一看效果：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">Generator<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token function">fibonacci</span><span class="token punctuation">(</span><span class="token keyword">int</span> a0<span class="token punctuation">,</span> <span class="token keyword">int</span> a1<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">co_yield</span> a0<span class="token punctuation">;</span>
+    <span class="token keyword">co_yield</span> a1<span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> a2<span class="token punctuation">;</span> <span class="token boolean">true</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        a2 <span class="token operator">=</span> a0 <span class="token operator">+</span> a1<span class="token punctuation">;</span>
+        a0 <span class="token operator">=</span> a1<span class="token punctuation">;</span>
+        a1 <span class="token operator">=</span> a2<span class="token punctuation">;</span>
+        <span class="token keyword">co_yield</span> a2<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> len<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">;</span> <span class="token keyword">int</span> i <span class="token operator">:</span> <span class="token function">fibonacci</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> i <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">--</span>len <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">break</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>要实现这个效果，只要实现 <code>Generator&lt;T&gt;</code><del>，虽然很麻烦</del>。</p>
+<h1 id="Why-Generator"><a href="#Why-Generator" class="headerlink" title="Why Generator"></a>Why Generator</h1><p>上一段例子很愚蠢，我随手写一个 <code>struct Fibo</code> 重载 <code>operator()</code>，内置一个迭代器不香？为什么要大费周章实现 Generator，还要付出协程的运行时代价？</p>
+<p><del>我也不知道为什么，纯纯为了学而学</del> Generator 可以免去你每次重新设计结构体的麻烦，无需你重写各种迭代器，可以看作一个又香又臭的语法糖。更进一步，Generator 可以很方便地相互嵌套，相比其他做法大大降低了编程复杂度。</p>
+<h1 id="Analysis-How-to"><a href="#Analysis-How-to" class="headerlink" title="Analysis How-to"></a>Analysis How-to</h1><p>希望你已经大致了解 C++ Coroutine 的运作方式，至少了解 <code>co_await</code> 关键字的作用。顺便推销一下我的另一篇文章 <a href="/2021/11/18/C-20-Coroutine/">C++20 Coroutine</a>，它可以帮助你记住 <code>co_await</code>。</p>
+<p>现在按照协程的生命周期来分析 <code>Generator&lt;T&gt;</code>，看看它应该具有哪些接口和行为。</p>
+<h2 id="get-return-object"><a href="#get-return-object" class="headerlink" title="get_return_object"></a>get_return_object</h2><p>协程在初次进入的时候会调用 <code>promise.get_return_object()</code>，其返回值会在第一次暂停的时候返回给 caller。caller 要向协程索取返回值，通常只能通过这个<code>return_object</code> 去要，所以它相当于一个 handler。</p>
+<p>按照 C++ 标准规定 <code>promise.get_return_object()</code> 的返回值必须是协程类型，也就是 <code>Generator&lt;T&gt;</code>，也好，省得我们思考了。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">class</span> <span class="token class-name">Generator</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">class</span> <span class="token class-name">promise_type</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">public</span><span class="token operator">:</span>
+        Generator <span class="token function">get_return_object</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> Generator<span class="token punctuation">&#123;</span><span class="token operator">&lt;</span>unspecified<span class="token operator">></span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">// ...</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="inital-suspend"><a href="#inital-suspend" class="headerlink" title="inital_suspend"></a>inital_suspend</h2><p>协程在初次进入的时候（且在上一步之后）会调用 <code>co_await promise.inital_suspend()</code>。我们希望的是协程不要做任何计算（懒惰），并且直接让出执行权给 caller。所以有如下设计：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">class</span> <span class="token class-name">Generator</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">class</span> <span class="token class-name">promise_type</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">public</span><span class="token operator">:</span>
+        Generator <span class="token function">get_return_object</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> Generator<span class="token punctuation">&#123;</span><span class="token operator">&lt;</span>unspecified<span class="token operator">></span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        std<span class="token operator">::</span>suspend_always <span class="token function">initial_suspend</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+        <span class="token comment">// ...</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>别去找 <code>std::suspend_always</code> 的实现了，我已经给你准备好了：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">suspend_never</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">constexpr</span> <span class="token keyword">bool</span> <span class="token function">await_ready</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">constexpr</span> <span class="token keyword">void</span> <span class="token function">await_suspend</span><span class="token punctuation">(</span>coroutine_handle<span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">constexpr</span> <span class="token keyword">void</span> <span class="token function">await_resume</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以看出，<code>std::suspend_always</code> 在被 <code>co_await</code> 的时候总是会让出执行权给 caller&#x2F;resumer，而且<strong>不做任何调度</strong>。如果 caller&#x2F;resumer 未来不将这个协程加入调度，那它就<strong>被永远遗忘</strong>在堆内存中了。</p>
+<p>另一方面，可以发现 <code>co_await std::suspend_always&#123;&#125;</code> 的返回值总是 <code>void</code>。</p>
+<h2 id="caller-resume"><a href="#caller-resume" class="headerlink" title="caller resume"></a>caller resume</h2><p>目前为止，一个协程已经构造好了，而且已经暂停了。用户程序大概长这个样子：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">Generator<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token function">fibonacci</span><span class="token punctuation">(</span><span class="token keyword">int</span> a0<span class="token punctuation">,</span> <span class="token keyword">int</span> a1<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    Generator<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> fibo <span class="token operator">=</span> <span class="token function">fibonacci</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 运行时，因为 co_await initial_suspend() 而跳出协程，执行到这里</span>
+    <span class="token comment">// fibo 就是我们要用的 handler</span>
+    <span class="token comment">// 要再入协程、获取返回值、销毁协程等等都要靠 fibo</span>
+
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这时，我们想做两件事：</p>
+<ol>
+<li>resume 一下 <code>fibo</code>，从而计算出第一个值</li>
+<li>通过 <code>fibo</code> 拿到第一个值</li>
+</ol>
+<p>根据 C++ 标准，要恢复一个协程，必须持有对应的 <code>std::coroutine_handle</code>，换句话说 <code>fibo</code> 必须持有 <code>std::coroutine_handle</code>：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// ...</span>
+<span class="token keyword">class</span> <span class="token class-name">Generator</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">class</span> <span class="token class-name">promise_type</span> <span class="token punctuation">&#123;</span> <span class="token comment">/*...*/</span> <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+  <span class="token keyword">private</span><span class="token operator">:</span>
+    std<span class="token operator">::</span>coroutine_handle<span class="token operator">&lt;</span>promise_type<span class="token operator">></span> m_handle<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>那 Generator 是由谁初始化的呢？别忘了，初始化的事是由 <code>promise.get_return_object()</code> 干的。</p>
+<p>问题又来了，如何在 <code>promise.get_return_object()</code> 初始化 <code>std::coroutine_handle</code>？</p>
+<p>我们要认识到以下事实：</p>
+<div class="note info"><p>&amp;promise 和 coroutine_handle 一一对应，它们的偏移量是编译期已知的，可以互相换算。</p>
+</div>
+
+<p>也就是说，可以根据 <code>promise</code> 的地址算出协程的 <code>std::coroutine_handle</code>，也可以反过来用 <code>std::coroutine_handle</code> 换算出 <code>promise</code> 的地址。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">class</span> <span class="token class-name">Generator</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">class</span> <span class="token class-name">promise_type</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">public</span><span class="token operator">:</span>
+        Generator <span class="token function">get_return_object</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> Generator<span class="token punctuation">&#123;</span>
+                std<span class="token operator">::</span><span class="token class-name">coroutine_handle</span><span class="token operator">&lt;</span>promise_type<span class="token operator">></span><span class="token operator">::</span><span class="token function">from_promise</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">)</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">// ...</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+
+    <span class="token function">Generator</span><span class="token punctuation">(</span>std<span class="token operator">::</span>coroutine_handle<span class="token operator">&lt;</span>promise_type<span class="token operator">></span> handle<span class="token punctuation">)</span> <span class="token keyword">noexcept</span>
+        <span class="token operator">:</span> <span class="token function">m_handle</span><span class="token punctuation">(</span>handle<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+  <span class="token keyword">private</span><span class="token operator">:</span>
+    std<span class="token operator">::</span>coroutine_handle<span class="token operator">&lt;</span>promise_type<span class="token operator">></span> m_handle<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<div class="note info"><p><code>std::coroutine_handle</code> 的本质是指向协程帧的指针，通常按值传递。</p>
+</div>
+
+<p>现在，我们可以任意给 Generator 加成员方法，让它利用 <code>m_handle</code> 做任何事情，比如利用 <code>fibo.m_handle.resume()</code> 恢复协程，进行一次计算。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// ...</span>
+<span class="token keyword">class</span> <span class="token class-name">Generator</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">class</span> <span class="token class-name">promise_type</span> <span class="token punctuation">&#123;</span> <span class="token comment">/*...*/</span> <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+
+    <span class="token keyword">void</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> m_handle<span class="token punctuation">.</span><span class="token function">resume</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span> <span class="token comment">// 计算下一个值</span>
+  <span class="token keyword">private</span><span class="token operator">:</span>
+    std<span class="token operator">::</span>coroutine_handle<span class="token operator">&lt;</span>promise_type<span class="token operator">></span> m_handle<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="co-yield"><a href="#co-yield" class="headerlink" title="co_yield"></a>co_yield</h2><p>现在，用户调用了 <code>fibo.next()</code>，协程被恢复执行。现在我们想返回第一个值给用户，意味着必须暂停协程，归还执行权。C++ 给我们提供了关键字 <code>co_yield</code>，它是一个语法糖，<code>co_yield expr</code> 等价于 <code>co_await promise.yield_value(expr)</code>。</p>
+<p>所以在 <code>promise.yield_value(expr)</code> 里面，我们要做两件事：</p>
+<ol>
+<li>将 <code>expr</code> 保存在 <code>promise</code> 里面，便于外部访问。</li>
+<li>返回一个 <code>std::suspend_always&#123;&#125;</code>，令 caller 重获执行权。</li>
+</ol>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">class</span> <span class="token class-name">Generator</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">class</span> <span class="token class-name">promise_type</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">public</span><span class="token operator">:</span>
+        <span class="token keyword">const</span> T <span class="token operator">&amp;</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> m_value<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+        std<span class="token operator">::</span>suspend_always <span class="token function">yield_value</span><span class="token punctuation">(</span>T value<span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span>
+            m_value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">// ...</span>
+
+      <span class="token keyword">private</span><span class="token operator">:</span>
+        T m_value<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">const</span> T <span class="token operator">&amp;</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> m_handle<span class="token punctuation">.</span><span class="token function">promise</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">void</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> m_handle<span class="token punctuation">.</span><span class="token function">resume</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token comment">// ...</span>
+
+  <span class="token keyword">private</span><span class="token operator">:</span>
+    std<span class="token operator">::</span>coroutine_handle<span class="token operator">&lt;</span>promise_type<span class="token operator">></span> m_handle<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<div class="note info"><p><code>std::coroutine_handle&lt;Promise&gt;::promise()</code> 可以拿到对应的 promise 对象，从而拿到计算结果。但请特别小心协程可能已经被销毁！</p>
+</div>
+
+<div class="note warning"><p>从容器的角度看，<code>T m_value</code> 是一个很烂的设计，仅供示意，请勿模仿！</p>
+</div>
+
+<h2 id="Finish-the-leftover"><a href="#Finish-the-leftover" class="headerlink" title="Finish the leftover"></a>Finish the leftover</h2><p>现在，Generator 已经具备我们所需的全部功能，但还有一些手续要办：</p>
+<ol>
+<li>异常处理</li>
+<li>定义 <code>co_return</code> 的行为</li>
+</ol>
+<h3 id="uncaught-exception-handler"><a href="#uncaught-exception-handler" class="headerlink" title="uncaught exception handler"></a>uncaught exception handler</h3><p>协程运行时没有被显式 catch 的异常会导致立即调用 <code>promise.unhandled_exception()</code>，紧接着调用 <code>co_await promise.final_suspend()</code>。</p>
+<p>简单起见，我们先不处理异常，留下一个空函数就行。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">// ...</span>
+<span class="token keyword">class</span> <span class="token class-name">promise_type</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">void</span> <span class="token function">unhandled_exception</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token comment">// ...</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="define-co-return"><a href="#define-co-return" class="headerlink" title="define co_return"></a>define <code>co_return</code></h3><p>协程可以显式 <code>co_return [expr]</code>，或者因为执行完函数体而隐式 <code>co_return</code>。</p>
+<p>我们的 fibonacci 不需要 <code>co_return</code> 任何东西，但是作为一篇负责任的教程，我还是会告诉你：</p>
+<div class="note info"><p><code>co_return expr;</code> 会调用 <code>promise.return_value(expr)</code>，随后析构协程内的自动变量，但 promise 和协程参数仍然存活。</p>
+<p>类似地 <code>co_return;</code> 或者 <code>co_return (void)expr;</code> 会调用 <code>promise.return_void()</code>。</p>
+</div>
+
+<div class="note warning"><p><code>return_value(expr)</code> 和 <code>retrun_void()</code> 是我们访问协程内自动变量的最后机会。但是 promise 和协程参数仍会存活。</p>
+</div>
+
+<p><code>return_xxx()</code> 和 自动变量析构后，协程执行 <code>co_await promise.final_suspend()</code>，若协程<strong>不暂停</strong>，则协程帧析构：</p>
+<ol>
+<li>析构 <code>promise</code></li>
+<li>析构协程参数</li>
+<li>释放堆空间</li>
+<li>转移执行权</li>
+</ol>
+<p>若协程暂停，就<strong>只能</strong>通过 <code>std::coroutine_handle::destroy()</code> 来显式析构，无论是否已经析构都<strong>不能再 resume</strong>。</p>
+<p>关于协程的各类元素的生命周期，是一大坑点，未来我会撰写一篇文章来表述。</p>
+<p>言归正传，我们只要随便写一个 final_suspend() 就好，反正这个 Generator 永远不会 <code>co_return</code>。</p>
+<h2 id="Demo-fibonacci"><a href="#Demo-fibonacci" class="headerlink" title="Demo: fibonacci"></a>Demo: fibonacci</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;coroutine></span></span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">class</span> <span class="token class-name">Generator</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">class</span> <span class="token class-name">promise_type</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">public</span><span class="token operator">:</span>
+        Generator <span class="token function">get_return_object</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> Generator<span class="token punctuation">&#123;</span>
+                std<span class="token operator">::</span><span class="token class-name">coroutine_handle</span><span class="token operator">&lt;</span>promise_type<span class="token operator">></span><span class="token operator">::</span><span class="token function">from_promise</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">void</span> <span class="token function">return_void</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+        std<span class="token operator">::</span>suspend_always <span class="token function">initial_suspend</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+        std<span class="token operator">::</span>suspend_always <span class="token function">final_suspend</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">const</span> T <span class="token operator">&amp;</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> m_value<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+        std<span class="token operator">::</span>suspend_always <span class="token function">yield_value</span><span class="token punctuation">(</span>T value<span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span>
+            m_value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">void</span> <span class="token function">unhandled_exception</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+        <span class="token operator">~</span><span class="token function">promise_type</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"~promise_type\n"</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+      <span class="token keyword">private</span><span class="token operator">:</span>
+        T m_value<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">const</span> T <span class="token operator">&amp;</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> m_handle<span class="token punctuation">.</span><span class="token function">promise</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token function">Generator</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token operator">:</span> <span class="token function">m_handle</span><span class="token punctuation">(</span><span class="token keyword">nullptr</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+    <span class="token function">Generator</span><span class="token punctuation">(</span>std<span class="token operator">::</span>coroutine_handle<span class="token operator">&lt;</span>promise_type<span class="token operator">></span> handle<span class="token punctuation">)</span> <span class="token keyword">noexcept</span>
+        <span class="token operator">:</span> <span class="token function">m_handle</span><span class="token punctuation">(</span>handle<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+    <span class="token operator">~</span><span class="token function">Generator</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"~Generator\n"</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>m_handle<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"m_handle.destroy()\n"</span><span class="token punctuation">;</span>
+            m_handle<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">void</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> m_handle<span class="token punctuation">.</span><span class="token function">resume</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">private</span><span class="token operator">:</span>
+    std<span class="token operator">::</span>coroutine_handle<span class="token operator">&lt;</span>promise_type<span class="token operator">></span> m_handle<span class="token punctuation">;</span>
+
+    <span class="token comment">// TODO begin() end() operator*</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+Generator<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> <span class="token function">fibo</span><span class="token punctuation">(</span><span class="token keyword">int</span> a0<span class="token punctuation">,</span> <span class="token keyword">int</span> a1<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">co_yield</span> a0<span class="token punctuation">;</span>
+    <span class="token keyword">co_yield</span> a1<span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> a2<span class="token punctuation">;</span> <span class="token boolean">true</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        a2 <span class="token operator">=</span> a0 <span class="token operator">+</span> a1<span class="token punctuation">;</span>
+        a0 <span class="token operator">=</span> a1<span class="token punctuation">;</span>
+        a1 <span class="token operator">=</span> a2<span class="token punctuation">;</span>
+        <span class="token keyword">co_yield</span> a2<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+    <span class="token keyword">auto</span> fi <span class="token operator">=</span> <span class="token function">fibo</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        fi<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        cout <span class="token operator">&lt;&lt;</span> fi<span class="token punctuation">.</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>Output:</p>
+<pre class="line-numbers language-none"><code class="language-none">1
+1
+2
+3
+5
+8
+13
+21
+34
+55
+~Generator
+m_handle.destroy()
+~promise_type<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Conclusion-and-Prospect"><a href="#Conclusion-and-Prospect" class="headerlink" title="Conclusion and Prospect"></a>Conclusion and Prospect</h1><p>我们实现了一个基本能用的 Generator，因为是入门教程，代码故意写得很糙，聪明的你一定知道如何改进。</p>
+<p>如果你想自己造一个 Generator，那么还需要改进的地方至少有：</p>
+<ol>
+<li><code>promise_type</code> 内置一个更高效、安全的容器</li>
+<li><code>Generator&lt;T&gt;</code> 内置一个迭代器类，以支持 range for 循环。</li>
+<li>如果你很熟悉生命周期的坑点，<code>promise_type</code> 内置的容器可以仅存放指向协程自动变量的指针，进一步压缩空间，提升 <code>yield</code> 效率。</li>
+<li>利用 execution 来实现异步版本的 Generator。</li>
+<li>思考递归 <code>yield</code> 的效率问题，以及如何改进（难但秀）。</li>
+</ol>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
+<li><a href="/2021/11/18/C-20-Coroutine/">C++20 Coroutine - 等疾风</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/language/coroutines">Coroutine (C++20) - cppreference</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/lewissbaker/cppcoro">cppcoro - lewissbaker</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1z5411Z7K5">协程上手经典案例：实现一个序列生成器 - Benny Huo</a></li>
+</ul>
+<h1 id="Some-Slight-Improvements"><a href="#Some-Slight-Improvements" class="headerlink" title="Some Slight Improvements"></a>Some Slight Improvements</h1><ol>
+<li>使用 <code>std::optional</code> 来做容器，自动调用正确的构造&#x2F;析构函数，支持移动语义。(可以进一步改用 <code>std::variant</code>)。</li>
+<li>定义了 Generator 的几个构造和赋值函数，增强了安全性(safety)。</li>
+<li>在 <code>unhandled_exception()</code> 内存放了 <code>std::exception_ptr</code>。</li>
+<li>用例改为稍微复杂一些的字符串生成，里面有一些性能问题，读者有兴趣的可以找找茬。</li>
+</ol>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;optional></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;coroutine></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;exception></span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;random></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cmath></span></span>
+
+<span class="token comment">// 使 Generator::promise_type  成为一个更安全高效的单元素容器</span>
+<span class="token comment">// 限制了 Generator 的所有权，删除了默认构造，拷贝构造和拷贝赋值</span>
+<span class="token comment">// Generator 保证在构造后持有</span>
+<span class="token comment">// coroutine_handle，但可能被移动走，所以析构时要检查非空</span>
+<span class="token comment">// TODO 迭代器，异常传播</span>
+
+<span class="token keyword">template</span><span class="token operator">&lt;</span><span class="token keyword">typename</span> <span class="token class-name">T</span><span class="token operator">></span>
+<span class="token keyword">class</span> <span class="token class-name">Generator</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">class</span> <span class="token class-name">promise_type</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">public</span><span class="token operator">:</span>
+        <span class="token function">promise_type</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
+
+        Generator <span class="token function">get_return_object</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> Generator<span class="token punctuation">&#123;</span>
+                std<span class="token operator">::</span><span class="token class-name">coroutine_handle</span><span class="token operator">&lt;</span>promise_type<span class="token operator">></span><span class="token operator">::</span><span class="token function">from_promise</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">void</span> <span class="token function">return_void</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+        std<span class="token operator">::</span>suspend_always <span class="token function">initial_suspend</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+        std<span class="token operator">::</span>suspend_always <span class="token function">final_suspend</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">const</span> T <span class="token operator">&amp;</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token operator">*</span>m_value<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+        T <span class="token operator">&amp;</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token operator">*</span>m_value<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+        std<span class="token operator">::</span>suspend_always <span class="token function">yield_value</span><span class="token punctuation">(</span><span class="token keyword">const</span> T <span class="token operator">&amp;</span>value<span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span>
+            m_value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        std<span class="token operator">::</span>suspend_always <span class="token function">yield_value</span><span class="token punctuation">(</span>T <span class="token operator">&amp;&amp;</span>value<span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span>
+            m_value<span class="token punctuation">.</span><span class="token function">emplace</span><span class="token punctuation">(</span>std<span class="token operator">::</span><span class="token function">move</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">void</span> <span class="token function">unhandled_exception</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> m_exception <span class="token operator">=</span> std<span class="token operator">::</span><span class="token function">current_exception</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+      <span class="token keyword">private</span><span class="token operator">:</span>
+        std<span class="token operator">::</span>optional<span class="token operator">&lt;</span>T<span class="token operator">></span> m_value<span class="token punctuation">;</span>
+        std<span class="token operator">::</span>exception_ptr m_exception<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">const</span> T <span class="token operator">&amp;</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> m_handle<span class="token punctuation">.</span><span class="token function">promise</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    T <span class="token operator">&amp;</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> m_handle<span class="token punctuation">.</span><span class="token function">promise</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token function">Generator</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">delete</span><span class="token punctuation">;</span>
+
+    <span class="token function">Generator</span><span class="token punctuation">(</span>std<span class="token operator">::</span>coroutine_handle<span class="token operator">&lt;</span>promise_type<span class="token operator">></span> handle<span class="token punctuation">)</span> <span class="token keyword">noexcept</span>
+        <span class="token operator">:</span> <span class="token function">m_handle</span><span class="token punctuation">(</span>handle<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+    <span class="token function">Generator</span><span class="token punctuation">(</span><span class="token keyword">const</span> Generator <span class="token operator">&amp;</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">delete</span><span class="token punctuation">;</span>
+
+    Generator <span class="token operator">&amp;</span><span class="token keyword">operator</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token keyword">const</span> Generator <span class="token operator">&amp;</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">delete</span><span class="token punctuation">;</span>
+
+    Generator <span class="token operator">&amp;</span><span class="token keyword">operator</span><span class="token operator">=</span><span class="token punctuation">(</span>Generator <span class="token operator">&amp;&amp;</span>other<span class="token punctuation">)</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">!=</span> other<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            m_handle <span class="token operator">=</span> other<span class="token punctuation">.</span>m_handle<span class="token punctuation">;</span>
+            other<span class="token punctuation">.</span>m_handle <span class="token operator">=</span> <span class="token keyword">nullptr</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> <span class="token operator">*</span><span class="token keyword">this</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token operator">~</span><span class="token function">Generator</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>m_handle<span class="token punctuation">)</span> m_handle<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">void</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> m_handle<span class="token punctuation">.</span><span class="token function">resume</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">private</span><span class="token operator">:</span>
+    std<span class="token operator">::</span>coroutine_handle<span class="token operator">&lt;</span>promise_type<span class="token operator">></span> m_handle<span class="token punctuation">;</span>
+
+    <span class="token comment">// TODO begin() end() operator* operator-></span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+Generator<span class="token operator">&lt;</span>std<span class="token operator">::</span>string<span class="token operator">></span> <span class="token function">lottery</span><span class="token punctuation">(</span>size_t size<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> mod<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    std<span class="token operator">::</span>mt19937 <span class="token function">rng</span><span class="token punctuation">(</span><span class="token function">time</span><span class="token punctuation">(</span><span class="token keyword">nullptr</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span>string winningNumbers<span class="token punctuation">;</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> size_t numLen <span class="token operator">=</span> std<span class="token operator">::</span><span class="token function">to_string</span><span class="token punctuation">(</span>mod <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        winningNumbers<span class="token punctuation">.</span><span class="token function">reserve</span><span class="token punctuation">(</span>size <span class="token operator">*</span> <span class="token punctuation">(</span>numLen <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">co_yield</span> winningNumbers <span class="token operator">+=</span> std<span class="token operator">::</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token function">rng</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">%</span> mod<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>size_t i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> size<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        winningNumbers <span class="token operator">+=</span> <span class="token string">" "</span><span class="token punctuation">;</span>
+        <span class="token keyword">co_yield</span> winningNumbers <span class="token operator">+=</span> std<span class="token operator">::</span><span class="token function">to_string</span><span class="token punctuation">(</span><span class="token function">rng</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">%</span> mod<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+    <span class="token keyword">auto</span> fi <span class="token operator">=</span> <span class="token function">lottery</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        fi<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        cout <span class="token operator">&lt;&lt;</span> fi<span class="token punctuation">.</span><span class="token function">result</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Output:</p>
+<pre class="line-numbers language-none"><code class="language-none">253
+253 148
+253 148 56
+253 148 56 2
+253 148 56 2 179
+253 148 56 2 179 41
+253 148 56 2 179 41 96
+253 148 56 2 179 41 96 10
+253 148 56 2 179 41 96 10 125
+253 148 56 2 179 41 96 10 125 123<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/C-%E5%8D%8F%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> C++协程</a>
+              <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 并发编程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/06/One-Minute-to-C-defer/" rel="prev" title="One Minute to C++ "defer"">
+                  <i class="fa fa-chevron-left"></i> One Minute to C++ "defer"
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="SOHUCS" sid="a29420a71de44b9954308349a1b3ee64"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/firebase@9.6.5/firebase-app-compat.js" integrity="sha256-lEi/yuE6dobRGV99ezEI6jJjxJjzmNhCgNXkhEjwBnI=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/firebase@9.6.5/firebase-firestore-compat.js" integrity="sha256-YpEg5f0FadC/n/ch3r2oUa7bPZ6PKotWoorWM/oD2aA=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="firestore" type="application/json">{"enable":true,"collection":"articles","apiKey":"AIzaSyAdeseHRyOrm9Gq5DI8r-Tq1h--rkFpirI","projectId":"blog-github-io"}</script>
+  <script src="/js/third-party/statistics/firestore.js"></script>
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="changyan" type="application/json">{"enable":true,"appid":"cyvBLYQE0","appkey":"6ecdbd575aef7772afb4f698420cb1da"}</script>
+<script src="/js/third-party/comments/changyan.js"></script>
+
+</body>
+</html>
