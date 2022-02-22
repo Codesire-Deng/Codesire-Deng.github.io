@@ -2155,7 +2155,7 @@ std<span class="token operator">::</span>is_standard_layout<span class="token op
 <p>要实现这个效果，只要实现 <code>Generator&lt;T&gt;</code><del>，虽然很麻烦</del>。</p>
 <h1 id="Why-Generator"><a href="#Why-Generator" class="headerlink" title="Why Generator"></a>Why Generator</h1><p>上一段例子很愚蠢，我随手写一个 <code>struct Fibo</code> 重载 <code>operator()</code>，内置一个迭代器不香？为什么要大费周章实现 Generator，还要付出协程的运行时代价？</p>
 <p><del>我也不知道为什么，纯纯为了学而学</del> Generator 可以免去你每次重新设计结构体的麻烦，无需你重写各种迭代器，可以看作一个又香又臭的语法糖。更进一步，Generator 可以很方便地相互嵌套，相比其他做法大大降低了编程复杂度。</p>
-<h1 id="Analysis-How-to"><a href="#Analysis-How-to" class="headerlink" title="Analysis How-to"></a>Analysis How-to</h1><p>希望你已经大致了解 C++ Coroutine 的运作方式，至少了解 <code>co_await</code> 关键字的作用。顺便推销一下我的另一篇文章 <a href="/2021/11/18/C-20-Coroutine/">C++20 Coroutine</a>，它可以帮助你记住 <code>co_await</code>。</p>
+<h1 id="Analyze-How-to"><a href="#Analyze-How-to" class="headerlink" title="Analyze How-to"></a>Analyze How-to</h1><p>希望你已经大致了解 C++ Coroutine 的运作方式，至少了解 <code>co_await</code> 关键字的作用。顺便推销一下我的另一篇文章 <a href="/2021/11/18/C-20-Coroutine/">C++20 Coroutine</a>，它可以帮助你记住 <code>co_await</code>。</p>
 <p>现在按照协程的生命周期来分析 <code>Generator&lt;T&gt;</code>，看看它应该具有哪些接口和行为。</p>
 <h2 id="get-return-object"><a href="#get-return-object" class="headerlink" title="get_return_object"></a>get_return_object</h2><p>协程在初次进入的时候会调用 <code>promise.get_return_object()</code>，其返回值会在第一次暂停的时候返回给 caller。caller 要向协程索取返回值，通常只能通过这个<code>return_object</code> 去要，所以它相当于一个 handler。</p>
 <p>按照 C++ 标准规定 <code>promise.get_return_object()</code> 的返回值必须是协程类型，也就是 <code>Generator&lt;T&gt;</code>，也好，省得我们思考了。</p>
