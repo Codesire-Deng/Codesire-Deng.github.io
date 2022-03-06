@@ -28,6 +28,13 @@
 <li><code>co_yield</code> 暂停同时返回一个值。</li>
 <li><code>co_return</code> 结束整个协程并返回一个值。</li>
 </ol>
+<h2 id="使用协程的理由"><a href="#使用协程的理由" class="headerlink" title="使用协程的理由"></a>使用协程的理由</h2><ol>
+<li>相比于回调和 sender&#x2F;receiver，协程的使用<strong>成本更低</strong>，<strong>性能下限更高</strong>。</li>
+<li>降低使用者的心智负担和阅历要求，催化高质量工程，有望成为<strong>资本宠儿</strong>。<ul>
+<li>例如可以摆脱 asio 里常见的 <code>std::shared_ptr</code>。</li>
+</ul>
+</li>
+</ol>
 <h2 id="C-协程的弱点"><a href="#C-协程的弱点" class="headerlink" title="C++协程的弱点"></a>C++协程的弱点</h2><ol>
 <li>除非编译器优化，每个协程都需要通过 <code>operator new</code> 来分配 frame：<ul>
 <li>动态内存分配可能引发性能问题；</li>
@@ -35,11 +42,12 @@
 </ul>
 </li>
 <li>除非编译器优化，协程的可定制点太多，需要大量间接调用&#x2F;跳转（而不是内联），同样引起性能问题。<ul>
-<li>目前，编译器通常难以内联协程</li>
-<li>HALO 优化理论：<a href="http://open-std.org/JTC1/SC22/WG21/docs/papers/2021/p2300r3.html#biblio-p0981r0">P0981R0</a></li>
+<li>目前，编译器通常难以内联协程；</li>
+<li>HALO 优化理论：<a href="http://open-std.org/JTC1/SC22/WG21/docs/papers/2021/p2300r3.html#biblio-p0981r0">P0981R0</a>。</li>
 </ul>
 </li>
 <li><strong>动态分配</strong>和<strong>间接调用</strong>的存在，导致协程暂时无法成为异步框架的最优方法。</li>
+<li>Debug 的体验评价不佳。</li>
 </ol>
 <h2 id="协程的限制"><a href="#协程的限制" class="headerlink" title="协程的限制"></a>协程的限制</h2><ol>
 <li>不能使用变参模板</li>
