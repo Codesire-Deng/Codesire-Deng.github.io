@@ -28,6 +28,19 @@
 <li><code>co_yield</code> 暂停同时返回一个值。</li>
 <li><code>co_return</code> 结束整个协程并返回一个值。</li>
 </ol>
+<h2 id="C-协程的弱点"><a href="#C-协程的弱点" class="headerlink" title="C++协程的弱点"></a>C++协程的弱点</h2><ol>
+<li>除非编译器优化，每个协程都需要通过 <code>operator new</code> 来分配 frame：<ul>
+<li>动态内存分配可能引发性能问题；</li>
+<li>在嵌入式或异构（例如 GPU）环境下，缺乏动态内存分配能力，难以工作。</li>
+</ul>
+</li>
+<li>除非编译器优化，协程的可定制点太多，需要大量间接调用&#x2F;跳转（而不是内联），同样引起性能问题。<ul>
+<li>目前，编译器通常难以内联协程</li>
+<li>HALO 优化理论：<a href="http://open-std.org/JTC1/SC22/WG21/docs/papers/2021/p2300r3.html#biblio-p0981r0">P0981R0</a></li>
+</ul>
+</li>
+<li><strong>动态分配</strong>和<strong>间接调用</strong>的存在，导致协程暂时无法成为异步框架的最优方法。</li>
+</ol>
 <h2 id="协程的限制"><a href="#协程的限制" class="headerlink" title="协程的限制"></a>协程的限制</h2><ol>
 <li>不能使用变参模板</li>
 <li>不能使用 <code>return</code></li>
@@ -90,7 +103,8 @@
 <li>使用 <code>operator delete</code> 来释放coroutine state。</li>
 <li>转移执行权。</li>
 </ol>
-<h2 id="关于堆分配"><a href="#关于堆分配" class="headerlink" title="关于堆分配"></a>关于堆分配</h2><p>程序员可通过自定义 <code>operator new</code> 来控制 coroutine state 的分配。这部分暂时忽略不讲。</p>
+<h2 id="关于堆分配"><a href="#关于堆分配" class="headerlink" title="关于堆分配"></a>关于堆分配</h2><p>动态内存分配可能成为<strong>严重性能瓶颈</strong>！</p>
+<p>程序员可通过自定义 <code>operator new</code> 来控制 coroutine state 的分配。这部分暂时忽略不讲。</p>
 <h2 id="Promise类型推导"><a href="#Promise类型推导" class="headerlink" title="Promise类型推导"></a>Promise类型推导</h2><p>这部分暂时忽略不讲。</p>
 <h2 id="co-await"><a href="#co-await" class="headerlink" title="co_await"></a>co_await</h2><p>一元运算符 <code>co_await</code> 会暂停协程并将转移执行权。其操作数必须定义 <code>operator co_await</code>，或者能通过当前协程的 <code>Promise::await_transform</code> 转换成这种类型。</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">co_await</span> expr<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -135,6 +149,7 @@
         <tag>C++</tag>
         <tag>语法</tag>
         <tag>C++协程</tag>
+        <tag>Concurrency</tag>
       </tags>
   </entry>
   <entry>
@@ -1747,7 +1762,7 @@ std<span class="token operator">::</span>is_standard_layout<span class="token op
 ]]></content>
       <tags>
         <tag>C++</tag>
-        <tag>并发编程</tag>
+        <tag>Concurrency</tag>
       </tags>
   </entry>
   <entry>
@@ -2579,8 +2594,8 @@ Generator<span class="token operator">&lt;</span>std<span class="token operator"
 253 148 56 2 179 41 96 10 125 123<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       <tags>
         <tag>C++</tag>
-        <tag>并发编程</tag>
         <tag>C++协程</tag>
+        <tag>Concurrency</tag>
       </tags>
   </entry>
   <entry>
@@ -6758,8 +6773,8 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 ]]></content>
       <tags>
         <tag>C++</tag>
-        <tag>并发编程</tag>
         <tag>计算机网络</tag>
+        <tag>Concurrency</tag>
       </tags>
   </entry>
   <entry>
