@@ -29,7 +29,7 @@
 <meta property="og:description" content="Preface要掌握 C++20 协程，仅仅看完文档是远远不够的。C++ 和其他语言的协程的最大不同点在于，C++ 提供了最少量的编译器实现和极大量的「可定制点」，而其他语言可能连「调度器」都给用户准备好了。 在茫茫多的可定制点面前，如果你能一眼看出「为什么 C++ 要这样设计」，那么我愿称你为天才。否则，还是从常见的范式下手，逐渐体会设计者的思想吧。 我们将从最简单的范式——Generator">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-02-22T08:28:51.000Z">
-<meta property="article:modified_time" content="2022-03-06T09:45:13.756Z">
+<meta property="article:modified_time" content="2022-03-07T12:50:39.173Z">
 <meta property="article:author" content="等疾风">
 <meta property="article:tag" content="C++">
 <meta property="article:tag" content="C++协程">
@@ -254,7 +254,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-03-06 17:45:13" itemprop="dateModified" datetime="2022-03-06T17:45:13+08:00">2022-03-06</time>
+      <time title="Modified: 2022-03-07 20:50:39" itemprop="dateModified" datetime="2022-03-07T20:50:39+08:00">2022-03-07</time>
     </span>
 
   
@@ -356,14 +356,23 @@
 <span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>别去找 <code>std::suspend_always</code> 的实现了，我已经给你准备好了：</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">suspend_never</span>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">suspend_always</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">constexpr</span> <span class="token keyword">bool</span> <span class="token function">await_ready</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">constexpr</span> <span class="token keyword">void</span> <span class="token function">await_suspend</span><span class="token punctuation">(</span>coroutine_handle<span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">constexpr</span> <span class="token keyword">void</span> <span class="token function">await_resume</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> <span class="token class-name">suspend_never</span>
 <span class="token punctuation">&#123;</span>
   <span class="token keyword">constexpr</span> <span class="token keyword">bool</span> <span class="token function">await_ready</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
 
   <span class="token keyword">constexpr</span> <span class="token keyword">void</span> <span class="token function">await_suspend</span><span class="token punctuation">(</span>coroutine_handle<span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
 
   <span class="token keyword">constexpr</span> <span class="token keyword">void</span> <span class="token function">await_resume</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token keyword">noexcept</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>可以看出，<code>std::suspend_always</code> 在被 <code>co_await</code> 的时候总是会让出执行权给 caller&#x2F;resumer，而且<strong>不做任何调度</strong>。如果 caller&#x2F;resumer 未来不将这个协程加入调度，那它就<strong>被永远遗忘</strong>在堆内存中了。</p>
 <p>另一方面，可以发现 <code>co_await std::suspend_always&#123;&#125;</code> 的返回值总是 <code>void</code>。</p>
