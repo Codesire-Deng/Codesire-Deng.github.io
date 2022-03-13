@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
   <meta name="description" content="树链剖分的名字非常高大上， 其实不难， 本质是将树分解成几条链， 映射在线段树（树状数组、Splay等）上， 当我们需要在树上的路径（题目通常给定两个结点，在他们的路径上操作）进行操作时， 就能转化成在线段树（等数据结构）上进行操作， 接下来以树转线段树为例。">
 <meta property="og:type" content="article">
@@ -258,20 +258,6 @@
       <time title="Modified: 2021-08-21 16:06:43" itemprop="dateModified" datetime="2021-08-21T16:06:43+08:00">2021-08-21</time>
     </span>
 
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Changyan: </span>
-    
-    <a title="朝花夕拾-树链剖分" href="/2016/04/24/%E6%A0%91%E9%93%BE%E5%89%96%E5%88%86/#SOHUCS" itemprop="discussionUrl">
-      <span id="sourceId::61e62b311bf565f07597cef2fc1fd273" class="cy_cmt_count" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
   
 </div>
 
@@ -775,7 +761,7 @@
 
 
 
-    <div class="comments" id="SOHUCS" sid="61e62b311bf565f07597cef2fc1fd273"></div>
+    <div class="comments gitalk-container"></div>
 </div>
   </main>
 
@@ -821,8 +807,10 @@
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script class="next-config" data-name="changyan" type="application/json">{"enable":true,"appid":"cyvBLYQE0","appkey":"6ecdbd575aef7772afb4f698420cb1da"}</script>
-<script src="/js/third-party/comments/changyan.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Codesire-Deng","repo":"Gitment-for-Codesire-Deng-s-Blog","client_id":"00a098064772784393ca","client_secret":"12657ee4c728b23deac323ac5253a6eb84b4c0a9","admin_user":["Codesire-Deng"],"distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"61e62b311bf565f07597cef2fc1fd273"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>
 </html>

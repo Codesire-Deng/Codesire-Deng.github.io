@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null,"activeClass":"changyan"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
   <meta name="description" content="Preface要掌握 C++20 协程，仅仅看完文档是远远不够的。C++ 和其他语言的协程的最大不同点在于，C++ 提供了最少量的编译器实现和极大量的「可定制点」，而其他语言可能连「调度器」都给用户准备好了。 在茫茫多的可定制点面前，如果你能一眼看出「为什么 C++ 要这样设计」，那么我愿称你为天才。否则，还是从常见的范式下手，逐渐体会设计者的思想吧。 我们将从最简单的范式——Generator">
 <meta property="og:type" content="article">
@@ -32,8 +32,8 @@
 <meta property="article:modified_time" content="2022-03-07T12:50:39.173Z">
 <meta property="article:author" content="等疾风">
 <meta property="article:tag" content="C++">
-<meta property="article:tag" content="C++协程">
 <meta property="article:tag" content="Concurrency">
+<meta property="article:tag" content="C++协程">
 <meta name="twitter:card" content="summary">
 
 
@@ -257,20 +257,6 @@
       <time title="Modified: 2022-03-07 20:50:39" itemprop="dateModified" datetime="2022-03-07T20:50:39+08:00">2022-03-07</time>
     </span>
 
-  
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Changyan: </span>
-    
-    <a title="Coroutine Tutorial: Generators" href="/2022/02/22/Generators-with-Coroutine/#SOHUCS" itemprop="discussionUrl">
-      <span id="sourceId::a29420a71de44b9954308349a1b3ee64" class="cy_cmt_count" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
   
 </div>
 
@@ -769,8 +755,8 @@ Generator<span class="token operator">&lt;</span>std<span class="token operator"
 
           <div class="post-tags">
               <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
-              <a href="/tags/C-%E5%8D%8F%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> C++协程</a>
               <a href="/tags/Concurrency/" rel="tag"><i class="fa fa-tag"></i> Concurrency</a>
+              <a href="/tags/C-%E5%8D%8F%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> C++协程</a>
           </div>
 
         
@@ -793,7 +779,7 @@ Generator<span class="token operator">&lt;</span>std<span class="token operator"
 
 
 
-    <div class="comments" id="SOHUCS" sid="a29420a71de44b9954308349a1b3ee64"></div>
+    <div class="comments gitalk-container"></div>
 </div>
   </main>
 
@@ -839,8 +825,10 @@ Generator<span class="token operator">&lt;</span>std<span class="token operator"
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script class="next-config" data-name="changyan" type="application/json">{"enable":true,"appid":"cyvBLYQE0","appkey":"6ecdbd575aef7772afb4f698420cb1da"}</script>
-<script src="/js/third-party/comments/changyan.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Codesire-Deng","repo":"Gitment-for-Codesire-Deng-s-Blog","client_id":"00a098064772784393ca","client_secret":"12657ee4c728b23deac323ac5253a6eb84b4c0a9","admin_user":["Codesire-Deng"],"distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"a29420a71de44b9954308349a1b3ee64"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>
 </html>
