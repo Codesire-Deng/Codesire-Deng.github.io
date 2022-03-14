@@ -29,7 +29,7 @@
 <meta property="og:description" content="前言很久之前就在Windows笔记本上装了ubuntu 18.04 LTS，因为是双系统，需要手动给硬盘分区，而当时ubuntu的系统分区贼多，埋下了某一个分区过小的伏笔。最近某Filesystem塞满了（500MB），才发现很多双系统安装教程没有卸载教程！ 于是探索的旅程又开始了。我们将卸载现有的Ubuntu系统，调整硬盘分区，然后重装ubuntu，并安装最棒的软件和驱动。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-01-25T13:28:00.000Z">
-<meta property="article:modified_time" content="2021-04-01T02:45:36.272Z">
+<meta property="article:modified_time" content="2022-03-14T07:49:22.736Z">
 <meta property="article:author" content="等疾风">
 <meta property="article:tag" content="减少脱发指南">
 <meta name="twitter:card" content="summary">
@@ -150,7 +150,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B8%E8%BD%BD%E5%8E%9F%E6%9C%89ubuntu"><span class="nav-number">2.</span> <span class="nav-text">卸载原有ubuntu</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85ubuntu-18-04-3-LTS"><span class="nav-number">3.</span> <span class="nav-text">安装ubuntu 18.04.3 LTS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%99%BB%E9%99%86ubuntu"><span class="nav-number">4.</span> <span class="nav-text">登陆ubuntu</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A6%E6%91%B8%E6%9D%BF%E5%8F%B3%E9%94%AE%E5%A4%B1%E7%81%B5"><span class="nav-number">5.</span> <span class="nav-text">触摸板右键失灵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VIM"><span class="nav-number">6.</span> <span class="nav-text">VIM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chrome"><span class="nav-number">7.</span> <span class="nav-text">Chrome</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VSCode"><span class="nav-number">8.</span> <span class="nav-text">VSCode</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A3%9E%E6%9C%BA"><span class="nav-number">9.</span> <span class="nav-text">飞机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BE%8E%E5%8C%96"><span class="nav-number">10.</span> <span class="nav-text">美化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">11.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B8%E8%BD%BD%E5%8E%9F%E6%9C%89ubuntu"><span class="nav-number">2.</span> <span class="nav-text">卸载原有ubuntu</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85ubuntu-18-04-3-LTS"><span class="nav-number">3.</span> <span class="nav-text">安装ubuntu 18.04.3 LTS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%99%BB%E5%BD%95ubuntu"><span class="nav-number">4.</span> <span class="nav-text">登录ubuntu</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A6%E6%91%B8%E6%9D%BF%E5%8F%B3%E9%94%AE%E5%A4%B1%E7%81%B5"><span class="nav-number">5.</span> <span class="nav-text">触摸板右键失灵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VIM"><span class="nav-number">6.</span> <span class="nav-text">VIM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chrome"><span class="nav-number">7.</span> <span class="nav-text">Chrome</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VSCode"><span class="nav-number">8.</span> <span class="nav-text">VSCode</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A3%9E%E6%9C%BA"><span class="nav-number">9.</span> <span class="nav-text">飞机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BE%8E%E5%8C%96"><span class="nav-number">10.</span> <span class="nav-text">美化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">11.</span> <span class="nav-text">结语</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -252,7 +252,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-04-01 10:45:36" itemprop="dateModified" datetime="2021-04-01T10:45:36+08:00">2021-04-01</time>
+      <time title="Modified: 2022-03-14 15:49:22" itemprop="dateModified" datetime="2022-03-14T15:49:22+08:00">2022-03-14</time>
     </span>
 
   
@@ -281,7 +281,7 @@
 <li>这时界面让你分割windows的C盘，供ubuntu使用。我分割了32GB，建议贪多，原因玄学。</li>
 <li>一路安装，没什么大问题。</li>
 </ol>
-<h1 id="登陆ubuntu"><a href="#登陆ubuntu" class="headerlink" title="登陆ubuntu"></a>登陆ubuntu</h1><p>因为是双显卡（Intel集显 + Geforce MX150），这可能会导致开机登陆困难，原因是默认的独显驱动有问题，导致机器卡死。</p>
+<h1 id="登录ubuntu"><a href="#登录ubuntu" class="headerlink" title="登录ubuntu"></a>登录ubuntu</h1><p>因为是双显卡（Intel集显 + Geforce MX150），这可能会导致开机登录困难，原因是默认的独显驱动有问题，导致机器卡死。</p>
 <ol>
 <li><p>在grub引导时，对ubuntu按&quot;e&quot;，倒数第二行找到<code>quiet splash *</code>，修改为<code>quiet splash acpi_osi=linux nomodeset *</code>，按&quot;F10&quot;引导。这么做是为了禁用所有显卡驱动。</p>
 </li>
@@ -344,7 +344,7 @@ endfunc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 <span class="token comment"># 司马笑</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h1 id="VSCode"><a href="#VSCode" class="headerlink" title="VSCode"></a>VSCode</h1><p>借助Settings Sync插件可以很快配置Code，但是各种task还需要自行备份。</p>
-<h1 id="飞机"><a href="#飞机" class="headerlink" title="飞机"></a>飞机</h1><p>第一次在~&#x2F;.local下安装软件，需要注销重登陆才能正常使用。<br>某些算法需要额外的库，比如</p>
+<h1 id="飞机"><a href="#飞机" class="headerlink" title="飞机"></a>飞机</h1><p>第一次在~&#x2F;.local下安装软件，需要注销重登录才能正常使用。<br>某些算法需要额外的库，比如</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libsodium-dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>搞定之后在Settings-&gt;...-&gt;Socks Host作调整即可。</p>
 <h1 id="美化"><a href="#美化" class="headerlink" title="美化"></a>美化</h1><p>调整控制台的配色和透明度，换壁纸等等，不多说了。</p>
