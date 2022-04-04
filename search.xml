@@ -147,11 +147,10 @@
 </ul>
 <p>注意在进入 <code>awaiter.await_suspend(handle)</code> 之前，当前协程已经完全暂停，此时当前 handle 可以在线程之间自由传递，并由其他调度者恢复。在这种情况下，协程可能已经被恢复，awaiter 随之已经被析构，所以 <code>await_suspend()</code> 不应再访问 <code>*this</code>。</p>
 <h2 id="co-yield"><a href="#co-yield" class="headerlink" title="co_yield"></a>co_yield</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">co_yield</span> expr
-<span class="token keyword">co_yield</span> braced<span class="token operator">-</span>init<span class="token operator">-</span>list		<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<span class="token keyword">co_yield</span> braced<span class="token operator">-</span>init<span class="token operator">-</span>list<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>等价于</p>
 <pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">co_await</span> promise<span class="token punctuation">.</span><span class="token function">yield_value</span><span class="token punctuation">(</span>expr<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
 ]]></content>
       <tags>
         <tag>C++</tag>
@@ -7198,5 +7197,45 @@ dw pseg_<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
       <tags>
         <tag>数学</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Intellisense and Copy elision</title>
+    <url>/2022/04/04/Intellisense-and-Copy-elision/</url>
+    <content><![CDATA[<p>最近开发 <code>co_context</code>，遇到了很多 C++ 周边的坑。其中一个坑是 intellisense 翻脸不认 C++17 标准的强制拷贝消除（Mandatory elision of copy&#x2F;move operations）。</p>
+<p>这个 intellisense 来自 Vscode Extention: C&#x2F;C++ (Microsoft)。</p>
+<h2 id="Brief-Solution"><a href="#Brief-Solution" class="headerlink" title="Brief Solution"></a>Brief Solution</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__INTELLISENSE__</span></span>
+<span class="token comment">// The fake code to cheat intellisense...</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span></span>
+<span class="token comment">// The real code for compiler...</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span id="more"></span>
+
+<h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p><code>co_context</code> 要开发一个 <code>lock_guard</code>，但用户必须要写 <code>co_await</code>，导致只能写成以下形式：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">auto</span> lk <span class="token operator">=</span> <span class="token keyword">co_await</span> mtx<span class="token punctuation">.</span><span class="token function">lock_guard</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>lk</code> 在析构的时候会自动调用 <code>mtx.unlock()</code>。这看起来很美好，但这里发生了 Copy elision，根据 C++17 标准，这是强制编译器执行的优化，无论拷贝&#x2F;移动构造函数有没有副作用。为了防止用户误用，我干脆删除了拷贝&#x2F;移动构造函数，注意这也是符合标准的做法。</p>
+<p>但问题是，intellisense 不知道 Copy elision！因为我删除了那些构造函数，导致 intellisense 会报错：“无法引用 xx 构造函数，它已经被删除”。</p>
+<p>最糟糕的是，库的用户在正确使用 <code>lock_guard</code> 时，都可能收到这一条错误的报错（哪怕编译通过），这很有迷惑性，显然会大大降低用户体验。</p>
+<h2 id="One-way-compromise"><a href="#One-way-compromise" class="headerlink" title="One way: compromise"></a>One way: compromise</h2><p>最初我选择向 intellisense 妥协：你想让我写移动构造，我写就是了。为了语义正确性，我不得不将 <code>lock_guard</code> 类内部的 <code>mutex&amp;</code> 改成 <code>mutex*</code>，以支持“移动”。</p>
+<p>最后在 <code>~lock_guard()</code> 内，我不得不判断 <code>if (mtx != nullptr) mtx-&gt;unlock()</code>，这很丑，也影响了性能。我不能忍受。</p>
+<h2 id="The-second-way-cheat"><a href="#The-second-way-cheat" class="headerlink" title="The second way: cheat"></a>The second way: cheat</h2><p>错误的根源是 intellisense 不知道 Copy elision。错误的代价不应由我来承担。</p>
+<p>我为 <code>lock_guard</code> 增加了移动构造函数，但标注了 <code>[[deprecated]]</code>，而且内部是 <code>assert(false)</code>，这是为了防止用户误用。这成功地骗过了 intellisense。</p>
+<p>因为保证不会拷贝&#x2F;移动，所以可以删除 <code>if (mtx != nullptr)</code> 这样的愚蠢代码啦！</p>
+<h2 id="The-final-solution-ifdef"><a href="#The-final-solution-ifdef" class="headerlink" title="The final solution: #ifdef"></a>The final solution: #ifdef</h2><p>经过高人指点，欺骗 intellisense 有专门的宏来完成。所以最后的解决办法是：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__INTELLISENSE__</span></span>
+    <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token function">deprecated</span><span class="token punctuation">(</span>
+        <span class="token string">"This function is for cheating intellisense, "</span>
+        <span class="token string">"who doesn't sense RVO. "</span>
+        <span class="token string">"You should NEVER use this explicitly or implicitly."</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">]</span>
+    <span class="token function">lock_guard</span><span class="token punctuation">(</span>lock_guard <span class="token operator">&amp;&amp;</span> other<span class="token punctuation">)</span> <span class="token keyword">noexcept</span>
+        <span class="token operator">:</span> <span class="token function">mtx</span><span class="token punctuation">(</span>other<span class="token punctuation">.</span>mtx<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">assert</span><span class="token punctuation">(</span><span class="token boolean">false</span> <span class="token operator">&amp;&amp;</span> <span class="token string">"Mandatory copy elision failed!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span></span>
+    <span class="token function">lock_guard</span><span class="token punctuation">(</span>lock_guard <span class="token operator">&amp;&amp;</span> other<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">delete</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>其中，<code>[[deprecated]]</code> 和 <code>assert</code> 可以删去，因为编译器永远不会处理它们。</p>
+]]></content>
   </entry>
 </search>

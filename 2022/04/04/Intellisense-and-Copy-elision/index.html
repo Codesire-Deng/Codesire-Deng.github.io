@@ -21,28 +21,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-  <meta name="description" content="更新Hexocnpm install -g cnpm                 # 升级 npm cnpm cache clean -f                 # 清除 npm 缓存  # 更新 package.json 中的 hexo 及个插件版本 cnpm install -g npm-check           # 检查之前安装的插件，都有哪些是可以升级的  cnpm i">
+  <meta name="description" content="最近开发 co_context，遇到了很多 C++ 周边的坑。其中一个坑是 intellisense 翻脸不认 C++17 标准的强制拷贝消除（Mandatory elision of copy&#x2F;move operations）。 这个 intellisense 来自 Vscode Extention: C&#x2F;C++ (Microsoft)。 Brief Solution#ifd">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo &amp; NexT 更新方式">
-<meta property="og:url" content="https://codesire-deng.github.io/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:title" content="Intellisense and Copy elision">
+<meta property="og:url" content="https://codesire-deng.github.io/2022/04/04/Intellisense-and-Copy-elision/index.html">
 <meta property="og:site_name" content="等疾风">
-<meta property="og:description" content="更新Hexocnpm install -g cnpm                 # 升级 npm cnpm cache clean -f                 # 清除 npm 缓存  # 更新 package.json 中的 hexo 及个插件版本 cnpm install -g npm-check           # 检查之前安装的插件，都有哪些是可以升级的  cnpm i">
+<meta property="og:description" content="最近开发 co_context，遇到了很多 C++ 周边的坑。其中一个坑是 intellisense 翻脸不认 C++17 标准的强制拷贝消除（Mandatory elision of copy&#x2F;move operations）。 这个 intellisense 来自 Vscode Extention: C&#x2F;C++ (Microsoft)。 Brief Solution#ifd">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-04-01T02:36:50.000Z">
-<meta property="article:modified_time" content="2021-04-01T02:43:59.440Z">
+<meta property="article:published_time" content="2022-04-04T11:35:59.000Z">
+<meta property="article:modified_time" content="2022-04-04T12:44:01.331Z">
 <meta property="article:author" content="等疾风">
-<meta property="article:tag" content="减少脱发指南">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://codesire-deng.github.io/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/">
+<link rel="canonical" href="https://codesire-deng.github.io/2022/04/04/Intellisense-and-Copy-elision/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://codesire-deng.github.io/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/","path":"2021/04/01/Hexo-NexT-更新方式/","title":"Hexo & NexT 更新方式"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://codesire-deng.github.io/2022/04/04/Intellisense-and-Copy-elision/","path":"2022/04/04/Intellisense-and-Copy-elision/","title":"Intellisense and Copy elision"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Hexo & NexT 更新方式 | 等疾风</title>
+<title>Intellisense and Copy elision | 等疾风</title>
   
 
 
@@ -150,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0Hexo"><span class="nav-number">1.</span> <span class="nav-text">更新Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0NexT"><span class="nav-number">2.</span> <span class="nav-text">更新NexT</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Brief-Solution"><span class="nav-number">1.</span> <span class="nav-text">Brief Solution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Background"><span class="nav-number">2.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#One-way-compromise"><span class="nav-number">3.</span> <span class="nav-text">One way: compromise</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-second-way-cheat"><span class="nav-number">4.</span> <span class="nav-text">The second way: cheat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-final-solution-ifdef"><span class="nav-number">5.</span> <span class="nav-text">The final solution: #ifdef</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -221,7 +220,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2021/04/01/Hexo-NexT-%E6%9B%B4%E6%96%B0%E6%96%B9%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2022/04/04/Intellisense-and-Copy-elision/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
@@ -234,7 +233,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hexo & NexT 更新方式
+          Intellisense and Copy elision
         </h1>
 
         <div class="post-meta-container">
@@ -246,7 +245,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2021-04-01 10:36:50 / Modified: 10:43:59" itemprop="dateCreated datePublished" datetime="2021-04-01T10:36:50+08:00">2021-04-01</time>
+      <time title="Created: 2022-04-04 19:35:59 / Modified: 20:44:01" itemprop="dateCreated datePublished" datetime="2022-04-04T19:35:59+08:00">2022-04-04</time>
     </span>
 
   
@@ -259,25 +258,41 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h3 id="更新Hexo"><a href="#更新Hexo" class="headerlink" title="更新Hexo"></a>更新Hexo</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cnpm <span class="token function">install</span> -g cnpm                 <span class="token comment"># 升级 npm</span>
-cnpm cache clean -f                 <span class="token comment"># 清除 npm 缓存</span>
+        <p>最近开发 <code>co_context</code>，遇到了很多 C++ 周边的坑。其中一个坑是 intellisense 翻脸不认 C++17 标准的强制拷贝消除（Mandatory elision of copy&#x2F;move operations）。</p>
+<p>这个 intellisense 来自 Vscode Extention: C&#x2F;C++ (Microsoft)。</p>
+<h2 id="Brief-Solution"><a href="#Brief-Solution" class="headerlink" title="Brief Solution"></a>Brief Solution</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__INTELLISENSE__</span></span>
+<span class="token comment">// The fake code to cheat intellisense...</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span></span>
+<span class="token comment">// The real code for compiler...</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span id="more"></span>
 
-<span class="token comment"># 更新 package.json 中的 hexo 及个插件版本</span>
-cnpm <span class="token function">install</span> -g npm-check           <span class="token comment"># 检查之前安装的插件，都有哪些是可以升级的 </span>
-cnpm <span class="token function">install</span> -g npm-upgrade         <span class="token comment"># 升级系统中的插件</span>
-npm-check
-npm-upgrade
+<h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p><code>co_context</code> 要开发一个 <code>lock_guard</code>，但用户必须要写 <code>co_await</code>，导致只能写成以下形式：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">auto</span> lk <span class="token operator">=</span> <span class="token keyword">co_await</span> mtx<span class="token punctuation">.</span><span class="token function">lock_guard</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-cnpm update
+<p><code>lk</code> 在析构的时候会自动调用 <code>mtx.unlock()</code>。这看起来很美好，但这里发生了 Copy elision，根据 C++17 标准，这是强制编译器执行的优化，无论拷贝&#x2F;移动构造函数有没有副作用。为了防止用户误用，我干脆删除了拷贝&#x2F;移动构造函数，注意这也是符合标准的做法。</p>
+<p>但问题是，intellisense 不知道 Copy elision！因为我删除了那些构造函数，导致 intellisense 会报错：“无法引用 xx 构造函数，它已经被删除”。</p>
+<p>最糟糕的是，库的用户在正确使用 <code>lock_guard</code> 时，都可能收到这一条错误的报错（哪怕编译通过），这很有迷惑性，显然会大大降低用户体验。</p>
+<h2 id="One-way-compromise"><a href="#One-way-compromise" class="headerlink" title="One way: compromise"></a>One way: compromise</h2><p>最初我选择向 intellisense 妥协：你想让我写移动构造，我写就是了。为了语义正确性，我不得不将 <code>lock_guard</code> 类内部的 <code>mutex&amp;</code> 改成 <code>mutex*</code>，以支持“移动”。</p>
+<p>最后在 <code>~lock_guard()</code> 内，我不得不判断 <code>if (mtx != nullptr) mtx-&gt;unlock()</code>，这很丑，也影响了性能。我不能忍受。</p>
+<h2 id="The-second-way-cheat"><a href="#The-second-way-cheat" class="headerlink" title="The second way: cheat"></a>The second way: cheat</h2><p>错误的根源是 intellisense 不知道 Copy elision。错误的代价不应由我来承担。</p>
+<p>我为 <code>lock_guard</code> 增加了移动构造函数，但标注了 <code>[[deprecated]]</code>，而且内部是 <code>assert(false)</code>，这是为了防止用户误用。这成功地骗过了 intellisense。</p>
+<p>因为保证不会拷贝&#x2F;移动，所以可以删除 <code>if (mtx != nullptr)</code> 这样的愚蠢代码啦！</p>
+<h2 id="The-final-solution-ifdef"><a href="#The-final-solution-ifdef" class="headerlink" title="The final solution: #ifdef"></a>The final solution: #ifdef</h2><p>经过高人指点，欺骗 intellisense 有专门的宏来完成。所以最后的解决办法是：</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__INTELLISENSE__</span></span>
+    <span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token function">deprecated</span><span class="token punctuation">(</span>
+        <span class="token string">"This function is for cheating intellisense, "</span>
+        <span class="token string">"who doesn't sense RVO. "</span>
+        <span class="token string">"You should NEVER use this explicitly or implicitly."</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">]</span>
+    <span class="token function">lock_guard</span><span class="token punctuation">(</span>lock_guard <span class="token operator">&amp;&amp;</span> other<span class="token punctuation">)</span> <span class="token keyword">noexcept</span>
+        <span class="token operator">:</span> <span class="token function">mtx</span><span class="token punctuation">(</span>other<span class="token punctuation">.</span>mtx<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">assert</span><span class="token punctuation">(</span><span class="token boolean">false</span> <span class="token operator">&amp;&amp;</span> <span class="token string">"Mandatory copy elision failed!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span></span>
+    <span class="token function">lock_guard</span><span class="token punctuation">(</span>lock_guard <span class="token operator">&amp;&amp;</span> other<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">delete</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="更新NexT"><a href="#更新NexT" class="headerlink" title="更新NexT"></a>更新NexT</h3><ol>
-<li>重命名原有的主题文件（夹）</li>
-<li><code>npm install hexo-theme-next@latest</code></li>
-<li>diff配合肉眼更新配置</li>
-<li>参考<a target="_blank" rel="noopener" href="https://theme-next.js.org/docs/getting-started/upgrade.html">官方文档</a></li>
-</ol>
+<p>其中，<code>[[deprecated]]</code> 和 <code>assert</code> 可以删去，因为编译器永远不会处理它们。</p>
 
     </div>
 
@@ -300,22 +315,16 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
   </div>
 </div>
 
-          <div class="post-tags">
-              <a href="/tags/%E5%87%8F%E5%B0%91%E8%84%B1%E5%8F%91%E6%8C%87%E5%8D%97/" rel="tag"><i class="fa fa-tag"></i> 减少脱发指南</a>
-          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/10/11/SAM%E5%AE%9E%E6%88%98/" rel="prev" title="SAM实战剖析">
-                  <i class="fa fa-chevron-left"></i> SAM实战剖析
+                <a href="/2022/02/22/Generators-with-Coroutine/" rel="prev" title="Coroutine Tutorial: Generators">
+                  <i class="fa fa-chevron-left"></i> Coroutine Tutorial: Generators
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/04/01/Concurrency-with-C/" rel="next" title="Concurrency With C++">
-                  Concurrency With C++ <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -375,7 +384,7 @@ hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Codesire-Deng","repo":"Gitment-for-Codesire-Deng-s-Blog","client_id":"00a098064772784393ca","client_secret":"12657ee4c728b23deac323ac5253a6eb84b4c0a9","admin_user":"Codesire-Deng","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"ab7e02ffab3b523805ba53055ef525c0"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Codesire-Deng","repo":"Gitment-for-Codesire-Deng-s-Blog","client_id":"00a098064772784393ca","client_secret":"12657ee4c728b23deac323ac5253a6eb84b4c0a9","admin_user":"Codesire-Deng","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"73e14c753b6c9ff17f46367a65ca1670"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>

@@ -159,7 +159,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -205,6 +205,84 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2022/04/04/Intellisense-and-Copy-elision/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/04/04/Intellisense-and-Copy-elision/" class="post-title-link" itemprop="url">Intellisense and Copy elision</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-04-04 19:35:59 / Modified: 20:44:01" itemprop="dateCreated datePublished" datetime="2022-04-04T19:35:59+08:00">2022-04-04</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>最近开发 <code>co_context</code>，遇到了很多 C++ 周边的坑。其中一个坑是 intellisense 翻脸不认 C++17 标准的强制拷贝消除（Mandatory elision of copy&#x2F;move operations）。</p>
+<p>这个 intellisense 来自 Vscode Extention: C&#x2F;C++ (Microsoft)。</p>
+<h2 id="Brief-Solution"><a href="#Brief-Solution" class="headerlink" title="Brief Solution"></a>Brief Solution</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__INTELLISENSE__</span></span>
+<span class="token comment">// The fake code to cheat intellisense...</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span></span>
+<span class="token comment">// The real code for compiler...</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/04/Intellisense-and-Copy-elision/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -668,7 +746,7 @@ Defer guard<span class="token punctuation">&#123;</span><span class="token punct
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-03-06 19:56:03" itemprop="dateModified" datetime="2022-03-06T19:56:03+08:00">2022-03-06</time>
+      <time title="Modified: 2022-04-04 19:34:09" itemprop="dateModified" datetime="2022-04-04T19:34:09+08:00">2022-04-04</time>
     </span>
 
   
@@ -948,90 +1026,6 @@ Defer guard<span class="token punctuation">&#123;</span><span class="token punct
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/05/03/C/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2021/04/01/Concurrency-with-C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
-      <meta itemprop="name" content="等疾风">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="等疾风">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/01/Concurrency-with-C/" class="post-title-link" itemprop="url">Concurrency With C++</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-01 10:47:34" itemprop="dateCreated datePublished" datetime="2021-04-01T10:47:34+08:00">2021-04-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-03-06 17:45:13" itemprop="dateModified" datetime="2022-03-06T17:45:13+08:00">2022-03-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>不同语言&#x2F;操作系统&#x2F;硬件的线程实现还不一样，因此学一个比较主流的多线程库还是挺重要的。<br>C++ STL的线程支持库就是一个好例子。在这之前，最好先复习一下基础知识。</p>
-<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><ul>
-<li><strong>不变量(invariants)</strong> 是指对数据结构的断言<ul>
-<li>例：某种帐本，任意前缀和不为负数。</li>
-<li>例：链表某个节点的后继的前驱是自己。</li>
-<li>众所周知，不良的并发编程会破坏不变量！</li>
-<li>破坏不变量的根源是写操作。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/04/01/Concurrency-with-C/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
