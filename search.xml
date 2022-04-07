@@ -166,7 +166,7 @@
 <span id="more"></span>
 
 <h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><p>基于引用计数的智能指针。在构造和析构时修改引用计数。当引用计数为 0 时，析构资源。</p>
-<p>单个引用计数器是线程安全的。但是，以下 shared_ptr 并非线程安全，至少因为两个原因：</p>
+<p>单个引用计数器是线程安全的。但是，shared_ptr 并非线程安全，至少因为两个原因：</p>
 <ol>
 <li>「改写资源指针」与「改写引用计数」，这两步并非原子化。</li>
 <li>「改写共享引用计数」与「改写弱引用计数」，这两步也非原子化。</li>
