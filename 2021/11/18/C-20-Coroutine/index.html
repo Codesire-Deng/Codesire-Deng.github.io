@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -16,12 +16,12 @@
 
 <link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-  <meta name="description" content="协程(coroutine)是能够暂停和恢复的函数。  协程是线程阻塞造成性能下降的最佳解决方案，尤其是应用在静态线程池中。">
+    <meta name="description" content="协程(coroutine)是能够暂停和恢复的函数。  协程是线程阻塞造成性能下降的最佳解决方案，尤其是应用在静态线程池中。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++20 Coroutine">
 <meta property="og:url" content="https://codesire-deng.github.io/2021/11/18/C-20-Coroutine/index.html">
@@ -94,11 +94,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
-        <li class="menu-item menu-item-log"><a href="/log/" rel="section"><i class="fa fa-sync-alt fa-fw"></i>Log</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-log"><a href="/log/" rel="section"><i class="fa fa-sync-alt fa-fw"></i>Log</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -170,7 +166,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -231,11 +227,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
       <meta itemprop="name" content="等疾风">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="C++20 Coroutine | 等疾风">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -382,7 +383,7 @@
 <p>程序员可通过自定义 <code>operator new</code> 来控制 coroutine state 的分配。这部分暂时忽略不讲。</p>
 <h2 id="Promise类型推导"><a href="#Promise类型推导" class="headerlink" title="Promise类型推导"></a>Promise类型推导</h2><p>这部分暂时忽略不讲。</p>
 <h2 id="co-await"><a href="#co-await" class="headerlink" title="co_await"></a>co_await</h2><p>一元运算符 <code>co_await</code> 会暂停协程并将转移执行权。其操作数必须定义 <code>operator co_await</code>，或者能通过当前协程的 <code>Promise::await_transform</code> 转换成这种类型。</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">co_await</span> expr<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">co_await</span> expr</span><br></pre></td></tr></table></figure>
 
 <p><img src="/2021/11/18/C-20-Coroutine/co_await.svg" alt="co_await"></p>
 <p>首先，<code>expr</code> 要被转换为 awaitable，规则如下：</p>
@@ -413,11 +414,10 @@
 <li>若 <code>true</code>，协程直接返回 <code>awaiter.await_resume()</code> 作为 <code>co_await expr</code> 的结果。</li>
 </ul>
 <p>注意在进入 <code>awaiter.await_suspend(handle)</code> 之前，当前协程已经完全暂停，此时当前 handle 可以在线程之间自由传递，并由其他调度者恢复。在这种情况下，协程可能已经被恢复，awaiter 随之已经被析构，所以 <code>await_suspend()</code> 不应再访问 <code>*this</code>。</p>
-<h2 id="co-yield"><a href="#co-yield" class="headerlink" title="co_yield"></a>co_yield</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">co_yield</span> expr
-<span class="token keyword">co_yield</span> braced<span class="token operator">-</span>init<span class="token operator">-</span>list<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="co-yield"><a href="#co-yield" class="headerlink" title="co_yield"></a>co_yield</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">co_yield</span> expr</span><br><span class="line"><span class="keyword">co_yield</span> braced-init-list</span><br></pre></td></tr></table></figure>
 
 <p>等价于</p>
-<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">co_await</span> promise<span class="token punctuation">.</span><span class="token function">yield_value</span><span class="token punctuation">(</span>expr<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">co_await</span> promise.<span class="built_in">yield_value</span>(expr)</span><br></pre></td></tr></table></figure>
 
     </div>
 

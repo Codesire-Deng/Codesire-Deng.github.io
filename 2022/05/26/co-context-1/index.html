@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="co_context 是最近开发的 C++ 异步协程框架，以易用性为最高目标，尽量兼顾性能。希望从此 C++ 的异步能比 Node.js 更简单，更优雅。 co_context 是基于 Linux io_uring，I&#x2F;O 走内核态协议栈，这是 co_context 努力逼近的性能上限。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="co_context[0]: C++高性能协程框架">
+<meta property="og:url" content="https://codesire-deng.github.io/2022/05/26/co-context-1/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="co_context 是最近开发的 C++ 异步协程框架，以易用性为最高目标，尽量兼顾性能。希望从此 C++ 的异步能比 Node.js 更简单，更优雅。 co_context 是基于 Linux io_uring，I&#x2F;O 走内核态协议栈，这是 co_context 努力逼近的性能上限。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://codesire-deng.github.io/2022/05/26/co-context-1/redis-single-thread.png">
+<meta property="article:published_time" content="2022-05-26T12:45:57.000Z">
+<meta property="article:modified_time" content="2022-05-26T13:26:13.590Z">
+<meta property="article:author" content="等疾风">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codesire-deng.github.io/2022/05/26/co-context-1/redis-single-thread.png">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2022/05/26/co-context-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://codesire-deng.github.io/2022/05/26/co-context-1/","path":"2022/05/26/co-context-1/","title":"co_context[0]: C++高性能协程框架"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>co_context[0]: C++高性能协程框架 | 等疾风</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">等疾风</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">正在捣鼓协程</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-log"><a href="/log/" rel="section"><i class="fa fa-sync-alt fa-fw"></i>Log</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E4%BE%8B%E9%80%9F%E8%A7%88"><span class="nav-number">1.</span> <span class="nav-text">用例速览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-PING-INLINE"><span class="nav-number">1.1.</span> <span class="nav-text">redis-PING_INLINE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E5%BC%8F-I-x2F-O"><span class="nav-number">1.2.</span> <span class="nav-text">链式 I&#x2F;O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E7%A7%92%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="nav-number">1.3.</span> <span class="nav-text">一秒定时器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E8%B6%85%E6%97%B6%E5%8F%96%E6%B6%88"><span class="nav-number">1.4.</span> <span class="nav-text">网络超时取消</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-x2F-O-%E5%8F%96%E6%B6%88"><span class="nav-number">1.5.</span> <span class="nav-text">I&#x2F;O 取消</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%E9%87%8F%E9%99%90%E5%88%B6"><span class="nav-number">1.6.</span> <span class="nav-text">并发量限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8D%8F%E7%A8%8B%E9%97%B4%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7"><span class="nav-number">1.7.</span> <span class="nav-text">其他协程间同步工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#co-context-%E7%9A%84%E4%B8%BB%E8%A6%81%E5%86%85%E5%AE%B9"><span class="nav-number">2.</span> <span class="nav-text">co_context 的主要内容</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2022/05/26/co-context-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="co_context[0]: C++高性能协程框架 | 等疾风">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          co_context[0]: C++高性能协程框架
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-05-26 20:45:57 / Modified: 21:26:13" itemprop="dateCreated datePublished" datetime="2022-05-26T20:45:57+08:00">2022-05-26</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a target="_blank" rel="noopener" href="https://github.com/Codesire-Deng/co_context">co_context</a> 是最近开发的 C++ 异步协程框架，以<strong>易用性</strong>为最高目标，尽量兼顾<strong>性能</strong>。希望从此 C++ 的异步能比 Node.js 更简单，更优雅。</p>
+<p>co_context 是基于 Linux io_uring，I&#x2F;O 走内核态协议栈，这是 co_context 努力逼近的性能上限。</p>
+<span id="more"></span>
+
+<p>做了几个小测试，性能还是比较猛的。如果别的网络框架，但凡沾上 <code>shared_ptr</code>，<code>mutex</code>，<code>memory_order_seq_cst</code> 等等重型工具，多半要比 co_context 慢一些。</p>
+<hr>
+<p>2022&#x2F;5&#x2F;26 更新：</p>
+<ul>
+<li>新增 「I&#x2F;O 取消」和「超时 I&#x2F;O 取消」，API 更好用了；</li>
+<li>更新调度策略，redis-PING QPS 突破 50 万了；</li>
+<li>重做 redis-benchmark 的实验：<ul>
+<li>发现后台运行 Chrome 会显著影响 CPU 调度，进而影响性能表现——关闭 Chrome；</li>
+<li>发现网络代理会降低 localhost 通信的性能——关闭网络代理；</li>
+</ul>
+</li>
+<li>链式 I&#x2F;O 中operator+ 的求值顺序是由编译器定义的，因此弃用，改用operator&amp;&amp; ；</li>
+<li>毕设 co_context 通过审核了 ，过几天儿童节答辩 ~</li>
+</ul>
+<hr>
+<h2 id="用例速览"><a href="#用例速览" class="headerlink" title="用例速览"></a>用例速览</h2><h3 id="redis-PING-INLINE"><a href="#redis-PING-INLINE" class="headerlink" title="redis-PING_INLINE"></a>redis-PING_INLINE</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;co_context/io_context.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;co_context/lazy_io.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;co_context/net/acceptor.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> co_context;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">uint16_t</span> port = <span class="number">6379</span>;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">reply</span>(co_context::socket sock) &#123;</span><br><span class="line">    <span class="type">char</span> recv_buf[<span class="number">100</span>];</span><br><span class="line">    <span class="type">int</span> n = <span class="keyword">co_await</span> sock.<span class="built_in">recv</span>(recv_buf);</span><br><span class="line">    <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        n = <span class="built_in">co_await</span> (sock.<span class="built_in">send</span>(&#123;<span class="string">&quot;+OK\r\n&quot;</span>, <span class="number">5</span>&#125;) &amp;&amp; sock.<span class="built_in">recv</span>(recv_buf));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">server</span>() &#123;</span><br><span class="line">    acceptor ac&#123;inet_address&#123;port&#125;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> sockfd; (sockfd = <span class="keyword">co_await</span> ac.<span class="built_in">accept</span>()) &gt;= <span class="number">0</span>;) &#123;</span><br><span class="line">        <span class="built_in">co_spawn</span>(<span class="built_in">reply</span>(co_context::socket&#123;sockfd&#125;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    io_context ctx&#123;<span class="number">32768</span>&#125;;</span><br><span class="line">    ctx.<span class="built_in">co_spawn</span>(<span class="built_in">server</span>());</span><br><span class="line">    ctx.<span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个 redis-server，但无论接收什么命令，都只会返回一个&quot;+OK&quot;。猜猜它的 QPS 是多少？单线程下，面向 1000 个客户端，co_context QPS 是 55 万，而 redis 本尊是 36 万，平均延迟、p99延迟等均碾压。虽然……这样的性能在网络框架里勉强及格 （毕竟隔壁 bRPC 动不动五百万并发。。）。</p>
+<p>测试工具是 redis-benchmark，其线程开1~3个（使QPS最优），测试环境是单机 5800X, 32GB 3200MHZ-ddr4。</p>
+<p><img src="/2022/05/26/co-context-1/redis-single-thread.png" alt="单线程"></p>
+<h3 id="链式-I-x2F-O"><a href="#链式-I-x2F-O" class="headerlink" title="链式 I&#x2F;O"></a>链式 I&#x2F;O</h3><p>链式 I&#x2F;O 能减少再入内核态和调度器的次数，增强性能。只需用<code>&amp;&amp;</code>连接请求即可。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// co_await 优先级太高，须加括号</span></span><br><span class="line"><span class="type">int</span> x = <span class="built_in">co_await</span> (<span class="built_in">A</span>() &amp;&amp; <span class="built_in">timeout</span>(<span class="built_in">B</span>(), <span class="number">3</span>s) &amp;&amp; <span class="built_in">C</span>());</span><br></pre></td></tr></table></figure>
+
+<p>先做 A，然后做 B（限时 3 秒），（如果没有超时或错误）最后做 C。有错误则返回错误，否则返回 C 的结果。</p>
+<h3 id="一秒定时器"><a href="#一秒定时器" class="headerlink" title="一秒定时器"></a>一秒定时器</h3><p>接下来只展示核心代码了，因为非核心代码和上面差不多。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">task&lt;&gt; <span class="built_in">my_clock</span>() &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> cnt = <span class="number">0</span>;;) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Time = %d\n&quot;</span>, cnt++);</span><br><span class="line">        <span class="function"><span class="keyword">co_await</span> <span class="title">timeout</span><span class="params">(<span class="number">1</span>s)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每隔一秒，在屏幕上打印时间。当然，这种写法容易有累计误差，切勿模仿喔~</p>
+<h3 id="网络超时取消"><a href="#网络超时取消" class="headerlink" title="网络超时取消"></a>网络超时取消</h3><p>用<code>timeout(req, time)</code>能够令<code>req</code>请求限制在<code>time</code>时间以内，若超时则返回失败。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">task&lt;&gt; <span class="built_in">run</span>(co_context::socket peer) &#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">8192</span>];</span><br><span class="line">    <span class="type">int</span> nr = <span class="keyword">co_await</span> <span class="built_in">timeout</span>(peer.<span class="built_in">recv</span>(buf), <span class="number">3</span>s);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (nr &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="function"><span class="keyword">co_await</span> <span class="title">lazy::write</span><span class="params">(STDOUT_FILENO, &#123;buf, (<span class="type">size_t</span>)nr&#125;, <span class="number">0</span>)</span></span>;</span><br><span class="line">        nr = <span class="keyword">co_await</span> <span class="built_in">timeout</span>(peer.<span class="built_in">recv</span>(buf), <span class="number">3</span>s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">log_error</span>(-nr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">log_error</span><span class="params">(<span class="type">int</span> err)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (err) &#123;</span><br><span class="line">        <span class="keyword">case</span> ECANCELED: <span class="comment">// 超时取消</span></span><br><span class="line">            log::<span class="built_in">e</span>(<span class="string">&quot;timeout!\n&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>: <span class="comment">// 其他错误</span></span><br><span class="line">            log::<span class="built_in">e</span>(<span class="string">&quot;%s\n&quot;</span>, <span class="built_in">strerror</span>(err)); </span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对每次TCP<code>recv</code>调用限时3秒钟。</p>
+<h3 id="I-x2F-O-取消"><a href="#I-x2F-O-取消" class="headerlink" title="I&#x2F;O 取消"></a>I&#x2F;O 取消</h3><p>I&#x2F;O 可以无理由取消订单，前提是货还没到你的手上。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">cancel_fd</span><span class="params">(fd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>取消与指定 fd 有关的 I&#x2F;O 操作。</p>
+<p>PS: 内部还可以做更细致的取消操作，只是作者还没想好怎么设计 API 比较优雅~</p>
+<h3 id="并发量限制"><a href="#并发量限制" class="headerlink" title="并发量限制"></a>并发量限制</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">counting_semaphore sem&#123;<span class="number">100</span>&#125;;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">co_await</span> sem.<span class="built_in">acquire</span>();</span><br><span class="line">        <span class="built_in">co_spawn</span>([]() -&gt; task&lt;&gt; &#123;</span><br><span class="line">            socket sock&#123;..&#125;;</span><br><span class="line">            <span class="keyword">co_await</span> sock.<span class="built_in">connect</span>(..) &amp;&amp; sock.<span class="built_in">send</span>(..) &amp;&amp; sock.<span class="built_in">recv</span>(..)</span><br><span class="line">                     &amp;&amp; sock.<span class="built_in">close</span>();</span><br><span class="line">            sem.<span class="built_in">release</span>();</span><br><span class="line">        &#125;());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码将业务并发量限制在 100 以内。注意<code>counting_semaphore</code>是针对 co_context 特制的，wait-free，性能比较好。</p>
+<h3 id="其他协程间同步工具"><a href="#其他协程间同步工具" class="headerlink" title="其他协程间同步工具"></a>其他协程间同步工具</h3><p>类似的同步工具还有<code>mutex</code>，<code>condition_variable</code>。所有的同步工具的使用体验和 C++ 标准定义的类似，不会有额外学习成本哦~</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> co_context;</span><br><span class="line">co_context::mutex mtx;</span><br><span class="line"><span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">add</span>() &#123;</span><br><span class="line">    <span class="keyword">auto</span> lock = <span class="keyword">co_await</span> mtx.<span class="built_in">lock_guard</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000000</span>; ++i) ++cnt;</span><br><span class="line">    std::cout &lt;&lt; cnt &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    io_context ctx&#123;<span class="number">2048</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; ++i) ctx.<span class="built_in">co_spawn</span>(<span class="built_in">add</span>());</span><br><span class="line">    ctx.<span class="built_in">run</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码将<code>cnt</code>安全地递增至 1e9。</p>
+<h2 id="co-context-的主要内容"><a href="#co-context-的主要内容" class="headerlink" title="co_context 的主要内容"></a>co_context 的主要内容</h2><p>co_context 在 4 个方面有贡献：</p>
+<ul>
+<li>liburingcxx: io_uring 的高性能 C++ binding。</li>
+<li>io_context: 针对 L1 cache 的高性能调度器。</li>
+<li>coro: 面向用户的协程库，提供简洁、好用、符合直觉的 API，还提供了同步 syscall 的协程 API（基于同步syscall 的上层库可以快速地移植到 co_context）。</li>
+<li>net: 基于 coro 提供一些便捷的网络抽象（非必需）。</li>
+</ul>
+<p>限于篇幅，co_context 的原理将写到其他文章中（也许就是将毕业设计报告的内容抄过来……逃）。</p>
+<p>代码实时同步于 <a target="_blank" rel="noopener" href="https://github.com/Codesire-Deng/co_context">Github</a>，求 star~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/04/04/Intellisense-and-Copy-elision/" rel="prev" title="Intellisense and Copy elision">
+                  <i class="fa fa-chevron-left"></i> Intellisense and Copy elision
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Codesire-Deng","repo":"Gitment-for-Codesire-Deng-s-Blog","client_id":"00a098064772784393ca","client_secret":"12657ee4c728b23deac323ac5253a6eb84b4c0a9","admin_user":"Codesire-Deng","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"49e23bb1c7a90ec58a609a0c4315b8de"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
