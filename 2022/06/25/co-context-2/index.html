@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Hello，我是等疾风！本篇介绍在 co_context 中用到的性能优化技巧，希望在各位 C&#x2F;C++ 道友的项目上有所帮助。重点将在技巧的入门，而不是 co_context 本身。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="co_context[2]: 性能优化杂谈">
+<meta property="og:url" content="https://codesire-deng.github.io/2022/06/25/co-context-2/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="Hello，我是等疾风！本篇介绍在 co_context 中用到的性能优化技巧，希望在各位 C&#x2F;C++ 道友的项目上有所帮助。重点将在技巧的入门，而不是 co_context 本身。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://codesire-deng.github.io/2022/06/25/co-context-2/netcat.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2022/06/25/co-context-2/redis-single-thread.png">
+<meta property="article:published_time" content="2022-06-25T15:06:00.000Z">
+<meta property="article:modified_time" content="2022-06-25T15:23:28.900Z">
+<meta property="article:author" content="等疾风">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Concurrency">
+<meta property="article:tag" content="C++协程">
+<meta property="article:tag" content="co_context">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codesire-deng.github.io/2022/06/25/co-context-2/netcat.png">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2022/06/25/co-context-2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://codesire-deng.github.io/2022/06/25/co-context-2/","path":"2022/06/25/co-context-2/","title":"co_context[2]: 性能优化杂谈"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>co_context[2]: 性能优化杂谈 | 等疾风</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">等疾风</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">正在捣鼓协程</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-log"><a href="/log/" rel="section"><i class="fa fa-sync-alt fa-fw"></i>Log</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">性能分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E9%94%81%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">无锁化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%86%E6%95%B0%E4%BA%92%E6%96%A5%E9%94%81%E3%80%8C%E5%9B%9B%E5%AE%97%E7%BD%AA%E3%80%8D"><span class="nav-number">2.1.</span> <span class="nav-text">细数互斥锁「四宗罪」</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E9%94%81%E4%B8%96%E7%95%8C%E7%9A%84%E7%A7%A9%E5%BA%8F"><span class="nav-number">2.2.</span> <span class="nav-text">无锁世界的秩序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E9%94%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">无锁数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%80%81%E4%BA%92%E6%96%A5%E9%94%81"><span class="nav-number">2.4.</span> <span class="nav-text">用户态互斥锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cacheline-%E7%BC%96%E6%8E%92"><span class="nav-number">3.</span> <span class="nav-text">cacheline 编排</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%A8%E6%A0%B8%E9%80%9A%E4%BF%A1%E5%8E%8B%E7%BC%A9"><span class="nav-number">4.</span> <span class="nav-text">跨核通信压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%BC%95%E7%94%A8%E7%9C%9F%E7%9A%84%E6%9C%89%E5%BF%85%E8%A6%81%E5%90%97%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">解引用真的有必要吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-union-%E4%BD%86%E4%B8%8D%E6%98%AF-std-variant"><span class="nav-number">4.2.</span> <span class="nav-text">使用 union 但不是 std::variant</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%B9%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82"><span class="nav-number">5.</span> <span class="nav-text">批处理请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2022/06/25/co-context-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="co_context[2]: 性能优化杂谈 | 等疾风">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          co_context[2]: 性能优化杂谈
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-06-25 23:06:00 / Modified: 23:23:28" itemprop="dateCreated datePublished" datetime="2022-06-25T23:06:00+08:00">2022-06-25</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Hello，我是等疾风！本篇介绍在 <a target="_blank" rel="noopener" href="https://github.com/Codesire-Deng/co_context">co_context</a> 中用到的性能优化技巧，希望在各位 C&#x2F;C++ 道友的项目上有所帮助。<strong>重点将在技巧的入门</strong>，而不是 co_context 本身。</p>
+<span id="more"></span>
+
+<h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h2><p>大多数情况下，我们其实是在优化已有的代码，而不是在设计全新的高性能业务。所以建议在优化之前，先分析出哪些代码是<strong>热点</strong>，哪些代码占用最多的<strong>运行时间&#x2F;空间</strong>，然后再针对性地做优化。相关的工具有 perf，vtune，valgrind 等等。需注意性能分析工具会不会<strong>拖慢程序运行速度</strong>（例如 valgrind，好家伙直接令我的程序假死），因为这会带来测量的误差。</p>
+<p>除了现成工具，还可以用 <strong>rdtsc 指令</strong>做低损耗、高精度的时间测量。</p>
+<p>在 co_context 里，性能在一开始就是设计重点，所以会减轻一些总体工作量。</p>
+<h2 id="无锁化"><a href="#无锁化" class="headerlink" title="无锁化"></a>无锁化</h2><h3 id="细数互斥锁「四宗罪」"><a href="#细数互斥锁「四宗罪」" class="headerlink" title="细数互斥锁「四宗罪」"></a>细数互斥锁「四宗罪」</h3><p>无锁设计，是性能优化入门的一道坎。我们在写多线程程序时，很自然想到用<strong>互斥锁（mutex）</strong>来保护共享数据，防止读到脏数据，防止竞争条件（race condition）。互斥锁还有信号量（semaphore），条件变量等变体，它们的原理都是类似的。但它们会有一些性能缺陷：</p>
+<ol>
+<li>和线程高度绑定：如果互斥锁抢不到，线程就陷入<strong>阻塞</strong>；</li>
+<li>引入额外的数据结构：至少有一条唤醒<strong>队列</strong>，记录哪些线程等待唤醒；且这条队列是<strong>不定长</strong>的；</li>
+<li>和操作系统高度绑定：线程的阻塞和唤醒都要走操作系统<strong>内核态</strong>；会打断 CPU 流水线，所以极致性能优化下一般不喜欢看见内核态；</li>
+<li>要切换上下文：每次切线程都要暂存和恢复寄存器的值，可能引发<strong>内存 I&#x2F;O</strong>。</li>
+</ol>
+<p>说了一堆屁话，总之<strong>能避开互斥锁就避开</strong>，而 co_context 比较无脑粗暴，几乎直接禁用了互斥锁。这也会带来一些副作用：线程在空闲的时候也没法阻塞，会导致 CPU 空转，对于其他进程来说无疑是 CPU 强盗。（所以我也给出了备选方案：使用 <code>std::atomic&lt;xxx&gt;::wait/notify</code>，它的原理类似 futex，线程可以阻塞）</p>
+<h3 id="无锁世界的秩序"><a href="#无锁世界的秩序" class="headerlink" title="无锁世界的秩序"></a>无锁世界的秩序</h3><p>无锁世界的秩序主要靠<strong>「原子变量」</strong>来维持。原子变量本质是对 CPU 内存顺序、原子指令、编译器乱序约束的封装。本节只做最基本的入门介绍，入门之后，读者可以快速读懂其他文章。</p>
+<p>比方说，县长说他到鹅城来，只干三件事，然后就离开。这三件事涉及机密，完成之前外人没法知道其状态。有一天，县长离开了鹅城，说明「三件事」已经完成了。至于是哪件事先做完，哪件事后做完，民间众说纷纭。</p>
+<p>在例子中，我们令「县长的位置」为原子变量，若「县长的位置」≠「鹅城」，则编译器和 CPU 保证三件「事」已经完成，但是，由于乱序优化和内存顺序等问题，这三件「事」的完成顺序是不确定的。所幸，我们不关心顺序，只要访问这三件「事」的结果就可以了。</p>
+<p>于是，我们解锁了两种 C++ 内存顺序：<code>std::memory_order_release</code> 和 <code>std::memory_order_acquire</code></p>
+<p>我们结合代码举例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">std::atomic&lt;<span class="type">int</span>&gt; distance_from_e_city = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程1</span></span><br><span class="line"><span class="built_in">do_A</span>();</span><br><span class="line"><span class="built_in">do_B</span>();</span><br><span class="line"><span class="built_in">do_C</span>();</span><br><span class="line">distance_from_e_city.<span class="built_in">store</span>(<span class="number">100</span>, std::memory_order_release); <span class="comment">// 瞬移100公里不过分吧</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程2</span></span><br><span class="line"><span class="keyword">if</span> (distance_from_e_city.<span class="built_in">load</span>(std::memory_order_acquire) &gt; <span class="number">50</span>) &#123;</span><br><span class="line">    <span class="built_in">use_A</span>(); <span class="comment">// 必定能看见do_A的结果</span></span><br><span class="line">    <span class="built_in">use_B</span>();</span><br><span class="line">    <span class="built_in">use_C</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译器会保证<code>std::memory_order_release</code>之前的指令不会被乱序到其之后，但是不保证<code>do_A()</code> <code>do_B()</code> <code>do_C()</code>之间的乱序。</p>
+<p>对称地， 保证<code>std::memory_order_acquire</code>之后的指令不会被乱序到其之前，但是不保证<code>use_A()</code> <code>use_B()</code> <code>use_C()</code>之间的乱序。</p>
+<p>最终，以原子变量为桥梁，我们实现了安全的共享数据访问。读者可以学习<code>std::memory_order_seq_cst</code> <code>std::memory_order_relaxed</code> 等等来解锁更多姿势。关键词：C++ 内存顺序</p>
+<h3 id="无锁数据结构"><a href="#无锁数据结构" class="headerlink" title="无锁数据结构"></a>无锁数据结构</h3><p>理解内存顺序之后，就能轻松上手无锁数据结构了。**定长单生产者单消费者队列(SPSC queue)**是一种高性能的无锁队列，它有很多约束：容量固定、只支持一个生产者和一个消费者。但它的延迟非常低，实现非常简单，只依赖内存顺序，不依赖互斥锁。co_context 用了 n 条 SPSC 队列来模拟“单生多消”和“多生单消”功能。</p>
+<p>其实，保证越少，性能越高。SPSC 队列尚且保留了「先进先出」的队列性质，倘若抛弃队列性质，还有更猛的乱序数据结构，性能提高可逼近100%。但是，乱序性会带来太高的 debug 难度，在负载均衡上也不实用，最终还是被我弃用了。</p>
+<h3 id="用户态互斥锁"><a href="#用户态互斥锁" class="headerlink" title="用户态互斥锁"></a>用户态互斥锁</h3><p>底层开发者可以承受没有互斥锁的不便，但不能不给应用层提供互斥锁的等价工具。co_context 给用户提供了互斥锁、信号量和条件变量，它们的 API 与 C++ 标准库几乎一致，在体验上没有差别，在实现上性能会略强，一是因为无等待且完全<strong>不经过内核态</strong>，二是因为没有<strong>引入堆内存分配</strong>。涉及的技巧比较复杂，在这里就不展开介绍了，关键词：用<strong>侵入式链表</strong>实现等待队列。这里推荐参考 <a target="_blank" rel="noopener" href="https://github.com/lewissbaker/cppcoro/blob/master/include/cppcoro/async_mutex.hpp">cppcoro</a> 的互斥锁实现。</p>
+<h2 id="cacheline-编排"><a href="#cacheline-编排" class="headerlink" title="cacheline 编排"></a>cacheline 编排</h2><p>常见 CPU 的内存读写都是以 64 字节为单位的，对应 CPU 的 cache 也是每 64 字节为一个「cacheline」。性能优化的必修课之一是妥善安排数据在 cache 中的位置。不妥的安排会导致以下情况：</p>
+<ol>
+<li><strong>伪共享（false sharing）</strong>：线程 1 读写变量 a，线程 2 读写变量 b，本是老死不相往来，却偏偏让 a 和 b 处于同一 cacheline。</li>
+<li><strong>乒乓缓存（cacheline ping-ponging）</strong>：常见于伪共享。变量 a 和 b 位于同一 cacheline，线程 1 只读 a，线程 2 频繁改写 b。结果，每当 b 被线程 2 修改时，线程 1 都要同步 a 所在的 cacheline，这实际上是多余的。</li>
+<li>多余读写：常见于指针解引用、通讯协议。可以只用一条 cacheline 完成跨核通讯，实际却用了多条。</li>
+<li>cache 浪费：偷懒，无脑塞 64 字节做 padding。这是不负责任的做法，本质只是将 cache-miss 转移到其他数据上。</li>
+</ol>
+<p>只要善用 C++ 的<code>alignas</code>关键字，针对以上问题，相信读者能想出优化的办法。</p>
+<p>co_context 大量使用了 <code>alignas(64)</code>来指定结构体在 cacheline 中的位置，以优化性能。</p>
+<h2 id="跨核通信压缩"><a href="#跨核通信压缩" class="headerlink" title="跨核通信压缩"></a>跨核通信压缩</h2><p>这一节也与 CPU cache 有关。</p>
+<h3 id="解引用真的有必要吗？"><a href="#解引用真的有必要吗？" class="headerlink" title="解引用真的有必要吗？"></a>解引用真的有必要吗？</h3><p>在多线程程序里，经常见到线程 1 写入变量 a，然后将 <code>p=&amp;a</code> 告诉线程 2，最后，线程 2 读取<code>*p</code> 。这里大概率涉及了两条 cacheline 的同步：一条是指针 p，另一条是<code>*p</code>也就是变量 a。 但这真的有必要吗？</p>
+<p>以 co_context 为例，优化前，线程 1 写入 <code>a.type = xxx</code> ，<code>p = &amp;a</code>交给线程 2，线程 2 根据 <code>p-&gt;type</code> 做不同的操作。但是，由于 <code>a.type</code> 只有 8 种取值 ，对应二进制 3 个 bit，而变量 a 正好是按照 8 字节对齐的，a 的地址末尾 3 个 bit 必然为 0，意味着 <code>p = &amp;a</code> 的末尾 3 个 bit 没有携带任何信息。那么为什么不让这 3 个 bit 存放 <code>a.type</code> 呢？</p>
+<p>于是，优化后，线程 1 写入<code>p = &amp;a; p |= a.type = xxx;</code> ，p 交给线程 2，线程 2 根据 <code>p &amp; 7</code> 做不同的转发，全过程没有解引用 p，节省了一次 cacheline 传播。</p>
+<h3 id="使用-union-但不是-std-variant"><a href="#使用-union-但不是-std-variant" class="headerlink" title="使用 union 但不是 std::variant"></a>使用 union 但不是 std::variant</h3><p>（这一条建议非常激进，读者一旦使用，最好补上充足的文档）</p>
+<p>使用 union（联合体）可以进一步压缩 struct 的体积。每当用 union 将 struct 的体积减小到 n*64，每次同步 cacheline 所传输的信息量就会提升，理论性能就会出现一次质变。</p>
+<p>用 std::variant 也能达到压缩体积的目的，但是 std::variant 的以类型为单位的多态粒度比较粗糙，内置的异常处理也带来了性能损耗，在极致性能优化时可能会禁用（但 std::variant 满足普通项目是绰绰有余了）。</p>
+<h2 id="批处理请求"><a href="#批处理请求" class="headerlink" title="批处理请求"></a>批处理请求</h2><p>在 co_context 中，很容易完成一个批处理优化：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 优化前</span></span><br><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">A_IO</span><span class="params">(&amp;buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">B_IO</span><span class="params">(&amp;buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">C_IO</span><span class="params">(&amp;buf)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 优化后</span></span><br><span class="line"><span class="built_in">co_await</span> (<span class="built_in">A_IO</span>(&amp;buf) &amp;&amp; <span class="built_in">B_IO</span>(&amp;buf) &amp;&amp; <span class="built_in">C_IO</span>(&amp;buf));</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子，原本要进入调度器 3 次，将 I&#x2F;O 请求提交给内核态 3 次，在优化后统统变为 1 次。批处理优化的思想无论在底层还是架构层应用层都是非常实用的。</p>
+<p>要留意的是批处理是否会<strong>对延迟造成不可接受的影响</strong>，如果为了批处理而强行等待，可能得不偿失。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本篇介绍了一些 C++ 性能优化的技巧，重点是内存顺序和 CPU cache。虽然性能优化的水很深，需要大量的基础知识和经验积累，但正因此我们有机会为世界做别出心裁的贡献，坚定前行吧骚年！最后，放两张祖传的 co_context 性能测试图：</p>
+<p>netcat 网络吞吐（单连接）：<br><img src="/2022/06/25/co-context-2/netcat.png" alt="netcat"></p>
+<p>redis-benchmark QPS 和平均延迟（单线程）：<br><img src="/2022/06/25/co-context-2/redis-single-thread.png" alt="redis-benchmark"></p>
+<hr>
+<p>代码实时同步于 <a target="_blank" rel="noopener" href="https://github.com/Codesire-Deng/co_context">Github</a>，求 star~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/Concurrency/" rel="tag"><i class="fa fa-tag"></i> Concurrency</a>
+              <a href="/tags/C-%E5%8D%8F%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> C++协程</a>
+              <a href="/tags/co-context/" rel="tag"><i class="fa fa-tag"></i> co_context</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/06/25/co-context-1/" rel="prev" title="co_context[1]: 易用性设计">
+                  <i class="fa fa-chevron-left"></i> co_context[1]: 易用性设计
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Codesire-Deng","repo":"Gitment-for-Codesire-Deng-s-Blog","client_id":"00a098064772784393ca","client_secret":"12657ee4c728b23deac323ac5253a6eb84b4c0a9","admin_user":"Codesire-Deng","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"c2f521f2cb65a4dbf6bd250b4e2776e7"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

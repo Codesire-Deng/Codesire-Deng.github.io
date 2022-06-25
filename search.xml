@@ -1733,68 +1733,6 @@
       </tags>
   </entry>
   <entry>
-    <title>co_context[0]: C++高性能协程框架</title>
-    <url>/2022/05/26/co-context-1/</url>
-    <content><![CDATA[<p><a href="https://github.com/Codesire-Deng/co_context">co_context</a> 是最近开发的 C++ 异步协程框架，以<strong>易用性</strong>为最高目标，尽量兼顾<strong>性能</strong>。希望从此 C++ 的异步能比 Node.js 更简单，更优雅。</p>
-<p>co_context 是基于 Linux io_uring，I&#x2F;O 走内核态协议栈，这是 co_context 努力逼近的性能上限。</p>
-<span id="more"></span>
-
-<p>做了几个小测试，性能还是比较猛的。如果别的网络框架，但凡沾上 <code>shared_ptr</code>，<code>mutex</code>，<code>memory_order_seq_cst</code> 等等重型工具，多半要比 co_context 慢一些。</p>
-<hr>
-<p>2022&#x2F;5&#x2F;26 更新：</p>
-<ul>
-<li>新增 「I&#x2F;O 取消」和「超时 I&#x2F;O 取消」，API 更好用了；</li>
-<li>更新调度策略，redis-PING QPS 突破 50 万了；</li>
-<li>重做 redis-benchmark 的实验：<ul>
-<li>发现后台运行 Chrome 会显著影响 CPU 调度，进而影响性能表现——关闭 Chrome；</li>
-<li>发现网络代理会降低 localhost 通信的性能——关闭网络代理；</li>
-</ul>
-</li>
-<li>链式 I&#x2F;O 中operator+ 的求值顺序是由编译器定义的，因此弃用，改用operator&amp;&amp; ；</li>
-<li>毕设 co_context 通过审核了 ，过几天儿童节答辩 ~</li>
-</ul>
-<hr>
-<h2 id="用例速览"><a href="#用例速览" class="headerlink" title="用例速览"></a>用例速览</h2><h3 id="redis-PING-INLINE"><a href="#redis-PING-INLINE" class="headerlink" title="redis-PING_INLINE"></a>redis-PING_INLINE</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;co_context/io_context.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;co_context/lazy_io.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;co_context/net/acceptor.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> co_context;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">uint16_t</span> port = <span class="number">6379</span>;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">reply</span>(co_context::socket sock) &#123;</span><br><span class="line">    <span class="type">char</span> recv_buf[<span class="number">100</span>];</span><br><span class="line">    <span class="type">int</span> n = <span class="keyword">co_await</span> sock.<span class="built_in">recv</span>(recv_buf);</span><br><span class="line">    <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        n = <span class="built_in">co_await</span> (sock.<span class="built_in">send</span>(&#123;<span class="string">&quot;+OK\r\n&quot;</span>, <span class="number">5</span>&#125;) &amp;&amp; sock.<span class="built_in">recv</span>(recv_buf));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">server</span>() &#123;</span><br><span class="line">    acceptor ac&#123;inet_address&#123;port&#125;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> sockfd; (sockfd = <span class="keyword">co_await</span> ac.<span class="built_in">accept</span>()) &gt;= <span class="number">0</span>;) &#123;</span><br><span class="line">        <span class="built_in">co_spawn</span>(<span class="built_in">reply</span>(co_context::socket&#123;sockfd&#125;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    io_context ctx&#123;<span class="number">32768</span>&#125;;</span><br><span class="line">    ctx.<span class="built_in">co_spawn</span>(<span class="built_in">server</span>());</span><br><span class="line">    ctx.<span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这是一个 redis-server，但无论接收什么命令，都只会返回一个&quot;+OK&quot;。猜猜它的 QPS 是多少？单线程下，面向 1000 个客户端，co_context QPS 是 55 万，而 redis 本尊是 36 万，平均延迟、p99延迟等均碾压。虽然……这样的性能在网络框架里勉强及格 （毕竟隔壁 bRPC 动不动五百万并发。。）。</p>
-<p>测试工具是 redis-benchmark，其线程开1~3个（使QPS最优），测试环境是单机 5800X, 32GB 3200MHZ-ddr4。</p>
-<p><img src="/2022/05/26/co-context-1/redis-single-thread.png" alt="单线程"></p>
-<h3 id="链式-I-x2F-O"><a href="#链式-I-x2F-O" class="headerlink" title="链式 I&#x2F;O"></a>链式 I&#x2F;O</h3><p>链式 I&#x2F;O 能减少再入内核态和调度器的次数，增强性能。只需用<code>&amp;&amp;</code>连接请求即可。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// co_await 优先级太高，须加括号</span></span><br><span class="line"><span class="type">int</span> x = <span class="built_in">co_await</span> (<span class="built_in">A</span>() &amp;&amp; <span class="built_in">timeout</span>(<span class="built_in">B</span>(), <span class="number">3</span>s) &amp;&amp; <span class="built_in">C</span>());</span><br></pre></td></tr></table></figure>
-
-<p>先做 A，然后做 B（限时 3 秒），（如果没有超时或错误）最后做 C。有错误则返回错误，否则返回 C 的结果。</p>
-<h3 id="一秒定时器"><a href="#一秒定时器" class="headerlink" title="一秒定时器"></a>一秒定时器</h3><p>接下来只展示核心代码了，因为非核心代码和上面差不多。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">task&lt;&gt; <span class="built_in">my_clock</span>() &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> cnt = <span class="number">0</span>;;) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Time = %d\n&quot;</span>, cnt++);</span><br><span class="line">        <span class="function"><span class="keyword">co_await</span> <span class="title">timeout</span><span class="params">(<span class="number">1</span>s)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>每隔一秒，在屏幕上打印时间。当然，这种写法容易有累计误差，切勿模仿喔~</p>
-<h3 id="网络超时取消"><a href="#网络超时取消" class="headerlink" title="网络超时取消"></a>网络超时取消</h3><p>用<code>timeout(req, time)</code>能够令<code>req</code>请求限制在<code>time</code>时间以内，若超时则返回失败。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">task&lt;&gt; <span class="built_in">run</span>(co_context::socket peer) &#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">8192</span>];</span><br><span class="line">    <span class="type">int</span> nr = <span class="keyword">co_await</span> <span class="built_in">timeout</span>(peer.<span class="built_in">recv</span>(buf), <span class="number">3</span>s);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (nr &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="function"><span class="keyword">co_await</span> <span class="title">lazy::write</span><span class="params">(STDOUT_FILENO, &#123;buf, (<span class="type">size_t</span>)nr&#125;, <span class="number">0</span>)</span></span>;</span><br><span class="line">        nr = <span class="keyword">co_await</span> <span class="built_in">timeout</span>(peer.<span class="built_in">recv</span>(buf), <span class="number">3</span>s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">log_error</span>(-nr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">log_error</span><span class="params">(<span class="type">int</span> err)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (err) &#123;</span><br><span class="line">        <span class="keyword">case</span> ECANCELED: <span class="comment">// 超时取消</span></span><br><span class="line">            log::<span class="built_in">e</span>(<span class="string">&quot;timeout!\n&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>: <span class="comment">// 其他错误</span></span><br><span class="line">            log::<span class="built_in">e</span>(<span class="string">&quot;%s\n&quot;</span>, <span class="built_in">strerror</span>(err)); </span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>对每次TCP<code>recv</code>调用限时3秒钟。</p>
-<h3 id="I-x2F-O-取消"><a href="#I-x2F-O-取消" class="headerlink" title="I&#x2F;O 取消"></a>I&#x2F;O 取消</h3><p>I&#x2F;O 可以无理由取消订单，前提是货还没到你的手上。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">cancel_fd</span><span class="params">(fd)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>取消与指定 fd 有关的 I&#x2F;O 操作。</p>
-<p>PS: 内部还可以做更细致的取消操作，只是作者还没想好怎么设计 API 比较优雅~</p>
-<h3 id="并发量限制"><a href="#并发量限制" class="headerlink" title="并发量限制"></a>并发量限制</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">counting_semaphore sem&#123;<span class="number">100</span>&#125;;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">co_await</span> sem.<span class="built_in">acquire</span>();</span><br><span class="line">        <span class="built_in">co_spawn</span>([]() -&gt; task&lt;&gt; &#123;</span><br><span class="line">            socket sock&#123;..&#125;;</span><br><span class="line">            <span class="keyword">co_await</span> sock.<span class="built_in">connect</span>(..) &amp;&amp; sock.<span class="built_in">send</span>(..) &amp;&amp; sock.<span class="built_in">recv</span>(..)</span><br><span class="line">                     &amp;&amp; sock.<span class="built_in">close</span>();</span><br><span class="line">            sem.<span class="built_in">release</span>();</span><br><span class="line">        &#125;());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>这段代码将业务并发量限制在 100 以内。注意<code>counting_semaphore</code>是针对 co_context 特制的，wait-free，性能比较好。</p>
-<h3 id="其他协程间同步工具"><a href="#其他协程间同步工具" class="headerlink" title="其他协程间同步工具"></a>其他协程间同步工具</h3><p>类似的同步工具还有<code>mutex</code>，<code>condition_variable</code>。所有的同步工具的使用体验和 C++ 标准定义的类似，不会有额外学习成本哦~</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> co_context;</span><br><span class="line">co_context::mutex mtx;</span><br><span class="line"><span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">add</span>() &#123;</span><br><span class="line">    <span class="keyword">auto</span> lock = <span class="keyword">co_await</span> mtx.<span class="built_in">lock_guard</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000000</span>; ++i) ++cnt;</span><br><span class="line">    std::cout &lt;&lt; cnt &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    io_context ctx&#123;<span class="number">2048</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; ++i) ctx.<span class="built_in">co_spawn</span>(<span class="built_in">add</span>());</span><br><span class="line">    ctx.<span class="built_in">run</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面的代码将<code>cnt</code>安全地递增至 1e9。</p>
-<h2 id="co-context-的主要内容"><a href="#co-context-的主要内容" class="headerlink" title="co_context 的主要内容"></a>co_context 的主要内容</h2><p>co_context 在 4 个方面有贡献：</p>
-<ul>
-<li>liburingcxx: io_uring 的高性能 C++ binding。</li>
-<li>io_context: 针对 L1 cache 的高性能调度器。</li>
-<li>coro: 面向用户的协程库，提供简洁、好用、符合直觉的 API，还提供了同步 syscall 的协程 API（基于同步syscall 的上层库可以快速地移植到 co_context）。</li>
-<li>net: 基于 coro 提供一些便捷的网络抽象（非必需）。</li>
-</ul>
-<p>限于篇幅，co_context 的原理将写到其他文章中（也许就是将毕业设计报告的内容抄过来……逃）。</p>
-<p>代码实时同步于 <a href="https://github.com/Codesire-Deng/co_context">Github</a>，求 star~</p>
-]]></content>
-  </entry>
-  <entry>
     <title>CUDA 学习笔记</title>
     <url>/2021/08/05/cuda/</url>
     <content><![CDATA[<p>参考资料：</p>
@@ -4503,6 +4441,232 @@
 ]]></content>
       <tags>
         <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>co_context[0]: C++高性能协程框架</title>
+    <url>/2022/05/26/co-context-0/</url>
+    <content><![CDATA[<p><a href="https://github.com/Codesire-Deng/co_context">co_context</a> 是最近开发的 C++ 异步协程框架，以<strong>易用性</strong>为最高目标，尽量兼顾<strong>性能</strong>。希望从此 C++ 的异步能比 Node.js 更简单，更优雅。</p>
+<p>co_context 是基于 Linux io_uring，I&#x2F;O 走内核态协议栈，这是 co_context 努力逼近的性能上限。</p>
+<span id="more"></span>
+
+<p>做了几个小测试，性能还是比较猛的。如果别的网络框架，但凡沾上 <code>shared_ptr</code>，<code>mutex</code>，<code>memory_order_seq_cst</code> 等等重型工具，多半要比 co_context 慢一些。</p>
+<hr>
+<p>2022&#x2F;5&#x2F;26 更新：</p>
+<ul>
+<li>新增 「I&#x2F;O 取消」和「超时 I&#x2F;O 取消」，API 更好用了；</li>
+<li>更新调度策略，redis-PING QPS 突破 50 万了；</li>
+<li>重做 redis-benchmark 的实验：<ul>
+<li>发现后台运行 Chrome 会显著影响 CPU 调度，进而影响性能表现——关闭 Chrome；</li>
+<li>发现网络代理会降低 localhost 通信的性能——关闭网络代理；</li>
+</ul>
+</li>
+<li>链式 I&#x2F;O 中operator+ 的求值顺序是由编译器定义的，因此弃用，改用operator&amp;&amp; ；</li>
+<li>毕设 co_context 通过审核了 ，过几天儿童节答辩 ~</li>
+</ul>
+<hr>
+<h2 id="用例速览"><a href="#用例速览" class="headerlink" title="用例速览"></a>用例速览</h2><h3 id="redis-PING-INLINE"><a href="#redis-PING-INLINE" class="headerlink" title="redis-PING_INLINE"></a>redis-PING_INLINE</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;co_context/io_context.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;co_context/lazy_io.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;co_context/net/acceptor.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> co_context;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">uint16_t</span> port = <span class="number">6379</span>;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">reply</span>(co_context::socket sock) &#123;</span><br><span class="line">    <span class="type">char</span> recv_buf[<span class="number">100</span>];</span><br><span class="line">    <span class="type">int</span> n = <span class="keyword">co_await</span> sock.<span class="built_in">recv</span>(recv_buf);</span><br><span class="line">    <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        n = <span class="built_in">co_await</span> (sock.<span class="built_in">send</span>(&#123;<span class="string">&quot;+OK\r\n&quot;</span>, <span class="number">5</span>&#125;) &amp;&amp; sock.<span class="built_in">recv</span>(recv_buf));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">server</span>() &#123;</span><br><span class="line">    acceptor ac&#123;inet_address&#123;port&#125;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> sockfd; (sockfd = <span class="keyword">co_await</span> ac.<span class="built_in">accept</span>()) &gt;= <span class="number">0</span>;) &#123;</span><br><span class="line">        <span class="built_in">co_spawn</span>(<span class="built_in">reply</span>(co_context::socket&#123;sockfd&#125;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    io_context ctx&#123;<span class="number">32768</span>&#125;;</span><br><span class="line">    ctx.<span class="built_in">co_spawn</span>(<span class="built_in">server</span>());</span><br><span class="line">    ctx.<span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个 redis-server，但无论接收什么命令，都只会返回一个&quot;+OK&quot;。猜猜它的 QPS 是多少？单线程下，面向 1000 个客户端，co_context QPS 是 55 万，而 redis 本尊是 36 万，平均延迟、p99延迟等均碾压。虽然……这样的性能在网络框架里勉强及格 （毕竟隔壁 bRPC 动不动五百万并发。。）。</p>
+<p>测试工具是 redis-benchmark，其线程开1~3个（使QPS最优），测试环境是单机 5800X, 32GB 3200MHZ-ddr4。</p>
+<p><img src="/2022/05/26/co-context-0/redis-single-thread.png" alt="单线程"></p>
+<h3 id="链式-I-x2F-O"><a href="#链式-I-x2F-O" class="headerlink" title="链式 I&#x2F;O"></a>链式 I&#x2F;O</h3><p>链式 I&#x2F;O 能减少再入内核态和调度器的次数，增强性能。只需用<code>&amp;&amp;</code>连接请求即可。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// co_await 优先级太高，须加括号</span></span><br><span class="line"><span class="type">int</span> x = <span class="built_in">co_await</span> (<span class="built_in">A</span>() &amp;&amp; <span class="built_in">timeout</span>(<span class="built_in">B</span>(), <span class="number">3</span>s) &amp;&amp; <span class="built_in">C</span>());</span><br></pre></td></tr></table></figure>
+
+<p>先做 A，然后做 B（限时 3 秒），（如果没有超时或错误）最后做 C。有错误则返回错误，否则返回 C 的结果。</p>
+<h3 id="一秒定时器"><a href="#一秒定时器" class="headerlink" title="一秒定时器"></a>一秒定时器</h3><p>接下来只展示核心代码了，因为非核心代码和上面差不多。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">task&lt;&gt; <span class="built_in">my_clock</span>() &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> cnt = <span class="number">0</span>;;) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Time = %d\n&quot;</span>, cnt++);</span><br><span class="line">        <span class="function"><span class="keyword">co_await</span> <span class="title">timeout</span><span class="params">(<span class="number">1</span>s)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每隔一秒，在屏幕上打印时间。当然，这种写法容易有累计误差，切勿模仿喔~</p>
+<h3 id="网络超时取消"><a href="#网络超时取消" class="headerlink" title="网络超时取消"></a>网络超时取消</h3><p>用<code>timeout(req, time)</code>能够令<code>req</code>请求限制在<code>time</code>时间以内，若超时则返回失败。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">task&lt;&gt; <span class="built_in">run</span>(co_context::socket peer) &#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">8192</span>];</span><br><span class="line">    <span class="type">int</span> nr = <span class="keyword">co_await</span> <span class="built_in">timeout</span>(peer.<span class="built_in">recv</span>(buf), <span class="number">3</span>s);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (nr &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="function"><span class="keyword">co_await</span> <span class="title">lazy::write</span><span class="params">(STDOUT_FILENO, &#123;buf, (<span class="type">size_t</span>)nr&#125;, <span class="number">0</span>)</span></span>;</span><br><span class="line">        nr = <span class="keyword">co_await</span> <span class="built_in">timeout</span>(peer.<span class="built_in">recv</span>(buf), <span class="number">3</span>s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">log_error</span>(-nr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">log_error</span><span class="params">(<span class="type">int</span> err)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (err) &#123;</span><br><span class="line">        <span class="keyword">case</span> ECANCELED: <span class="comment">// 超时取消</span></span><br><span class="line">            log::<span class="built_in">e</span>(<span class="string">&quot;timeout!\n&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>: <span class="comment">// 其他错误</span></span><br><span class="line">            log::<span class="built_in">e</span>(<span class="string">&quot;%s\n&quot;</span>, <span class="built_in">strerror</span>(err)); </span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对每次TCP<code>recv</code>调用限时3秒钟。</p>
+<h3 id="I-x2F-O-取消"><a href="#I-x2F-O-取消" class="headerlink" title="I&#x2F;O 取消"></a>I&#x2F;O 取消</h3><p>I&#x2F;O 可以无理由取消订单，前提是货还没到你的手上。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">cancel_fd</span><span class="params">(fd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>取消与指定 fd 有关的 I&#x2F;O 操作。</p>
+<p>PS: 内部还可以做更细致的取消操作，只是作者还没想好怎么设计 API 比较优雅~</p>
+<h3 id="并发量限制"><a href="#并发量限制" class="headerlink" title="并发量限制"></a>并发量限制</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">counting_semaphore sem&#123;<span class="number">100</span>&#125;;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">co_await</span> sem.<span class="built_in">acquire</span>();</span><br><span class="line">        <span class="built_in">co_spawn</span>([]() -&gt; task&lt;&gt; &#123;</span><br><span class="line">            socket sock&#123;..&#125;;</span><br><span class="line">            <span class="keyword">co_await</span> sock.<span class="built_in">connect</span>(..) &amp;&amp; sock.<span class="built_in">send</span>(..) &amp;&amp; sock.<span class="built_in">recv</span>(..)</span><br><span class="line">                     &amp;&amp; sock.<span class="built_in">close</span>();</span><br><span class="line">            sem.<span class="built_in">release</span>();</span><br><span class="line">        &#125;());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码将业务并发量限制在 100 以内。注意<code>counting_semaphore</code>是针对 co_context 特制的，wait-free，性能比较好。</p>
+<h3 id="其他协程间同步工具"><a href="#其他协程间同步工具" class="headerlink" title="其他协程间同步工具"></a>其他协程间同步工具</h3><p>类似的同步工具还有<code>mutex</code>，<code>condition_variable</code>。所有的同步工具的使用体验和 C++ 标准定义的类似，不会有额外学习成本哦~</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> co_context;</span><br><span class="line">co_context::mutex mtx;</span><br><span class="line"><span class="type">int</span> cnt = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">add</span>() &#123;</span><br><span class="line">    <span class="keyword">auto</span> lock = <span class="keyword">co_await</span> mtx.<span class="built_in">lock_guard</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000000</span>; ++i) ++cnt;</span><br><span class="line">    std::cout &lt;&lt; cnt &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    io_context ctx&#123;<span class="number">2048</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; ++i) ctx.<span class="built_in">co_spawn</span>(<span class="built_in">add</span>());</span><br><span class="line">    ctx.<span class="built_in">run</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码将<code>cnt</code>安全地递增至 1e9。</p>
+<h2 id="co-context-的主要内容"><a href="#co-context-的主要内容" class="headerlink" title="co_context 的主要内容"></a>co_context 的主要内容</h2><p>co_context 在 4 个方面有贡献：</p>
+<ul>
+<li>liburingcxx: io_uring 的高性能 C++ binding。</li>
+<li>io_context: 针对 L1 cache 的高性能调度器。</li>
+<li>coro: 面向用户的协程库，提供简洁、好用、符合直觉的 API，还提供了同步 syscall 的协程 API（基于同步syscall 的上层库可以快速地移植到 co_context）。</li>
+<li>net: 基于 coro 提供一些便捷的网络抽象（非必需）。</li>
+</ul>
+<p>限于篇幅，co_context 的原理将写到其他文章中（也许就是将毕业设计报告的内容抄过来……逃）。</p>
+<p>代码实时同步于 <a href="https://github.com/Codesire-Deng/co_context">Github</a>，求 star~</p>
+]]></content>
+      <tags>
+        <tag>C++</tag>
+        <tag>Concurrency</tag>
+        <tag>C++协程</tag>
+        <tag>co_context</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>co_context[1]: 易用性设计</title>
+    <url>/2022/06/25/co-context-1/</url>
+    <content><![CDATA[<p><a href="https://github.com/Codesire-Deng/co_context">co_context</a> 是最近开发的 C++ 异步协程框架，基于 Linux io_uring。<strong>「易用性」</strong>和「性能」是我们最重视的属性，这篇文章，我们介绍在 co_context 中有关易用性的设计。</p>
+<span id="more"></span>
+
+<h2 id="I-x2F-O：同步风格，业务专注"><a href="#I-x2F-O：同步风格，业务专注" class="headerlink" title="I&#x2F;O：同步风格，业务专注"></a>I&#x2F;O：同步风格，业务专注</h2><p>任何有意义的计算机程序都需要做 I&#x2F;O，为了提高性能，我们不得不追求更好的 I&#x2F;O 模型。很多网络文章将 I&#x2F;O 模型分成阻塞、非阻塞、多路复用等多种，但本人不太喜欢这种分类（阻塞+非阻塞≠全集，违反直觉）。从代码风格上，我将 I&#x2F;O 模型分成两种：同步式，函数回调式。</p>
+<p>以一个简单需求为例：等待五秒钟后，打印“Hello, world!”。我们对比一下同步式和函数回调的写法：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 同步式，使用C++标准库</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">delay_print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    this_thread::<span class="built_in">sleep_for</span>(<span class="number">5</span>s);</span><br><span class="line">    <span class="built_in">printf</span>(“Hello, world!\n”);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在业务代码中使用</span></span><br><span class="line"><span class="built_in">delay_print</span>(); <span class="comment">// 导致当前线程会阻塞5秒</span></span><br><span class="line">std::thread t&#123;delay_print&#125;; <span class="comment">// 生成新线程，令其阻塞5秒</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 同步式，使用co_context</span></span><br><span class="line"><span class="function">task&lt;<span class="type">void</span>&gt; <span class="title">delay_print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">co_await</span> <span class="title">timeout</span><span class="params">(<span class="number">5</span>s)</span></span>;</span><br><span class="line">    <span class="built_in">printf</span>(“Hello, world!\n”);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在业务代码中使用</span></span><br><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">delay_print</span><span class="params">()</span></span>; <span class="comment">// 当前协程暂停5秒后被继续执行；当前线程不阻塞（转而执行其他协程）</span></span><br><span class="line"><span class="built_in">co_spawn</span>(<span class="built_in">delay_print</span>()); <span class="comment">// 生成一个新协程，5秒后被执行；当前协程继续执行</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 函数回调，使用Boost.Asio</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">const</span> error_code &amp; <span class="comment">/*e*/</span>)</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Hello, world!&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    asio::io_context io;</span><br><span class="line">    <span class="function">asio::steady_timer <span class="title">t</span><span class="params">(io, <span class="number">5</span>s)</span></span>;</span><br><span class="line">    t.<span class="built_in">async_wait</span>(&amp;print); <span class="comment">// 总是不会造成阻塞</span></span><br><span class="line">    io.<span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">同步阻塞式</th>
+<th align="left">函数回调式</th>
+<th align="left">co_context（同步式）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">学习难度</td>
+<td align="left">易</td>
+<td align="left">难</td>
+<td align="left"><strong>易</strong></td>
+</tr>
+<tr>
+<td align="left">编程难度</td>
+<td align="left">易</td>
+<td align="left">难</td>
+<td align="left"><strong>易</strong></td>
+</tr>
+<tr>
+<td align="left">阅读难度</td>
+<td align="left">易</td>
+<td align="left">非常难</td>
+<td align="left"><strong>易</strong></td>
+</tr>
+<tr>
+<td align="left">调度者</td>
+<td align="left">OS（线程调度）</td>
+<td align="left">用户（显式）</td>
+<td align="left"><strong>用户（隐式）</strong></td>
+</tr>
+<tr>
+<td align="left">并发容量参考</td>
+<td align="left">千级</td>
+<td align="left">十万级</td>
+<td align="left"><strong>十万级</strong></td>
+</tr>
+<tr>
+<td align="left">典型场景</td>
+<td align="left">磁盘；客户端</td>
+<td align="left">网络；服务器</td>
+<td align="left"><strong>全场景</strong></td>
+</tr>
+</tbody></table>
+<p>从业务逻辑的角度看，同步式的表达更加流畅，语言噪音更小，<strong>简单易懂</strong>；而函数回调写的业务比较零散，仅因一个计时器就需要将业务分割成两部分（等待 5 秒，打印 Helloworld），当业务越来越复杂，代码分裂割据的现象就越严重。只需看 Boost.Asio 的 echo server 例子就能知道，回调不是一般人能喜欢写的。所以，co_context 选择了同步写法。</p>
+<h2 id="抽象层次：从系统调用出发"><a href="#抽象层次：从系统调用出发" class="headerlink" title="抽象层次：从系统调用出发"></a>抽象层次：从系统调用出发</h2><p>在众多 C++ 异步框架中，抽象层次有高有低。<a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/overview.html">Asio</a> 对 Proactor 模式的应用登峰造极，做出 Executor，Strand，Buffer，Stream 等偏向编程的抽象；最近比较活跃的搜狗 <a href="https://github.com/sogou/workflow">Workflow</a> 面向任务流抽象，直接内置了通用网络协议，用户将基础任务和协议串联或并联成自己的应用；中文互联网教科书级别的 <a href="https://github.com/chenshuo/muduo">Muduo</a> 针对网络层和传输层抽象，对熟练计算机网络的同学比较友好；还有 libevent、libev、libuv 等等……任何一种抽象都在学习成本和开发效率上有所优劣。而 co_context 的做法是，直接对<strong>同步阻塞系统调用</strong>抽象（走操作系统的路，让操作系统无路可走）。偏底层的开发者基于 co_context 完成高级业务库后，偏上层的开发者同样是以同步编程的风格来描述业务逻辑。</p>
+<h3 id="用系统调用构建你的库"><a href="#用系统调用构建你的库" class="headerlink" title="用系统调用构建你的库"></a>用系统调用构建你的库</h3><p>在 Linux 中，同步阻塞 API 直截了当地表达了程序员的意图，而 co_context 提供的 API 极力地继承了这种特性。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Linux 系统调用</span></span><br><span class="line"><span class="type">int</span> n = <span class="built_in">read</span>(fd, buf, count);</span><br><span class="line"><span class="type">int</span> n = <span class="built_in">writev</span>(fd, iov, iovcnt);</span><br><span class="line"><span class="type">int</span> fd = <span class="built_in">accept4</span>(sockfd, addr, addrlen, flags); <span class="comment">// man7.org/linux/man-pages/man2/accept.2.html</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// co_context</span></span><br><span class="line"><span class="type">int</span> n = <span class="keyword">co_await</span> <span class="built_in">read</span>(fd, buf, count);</span><br><span class="line"><span class="type">int</span> n = <span class="keyword">co_await</span> <span class="built_in">writev</span>(fd, iov, iovcnt);</span><br><span class="line"><span class="type">int</span> fd = <span class="keyword">co_await</span> <span class="built_in">accept</span>(sockfd, addr, addrlen, flags);</span><br></pre></td></tr></table></figure>
+
+<p>从实现的角度上说，因为底层的 io_uring 也是面向系统调用的，所以提供这些接口的实现并不困难。从用户的角度看，用这些系统调用来实现基本的功能实在是太简单了（相比用函数回调）。例如，实现一个 netcat 基础功能，将 TCP 连接上接收到的任何信息打印到 stdout：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">task&lt;<span class="type">int</span>&gt; <span class="title">hear</span><span class="params">(co_context::socket peer)</span> </span>&#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">8192</span>];</span><br><span class="line">    <span class="type">int</span> nr = <span class="keyword">co_await</span> peer.<span class="built_in">recv</span>(buf);</span><br><span class="line">    <span class="keyword">while</span> (nr &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="function"><span class="keyword">co_await</span> <span class="title">lazy::write</span><span class="params">(STDOUT_FILENO, &#123;buf, nr&#125;, <span class="comment">/*offset*/</span><span class="number">0</span>)</span></span>;</span><br><span class="line">        nr = <span class="keyword">co_await</span> peer.<span class="built_in">recv</span>(buf);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// handle_error(-nr); // 当场处理错误码</span></span><br><span class="line">    <span class="comment">// throw std::system_error&#123;-nr, std::system_category(), &quot;hear&quot;&#125;; // 或者，抛出异常</span></span><br><span class="line">    <span class="keyword">co_return</span> -nr; <span class="comment">// 或者，返回错误码。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后，上层可以同步地调用<code>hear</code>协程：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">task&lt;<span class="type">void</span>&gt; <span class="title">run</span><span class="params">(<span class="type">int</span> some_para)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="type">int</span> err = <span class="keyword">co_await</span> <span class="built_in">hear</span>(sockfd);</span><br><span class="line">    <span class="keyword">if</span> (err != <span class="number">0</span>) <span class="built_in">handle_error</span>(err);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而<code>task&lt;void&gt;</code>（或者缩写<code>task&lt;&gt;</code>）是一种特殊的协程类型，可以独立地被生成并运行，例如，开启 10000 个 <code>run()</code> 协程：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">10000</span>; ++i)</span><br><span class="line">    <span class="built_in">co_spawn</span>(<span class="built_in">run</span>(i));</span><br><span class="line"><span class="comment">// 是不是很像 std::thread&#123;run, i&#125;.detach() ？</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="库-调度器-x3D-应用"><a href="#库-调度器-x3D-应用" class="headerlink" title="库+调度器&#x3D;应用"></a>库+调度器&#x3D;应用</h3><p>上面的例子演示了如何用协程式 API 实现自己的业务库，但是，光有库是不能做成应用的，我们需要一个调度器来运行这些库函数。调度器负责管理所有的协程，在协程因等待 I&#x2F;O 而暂停时，调度器寻找下一个就绪的协程，并恢复其执行，如此往复。调度器可以掌控一个或多个线程。</p>
+<p>co_context 的调度器名叫<code>io_context</code>，这是从 Boost.Asio 借鉴而来的。 与 Asio 需要经常指定 <code>io_context</code> 不同，co_context 是隐式指定的，默认沿用当前的调度器，所以<strong>调度器的存在感非常低</strong>。通常，只有为了更好的负载均衡，将任务分配到特定的线程组上，才需要显式指定调度器。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> co_context;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">a</span>() &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a\n&quot;</span>);</span><br><span class="line">    <span class="keyword">co_return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">b</span>() &#123;</span><br><span class="line">    <span class="built_in">co_spawn</span>(<span class="built_in">a</span>()); <span class="comment">// 不显式指定，则使用当前的调度器</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;b\n&quot;</span>);</span><br><span class="line">    <span class="keyword">co_return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">c</span>(io_context&amp; io) &#123;</span><br><span class="line">    io.<span class="built_in">co_spawn</span>(<span class="built_in">a</span>()); <span class="comment">// 显式指定调度器</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;c\n&quot;</span>);</span><br><span class="line">    <span class="keyword">co_return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    io_context io&#123;<span class="number">32768</span>&#125;;</span><br><span class="line">    io.<span class="built_in">co_spawn</span>(<span class="built_in">b</span>()); <span class="comment">// 根源的co_spawn必须指定调度器</span></span><br><span class="line">    io.<span class="built_in">co_spawn</span>(<span class="built_in">c</span>(io));</span><br><span class="line">    io.<span class="built_in">run</span>(); <span class="comment">// 调度器开始工作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="高阶-API"><a href="#高阶-API" class="headerlink" title="高阶 API"></a>高阶 API</h2><p>很多人，包括我的毕设答辩考官，可能会忽视协程式 API 的威力。“你是不是仅仅对系统调用做了一个迁移（简单包装）？”当然不是，co_context 提供的惰性求值 API 具有可组合的能力，在<strong>易用性</strong>和<strong>性能</strong>上都是大杀器。</p>
+<p><img src="/2022/06/25/co-context-1/HO-api.png" alt="高阶API"></p>
+<p>如上图所示，用户可以将两个原始的一阶 API 组合，形成二阶 API。只要有意义，用户要写成三四五六七八阶都不是问题。如下图所示，在运行时，co_context 将整个高<br>阶 API 转化为链表，整个链表只进入一次调度器，只进入一次 io_uring，显然可以节省调度开销。</p>
+<p><img src="/2022/06/25/co-context-1/HO-api-principle.png" alt="高阶API原理"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>「面向系统调用」和「高阶 API 」是一套组合拳，从底层开始为用户提供了易用性（和性能）。因为使用了同步的代码风格，我们不难将已有的同步库改写成 co_context 的形式，从而获得强大的并发性能；如果原有库是基于系统调用，那么……可能加一次班就能完成迁移了。</p>
+<p>co_context 在易用性上还有其他设计，例如：C++协程帮你托管了堆内存，你不再需要用<code>shared_ptr</code>了；当你忘记用<code>co_await</code>时， 编译器会向你道歉；等等，只不过这些内容有点喧宾夺主，我就不多写了。在未来的文章中，我可能会介绍这些易用性是怎样实现的。下一章，打算先介绍 co_context 的性能设计，看看它用了哪些 trick 来骗取性能。</p>
+<hr>
+<p>代码实时同步于 <a href="https://github.com/Codesire-Deng/co_context">Github</a>，求 star~</p>
+]]></content>
+      <tags>
+        <tag>C++</tag>
+        <tag>Concurrency</tag>
+        <tag>C++协程</tag>
+        <tag>co_context</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>co_context[2]: 性能优化杂谈</title>
+    <url>/2022/06/25/co-context-2/</url>
+    <content><![CDATA[<p>Hello，我是等疾风！本篇介绍在 <a href="https://github.com/Codesire-Deng/co_context">co_context</a> 中用到的性能优化技巧，希望在各位 C&#x2F;C++ 道友的项目上有所帮助。<strong>重点将在技巧的入门</strong>，而不是 co_context 本身。</p>
+<span id="more"></span>
+
+<h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h2><p>大多数情况下，我们其实是在优化已有的代码，而不是在设计全新的高性能业务。所以建议在优化之前，先分析出哪些代码是<strong>热点</strong>，哪些代码占用最多的<strong>运行时间&#x2F;空间</strong>，然后再针对性地做优化。相关的工具有 perf，vtune，valgrind 等等。需注意性能分析工具会不会<strong>拖慢程序运行速度</strong>（例如 valgrind，好家伙直接令我的程序假死），因为这会带来测量的误差。</p>
+<p>除了现成工具，还可以用 <strong>rdtsc 指令</strong>做低损耗、高精度的时间测量。</p>
+<p>在 co_context 里，性能在一开始就是设计重点，所以会减轻一些总体工作量。</p>
+<h2 id="无锁化"><a href="#无锁化" class="headerlink" title="无锁化"></a>无锁化</h2><h3 id="细数互斥锁「四宗罪」"><a href="#细数互斥锁「四宗罪」" class="headerlink" title="细数互斥锁「四宗罪」"></a>细数互斥锁「四宗罪」</h3><p>无锁设计，是性能优化入门的一道坎。我们在写多线程程序时，很自然想到用<strong>互斥锁（mutex）</strong>来保护共享数据，防止读到脏数据，防止竞争条件（race condition）。互斥锁还有信号量（semaphore），条件变量等变体，它们的原理都是类似的。但它们会有一些性能缺陷：</p>
+<ol>
+<li>和线程高度绑定：如果互斥锁抢不到，线程就陷入<strong>阻塞</strong>；</li>
+<li>引入额外的数据结构：至少有一条唤醒<strong>队列</strong>，记录哪些线程等待唤醒；且这条队列是<strong>不定长</strong>的；</li>
+<li>和操作系统高度绑定：线程的阻塞和唤醒都要走操作系统<strong>内核态</strong>；会打断 CPU 流水线，所以极致性能优化下一般不喜欢看见内核态；</li>
+<li>要切换上下文：每次切线程都要暂存和恢复寄存器的值，可能引发<strong>内存 I&#x2F;O</strong>。</li>
+</ol>
+<p>说了一堆屁话，总之<strong>能避开互斥锁就避开</strong>，而 co_context 比较无脑粗暴，几乎直接禁用了互斥锁。这也会带来一些副作用：线程在空闲的时候也没法阻塞，会导致 CPU 空转，对于其他进程来说无疑是 CPU 强盗。（所以我也给出了备选方案：使用 <code>std::atomic&lt;xxx&gt;::wait/notify</code>，它的原理类似 futex，线程可以阻塞）</p>
+<h3 id="无锁世界的秩序"><a href="#无锁世界的秩序" class="headerlink" title="无锁世界的秩序"></a>无锁世界的秩序</h3><p>无锁世界的秩序主要靠<strong>「原子变量」</strong>来维持。原子变量本质是对 CPU 内存顺序、原子指令、编译器乱序约束的封装。本节只做最基本的入门介绍，入门之后，读者可以快速读懂其他文章。</p>
+<p>比方说，县长说他到鹅城来，只干三件事，然后就离开。这三件事涉及机密，完成之前外人没法知道其状态。有一天，县长离开了鹅城，说明「三件事」已经完成了。至于是哪件事先做完，哪件事后做完，民间众说纷纭。</p>
+<p>在例子中，我们令「县长的位置」为原子变量，若「县长的位置」≠「鹅城」，则编译器和 CPU 保证三件「事」已经完成，但是，由于乱序优化和内存顺序等问题，这三件「事」的完成顺序是不确定的。所幸，我们不关心顺序，只要访问这三件「事」的结果就可以了。</p>
+<p>于是，我们解锁了两种 C++ 内存顺序：<code>std::memory_order_release</code> 和 <code>std::memory_order_acquire</code></p>
+<p>我们结合代码举例：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::atomic&lt;<span class="type">int</span>&gt; distance_from_e_city = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程1</span></span><br><span class="line"><span class="built_in">do_A</span>();</span><br><span class="line"><span class="built_in">do_B</span>();</span><br><span class="line"><span class="built_in">do_C</span>();</span><br><span class="line">distance_from_e_city.<span class="built_in">store</span>(<span class="number">100</span>, std::memory_order_release); <span class="comment">// 瞬移100公里不过分吧</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程2</span></span><br><span class="line"><span class="keyword">if</span> (distance_from_e_city.<span class="built_in">load</span>(std::memory_order_acquire) &gt; <span class="number">50</span>) &#123;</span><br><span class="line">    <span class="built_in">use_A</span>(); <span class="comment">// 必定能看见do_A的结果</span></span><br><span class="line">    <span class="built_in">use_B</span>();</span><br><span class="line">    <span class="built_in">use_C</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译器会保证<code>std::memory_order_release</code>之前的指令不会被乱序到其之后，但是不保证<code>do_A()</code> <code>do_B()</code> <code>do_C()</code>之间的乱序。</p>
+<p>对称地， 保证<code>std::memory_order_acquire</code>之后的指令不会被乱序到其之前，但是不保证<code>use_A()</code> <code>use_B()</code> <code>use_C()</code>之间的乱序。</p>
+<p>最终，以原子变量为桥梁，我们实现了安全的共享数据访问。读者可以学习<code>std::memory_order_seq_cst</code> <code>std::memory_order_relaxed</code> 等等来解锁更多姿势。关键词：C++ 内存顺序</p>
+<h3 id="无锁数据结构"><a href="#无锁数据结构" class="headerlink" title="无锁数据结构"></a>无锁数据结构</h3><p>理解内存顺序之后，就能轻松上手无锁数据结构了。**定长单生产者单消费者队列(SPSC queue)**是一种高性能的无锁队列，它有很多约束：容量固定、只支持一个生产者和一个消费者。但它的延迟非常低，实现非常简单，只依赖内存顺序，不依赖互斥锁。co_context 用了 n 条 SPSC 队列来模拟“单生多消”和“多生单消”功能。</p>
+<p>其实，保证越少，性能越高。SPSC 队列尚且保留了「先进先出」的队列性质，倘若抛弃队列性质，还有更猛的乱序数据结构，性能提高可逼近100%。但是，乱序性会带来太高的 debug 难度，在负载均衡上也不实用，最终还是被我弃用了。</p>
+<h3 id="用户态互斥锁"><a href="#用户态互斥锁" class="headerlink" title="用户态互斥锁"></a>用户态互斥锁</h3><p>底层开发者可以承受没有互斥锁的不便，但不能不给应用层提供互斥锁的等价工具。co_context 给用户提供了互斥锁、信号量和条件变量，它们的 API 与 C++ 标准库几乎一致，在体验上没有差别，在实现上性能会略强，一是因为无等待且完全<strong>不经过内核态</strong>，二是因为没有<strong>引入堆内存分配</strong>。涉及的技巧比较复杂，在这里就不展开介绍了，关键词：用<strong>侵入式链表</strong>实现等待队列。这里推荐参考 <a href="https://github.com/lewissbaker/cppcoro/blob/master/include/cppcoro/async_mutex.hpp">cppcoro</a> 的互斥锁实现。</p>
+<h2 id="cacheline-编排"><a href="#cacheline-编排" class="headerlink" title="cacheline 编排"></a>cacheline 编排</h2><p>常见 CPU 的内存读写都是以 64 字节为单位的，对应 CPU 的 cache 也是每 64 字节为一个「cacheline」。性能优化的必修课之一是妥善安排数据在 cache 中的位置。不妥的安排会导致以下情况：</p>
+<ol>
+<li><strong>伪共享（false sharing）</strong>：线程 1 读写变量 a，线程 2 读写变量 b，本是老死不相往来，却偏偏让 a 和 b 处于同一 cacheline。</li>
+<li><strong>乒乓缓存（cacheline ping-ponging）</strong>：常见于伪共享。变量 a 和 b 位于同一 cacheline，线程 1 只读 a，线程 2 频繁改写 b。结果，每当 b 被线程 2 修改时，线程 1 都要同步 a 所在的 cacheline，这实际上是多余的。</li>
+<li>多余读写：常见于指针解引用、通讯协议。可以只用一条 cacheline 完成跨核通讯，实际却用了多条。</li>
+<li>cache 浪费：偷懒，无脑塞 64 字节做 padding。这是不负责任的做法，本质只是将 cache-miss 转移到其他数据上。</li>
+</ol>
+<p>只要善用 C++ 的<code>alignas</code>关键字，针对以上问题，相信读者能想出优化的办法。</p>
+<p>co_context 大量使用了 <code>alignas(64)</code>来指定结构体在 cacheline 中的位置，以优化性能。</p>
+<h2 id="跨核通信压缩"><a href="#跨核通信压缩" class="headerlink" title="跨核通信压缩"></a>跨核通信压缩</h2><p>这一节也与 CPU cache 有关。</p>
+<h3 id="解引用真的有必要吗？"><a href="#解引用真的有必要吗？" class="headerlink" title="解引用真的有必要吗？"></a>解引用真的有必要吗？</h3><p>在多线程程序里，经常见到线程 1 写入变量 a，然后将 <code>p=&amp;a</code> 告诉线程 2，最后，线程 2 读取<code>*p</code> 。这里大概率涉及了两条 cacheline 的同步：一条是指针 p，另一条是<code>*p</code>也就是变量 a。 但这真的有必要吗？</p>
+<p>以 co_context 为例，优化前，线程 1 写入 <code>a.type = xxx</code> ，<code>p = &amp;a</code>交给线程 2，线程 2 根据 <code>p-&gt;type</code> 做不同的操作。但是，由于 <code>a.type</code> 只有 8 种取值 ，对应二进制 3 个 bit，而变量 a 正好是按照 8 字节对齐的，a 的地址末尾 3 个 bit 必然为 0，意味着 <code>p = &amp;a</code> 的末尾 3 个 bit 没有携带任何信息。那么为什么不让这 3 个 bit 存放 <code>a.type</code> 呢？</p>
+<p>于是，优化后，线程 1 写入<code>p = &amp;a; p |= a.type = xxx;</code> ，p 交给线程 2，线程 2 根据 <code>p &amp; 7</code> 做不同的转发，全过程没有解引用 p，节省了一次 cacheline 传播。</p>
+<h3 id="使用-union-但不是-std-variant"><a href="#使用-union-但不是-std-variant" class="headerlink" title="使用 union 但不是 std::variant"></a>使用 union 但不是 std::variant</h3><p>（这一条建议非常激进，读者一旦使用，最好补上充足的文档）</p>
+<p>使用 union（联合体）可以进一步压缩 struct 的体积。每当用 union 将 struct 的体积减小到 n*64，每次同步 cacheline 所传输的信息量就会提升，理论性能就会出现一次质变。</p>
+<p>用 std::variant 也能达到压缩体积的目的，但是 std::variant 的以类型为单位的多态粒度比较粗糙，内置的异常处理也带来了性能损耗，在极致性能优化时可能会禁用（但 std::variant 满足普通项目是绰绰有余了）。</p>
+<h2 id="批处理请求"><a href="#批处理请求" class="headerlink" title="批处理请求"></a>批处理请求</h2><p>在 co_context 中，很容易完成一个批处理优化：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 优化前</span></span><br><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">A_IO</span><span class="params">(&amp;buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">B_IO</span><span class="params">(&amp;buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">C_IO</span><span class="params">(&amp;buf)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 优化后</span></span><br><span class="line"><span class="built_in">co_await</span> (<span class="built_in">A_IO</span>(&amp;buf) &amp;&amp; <span class="built_in">B_IO</span>(&amp;buf) &amp;&amp; <span class="built_in">C_IO</span>(&amp;buf));</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子，原本要进入调度器 3 次，将 I&#x2F;O 请求提交给内核态 3 次，在优化后统统变为 1 次。批处理优化的思想无论在底层还是架构层应用层都是非常实用的。</p>
+<p>要留意的是批处理是否会<strong>对延迟造成不可接受的影响</strong>，如果为了批处理而强行等待，可能得不偿失。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本篇介绍了一些 C++ 性能优化的技巧，重点是内存顺序和 CPU cache。虽然性能优化的水很深，需要大量的基础知识和经验积累，但正因此我们有机会为世界做别出心裁的贡献，坚定前行吧骚年！最后，放两张祖传的 co_context 性能测试图：</p>
+<p>netcat 网络吞吐（单连接）：<br><img src="/2022/06/25/co-context-2/netcat.png" alt="netcat"></p>
+<p>redis-benchmark QPS 和平均延迟（单线程）：<br><img src="/2022/06/25/co-context-2/redis-single-thread.png" alt="redis-benchmark"></p>
+<hr>
+<p>代码实时同步于 <a href="https://github.com/Codesire-Deng/co_context">Github</a>，求 star~</p>
+]]></content>
+      <tags>
+        <tag>C++</tag>
+        <tag>Concurrency</tag>
+        <tag>C++协程</tag>
+        <tag>co_context</tag>
       </tags>
   </entry>
 </search>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"changyan","storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="co_context 是最近开发的 C++ 异步协程框架，基于 Linux io_uring。「易用性」和「性能」是我们最重视的属性，这篇文章，我们介绍在 co_context 中有关易用性的设计。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="co_context[1]: 易用性设计">
+<meta property="og:url" content="https://codesire-deng.github.io/2022/06/25/co-context-1/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="co_context 是最近开发的 C++ 异步协程框架，基于 Linux io_uring。「易用性」和「性能」是我们最重视的属性，这篇文章，我们介绍在 co_context 中有关易用性的设计。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://codesire-deng.github.io/2022/06/25/co-context-1/HO-api.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2022/06/25/co-context-1/HO-api-principle.png">
+<meta property="article:published_time" content="2022-06-25T14:17:00.000Z">
+<meta property="article:modified_time" content="2022-06-25T15:23:35.657Z">
+<meta property="article:author" content="等疾风">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Concurrency">
+<meta property="article:tag" content="C++协程">
+<meta property="article:tag" content="co_context">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codesire-deng.github.io/2022/06/25/co-context-1/HO-api.png">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2022/06/25/co-context-1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://codesire-deng.github.io/2022/06/25/co-context-1/","path":"2022/06/25/co-context-1/","title":"co_context[1]: 易用性设计"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>co_context[1]: 易用性设计 | 等疾风</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">等疾风</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">正在捣鼓协程</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-log"><a href="/log/" rel="section"><i class="fa fa-sync-alt fa-fw"></i>Log</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#I-x2F-O%EF%BC%9A%E5%90%8C%E6%AD%A5%E9%A3%8E%E6%A0%BC%EF%BC%8C%E4%B8%9A%E5%8A%A1%E4%B8%93%E6%B3%A8"><span class="nav-number">1.</span> <span class="nav-text">I&#x2F;O：同步风格，业务专注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E5%B1%82%E6%AC%A1%EF%BC%9A%E4%BB%8E%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%87%BA%E5%8F%91"><span class="nav-number">2.</span> <span class="nav-text">抽象层次：从系统调用出发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E6%9E%84%E5%BB%BA%E4%BD%A0%E7%9A%84%E5%BA%93"><span class="nav-number">2.1.</span> <span class="nav-text">用系统调用构建你的库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%93-%E8%B0%83%E5%BA%A6%E5%99%A8-x3D-%E5%BA%94%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">库+调度器&#x3D;应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E9%98%B6-API"><span class="nav-number">3.</span> <span class="nav-text">高阶 API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2022/06/25/co-context-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="co_context[1]: 易用性设计 | 等疾风">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          co_context[1]: 易用性设计
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-06-25 22:17:00 / Modified: 23:23:35" itemprop="dateCreated datePublished" datetime="2022-06-25T22:17:00+08:00">2022-06-25</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a target="_blank" rel="noopener" href="https://github.com/Codesire-Deng/co_context">co_context</a> 是最近开发的 C++ 异步协程框架，基于 Linux io_uring。<strong>「易用性」</strong>和「性能」是我们最重视的属性，这篇文章，我们介绍在 co_context 中有关易用性的设计。</p>
+<span id="more"></span>
+
+<h2 id="I-x2F-O：同步风格，业务专注"><a href="#I-x2F-O：同步风格，业务专注" class="headerlink" title="I&#x2F;O：同步风格，业务专注"></a>I&#x2F;O：同步风格，业务专注</h2><p>任何有意义的计算机程序都需要做 I&#x2F;O，为了提高性能，我们不得不追求更好的 I&#x2F;O 模型。很多网络文章将 I&#x2F;O 模型分成阻塞、非阻塞、多路复用等多种，但本人不太喜欢这种分类（阻塞+非阻塞≠全集，违反直觉）。从代码风格上，我将 I&#x2F;O 模型分成两种：同步式，函数回调式。</p>
+<p>以一个简单需求为例：等待五秒钟后，打印“Hello, world!”。我们对比一下同步式和函数回调的写法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 同步式，使用C++标准库</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">delay_print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    this_thread::<span class="built_in">sleep_for</span>(<span class="number">5</span>s);</span><br><span class="line">    <span class="built_in">printf</span>(“Hello, world!\n”);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在业务代码中使用</span></span><br><span class="line"><span class="built_in">delay_print</span>(); <span class="comment">// 导致当前线程会阻塞5秒</span></span><br><span class="line">std::thread t&#123;delay_print&#125;; <span class="comment">// 生成新线程，令其阻塞5秒</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 同步式，使用co_context</span></span><br><span class="line"><span class="function">task&lt;<span class="type">void</span>&gt; <span class="title">delay_print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">co_await</span> <span class="title">timeout</span><span class="params">(<span class="number">5</span>s)</span></span>;</span><br><span class="line">    <span class="built_in">printf</span>(“Hello, world!\n”);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在业务代码中使用</span></span><br><span class="line"><span class="function"><span class="keyword">co_await</span> <span class="title">delay_print</span><span class="params">()</span></span>; <span class="comment">// 当前协程暂停5秒后被继续执行；当前线程不阻塞（转而执行其他协程）</span></span><br><span class="line"><span class="built_in">co_spawn</span>(<span class="built_in">delay_print</span>()); <span class="comment">// 生成一个新协程，5秒后被执行；当前协程继续执行</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 函数回调，使用Boost.Asio</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">const</span> error_code &amp; <span class="comment">/*e*/</span>)</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Hello, world!&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    asio::io_context io;</span><br><span class="line">    <span class="function">asio::steady_timer <span class="title">t</span><span class="params">(io, <span class="number">5</span>s)</span></span>;</span><br><span class="line">    t.<span class="built_in">async_wait</span>(&amp;print); <span class="comment">// 总是不会造成阻塞</span></span><br><span class="line">    io.<span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">同步阻塞式</th>
+<th align="left">函数回调式</th>
+<th align="left">co_context（同步式）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">学习难度</td>
+<td align="left">易</td>
+<td align="left">难</td>
+<td align="left"><strong>易</strong></td>
+</tr>
+<tr>
+<td align="left">编程难度</td>
+<td align="left">易</td>
+<td align="left">难</td>
+<td align="left"><strong>易</strong></td>
+</tr>
+<tr>
+<td align="left">阅读难度</td>
+<td align="left">易</td>
+<td align="left">非常难</td>
+<td align="left"><strong>易</strong></td>
+</tr>
+<tr>
+<td align="left">调度者</td>
+<td align="left">OS（线程调度）</td>
+<td align="left">用户（显式）</td>
+<td align="left"><strong>用户（隐式）</strong></td>
+</tr>
+<tr>
+<td align="left">并发容量参考</td>
+<td align="left">千级</td>
+<td align="left">十万级</td>
+<td align="left"><strong>十万级</strong></td>
+</tr>
+<tr>
+<td align="left">典型场景</td>
+<td align="left">磁盘；客户端</td>
+<td align="left">网络；服务器</td>
+<td align="left"><strong>全场景</strong></td>
+</tr>
+</tbody></table>
+<p>从业务逻辑的角度看，同步式的表达更加流畅，语言噪音更小，<strong>简单易懂</strong>；而函数回调写的业务比较零散，仅因一个计时器就需要将业务分割成两部分（等待 5 秒，打印 Helloworld），当业务越来越复杂，代码分裂割据的现象就越严重。只需看 Boost.Asio 的 echo server 例子就能知道，回调不是一般人能喜欢写的。所以，co_context 选择了同步写法。</p>
+<h2 id="抽象层次：从系统调用出发"><a href="#抽象层次：从系统调用出发" class="headerlink" title="抽象层次：从系统调用出发"></a>抽象层次：从系统调用出发</h2><p>在众多 C++ 异步框架中，抽象层次有高有低。<a target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/overview.html">Asio</a> 对 Proactor 模式的应用登峰造极，做出 Executor，Strand，Buffer，Stream 等偏向编程的抽象；最近比较活跃的搜狗 <a target="_blank" rel="noopener" href="https://github.com/sogou/workflow">Workflow</a> 面向任务流抽象，直接内置了通用网络协议，用户将基础任务和协议串联或并联成自己的应用；中文互联网教科书级别的 <a target="_blank" rel="noopener" href="https://github.com/chenshuo/muduo">Muduo</a> 针对网络层和传输层抽象，对熟练计算机网络的同学比较友好；还有 libevent、libev、libuv 等等……任何一种抽象都在学习成本和开发效率上有所优劣。而 co_context 的做法是，直接对<strong>同步阻塞系统调用</strong>抽象（走操作系统的路，让操作系统无路可走）。偏底层的开发者基于 co_context 完成高级业务库后，偏上层的开发者同样是以同步编程的风格来描述业务逻辑。</p>
+<h3 id="用系统调用构建你的库"><a href="#用系统调用构建你的库" class="headerlink" title="用系统调用构建你的库"></a>用系统调用构建你的库</h3><p>在 Linux 中，同步阻塞 API 直截了当地表达了程序员的意图，而 co_context 提供的 API 极力地继承了这种特性。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Linux 系统调用</span></span><br><span class="line"><span class="type">int</span> n = <span class="built_in">read</span>(fd, buf, count);</span><br><span class="line"><span class="type">int</span> n = <span class="built_in">writev</span>(fd, iov, iovcnt);</span><br><span class="line"><span class="type">int</span> fd = <span class="built_in">accept4</span>(sockfd, addr, addrlen, flags); <span class="comment">// man7.org/linux/man-pages/man2/accept.2.html</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// co_context</span></span><br><span class="line"><span class="type">int</span> n = <span class="keyword">co_await</span> <span class="built_in">read</span>(fd, buf, count);</span><br><span class="line"><span class="type">int</span> n = <span class="keyword">co_await</span> <span class="built_in">writev</span>(fd, iov, iovcnt);</span><br><span class="line"><span class="type">int</span> fd = <span class="keyword">co_await</span> <span class="built_in">accept</span>(sockfd, addr, addrlen, flags);</span><br></pre></td></tr></table></figure>
+
+<p>从实现的角度上说，因为底层的 io_uring 也是面向系统调用的，所以提供这些接口的实现并不困难。从用户的角度看，用这些系统调用来实现基本的功能实在是太简单了（相比用函数回调）。例如，实现一个 netcat 基础功能，将 TCP 连接上接收到的任何信息打印到 stdout：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">task&lt;<span class="type">int</span>&gt; <span class="title">hear</span><span class="params">(co_context::socket peer)</span> </span>&#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">8192</span>];</span><br><span class="line">    <span class="type">int</span> nr = <span class="keyword">co_await</span> peer.<span class="built_in">recv</span>(buf);</span><br><span class="line">    <span class="keyword">while</span> (nr &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="function"><span class="keyword">co_await</span> <span class="title">lazy::write</span><span class="params">(STDOUT_FILENO, &#123;buf, nr&#125;, <span class="comment">/*offset*/</span><span class="number">0</span>)</span></span>;</span><br><span class="line">        nr = <span class="keyword">co_await</span> peer.<span class="built_in">recv</span>(buf);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// handle_error(-nr); // 当场处理错误码</span></span><br><span class="line">    <span class="comment">// throw std::system_error&#123;-nr, std::system_category(), &quot;hear&quot;&#125;; // 或者，抛出异常</span></span><br><span class="line">    <span class="keyword">co_return</span> -nr; <span class="comment">// 或者，返回错误码。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后，上层可以同步地调用<code>hear</code>协程：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">task&lt;<span class="type">void</span>&gt; <span class="title">run</span><span class="params">(<span class="type">int</span> some_para)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="type">int</span> err = <span class="keyword">co_await</span> <span class="built_in">hear</span>(sockfd);</span><br><span class="line">    <span class="keyword">if</span> (err != <span class="number">0</span>) <span class="built_in">handle_error</span>(err);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而<code>task&lt;void&gt;</code>（或者缩写<code>task&lt;&gt;</code>）是一种特殊的协程类型，可以独立地被生成并运行，例如，开启 10000 个 <code>run()</code> 协程：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>; i&lt;<span class="number">10000</span>; ++i)</span><br><span class="line">    <span class="built_in">co_spawn</span>(<span class="built_in">run</span>(i));</span><br><span class="line"><span class="comment">// 是不是很像 std::thread&#123;run, i&#125;.detach() ？</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="库-调度器-x3D-应用"><a href="#库-调度器-x3D-应用" class="headerlink" title="库+调度器&#x3D;应用"></a>库+调度器&#x3D;应用</h3><p>上面的例子演示了如何用协程式 API 实现自己的业务库，但是，光有库是不能做成应用的，我们需要一个调度器来运行这些库函数。调度器负责管理所有的协程，在协程因等待 I&#x2F;O 而暂停时，调度器寻找下一个就绪的协程，并恢复其执行，如此往复。调度器可以掌控一个或多个线程。</p>
+<p>co_context 的调度器名叫<code>io_context</code>，这是从 Boost.Asio 借鉴而来的。 与 Asio 需要经常指定 <code>io_context</code> 不同，co_context 是隐式指定的，默认沿用当前的调度器，所以<strong>调度器的存在感非常低</strong>。通常，只有为了更好的负载均衡，将任务分配到特定的线程组上，才需要显式指定调度器。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> co_context;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">a</span>() &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;a\n&quot;</span>);</span><br><span class="line">    <span class="keyword">co_return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">b</span>() &#123;</span><br><span class="line">    <span class="built_in">co_spawn</span>(<span class="built_in">a</span>()); <span class="comment">// 不显式指定，则使用当前的调度器</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;b\n&quot;</span>);</span><br><span class="line">    <span class="keyword">co_return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task&lt;&gt; <span class="built_in">c</span>(io_context&amp; io) &#123;</span><br><span class="line">    io.<span class="built_in">co_spawn</span>(<span class="built_in">a</span>()); <span class="comment">// 显式指定调度器</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;c\n&quot;</span>);</span><br><span class="line">    <span class="keyword">co_return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    io_context io&#123;<span class="number">32768</span>&#125;;</span><br><span class="line">    io.<span class="built_in">co_spawn</span>(<span class="built_in">b</span>()); <span class="comment">// 根源的co_spawn必须指定调度器</span></span><br><span class="line">    io.<span class="built_in">co_spawn</span>(<span class="built_in">c</span>(io));</span><br><span class="line">    io.<span class="built_in">run</span>(); <span class="comment">// 调度器开始工作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="高阶-API"><a href="#高阶-API" class="headerlink" title="高阶 API"></a>高阶 API</h2><p>很多人，包括我的毕设答辩考官，可能会忽视协程式 API 的威力。“你是不是仅仅对系统调用做了一个迁移（简单包装）？”当然不是，co_context 提供的惰性求值 API 具有可组合的能力，在<strong>易用性</strong>和<strong>性能</strong>上都是大杀器。</p>
+<p><img src="/2022/06/25/co-context-1/HO-api.png" alt="高阶API"></p>
+<p>如上图所示，用户可以将两个原始的一阶 API 组合，形成二阶 API。只要有意义，用户要写成三四五六七八阶都不是问题。如下图所示，在运行时，co_context 将整个高<br>阶 API 转化为链表，整个链表只进入一次调度器，只进入一次 io_uring，显然可以节省调度开销。</p>
+<p><img src="/2022/06/25/co-context-1/HO-api-principle.png" alt="高阶API原理"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>「面向系统调用」和「高阶 API 」是一套组合拳，从底层开始为用户提供了易用性（和性能）。因为使用了同步的代码风格，我们不难将已有的同步库改写成 co_context 的形式，从而获得强大的并发性能；如果原有库是基于系统调用，那么……可能加一次班就能完成迁移了。</p>
+<p>co_context 在易用性上还有其他设计，例如：C++协程帮你托管了堆内存，你不再需要用<code>shared_ptr</code>了；当你忘记用<code>co_await</code>时， 编译器会向你道歉；等等，只不过这些内容有点喧宾夺主，我就不多写了。在未来的文章中，我可能会介绍这些易用性是怎样实现的。下一章，打算先介绍 co_context 的性能设计，看看它用了哪些 trick 来骗取性能。</p>
+<hr>
+<p>代码实时同步于 <a target="_blank" rel="noopener" href="https://github.com/Codesire-Deng/co_context">Github</a>，求 star~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div></div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/Concurrency/" rel="tag"><i class="fa fa-tag"></i> Concurrency</a>
+              <a href="/tags/C-%E5%8D%8F%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> C++协程</a>
+              <a href="/tags/co-context/" rel="tag"><i class="fa fa-tag"></i> co_context</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/05/26/co-context-0/" rel="prev" title="co_context[0]: C++高性能协程框架">
+                  <i class="fa fa-chevron-left"></i> co_context[0]: C++高性能协程框架
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/06/25/co-context-2/" rel="next" title="co_context[2]: 性能优化杂谈">
+                  co_context[2]: 性能优化杂谈 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">邓子烽</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Codesire-Deng","repo":"Gitment-for-Codesire-Deng-s-Blog","client_id":"00a098064772784393ca","client_secret":"12657ee4c728b23deac323ac5253a6eb84b4c0a9","admin_user":"Codesire-Deng","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"ffffd739c659b419ab86685fb9840599"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

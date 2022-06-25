@@ -24,23 +24,27 @@
     <meta name="description" content="co_context 是最近开发的 C++ 异步协程框架，以易用性为最高目标，尽量兼顾性能。希望从此 C++ 的异步能比 Node.js 更简单，更优雅。 co_context 是基于 Linux io_uring，I&#x2F;O 走内核态协议栈，这是 co_context 努力逼近的性能上限。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="co_context[0]: C++高性能协程框架">
-<meta property="og:url" content="https://codesire-deng.github.io/2022/05/26/co-context-1/index.html">
+<meta property="og:url" content="https://codesire-deng.github.io/2022/05/26/co-context-0/index.html">
 <meta property="og:site_name" content="等疾风">
 <meta property="og:description" content="co_context 是最近开发的 C++ 异步协程框架，以易用性为最高目标，尽量兼顾性能。希望从此 C++ 的异步能比 Node.js 更简单，更优雅。 co_context 是基于 Linux io_uring，I&#x2F;O 走内核态协议栈，这是 co_context 努力逼近的性能上限。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://codesire-deng.github.io/2022/05/26/co-context-1/redis-single-thread.png">
+<meta property="og:image" content="https://codesire-deng.github.io/2022/05/26/co-context-0/redis-single-thread.png">
 <meta property="article:published_time" content="2022-05-26T12:45:57.000Z">
-<meta property="article:modified_time" content="2022-05-26T13:26:13.590Z">
+<meta property="article:modified_time" content="2022-06-25T15:25:17.418Z">
 <meta property="article:author" content="等疾风">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Concurrency">
+<meta property="article:tag" content="C++协程">
+<meta property="article:tag" content="co_context">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://codesire-deng.github.io/2022/05/26/co-context-1/redis-single-thread.png">
+<meta name="twitter:image" content="https://codesire-deng.github.io/2022/05/26/co-context-0/redis-single-thread.png">
 
 
-<link rel="canonical" href="https://codesire-deng.github.io/2022/05/26/co-context-1/">
+<link rel="canonical" href="https://codesire-deng.github.io/2022/05/26/co-context-0/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://codesire-deng.github.io/2022/05/26/co-context-1/","path":"2022/05/26/co-context-1/","title":"co_context[0]: C++高性能协程框架"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://codesire-deng.github.io/2022/05/26/co-context-0/","path":"2022/05/26/co-context-0/","title":"co_context[0]: C++高性能协程框架"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>co_context[0]: C++高性能协程框架 | 等疾风</title>
@@ -162,13 +166,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -218,7 +222,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2022/05/26/co-context-1/">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2022/05/26/co-context-0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
@@ -246,9 +250,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-05-26 20:45:57 / Modified: 21:26:13" itemprop="dateCreated datePublished" datetime="2022-05-26T20:45:57+08:00">2022-05-26</time>
+      <time title="Created: 2022-05-26 20:45:57" itemprop="dateCreated datePublished" datetime="2022-05-26T20:45:57+08:00">2022-05-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-25 23:25:17" itemprop="dateModified" datetime="2022-06-25T23:25:17+08:00">2022-06-25</time>
     </span>
 
   
@@ -284,7 +294,7 @@
 
 <p>这是一个 redis-server，但无论接收什么命令，都只会返回一个&quot;+OK&quot;。猜猜它的 QPS 是多少？单线程下，面向 1000 个客户端，co_context QPS 是 55 万，而 redis 本尊是 36 万，平均延迟、p99延迟等均碾压。虽然……这样的性能在网络框架里勉强及格 （毕竟隔壁 bRPC 动不动五百万并发。。）。</p>
 <p>测试工具是 redis-benchmark，其线程开1~3个（使QPS最优），测试环境是单机 5800X, 32GB 3200MHZ-ddr4。</p>
-<p><img src="/2022/05/26/co-context-1/redis-single-thread.png" alt="单线程"></p>
+<p><img src="/2022/05/26/co-context-0/redis-single-thread.png" alt="单线程"></p>
 <h3 id="链式-I-x2F-O"><a href="#链式-I-x2F-O" class="headerlink" title="链式 I&#x2F;O"></a>链式 I&#x2F;O</h3><p>链式 I&#x2F;O 能减少再入内核态和调度器的次数，增强性能。只需用<code>&amp;&amp;</code>连接请求即可。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// co_await 优先级太高，须加括号</span></span><br><span class="line"><span class="type">int</span> x = <span class="built_in">co_await</span> (<span class="built_in">A</span>() &amp;&amp; <span class="built_in">timeout</span>(<span class="built_in">B</span>(), <span class="number">3</span>s) &amp;&amp; <span class="built_in">C</span>());</span><br></pre></td></tr></table></figure>
 
@@ -340,6 +350,12 @@
   </div>
 </div>
 
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/Concurrency/" rel="tag"><i class="fa fa-tag"></i> Concurrency</a>
+              <a href="/tags/C-%E5%8D%8F%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> C++协程</a>
+              <a href="/tags/co-context/" rel="tag"><i class="fa fa-tag"></i> co_context</a>
+          </div>
 
         
 
@@ -350,6 +366,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2022/06/25/co-context-1/" rel="next" title="co_context[1]: 易用性设计">
+                  co_context[1]: 易用性设计 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -409,7 +428,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Codesire-Deng","repo":"Gitment-for-Codesire-Deng-s-Blog","client_id":"00a098064772784393ca","client_secret":"12657ee4c728b23deac323ac5253a6eb84b4c0a9","admin_user":"Codesire-Deng","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"49e23bb1c7a90ec58a609a0c4315b8de"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Codesire-Deng","repo":"Gitment-for-Codesire-Deng-s-Blog","client_id":"00a098064772784393ca","client_secret":"12657ee4c728b23deac323ac5253a6eb84b4c0a9","admin_user":"Codesire-Deng","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"8e9301099e9d07a4025f244eaf27c0ba"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>
