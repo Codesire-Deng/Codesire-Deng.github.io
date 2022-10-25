@@ -34,7 +34,9 @@
 </li>
 <li>已经能用了，但是 BUG 很多又卡顿，Fuck Nvidia。遂放弃，或者<a href="https://forum.manjaro.org/t/installing-video-nvidia-causes-kde-sddm-to-fail-to-load/110395/6">参考</a></li>
 </ol>
-<h2 id="进入桌面后"><a href="#进入桌面后" class="headerlink" title="进入桌面后"></a>进入桌面后</h2><h3 id="调整快捷键"><a href="#调整快捷键" class="headerlink" title="调整快捷键"></a>调整快捷键</h3><ol>
+<h2 id="进入桌面后"><a href="#进入桌面后" class="headerlink" title="进入桌面后"></a>进入桌面后</h2><h3 id="添加-sudo-免密"><a href="#添加-sudo-免密" class="headerlink" title="添加 sudo 免密"></a>添加 sudo 免密</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">su</span><br><span class="line">vim /etc/sudoers.d/00_codesire</span><br><span class="line"><span class="comment"># 内容如下</span></span><br><span class="line">codesire ALL=(ALL:ALL) NOPASSWD: ALL</span><br></pre></td></tr></table></figure>
+
+<h3 id="调整快捷键"><a href="#调整快捷键" class="headerlink" title="调整快捷键"></a>调整快捷键</h3><ol>
 <li>Konsole</li>
 <li>System Settings</li>
 <li>KRunner</li>
