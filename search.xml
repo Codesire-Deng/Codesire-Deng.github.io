@@ -3,7 +3,7 @@
   <entry>
     <title>Archlinux装机笔记</title>
     <url>/2022/10/24/Archlinux%E8%A3%85%E6%9C%BA%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>重要数据·务必备份</strong>！固态硬盘报废，连带 Linux 无了，只能重装。丫的一点都不省心，每次装机必出 BUG。写一篇笔记，希望一劳永逸。</p>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>重要数据·务必备份</strong>！固态硬盘报废，连带 Linux 无了，只能重装。恐将来也会频繁装机，故写一篇笔记，希望一劳永逸。</p>
 <span id="more"></span>
 
 <h2 id="进入桌面前"><a href="#进入桌面前" class="headerlink" title="进入桌面前"></a>进入桌面前</h2><h3 id="准备装机盘"><a href="#准备装机盘" class="headerlink" title="准备装机盘"></a>准备装机盘</h3><ol>
