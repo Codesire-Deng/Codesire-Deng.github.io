@@ -21,15 +21,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.13.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="病重躺家，药不能停。 何以解忧？唯有博客。 数据在校，不在我心。 宿舍断电，学校英明！ 回滚旧版，泪眼嘤嘤。 &amp;nbsp;H T M L ，手写还行！   Preface「多态」是一个很宽泛的理念，对应繁多实现。本文将记录我所看到的多态的各种形态。作者见识短浅，还请读者多多指教。  本文已计划的内容：  基于 std::visit  实现运行时多态的优化  实现重载模式    CRTP 实现静态">
+    <meta name="description" content="Preface「多态」是一个很宽泛的理念，对应繁多实现。本文将记录我所看到的多态的各种形态。作者见识短浅，还请读者多多指教。  本文已计划的内容：  基于 std::visit  实现运行时多态的优化  实现重载模式    CRTP 实现静态多态  静态多态  静态接口  CRTP 的一些分析和 trick    C++20 前基于 SFINAE 的模板偏特化  C++20 后基于 concept">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++ 多态">
 <meta property="og:url" content="https://codesire-deng.github.io/2022/01/28/C-%E5%A4%9A%E6%80%81/index.html">
 <meta property="og:site_name" content="等疾风">
-<meta property="og:description" content="病重躺家，药不能停。 何以解忧？唯有博客。 数据在校，不在我心。 宿舍断电，学校英明！ 回滚旧版，泪眼嘤嘤。 &amp;nbsp;H T M L ，手写还行！   Preface「多态」是一个很宽泛的理念，对应繁多实现。本文将记录我所看到的多态的各种形态。作者见识短浅，还请读者多多指教。  本文已计划的内容：  基于 std::visit  实现运行时多态的优化  实现重载模式    CRTP 实现静态">
+<meta property="og:description" content="Preface「多态」是一个很宽泛的理念，对应繁多实现。本文将记录我所看到的多态的各种形态。作者见识短浅，还请读者多多指教。  本文已计划的内容：  基于 std::visit  实现运行时多态的优化  实现重载模式    CRTP 实现静态多态  静态多态  静态接口  CRTP 的一些分析和 trick    C++20 前基于 SFINAE 的模板偏特化  C++20 后基于 concept">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-01-28T09:42:04.000Z">
-<meta property="article:modified_time" content="2022-02-01T08:05:38.439Z">
+<meta property="article:modified_time" content="2022-12-03T13:27:33.546Z">
 <meta property="article:author" content="等疾风">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
@@ -261,7 +261,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-02-01 16:05:38" itemprop="dateModified" datetime="2022-02-01T16:05:38+08:00">2022-02-01</time>
+      <time title="Modified: 2022-12-03 21:27:33" itemprop="dateModified" datetime="2022-12-03T21:27:33+08:00">2022-12-03</time>
     </span>
 
   
@@ -274,16 +274,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <small>
-病重躺家，药不能停。<br/>
-何以解忧？唯有博客。<br/>
-数据在校，不在我心。<br/>
-宿舍断电，学校英明！<br/>
-回滚旧版，泪眼嘤嘤。<br/>
-&nbsp;H T M L ，手写还行！
-</small>
-
-<h1 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h1><p>「多态」是一个很宽泛的理念，对应繁多实现。本文将记录我所看到的多态的各种形态。作者见识短浅，还请读者多多指教。</p>
+        <h1 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h1><p>「多态」是一个很宽泛的理念，对应繁多实现。本文将记录我所看到的多态的各种形态。作者见识短浅，还请读者多多指教。</p>
 <ul>
 <li>本文已计划的内容：<ul>
 <li><input checked="" disabled="" type="checkbox"> 基于 <code>std::visit</code><ul>

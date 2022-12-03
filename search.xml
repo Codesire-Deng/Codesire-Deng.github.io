@@ -73,18 +73,19 @@
 <li>覆盖拷贝 <a href="https://github.com/Codesire-Deng/rc">Codesire-Deng&#x2F;rc</a> 的配置文件。</li>
 <li>安装完后，调整 konsole 和 vscode 的默认终端。</li>
 </ul>
-<h3 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h3><h4 id="C-相关"><a href="#C-相关" class="headerlink" title="C++ 相关"></a>C++ 相关</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yay -S linux-headers cmake clang-git mimalloc boost cloc </span><br></pre></td></tr></table></figure>
+<h3 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h3><h4 id="C-相关"><a href="#C-相关" class="headerlink" title="C++ 相关"></a>C++ 相关</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yay -S linux-headers cmake clang mimalloc boost cloc </span><br></pre></td></tr></table></figure>
 
 <h4 id="perf-相关"><a href="#perf-相关" class="headerlink" title="perf 相关"></a>perf 相关</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yay -S perf</span><br><span class="line"><span class="built_in">cd</span> ~/Downloads &amp;&amp; git <span class="built_in">clone</span> https://github.com/brendangregg/FlameGraph.git</span><br><span class="line">sudo <span class="built_in">ln</span> -s ~/Downloads/FlameGraph/stackcollapse-perf.pl /usr/bin/stackcollapse-perf.pl</span><br><span class="line">sudo <span class="built_in">ln</span> -s ~/Downloads/FlameGraph/flamegraph.pl /usr/bin/flamegraph.pl</span><br></pre></td></tr></table></figure>
 
 <h4 id="Node-相关"><a href="#Node-相关" class="headerlink" title="Node 相关"></a>Node 相关</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o n</span><br><span class="line">sudo bash n lts</span><br><span class="line">sudo npm install -g n</span><br><span class="line"><span class="built_in">rm</span> n</span><br><span class="line">sudo npm install -g cnpm --registry=https://registry.npmmirror.com</span><br><span class="line">sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
 
 <h3 id="编译-Clang-套件"><a href="#编译-Clang-套件" class="headerlink" title="编译 Clang 套件"></a>编译 Clang 套件</h3><blockquote>
-<p>若已有 <code>yay clang-git</code> 则可忽略此步</p>
+<p>若已有 <code>yay clang-git</code> 则可忽略此步。但是 <code>clang-git</code> 的质量堪忧。</p>
 </blockquote>
 <p>参考 <a href="https://clang.llvm.org/get_started.html">Clang Docs</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/llvm/llvm-project.git</span><br><span class="line"><span class="built_in">cd</span> llvm-project</span><br><span class="line">cmake -B build -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G <span class="string">&quot;Unix Makefiles&quot;</span> ./llvm</span><br><span class="line">cmake --build build -j 14 <span class="comment"># 不要使用全部的核心！UI会崩溃</span></span><br><span class="line">sudo <span class="built_in">cp</span> ./build/bin/clang-format $(<span class="built_in">which</span> clang-format)</span><br><span class="line">clang-format --version</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/llvm/llvm-project.git</span><br><span class="line"><span class="built_in">cd</span> llvm-project</span><br><span class="line">cmake -B build -DLLVM_ENABLE_PROJECTS=<span class="string">&quot;clang;clang-tools-extra;compiler-rt&quot;</span> -DCMAKE_BUILD_TYPE=Release -G <span class="string">&quot;Unix Makefiles&quot;</span> ./llvm</span><br><span class="line">cmake --build build -j 14 <span class="comment"># 不要使用全部的核心！UI会崩溃</span></span><br><span class="line">cmake --install build</span><br><span class="line"><span class="built_in">which</span> clang-format</span><br><span class="line">clang-format --version</span><br></pre></td></tr></table></figure>
 
+<p>可在 llvm-project&#x2F;llvm&#x2F;CMakeLists.txt 中搜索 <code>LLVM_ALL_PROJECTS</code> 查看所有项目。</p>
 <h3 id="生成-SSH-key"><a href="#生成-SSH-key" class="headerlink" title="生成 SSH key"></a>生成 SSH key</h3><p>参考 <a href="https://docs.github.com/cn/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github Docs</a></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;oi_dzf@qq.com&quot;</span></span><br><span class="line"><span class="built_in">eval</span> <span class="string">&quot;<span class="subst">$(ssh-agent -s)</span>&quot;</span></span><br><span class="line">ssh-add ~/.ssh/id_ed25519</span><br></pre></td></tr></table></figure>
 
@@ -131,8 +132,8 @@
 
 <small>
 
-<h2 id="吐槽"><a href="#吐槽" class="headerlink" title="吐槽"></a>吐槽</h2><p>GoLang 设计的 goroutine 简单好用，大名鼎鼎；虚拟机语言（例如 C#，Javascript，Java）的协程更是逆天改命，强势占领高性能并发的高地；机器队这边简直神速，而我们的人工队 C++ 在干什么呢，不会还没做完 STL network 吧，不会连 <code>format</code> 的编译器支持都没有吧，不会还没推广 <code>import &lt;module&gt;</code> 吧 🥵🥵🥵……</p>
-</small>
+<h2 id="吐槽"><a href="#吐槽" class="headerlink" title="吐槽"></a><del>吐槽</del></h2><p><del>GoLang 设计的 goroutine 简单好用，大名鼎鼎；虚拟机语言（例如 C#，Javascript，Java）的协程更是逆天改命，强势占领高性能并发的高地；机器队这边简直神速，而我们的人工队 C++ 在干什么呢，不会还没做完 STL network 吧，不会连 <code>format</code> 的编译器支持都没有吧，不会还没推广 <code>import &lt;module&gt;</code> 吧 🥵🥵🥵……</del></p>
+<h2 id="C-20-协程永远的神"><a href="#C-20-协程永远的神" class="headerlink" title="C++20 协程永远的神"></a>C++20 协程永远的神</h2></small>
 
 <h2 id="C-的协程"><a href="#C-的协程" class="headerlink" title="C++的协程"></a>C++的协程</h2><p>C++的协程是：</p>
 <ol>
@@ -150,7 +151,7 @@
 </ol>
 <h2 id="使用协程的理由"><a href="#使用协程的理由" class="headerlink" title="使用协程的理由"></a>使用协程的理由</h2><ol>
 <li>相比于回调和 sender&#x2F;receiver，协程的使用<strong>成本更低</strong>，<strong>性能下限更高</strong>。</li>
-<li>降低使用者的心智负担和阅历要求，催化高质量工程，有望成为<strong>资本宠儿</strong>。<ul>
+<li>降低使用者的心智负担和阅历要求，催化高质量工程，资本宠儿。<ul>
 <li>例如可以摆脱 asio 里常见的 <code>std::shared_ptr</code>。</li>
 </ul>
 </li>
@@ -375,16 +376,7 @@
   <entry>
     <title>C++ 多态</title>
     <url>/2022/01/28/C-%E5%A4%9A%E6%80%81/</url>
-    <content><![CDATA[<small>
-病重躺家，药不能停。<br/>
-何以解忧？唯有博客。<br/>
-数据在校，不在我心。<br/>
-宿舍断电，学校英明！<br/>
-回滚旧版，泪眼嘤嘤。<br/>
-&nbsp;H T M L ，手写还行！
-</small>
-
-<h1 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h1><p>「多态」是一个很宽泛的理念，对应繁多实现。本文将记录我所看到的多态的各种形态。作者见识短浅，还请读者多多指教。</p>
+    <content><![CDATA[<h1 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h1><p>「多态」是一个很宽泛的理念，对应繁多实现。本文将记录我所看到的多态的各种形态。作者见识短浅，还请读者多多指教。</p>
 <ul>
 <li>本文已计划的内容：<ul>
 <li><input checked="" disabled="" type="checkbox"> 基于 <code>std::visit</code><ul>
