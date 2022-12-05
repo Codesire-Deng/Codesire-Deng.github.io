@@ -171,7 +171,7 @@
 <li>Debug 的体验风评不佳。</li>
 </ol>
 <h2 id="协程的限制"><a href="#协程的限制" class="headerlink" title="协程的限制"></a>协程的限制</h2><ol>
-<li>不能使用变参模板</li>
+<li>不能使用可变参数（variadic arguments），但可以使用变参模板</li>
 <li>不能使用 <code>return</code></li>
 <li>不能使用占位符返回类型 （<code>auto</code> 或者 Concept）</li>
 <li>不能是 constexpr 函数</li>
