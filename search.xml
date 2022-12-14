@@ -275,6 +275,7 @@
 </ul>
 </li>
 <li>否则返回一个 coroutine handle（对应其他协程），调用这个 <code>other_handle.resume()</code>。注意链式调用可能最终恢复当前协程。</li>
+<li>若 <code>awaiter.await_suspend()</code> 抛出一个异常，则立即恢复协程，并由该协程接收这个异常。</li>
 <li>当前协程恢复后，返回 <code>awaiter.await_resume()</code> 作为 <code>co_await expr</code> 的结果。</li>
 </ul>
 </li>
