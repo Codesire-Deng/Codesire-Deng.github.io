@@ -111,6 +111,20 @@
 </li>
 <li>重启即可。在选择界面按 <code>d</code> 即可指定默认项。</li>
 </ol>
+<h3 id="开机挂载硬盘"><a href="#开机挂载硬盘" class="headerlink" title="开机挂载硬盘"></a>开机挂载硬盘</h3><ol>
+<li>确认设备文件名<ul>
+<li><code>sudo fdisk -l</code></li>
+</ul>
+</li>
+<li>找到 UUID 和文件系统类型<ul>
+<li><code>blkid</code></li>
+</ul>
+</li>
+<li>条目追加至 <code>/etc/fstab</code><ul>
+<li>例如：<code>UUID=3A848F25848EE32D /run/media/codesire/3A848F25848EE32D ntfs defaults 0 0</code></li>
+</ul>
+</li>
+</ol>
 <h3 id="附：Windows-改为-UTC-时间"><a href="#附：Windows-改为-UTC-时间" class="headerlink" title="附：Windows 改为 UTC 时间"></a>附：Windows 改为 UTC 时间</h3><p>新建<code>UTC.reg</code>，内容如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"></span><br><span class="line">[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation]</span><br><span class="line">&quot;RealTimeIsUniversal&quot;=dword:00000001</span><br></pre></td></tr></table></figure>
 
