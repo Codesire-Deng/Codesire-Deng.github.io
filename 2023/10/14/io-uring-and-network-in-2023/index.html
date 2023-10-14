@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic%7CFira+Code:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"codesire-deng.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="原作者：Jens Axboe 原文：github.com&#x2F;axboe&#x2F;liburing&#x2F;wiki&#x2F;io_uring-and-networking-in-2023 译者：等疾风 （本翻译已获得原作者授权。未经译者允许，请勿转载。） 介绍作为一个 IO 模型，io_uring 既适用于存储，也适用于网络。在 UNIX 中，人们经常吹捧“一切皆文件”。多数情况下这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="io_uring and network in 2023">
+<meta property="og:url" content="https://codesire-deng.github.io/2023/10/14/io-uring-and-network-in-2023/index.html">
+<meta property="og:site_name" content="等疾风">
+<meta property="og:description" content="原作者：Jens Axboe 原文：github.com&#x2F;axboe&#x2F;liburing&#x2F;wiki&#x2F;io_uring-and-networking-in-2023 译者：等疾风 （本翻译已获得原作者授权。未经译者允许，请勿转载。） 介绍作为一个 IO 模型，io_uring 既适用于存储，也适用于网络。在 UNIX 中，人们经常吹捧“一切皆文件”。多数情况下这">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-14T13:43:18.000Z">
+<meta property="article:modified_time" content="2023-10-14T13:46:34.526Z">
+<meta property="article:author" content="等疾风">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://codesire-deng.github.io/2023/10/14/io-uring-and-network-in-2023/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://codesire-deng.github.io/2023/10/14/io-uring-and-network-in-2023/","path":"2023/10/14/io-uring-and-network-in-2023/","title":"io_uring and network in 2023"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>io_uring and network in 2023 | 等疾风</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="等疾风" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">等疾风</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">正在捣鼓协程</p>
+      <img class="custom-logo-image" src="/uploads/custom-logo4.png" alt="等疾风">
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-log"><a href="/log/" rel="section"><i class="fa fa-sync-alt fa-fw"></i>Log</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86-Batching"><span class="nav-number">2.</span> <span class="nav-text">批量处理(Batching)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9E%E5%8F%91-Multi-shot"><span class="nav-number">3.</span> <span class="nav-text">连发(Multi-shot)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Provided-buffers"><span class="nav-number">4.</span> <span class="nav-text">Provided buffers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Socket-%E7%8A%B6%E6%80%81"><span class="nav-number">5.</span> <span class="nav-text">Socket 状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-work"><span class="nav-number">6.</span> <span class="nav-text">Task work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E9%97%B4%E6%B6%88%E6%81%AF%EF%BC%88Ring-messages%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">环间消息（Ring messages）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">8.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">9.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="等疾风"
+      src="/uploads/blogAvatar_s.jpg">
+  <p class="site-author-name" itemprop="name">等疾风</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Codesire-Deng" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Codesire-Deng" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:oi_dzf@qq.com" title="E-Mail → mailto:oi_dzf@qq.com" rel="noopener me" target="_blank"><i class="fas fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://wpa.qq.com/msgrd?v=3&uin=513374673&site=qq&menu=yes" title="QQ → http:&#x2F;&#x2F;wpa.qq.com&#x2F;msgrd?v&#x3D;3&amp;uin&#x3D;513374673&amp;site&#x3D;qq&amp;menu&#x3D;yes" rel="noopener me" target="_blank"><i class="fab fa-qq fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml" rel="noopener me"><i class="fa fa-rss fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/35186937" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;35186937" rel="noopener me" target="_blank"><i class="fa-brands fa-bilibili fa-fw"></i></a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="Back to top">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://codesire-deng.github.io/2023/10/14/io-uring-and-network-in-2023/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/blogAvatar_s.jpg">
+      <meta itemprop="name" content="等疾风">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="等疾风">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="io_uring and network in 2023 | 等疾风">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          io_uring and network in 2023
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-10-14 21:43:18 / Modified: 21:46:34" itemprop="dateCreated datePublished" datetime="2023-10-14T21:43:18+08:00">2023-10-14</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>原作者：<a target="_blank" rel="noopener" href="https://github.com/axboe">Jens Axboe</a></p>
+<p>原文：<a target="_blank" rel="noopener" href="https://github.com/axboe/liburing/wiki/io_uring-and-networking-in-2023">github.com&#x2F;axboe&#x2F;liburing&#x2F;wiki&#x2F;io_uring-and-networking-in-2023</a></p>
+<p>译者：<a target="_blank" rel="noopener" href="https://github.com/Codesire-Deng">等疾风</a></p>
+<p>（本翻译已获得<a target="_blank" rel="noopener" href="https://github.com/axboe/liburing/discussions/960">原作者授权</a>。未经译者允许，请勿转载。）</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>作为一个 IO 模型，io_uring 既适用于存储，也适用于网络。在 UNIX 中，人们经常吹捧“一切皆文件”。多数情况下这是对的，然而，一旦你需要对文件做 IO，所有的文件就不再众生平等，而是必须被区别对待。</p>
+<span id="more"></span>
+
+<p>由于<em>基于完成模型</em>的设计，将存储应用迁移到 io_uring 非常简单，只需遵循这几步：</p>
+<ol>
+<li>将 libaio 之类的调用简单替换为 io_uring </li>
+<li>加入 io_uring 独有的高级特性。</li>
+</ol>
+<p>对于网络应用来说，迁移到地道的 io_uring 会稍微复杂些。几十年来，网络应用程序一直使用<em>基于就绪模型</em>编写，最常见的做法是借助<code>epoll(2)</code>，在 socket 有可用数据时收到通知。虽然你可以将 epoll 简单地替换为 io_uring，继续沿用<em>基于就绪模型</em>，这虽然能够减少系统调用，但并不利于后期的优化，因为你将无法利用 io_uring 提供的高级特性。所以，你需要将<em>基于就绪模型</em>改造为<em>基于完成模型</em>。</p>
+<p>本文旨在介绍当前版本已有的、针对网络应用量身定制的功能，并假设读者已经了解 io_uring 的基础知识。本文并非为了展示从 epoll 迁移到 io_uring 的成功案例和收益。</p>
+<h2 id="批量处理-Batching"><a href="#批量处理-Batching" class="headerlink" title="批量处理(Batching)"></a>批量处理(Batching)</h2><p>io_uring 的主要优点之一是可以在单个系统调用中完成多个操作。<br>只要你试过同时填写多个 SQE(submission queue entry), 最后一次性地向内核提交所有请求，你就能明显地体会到。(<code>io_uring_get_sqe()</code> + <code>io_uring_prep_foo(sqe)</code> + <code>io_uring_submit()</code>)</p>
+<p><code>io_uring_enter(2)</code> 是 io_uring 中用于提交 IO 请求的低级系统调用，它还能顺便等待 IO 的完成。这是一个重要的设计，相比于将提交 IO 和等待 IO 分开成两次操作，合并成一次操作有着更高的同步效率。liburing 封装了 <code>io_uring_submit_and_wait()</code>，以便将提交和等待操作合成到单个系统调用中。</p>
+<p>这在 IO 事件循环中非常有用，因为一个 IO 完成后通常又需要做新的 IO。应用程序可以处理这些完成事件，同时获取新的 SQE 并准备提交，最后调用另一个 <code>io_uring_submit_and_wait()</code> 来开启新一轮事件循环。</p>
+<p>相关 man 手册页：<code>io_uring_submit_and_wait(3)</code>, <code>io_uring_get_sqe(3)</code>, <code>io_uring_submit(3)</code></p>
+<h2 id="连发-Multi-shot"><a href="#连发-Multi-shot" class="headerlink" title="连发(Multi-shot)"></a>连发(Multi-shot)</h2><p>默认情况下，任何 SQE 都只会产生一个完成事件，即一个 CQE。例如，应用提交一个 read 请求，当 read 完成时，只会产生一个完成事件。但是，io_uring 还支持连发请求。连发请求可以产生多个完成事件，即一个 IO 能触发多次。</p>
+<p>考虑一个网络服务器应用，它需要不断接受(accept)新连接。程序可以申请 SQE 并用<code>io_uring_prep_accept()</code>来接受一次连接。一旦连接请求到来，就产生一个完成事件，之后，程序必须提交新的 SQE 来处理后来的连接。</p>
+<p>这种循环模式可以考虑改用<code>io_uring_prep_multishot_accept()</code>来做“连发”。这会告诉 io_uring 在接受了一个连接并产生完成事件后，继续保持监听状态，下一次收到新的连接时继续产生新的 CQE。这减少了程序在处理新连接后的啰嗦工作。连发的 accept 从 Linux 5.19 起可用。</p>
+<p>默认情况下，一个连发请求会保持活跃，直到：</p>
+<ol>
+<li>它们被显式取消（例如使用<code>io_uring_prep_cancel()</code>之类的函数），或者</li>
+<li>请求本身遇到错误。</li>
+</ol>
+<p>如果连发请求仍然活跃，则 CQE(<code>struct io_uring_cqe</code>) 的 <code>flags</code> 字段将包含 <code>IORING_CQE_F_MORE</code> 标志。如果没有此标志，意味着连发请求失效，程序应该重新提交新的请求。一般来说，连发请求会一直有效，除非遇到错误。</p>
+<p>除了 accept，还有其它 IO 支持连发。例如一个网络应用需要在 socket 上连续多次接收数据，就可以考虑将 <code>io_uring_prep_recv()</code> 替换为 <code>io_uring_prep_recv_multishot()</code>。与连发的 accept 类似，每当在 socket 上有数据可读时都会产生一个完成事件。敏锐的读者可能会问“但是收到的数据放在哪里？”。为此，io_uring 提供一个&quot;provided buffers&quot;的概念（将在下一节中详细介绍）。连发的 recv 从 Linux 6.0 开始可用。</p>
+<p>除了 recv 和 accept 之外，io_uring 还支持 poll 的连发。理念是相同的 —— 发起一次请求，每当关心的 poll 掩码变为真就得到一次通知。从 Linux 5.13 起可用。</p>
+<p>相关的 man 手册页：<code>io_uring_prep_recv_multishot(3)</code>, <code>io_uring_prep_multishot_accept(3)</code>,  <code>io_uring_prep_poll_multishot(3)</code></p>
+<h2 id="Provided-buffers"><a href="#Provided-buffers" class="headerlink" title="Provided buffers"></a>Provided buffers</h2><p><em>基于就绪</em>的 IO 模型在推迟提供 buffer 方面有显著的优势 —— 你可以等到收到 IO 就绪通知之后再提供 buffer 并拷贝数据。但对于<em>基于完成</em>的模型来说，buffer 却需要在提交请求前就准备好。诚然，应用程序不难在提交请求时先申请一个 buffer，但如果堆积的请求数高达十几万个，这种做法可能会导致内存紧张，可扩展性不强。</p>
+<p>于是，io_uring 支持一种称为 provided buffers 的机制。应用程序预留一个 buffer 池，并将这些 buffer 交给 io_uring 管理。这允许内核在拷贝数据前在 buffer 池中选择合适的 buffer，而不是在提交请求时就指定好。最后，产生的 CQE 将告诉你选择了哪一个 buffer。</p>
+<p>io_uring 支持两种形式的 provided buffers：</p>
+<ol>
+<li>老接口 <code>io_uring_prep_provide_buffers()</code>，在 Linux 5.7 后可用。</li>
+<li>新的做法是&quot;环形映射 buffers&quot;(&quot;ring mapped buffers&quot;)，从 Linux 5.19 开始支持。</li>
+</ol>
+<p>这两种形式的原理是一样的，唯一的区别是程序如何向 io_uring 提供 buffer。新的做法性能更高（请参阅 <a target="_blank" rel="noopener" href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c7fb19428d67dd0a2a78a4f237af01d39c78dc5a">commit</a>），是应用程序的首选。</p>
+<p>每个 buffer 由一个 group ID 和一个 buffer ID 确定。Group 旨在便于应用程序区分 buffer 的各种类型。一个例子是根据 buffer 的大小分成不同的 group。在同一个 group 内的 buffer ID 必须是唯一的。</p>
+<p>应用程序必须先对每个 group ID 注册一个环形队列。调用<code>io_uring_register_buf_ring()</code>，它会初始化一个环形队列，由应用程序和内核共享。然后，应用程序可以用<code>io_uring_buf_ring_add()</code>将 buffer 添加到环中，从而能被内核使用。这高效率地把 buffer 的所有权转给了内核。一旦内核使用了一个 buffer，内核将告诉应用程序所用的 group ID 和 buffer ID，意味着 buffer 的所有权移交给应用程序。每次添加完若干 buffer 后，应用程序必须调用<code>io_uring_buf_ring_advance()</code>来告诉内核添加了多少 buffer。</p>
+<p>一旦应用程序处理完一个 buffer，就可以将其所有权转给内核，使得 buffer 可以循环使用。</p>
+<p>利用 provided buffers 机制，应用程序可以提交 recv 请求（或者其他读请求），而无需预先提供 buffer。程序只需在 SQE 的 <code>flags</code> 字段中设置 IOSQE_BUFFER_SELECT 标志，并在 <code>buf_group</code> 字段中设置好 group ID 即可。原本用于拷贝数据的地址应该填成 <code>NULL</code>。一旦 recv 操作就绪，内核就会自动选择一个 buffer，并且在产生的 CQE 的 <code>flags</code> 字段中包含这个 buffer ID。CQE 的 flags 字段还会包含 <code>IORING_CQE_F_BUFFER</code>标志，表明此操作使用了 provided buffers。</p>
+<p>如果 IO 触发的太快了，provided buffers 可能会因为来不及循环补充而被耗尽。在这种情况下，请求将会失败，并且带有错误码<code>-ENOBUFS</code>。一种缓解办法是，为同一类型的 buffer 安排多个 buffer group，然后循环使用这些 group。一旦收到缓冲区溢出错误，应用程序就立即切换到下一个 buffer group，并重新提交连发（或者普通）的 IO 请求。</p>
+<p>初始化一个 buffer 环形队列乍一看有亿点麻烦。因为数据是经过内核映射的，我们要确保队列所在的内存是按页大小对齐的。下面的例子展示了如何初始化一个环并且在环上填满 buffer：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> io_uring_buf_ring *<span class="title function_">setup_buffer_ring</span><span class="params">(<span class="keyword">struct</span> io_uring *ring)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">io_uring_buf_reg</span> <span class="title">reg</span> =</span> &#123; &#125;;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">io_uring_buf_ring</span> *<span class="title">br</span>;</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 申请环形队列的内存 */</span></span><br><span class="line">    <span class="keyword">if</span> (posix_memalign((<span class="type">void</span> **) &amp;br, <span class="number">4096</span>,</span><br><span class="line">               BUFS_IN_GROUP * <span class="keyword">sizeof</span>(<span class="keyword">struct</span> io_uring_buf_ring)))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 向内核注册这个环形队列 */</span></span><br><span class="line">    reg.ring_addr = (<span class="type">unsigned</span> <span class="type">long</span>) br;</span><br><span class="line">    reg.ring_entries = BUFS_IN_GROUP;</span><br><span class="line">    reg.bgid = BUF_BGID;</span><br><span class="line">    <span class="keyword">if</span> (io_uring_register_buf_ring(ring, &amp;reg, <span class="number">0</span>))</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 初始化环上的每个 buffer 信息 */</span></span><br><span class="line">    io_uring_buf_ring_init(br);</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; BUFS_IN_GROUP; i++) &#123;</span><br><span class="line">        <span class="comment">/* 添加一个 buffer，其 buffer ID 是 i */</span></span><br><span class="line">        io_uring_buf_ring_add(br, bufs[i], BUF_SIZE, i,</span><br><span class="line">                      io_uring_buf_ring_mask(BUFS_IN_GROUP), i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 我们已经准备好了所有 buffer，将其所有权转给 io_uring */</span></span><br><span class="line">    io_uring_buf_ring_advance(br, BUFS_IN_GROUP);</span><br><span class="line">    <span class="keyword">return</span> br;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个例子硬编码了 4096 作为内存页大小，实战中应该用 <code>sysconf(_SC_PAGESIZE)</code> 或其他办法来避免硬编码。在处理 CQE 时，应用程序是这么写的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">io_uring_wait_cqe(ring, &amp;cqe);</span><br><span class="line"><span class="comment">/* cqe-&gt;flags 会带有 IORING_CQE_F_BUFFER 标志。先找到 buffer ID */</span></span><br><span class="line">buffer_id = cqe-&gt;flags &gt;&gt; IORING_CQE_BUFFER_SHIFT;</span><br><span class="line"><span class="comment">/* 找到 buffer ID 对应的 buffer */</span></span><br><span class="line">buf = bufs[buffer_id];</span><br><span class="line"><span class="comment">// [...你的应用逻辑...]</span></span><br><span class="line"><span class="comment">/* buffer 的使命结束了，把它写回环形队列里 */</span></span><br><span class="line">io_uring_buf_ring_add(br, bufs[buffer_id], BUF_SIZE, buffer_id,</span><br><span class="line">                  io_uring_buf_ring_mask(BUFS_IN_GROUP), <span class="number">0</span>);</span><br><span class="line"><span class="comment">/* 将所有权交给 io_uring */</span></span><br><span class="line">io_uring_buf_ring_advance(br, <span class="number">1</span>);</span><br><span class="line"><span class="comment">/* CQE 的使命也结束了，还给 io_uring */</span></span><br><span class="line">io_uring_cqe_seen(ring, cqe);</span><br></pre></td></tr></table></figure>
+
+<p>如果归还 buffer 和归还 CQE 同时发生（就和上面一样），则可以只调用一个函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 同时归还 CQE 和 buffer 的所有权 */</span></span><br><span class="line">io_uring_buf_ring_cq_advance(ring, br, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>相关手册页：<code>io_uring_register_buf_ring(3)</code>, <code>io_uring_buf_ring_add(3)</code>, <code>io_uring_buf_ring_advance(3)</code>, <code>io_uring_buf_ring_cq_advance(3)</code>, <code>io_uring_enter(2)</code></p>
+<h2 id="Socket-状态"><a href="#Socket-状态" class="headerlink" title="Socket 状态"></a>Socket 状态</h2><p>默认情况下，当你提交一个 <code>recv</code> 请求，io_uring 就会去尝试读取一次。此时如果没有数据可读，io_uring 会启用一个轮询机制，等待 socket 的可读。为了提高用户和内核的性能，io_uring 会告诉应用程序“这个 socket 是否有更多数据可读”；类似地，应用程序可以告诉 io_uring “这个 socket 是否直接进入轮询（跳过尝试读取）”，避免无谓的性能损耗。</p>
+<p>如果 CQE 的 <code>flags</code> 字段包含了 <code>IORING_CQE_F_SOCK_NONEMPTY</code>，那么相应的 socket 还有可读的数据。从 Linux 5.19 开始可用。</p>
+<p>另一边，在提交 recv IO 时，如果你认为此时 socket 应该没有可读的数据，则可以提示 io_uring 跳过尝试读取。应用程序可以在 SQE 的 <code>ioprio</code> 字段中设置 <code>IORING_RECVSEND_POLL_FIRST</code>，让 io_uring 跳过第一次 recv&#x2F;send 尝试，直接进入轮询等待状态。</p>
+<p><code>IORING_RECVSEND_POLL_FIRST</code> 既能用于接收也能用于发送。即便设置了这个标志，在 IO 提交时如果数据可用或者空间足够，操作仍会立即进行。从 Linux 5.19 起可用。</p>
+<p>相关手册页：<code>io_uring_prep_send(3)</code>, <code>io_uring_prep_sendmsg(3)</code>, <code>io_uring_prep_recv(3)</code>, <code>io_uring_prep_recvmsg(3)</code></p>
+<h2 id="Task-work"><a href="#Task-work" class="headerlink" title="Task work"></a>Task work</h2><p>（译注：按照笔者的理解，task 大概可理解为 Linux 进程）</p>
+<p>上一节提到，io_uring 依赖内部的轮询机制来触发（或重新触发）操作。一旦操作准备就绪，一个 <code>task_work</code> 会用于处理它。顾名思义，<code>task_work</code> 由 task 本身运行，尤其是提交请求的那个 task。默认情况下，每当应用程序在内核态和用户态之间切换时，就会运行 task work。接下来，为了向 task 报告 task work 的状态，它可能会引发内核和用户态之间的强制转换。在 io_uring 内部，这是通过处理器间中断（inter-processor interrupt, IPI）来实现的，这将触发 task 的重新调度。这类似于 task 处理信号（signal）的方式。</p>
+<p>粗鲁地使用中断是对性能不友好的。如果应用程序正忙于数据运算，那么强制它进出内核会拖慢速度。幸运的是，io_uring 提供了一种规避方法。在初始化 io_uring 时，应用程序可以设置 <code>IORING_SETUP_COOP_TASKRUN</code>，这样就能在 task_work 排队时，避免 IPI 和 task 的强制重新调度，将它们推迟到下一次用户&#x2F;内核态转换（通常是下一次系统调用时）。根据等待和处理事件的方式，应用程序还可以设置 <code>IORING_SETUP_TASKRUN_FLAG</code> 标志，使得 io_uring 会维护一个标志，表示是否需要一次系统调用来处理 task_work。如果应用程序依靠 <code>io_uring_peek_cqe()</code> 来检查是否有完成事件就会很有用，它会告诉 liburing 是否需要 <code>io_uring_enter(2)</code> 来进入内核并处理 task_work。从 Linux 5.19 起可用。</p>
+<p><code>IORING_SETUP_COOP_TASKRUN</code> 的一个缺点是，task_work 会在任何的用户&#x2F;内核态切换时执行，而繁忙的网络应用可能会存在大量与 io_uring 无关的系统调用。这使得应用程序很难做好批量处理。为了改进这一点，引入了 <code>IORING_SETUP_DEFER_TASKRUN</code>，如果在初始化 io_uring 时带上这个标志，io_uring 就只会在应用程序显式等待完成事件时执行 task work。实际应用已经证明这在效率方面有非常大的好处，因为它使得程序能够真正实现完成端的批量处理。注意 <code>IORING_SETUP_DEFER_TASKRUN</code> 必须配合<code>IORING_SETUP_SINGLE_ISSUER</code> 使用，它表示只有一个应用（线程）会向这个 io_uring 提交请求。这允许更多的内部优化。一般来说，不建议在线程之间共享一个 io_uring，以便避开不必要的同步。从 Linux 6.1 起可用。</p>
+<p>相关手册页：<code>io_uring_setup(2)</code>, <code>io_uring_queue_init(3)</code>,<code>io_uring_queue_init_params(3)</code></p>
+<h2 id="环间消息（Ring-messages）"><a href="#环间消息（Ring-messages）" class="headerlink" title="环间消息（Ring messages）"></a>环间消息（Ring messages）</h2><p>环间消息是一种在两个 io_uring 之间传递消息的方法。可以用来唤醒某个正在阻塞等待的 io_uring，或者单纯地在两个 io_uring 之间发送数据。</p>
+<p>环间消息的最简单的玩法是在两个环之间传输 8 字节的数据。io_uring 不会修改或者关心数据内容，你可以传递任何 8 字节的东西，例如一个指针。一个使用场景是网络后端应用，它们需要将接收到的连接（connections）分发到各个线程中，或者是将耗时的工作卸载到另一个线程。<code>io_uring_prep_msg_ring()</code> 可以用来初始化环间消息的 SQE。或者它可以直接从处理给定连接的线程中使用。从 Linux 5.18 起可用。</p>
+<p>另一种玩法是在环之间传递文件描述符（file descriptor, fd），尤其是传递直接描述符（direct descriptor）（译注：这是一种 io_uring 独享的 fd，可提高性能）。例如后端利用直接描述符来做 accept，并将产生的连接分发给子线程。从 Linux 6.0 起可用。</p>
+<p>相关手册页：<code>io_uring_prep_msg_ring(3)</code>, <code>io_uring_prep_msg_ring_cqe_flags(3)</code>, <code>io_uring_prep_msg_ring_fd(3)</code>, <code>io_uring_register_files(3)</code></p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>以上只是应用程序在现今的 Linux 内核中可以享用的优化和功能中的一部分。虽然本文主要以网络为中心，但很多技巧都适用于其它使用 io_uring 的应用。本文也不应该被当作完全的指南，因为还有更多未提到的优化和功能，例如“直接描述符”（direct descriptor），它可以避免在线程之间共享文件描述符表。还有 io_uring 支持的“零拷贝传输”（zero-copy transmit）。这些话题将在以后的文章中介绍。</p>
+<p>同样值得注意的是，上述绝大多数技巧都经过充分的实际应用考验，例如 Thrift。随着网络领域的应用越来越多，这里肯定会有更多的创新，因此，本文在很大程度上也只是一项正在进行中的工作。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>io_uring kernel tree: <a target="_blank" rel="noopener" href="https://git.kernel.dk/cgit/linux-block/">git.kernel.dk&#x2F;cgit&#x2F;linux-block</a> (<code>git clone https://git.kernel.dk/linux.git</code>)</li>
+<li>liburing source and man pages: <a target="_blank" rel="noopener" href="https://git.kernel.dk/cgit/liburing/">git.kernel.dk&#x2F;cgit&#x2F;liburing</a> (<code>git clone https://git.kernel.dk/liburing.git</code>)</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/axboe">Jens Axboe</a> 著 2023-02-14</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Codesire-Deng">等疾风</a> 译 2023-10-14</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button>
+    Donate
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/uploads/weixin.png" alt="等疾风 WeChat Pay">
+        <span>WeChat Pay</span>
+      </div>
+
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/24/Archlinux%E8%A3%85%E6%9C%BA%E7%AC%94%E8%AE%B0/" rel="prev" title="Archlinux装机笔记">
+                  <i class="fa fa-angle-left"></i> Archlinux装机笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">邓子烽</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Codesire-Deng","repo":"Gitment-for-Codesire-Deng-s-Blog","client_id":"00a098064772784393ca","client_secret":"12657ee4c728b23deac323ac5253a6eb84b4c0a9","admin_user":"Codesire-Deng","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"en","js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"ae9c1c959649e8026a207bdae3f04c7b"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
